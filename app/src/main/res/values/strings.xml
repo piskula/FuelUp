@@ -6,4 +6,11 @@
 
     <string name="action_settings">Settings</string>
     <string name="vehicleList_noVehicleInDb">Nemame</string>
+    <string name="vehicleName">Name</string>
+    <string name="password">Password</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="advanced">Advanced</string>
+
 </resources>

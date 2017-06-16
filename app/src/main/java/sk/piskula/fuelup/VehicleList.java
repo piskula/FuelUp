@@ -1,10 +1,17 @@
 package sk.piskula.fuelup;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,6 +20,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -20,14 +32,22 @@ import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
 
+import lombok.extern.slf4j.Slf4j;
 import sk.piskula.fuelup.adapters.ListVehiclesAdapter;
 import sk.piskula.fuelup.data.DatabaseHelper;
 import sk.piskula.fuelup.entity.Vehicle;
 
+@Slf4j
 public class VehicleList extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements OnNavigationItemSelectedListener, OnItemClickListener {
+
+    private static final String SHARED_PREFERENCES_NAME = "sk.piskula.fuelup.preferences";
+    private static final String PREFS_VEHICLE_ID_KEY = "vehicle_id";
+    private static final String EXTRA_ADDED_CAR = "extra_key_added_car";
 
     private DatabaseHelper databaseHelper = null;
+
+    private SharedPreferences sharedPreferences;
 
     private ListView listView;
     private ListVehiclesAdapter mAdapter;
@@ -35,6 +55,10 @@ public class VehicleList extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+
+        //TODO open last viewed car if possible
+
         setContentView(R.layout.vehicle_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,24 +77,41 @@ public class VehicleList extends AppCompatActivity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-                Vehicle vehicle = new Vehicle();
-                vehicle.setName("jmeno");
+            public void onClick(final View view) {
 
-                final Dao<Vehicle, Integer> vehicleDao;
+                final Dialog dialog = createVehicleDialog();
+                dialog.setContentView(R.layout.create_vehicle_dialog);
+                dialog.setTitle("Create Vehicle");
 
-                try {
-                    vehicleDao = getHelper().getVehicleDao();
-                    vehicleDao.create(vehicle);
-                    showMessageDialog("OK, vehicle saved. Vehicles: " + vehicleDao.queryForAll().size());
-                } catch (SQLException e) {
-                    showMessageDialog("Vehicle save error.");
-                    e.printStackTrace();
-                    return;
-                }
+                EditText name = dialog.findViewById(R.id.createVehicleDialog_name);
+                Button ok = dialog.findViewById(R.id.createVehicleDialog_ok);
+                Button advanced = dialog.findViewById(R.id.createVehicleDialog_advanced);
 
+                name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View view, boolean hasFocus) {
+                        if (hasFocus) {
+                            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                        }
+                    }
+                });
+
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        EditText name = dialog.findViewById(R.id.createVehicleDialog_name);
+                        saveVehicle(name.getText().toString(), view);
+                        dialog.dismiss();
+                    }
+                });
+
+                advanced.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //TODO
+                    }
+                });
+                dialog.show();
             }
         });
 
@@ -84,15 +125,32 @@ public class VehicleList extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void showMessageDialog(final String message)
-    {
-        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage(message);
-        final AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-        mAdapter.refreshItems(this);
+    private Dialog createVehicleDialog() {
+        return new Dialog(this);
     }
 
+    private void saveVehicle(String name, View view) {
+        Vehicle vehicle = new Vehicle();
+        vehicle.setName(name);
+
+        final Dao<Vehicle, Integer> vehicleDao;
+
+        try {
+            vehicleDao = getHelper().getVehicleDao();
+            vehicleDao.create(vehicle);
+            mAdapter.refreshItems(this);
+        } catch (SQLException e) {
+            String status;
+            if (e.getCause().getCause().getMessage().contains("UNIQUE")) {
+                status = "Cannot create duplicate vehicle";
+            } else {
+                status = "Unexpected error. See logs for details.";
+            }
+            Snackbar.make(view, "ERROR: " + status, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            e.printStackTrace();
+        }
+    }
 
     private DatabaseHelper getHelper() {
         if (databaseHelper == null) {
@@ -166,5 +224,21 @@ public class VehicleList extends AppCompatActivity
             OpenHelperManager.releaseHelper();
             databaseHelper = null;
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        Vehicle clickedVehicle = mAdapter.getItem(position);
+        log.debug("shortClickedItem : " + clickedVehicle);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(PREFS_VEHICLE_ID_KEY, clickedVehicle.getId());
+        editor.commit();
+
+        Snackbar.make(view, "Clicked " + clickedVehicle.getName(), Snackbar.LENGTH_SHORT);
+        //TODO
+//        Intent i = new Intent(this, CarDataActivity.class);
+//        i.putExtra(EXTRA_ADDED_CAR, clickedCar);
+//        startActivityForResult(i, REQUEST_CODE_DELETED_CAR);
     }
 }

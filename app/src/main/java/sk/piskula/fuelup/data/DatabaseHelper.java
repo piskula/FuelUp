@@ -2,7 +2,6 @@ package sk.piskula.fuelup.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
@@ -11,6 +10,7 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 
+import lombok.extern.slf4j.Slf4j;
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.Vehicle;
 
@@ -18,9 +18,10 @@ import sk.piskula.fuelup.entity.Vehicle;
  * @author Ondrej Oravcok
  * @version 16.6.2017.
  */
+@Slf4j
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
-    private static final String DATABASE_NAME = "studentdir.db";
+    private static final String DATABASE_NAME = "fuelup.db";
     private static final int DATABASE_VERSION = 1;
 
     private Dao<Vehicle, Integer> vehicleDao;
@@ -38,7 +39,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, Vehicle.class);
 
         } catch (SQLException e) {
-            Log.e(DatabaseHelper.class.getName(), "Unable to create databases.", e);
+            log.error("Unable to create databases.", e);
         }
     }
 
@@ -56,8 +57,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             onCreate(sqliteDatabase, connectionSource);
 
         } catch (SQLException e) {
-            Log.e(DatabaseHelper.class.getName(), "Unable to upgrade database from version "
-                    + oldVer + " to new " + newVer, e);
+            log.error("Unable to upgrade database from version " + oldVer + " to new " + newVer, e);
         }
     }
 
