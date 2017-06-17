@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.Calendar;
 
 import sk.piskula.fuelup.R;
+import sk.piskula.fuelup.entity.Expense;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.enums.DistanceUnit;
@@ -32,6 +33,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     private Dao<Vehicle, Integer> vehicleDao;
     private Dao<FillUp, Integer> fillUpDao;
+    private Dao<Expense, Integer> expenseDao;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION, R.raw.ormlite_config);
@@ -45,6 +47,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             // of the application life time i.e. the first time when the application starts.
             TableUtils.createTable(connectionSource, Vehicle.class);
             TableUtils.createTable(connectionSource, FillUp.class);
+            TableUtils.createTable(connectionSource, Expense.class);
 
         } catch (SQLException e) {
             Log.e(TAG, "Unable to create databases.", e);
@@ -64,6 +67,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
             TableUtils.dropTable(connectionSource, Vehicle.class, true);
             TableUtils.dropTable(connectionSource, FillUp.class, true);
+            TableUtils.dropTable(connectionSource, Expense.class, true);
             onCreate(sqliteDatabase, connectionSource);
 
         } catch (SQLException e) {
@@ -83,6 +87,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             fillUpDao = getDao(FillUp.class);
         }
         return fillUpDao;
+    }
+
+    public Dao<Expense, Integer> getExpenseDao() throws SQLException {
+        if (expenseDao == null) {
+            expenseDao = getDao(Expense.class);
+        }
+        return expenseDao;
     }
 
     private void initSamlpeData() {
@@ -112,7 +123,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         fillUp1.setFuelPriceTotal(BigDecimal.valueOf(fillUp1.getFuelVolume() * 1.176));
 
         Calendar cal2 = Calendar.getInstance();
-        cal2.set(2017, Calendar.JUNE, 17);
+        cal2.set(2017, Calendar.JUNE, 16);
 
         FillUp fillUp2 = new FillUp();
         fillUp2.setVehicle(mercedes);
@@ -128,6 +139,32 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             getFillUpDao().create(fillUp2);
         } catch (SQLException e) {
             Log.e(TAG, "Unable to create sample FillUps.", e);
+        }
+
+        Calendar cal3 = Calendar.getInstance();
+        cal3.set(2017, Calendar.JUNE, 18);
+
+        Expense tyreChange = new Expense();
+        tyreChange.setVehicle(mercedes);
+        tyreChange.setDate(cal3.getTime());
+        tyreChange.setInfo("Tyre change");
+        tyreChange.setPrice(BigDecimal.valueOf(40.0d));
+
+        Calendar cal4 = Calendar.getInstance();
+        cal4.set(2017, Calendar.JUNE, 19);
+
+        Expense windowClean = new Expense();
+        windowClean.setVehicle(mercedes);
+        windowClean.setDate(cal4.getTime());
+        windowClean.setInfo("window clean");
+        windowClean.setPrice(BigDecimal.valueOf(7.0d));
+
+
+        try {
+            getExpenseDao().create(tyreChange);
+            getExpenseDao().create(windowClean);
+        } catch (SQLException e) {
+            Log.e(TAG, "Unable to create sample Expenses.", e);
         }
     }
 }

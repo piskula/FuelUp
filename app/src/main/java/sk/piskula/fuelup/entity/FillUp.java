@@ -17,7 +17,7 @@ public class FillUp implements Serializable {
     private static final long serialVersionUID = -7406089937623011561L;
 
     @DatabaseField(generatedId = true)
-    private Long Id;
+    private Long id;
 
     @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
     private Vehicle vehicle;
@@ -46,11 +46,11 @@ public class FillUp implements Serializable {
     //end of atributes
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public Vehicle getVehicle() {
@@ -115,6 +115,21 @@ public class FillUp implements Serializable {
 
     public void setInfo(String info) {
         this.info = info;
+    }
+
+    @Override
+    public String toString(){
+        return "FillUp{"
+                + "id=" + id
+                + ", date=" + date
+                + ", info=" + info
+                + ", vehicle=" + vehicle
+                + ", distanceFromLastFillUp=" + distanceFromLastFillUp
+                + ", fuelVolume=" + fuelVolume
+                + ", fuelPricePerLitre=" + fuelPricePerLitre
+                + ", fuelPriceTotlal=" + fuelPriceTotal
+                + ", isFullFillUp=" + isFullFillUp
+                +"}";
     }
 
 }

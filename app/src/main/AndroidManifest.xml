@@ -23,7 +23,11 @@
             android:name=".screens.VehicleTabbedDetail"
             android:label="Detail"
             android:parentActivityName=".screens.VehicleList">
-
+        </activity>
+        <activity
+            android:name=".screens.edit.EditExpense"
+            android:label="Expense"
+            android:parentActivityName=".screens.VehicleTabbedDetail">
         </activity>
     </application>
 

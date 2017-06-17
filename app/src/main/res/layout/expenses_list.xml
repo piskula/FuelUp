@@ -3,11 +3,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="sk.piskula.fuelup.screens.detailfragments.FillUpsListFragment">
+
     <TextView
+        android:id="@id/android:empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:gravity="center"
+        android:text="@string/listExpenses_noExpenseInTheDatabase"
+        android:textAppearance="?android:attr/textAppearance"
+        android:textColor="@android:color/darker_gray"
+        android:visibility="gone"
+        />
+
+    <ListView
+        android:id="@id/android:list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="4dp"
+        android:divider="@android:drawable/divider_horizontal_bright"
+        android:dividerHeight="0.5dp"
+        android:listSelector="@android:drawable/list_selector_background"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_add_expense"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Expenses"
-        android:textStyle="bold"
-        android:layout_gravity="center"/>
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:tint="@android:color/white"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
+
 </FrameLayout>

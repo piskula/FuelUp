@@ -162,11 +162,8 @@ public class VehicleList extends AppCompatActivity
         Vehicle vehicle = new Vehicle();
         vehicle.setName(name);
 
-        final Dao<Vehicle, Integer> vehicleDao;
-
         try {
-            vehicleDao = getHelper().getVehicleDao();
-            vehicleDao.create(vehicle);
+            getHelper().getVehicleDao().create(vehicle);
             adapter.refreshItems(this);
         } catch (SQLException e) {
             String status;
@@ -200,7 +197,6 @@ public class VehicleList extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.vehicle_list, menu);
         return true;
     }

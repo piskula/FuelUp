@@ -16,8 +16,12 @@
     <string name="title_fillUps">Fill Ups</string>
     <string name="title_expenses">Expenses</string>
     <string name="title_statistics">Statistics</string>
+    <string name="remove">Remove</string>
 
-    <string name="listFillUps_noFillupInTheDatabase">No fill-up available for this car. Add a new one by clicking the add button on the top right</string>
+    <string name="listExpenses_noExpenseInTheDatabase">No expense available for this car. Add a new one by clicking the add button on the bottom right</string>
+    <string name="desc_expensePic">service icon</string>
+
+    <string name="listFillUps_noFillupInTheDatabase">No fill-up available for this car. Add a new one by clicking the add button on the bottom right</string>
     <string name="list_item_fillup_is_full">full</string>
     <string name="list_item_fillup_txt_avg_symbol">ø</string>
     <string name="l_100km">l/100km</string>
@@ -27,6 +31,19 @@
     <string name="euro">€</string>
     <string name="listFillUps_isNotFull">not full</string>
     <string name="listFillups_isFull">full</string>
+
+    <string name="add_expense_activity_btn_add">Add</string>
+    <string name="add_expense_activity_title">Add new expense</string>
+    <string name="add_expense_activity_price">Price</string>
+    <string name="add_expense_activity_price_hint">Enter price of expense</string>
+    <string name="add_expense_activity_info">Info</string>
+    <string name="add_expense_activity_info_hint">Enter information about expense</string>
+    <string name="add_expense_activity_date">Date</string>
+    <string name="add_expense_activity_date_hint">Click to show date picker</string>
+    <string name="addExpenseActivity_emptyFields">One or more fields are empty!</string>
+    <string name="addExpenseActivity_btnTxt_update">Update</string>
+    <string name="addExpense_Toast_createdSuccessfully">Expense created successfully</string>
+    <string name="addExpense_Toast_updatedSuccessfully">Expense updated successfully</string>
 
 
 </resources>

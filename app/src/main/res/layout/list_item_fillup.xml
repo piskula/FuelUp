@@ -12,7 +12,6 @@
         android:layout_alignParentTop="true"
         android:text="@string/list_item_fillup_is_full"
         android:textColor="@android:color/darker_gray" />
-    
   
     <TextView
         android:id="@+id/txt_itemfillup_price_total"
@@ -108,7 +107,7 @@
         android:layout_height="70dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/gas_pipe"
+        android:src="@drawable/gasoline_drop"
         android:contentDescription="@string/desc_fillupPic" />
 
     <TextView
