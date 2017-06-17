@@ -13,4 +13,8 @@
     <string name="ok">OK</string>
     <string name="advanced">Advanced</string>
 
+    <string name="title_fillUps">Fill Ups</string>
+    <string name="title_expenses">Expenses</string>
+    <string name="title_statistics">Statistics</string>
+
 </resources>

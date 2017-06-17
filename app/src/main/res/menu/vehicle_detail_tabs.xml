@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_fillUps"
+        android:icon="@drawable/ic_local_gas_station_24dp"
+        android:title="@string/title_fillUps" />
+
+    <item
+        android:id="@+id/navigation_expenses"
+        android:icon="@drawable/ic_attach_money_24dp"
+        android:title="@string/title_expenses" />
+
+    <item
+        android:id="@+id/navigation_statistics"
+        android:icon="@drawable/ic_chart_24dp"
+        android:title="@string/title_statistics" />
+
+</menu>

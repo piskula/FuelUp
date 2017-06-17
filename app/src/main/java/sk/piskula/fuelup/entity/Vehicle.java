@@ -20,6 +20,8 @@ import sk.piskula.fuelup.entity.enums.VehicleType;
 @DatabaseTable(tableName = "vehicles")
 public class Vehicle implements Serializable {
 
+    private static final long serialVersionUID = -7406082437623008261L;
+
     @DatabaseField(generatedId = true)
     private Long id;
 
@@ -37,6 +39,9 @@ public class Vehicle implements Serializable {
 
     @DatabaseField(columnName = "vehicle_maker")
     private String vehicleMaker;
+
+    @DatabaseField(columnName = "start_mileage")
+    private Long startMileage;
 
     //end of attributes
 
@@ -93,6 +98,14 @@ public class Vehicle implements Serializable {
 
     public void setImage(byte[] image) {
         this.image = image;
+    }
+
+    public Long getStartMileage() {
+        return startMileage;
+    }
+
+    public void setStartMileage(Long startMileage) {
+        this.startMileage = startMileage;
     }
 
     @Override
