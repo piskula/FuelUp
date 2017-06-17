@@ -17,4 +17,16 @@
     <string name="title_expenses">Expenses</string>
     <string name="title_statistics">Statistics</string>
 
+    <string name="listFillUps_noFillupInTheDatabase">No fill-up available for this car. Add a new one by clicking the add button on the top right</string>
+    <string name="list_item_fillup_is_full">full</string>
+    <string name="list_item_fillup_txt_avg_symbol">ø</string>
+    <string name="l_100km">l/100km</string>
+    <string name="litre">l</string>
+    <string name="per_litre_symbol">€/l</string>
+    <string name="desc_fillupPic">pump icon</string>
+    <string name="euro">€</string>
+    <string name="listFillUps_isNotFull">not full</string>
+    <string name="listFillups_isFull">full</string>
+
+
 </resources>

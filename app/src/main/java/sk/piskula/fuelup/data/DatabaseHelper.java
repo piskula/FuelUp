@@ -2,6 +2,7 @@ package sk.piskula.fuelup.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
@@ -10,11 +11,8 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.Calendar;
 
-import lombok.extern.slf4j.Slf4j;
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
@@ -25,8 +23,9 @@ import sk.piskula.fuelup.entity.enums.VehicleType;
  * @author Ondrej Oravcok
  * @version 16.6.2017.
  */
-@Slf4j
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
+
+    private static final String TAG = "DatabaseHelper";
 
     private static final String DATABASE_NAME = "fuelup.db";
     private static final int DATABASE_VERSION = 1;
@@ -48,7 +47,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, FillUp.class);
 
         } catch (SQLException e) {
-            log.error("Unable to create databases.", e);
+            Log.e(TAG, "Unable to create databases.", e);
         }
         initSamlpeData();
     }
@@ -68,7 +67,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             onCreate(sqliteDatabase, connectionSource);
 
         } catch (SQLException e) {
-            log.error("Unable to upgrade database from version " + oldVer + " to new " + newVer, e);
+            Log.e(TAG, "Unable to upgrade database from version " + oldVer + " to new " + newVer, e);
         }
     }
 
@@ -97,34 +96,38 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         try {
             getVehicleDao().create(mercedes);
         } catch (SQLException e) {
-            log.error("Unable to create sample Vehicle " + mercedes.getName(), e);
+            Log.e(TAG, "Unable to create sample Vehicle " + mercedes.getName(), e);
         }
 
         Calendar cal = Calendar.getInstance();
         cal.set(2017, Calendar.JUNE, 17);
 
         FillUp fillUp1 = new FillUp();
-        fillUp1.setDate(cal);
+        fillUp1.setVehicle(mercedes);
+        fillUp1.setDate(cal.getTime());
         fillUp1.setDistanceFromLastFillUp(350L);
         fillUp1.setFuelVolume(29.4d);
         fillUp1.setFullFillUp(true);
         fillUp1.setFuelPricePerLitre(BigDecimal.valueOf(1.176));
+        fillUp1.setFuelPriceTotal(BigDecimal.valueOf(fillUp1.getFuelVolume() * 1.176));
 
         Calendar cal2 = Calendar.getInstance();
         cal2.set(2017, Calendar.JUNE, 17);
 
         FillUp fillUp2 = new FillUp();
-        fillUp2.setDate(cal2);
+        fillUp2.setVehicle(mercedes);
+        fillUp2.setDate(cal2.getTime());
         fillUp2.setDistanceFromLastFillUp(450L);
         fillUp2.setFuelVolume(41.0d);
         fillUp2.setFullFillUp(true);
         fillUp2.setFuelPricePerLitre(BigDecimal.valueOf(1.099));
+        fillUp2.setFuelPriceTotal(BigDecimal.valueOf(fillUp2.getFuelVolume() * 1.099));
 
         try {
             getFillUpDao().create(fillUp1);
             getFillUpDao().create(fillUp2);
         } catch (SQLException e) {
-            log.error("Unable to create sample FillUps.", e);
+            Log.e(TAG, "Unable to create sample FillUps.", e);
         }
     }
 }

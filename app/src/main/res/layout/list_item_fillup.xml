@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp" >
+
+    <TextView
+        android:id="@+id/txt_itemfillup_isfullfillup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/list_item_fillup_is_full"
+        android:textColor="@android:color/darker_gray" />
+    
+  
+    <TextView
+        android:id="@+id/txt_itemfillup_price_total"
+        android:layout_marginTop="3dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/txt_itemfillup_fuel_volume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/img_itemfillup_pump"
+        android:layout_alignParentBottom="true"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textAppearance="?android:attr/textAppearance"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/txt_itemfillup_consumption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/txt_itemfillup_consumption_symbol"
+        android:maxLines="1"
+        android:textColor="@android:color/holo_orange_dark"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/txt_itemfillup_consumption_symbol"
+        android:layout_margin="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/l_100km" />
+    
+
+    <TextView
+        android:id="@+id/txt_itemfillup_avg_symbol"
+        android:layout_margin="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/txt_itemfillup_consumption"
+        android:text="@string/list_item_fillup_txt_avg_symbol" />
+
+    <TextView
+        android:id="@+id/txt_itemfillup_price_per_litre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:linksClickable="false"
+        android:text="@string/per_litre_symbol"
+        android:textColor="@android:color/holo_green_dark"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+    <TextView
+        android:id="@+id/txt_itemfillup_price_per_liter_symbol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/txt_itemfillup_price_per_litre"
+        android:text="@string/per_litre_symbol"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+    
+    <TextView
+        android:id="@+id/txt_itemfillup_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/txt_itemfillup_fuel_volume"
+        android:layout_alignParentTop="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
+    
+    <TextView
+        android:id="@+id/txt_itemfillup_driven"
+        android:layout_margin="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/txt_itemfillup_distance" />
+
+	
+    <ImageView
+        android:id="@+id/img_itemfillup_pump"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/gas_pipe"
+        android:contentDescription="@string/desc_fillupPic" />
+
+    <TextView
+        android:id="@+id/txt_itemfillup_price_total_symbol"
+        android:layout_marginTop="3dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/txt_itemfillup_price_total"
+        android:text="@string/euro"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+    
+    <TextView
+        android:id="@+id/txt_itemfillup_fuel_volume_symbol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/txt_itemfillup_fuel_volume"
+        android:text="@string/litre"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+    
+    
+</RelativeLayout>

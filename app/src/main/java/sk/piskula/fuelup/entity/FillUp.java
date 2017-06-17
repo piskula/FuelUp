@@ -5,8 +5,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Calendar;
+import java.util.Date;
 
 /**
  * @author Ondrej Oravcok
@@ -20,7 +19,7 @@ public class FillUp implements Serializable {
     @DatabaseField(generatedId = true)
     private Long Id;
 
-    @DatabaseField(canBeNull = false, foreign = true)
+    @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
     private Vehicle vehicle;
 
     @DatabaseField(columnName = "distance_from_last_fill_up")
@@ -39,7 +38,7 @@ public class FillUp implements Serializable {
     private boolean isFullFillUp;
 
     @DatabaseField
-    private Calendar date;
+    private Date date;
 
     @DatabaseField
     private String info;
@@ -102,11 +101,11 @@ public class FillUp implements Serializable {
         isFullFillUp = fullFillUp;
     }
 
-    public Calendar getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Calendar date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

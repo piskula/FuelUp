@@ -35,24 +35,18 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
-import lombok.extern.slf4j.Slf4j;
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.adapters.ListVehiclesAdapter;
 import sk.piskula.fuelup.data.DatabaseHelper;
 import sk.piskula.fuelup.entity.Vehicle;
-import sk.piskula.fuelup.screens.VehicleTabbedDetail;
 
-@Slf4j
 public class VehicleList extends AppCompatActivity
         implements OnNavigationItemSelectedListener {
 
     private static final String SHARED_PREFERENCES_NAME = "sk.piskula.fuelup.preferences";
     private static final String PREFS_VEHICLE_ID_KEY = "vehicle_id";
-    private static final String EXTRA_ADDED_CAR = "extra_key_added_car";
+    public static final String EXTRA_ADDED_CAR = "extra_key_added_car";
 
     private DatabaseHelper databaseHelper = null;
 
@@ -72,9 +66,8 @@ public class VehicleList extends AppCompatActivity
         listView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-//                Snackbar.make(view, "Clicked " + adapter.getItem(i).getName(), Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                 Intent i = new Intent(view.getContext(), VehicleTabbedDetail.class);
-//                i.putExtra(EXTRA_ADDED_CAR, clickedCar);
+                i.putExtra(EXTRA_ADDED_CAR, adapter.getItem(position));
                 startActivity(i);
             }
         });

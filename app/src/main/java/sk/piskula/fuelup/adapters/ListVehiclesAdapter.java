@@ -23,7 +23,7 @@ import sk.piskula.fuelup.entity.Vehicle;
  */
 public class ListVehiclesAdapter extends BaseAdapter {
 
-    public static final String TAG = "ListVehiclesAdapter";
+    private static final String TAG = "ListVehiclesAdapter";
 
     private DatabaseHelper databaseHelper = null;
 
