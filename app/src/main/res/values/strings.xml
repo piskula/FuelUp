@@ -32,6 +32,29 @@
     <string name="listFillUps_isNotFull">not full</string>
     <string name="listFillups_isFull">full</string>
 
+    <string name="add_car_activity_btn_add">Add</string>
+    <string name="add_car_activity_nick">Car Nick</string>
+    <string name="add_car_activity_nick_hint">Enter the familiar name of your vehicle</string>
+    <string name="add_car_activity_type">Car manufacturer and type name</string>
+    <string name="add_car_activity_type_hint">Enter manufacturer and type name</string>
+    <string name="add_car_activity_mileage">Mileage</string>
+    <string name="add_car_activity_mileage_hint">Enter actual mileage of your car</string>
+    <string name="add_car_activity_title">Add new car</string>
+    <string name="add_car_activity_units">Default Units</string>
+    <string name="add_car_activity_car_type">Select type of your vehicle</string>
+    <string name="add_car_activity_type_prompt">Choose a type</string>
+    <string name="addCarActivity_LOG_badLongNumberFormat">tryed bad number format of Distance travelled</string>
+    <string name="addCarActivity_LOG_wantToAdd">want to add car:</string>
+    <string name="addCarActivity_LOG_added">added car:</string>
+    <string name="addCarActivity_wrong_number_format">Wrong number format</string>
+    <string name="addCarActivity_Toast_added01">Car</string>
+    <string name="addCarActivity_Toast_added02">added</string>
+    <string name="addCarActivity_Toast_emptyFields">There are some empty fields above</string>
+    <string name="addCarActivity_Toast_successfullyCreated">Vehicle have been successfully created.</string>
+    <string name="add_car_activity_take_photo">Take photo</string>
+    <string name="add_car_activity_select_photo">Select photo from gallery</string>
+    <string name="add_car_activity_delete_photo">Delete photo</string>
+
     <string name="add_expense_activity_btn_add">Add</string>
     <string name="add_expense_activity_title">Add new expense</string>
     <string name="add_expense_activity_price">Price</string>
@@ -45,5 +68,39 @@
     <string name="addExpense_Toast_createdSuccessfully">Expense created successfully</string>
     <string name="addExpense_Toast_updatedSuccessfully">Expense updated successfully</string>
 
+    <string-array name="car_types_arrays">
+        <item>Sedan</item>
+        <item>Hatchback</item>
+        <item>Combi</item>
+        <item>Van</item>
+        <item>Motocycle</item>
+        <item>Pickup</item>
+        <item>Quad</item>
+        <item>Sport</item>
+        <item>SUV</item>
+    </string-array>
 
+    <string-array name="car_distance_units">
+        <item>km</item>
+        <item>mi</item>
+    </string-array>
+    <string name="units_kilometres">km</string>
+    <string name="units_miles">mi</string>
+    <string name="units_prefix">l/100</string>
+
+    <string-array name="car_currency">
+        <item>EUR</item>
+        <item>CZK</item>
+        <item>USD</item>
+        <item>PLN</item>
+        <item>GBP</item>
+        <item>INR</item>
+        <item>AUD</item>
+        <item>CAD</item>
+        <item>SGD</item>
+        <item>CHF</item>
+        <item>MYR</item>
+        <item>JPY</item>
+        <item>CNY</item>
+    </string-array>
 </resources>

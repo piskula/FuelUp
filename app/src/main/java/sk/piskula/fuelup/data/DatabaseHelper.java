@@ -11,14 +11,17 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.Expense;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
+import sk.piskula.fuelup.entity.VehicleType;
 import sk.piskula.fuelup.entity.enums.DistanceUnit;
-import sk.piskula.fuelup.entity.enums.VehicleType;
 
 /**
  * @author Ondrej Oravcok
@@ -34,6 +37,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private Dao<Vehicle, Integer> vehicleDao;
     private Dao<FillUp, Integer> fillUpDao;
     private Dao<Expense, Integer> expenseDao;
+    private Dao<VehicleType, Integer> vehicleTypeDao;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION, R.raw.ormlite_config);
@@ -48,7 +52,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, Vehicle.class);
             TableUtils.createTable(connectionSource, FillUp.class);
             TableUtils.createTable(connectionSource, Expense.class);
-
+            TableUtils.createTable(connectionSource, VehicleType.class);
         } catch (SQLException e) {
             Log.e(TAG, "Unable to create databases.", e);
         }
@@ -68,6 +72,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(connectionSource, Vehicle.class, true);
             TableUtils.dropTable(connectionSource, FillUp.class, true);
             TableUtils.dropTable(connectionSource, Expense.class, true);
+            TableUtils.dropTable(connectionSource, VehicleType.class, true);
             onCreate(sqliteDatabase, connectionSource);
 
         } catch (SQLException e) {
@@ -96,12 +101,35 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return expenseDao;
     }
 
+    public Dao<VehicleType, Integer> getVehicleTypeDao() throws SQLException {
+        if (vehicleTypeDao == null) {
+            vehicleTypeDao = getDao(VehicleType.class);
+        }
+        return vehicleTypeDao;
+    }
+
+    private List<VehicleType> initVehicleTypes() {
+        List<String> types = Arrays.asList("Sedan", "Hatchback", "Combi", "Van", "Motocycle", "Pickup", "Quad", "Sport", "SUV", "Coupe");
+        List<VehicleType> result = new ArrayList<>();
+        for(String type : types) {
+            try {
+                getVehicleTypeDao().create(vehicleType(type));
+                result.add(getVehicleTypeDao().queryBuilder().where().eq("name", type).query().get(0));
+            } catch (SQLException e) {
+                Log.e(TAG, "Unable to create sample VehicleType " + type, e);
+            }
+        }
+        return result;
+    }
+
     private void initSamlpeData() {
+        List<VehicleType> types = initVehicleTypes();
+
         Vehicle mercedes = new Vehicle();
         mercedes.setName("Sprinterik");
         mercedes.setVehicleMaker("Mercedes");
-        mercedes.setType(VehicleType.VAN);
-        mercedes.setUnit(DistanceUnit.KM);
+        mercedes.setType(types.get(3));
+        mercedes.setUnit(DistanceUnit.km);
         mercedes.setStartMileage(227880L);
 
         try {
@@ -166,5 +194,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         } catch (SQLException e) {
             Log.e(TAG, "Unable to create sample Expenses.", e);
         }
+    }
+
+    private VehicleType vehicleType(String name) {
+        VehicleType vehicleType = new VehicleType();
+        vehicleType.setName(name);
+        return vehicleType;
     }
 }

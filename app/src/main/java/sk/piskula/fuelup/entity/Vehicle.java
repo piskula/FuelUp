@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import sk.piskula.fuelup.entity.enums.DistanceUnit;
-import sk.piskula.fuelup.entity.enums.VehicleType;
 
 /**
  * @author Ondrej Oravcok
@@ -28,10 +27,10 @@ public class Vehicle implements Serializable {
     @DatabaseField(canBeNull = false, unique = true)
     private String name;
 
-    @DatabaseField(unknownEnumName = "SEDAN")
+    @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
     private VehicleType type;
 
-    @DatabaseField(unknownEnumName = "KM")
+    @DatabaseField(unknownEnumName = "km")
     private DistanceUnit unit;
 
     @DatabaseField(persisted = false)

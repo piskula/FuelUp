@@ -29,6 +29,12 @@
             android:label="Expense"
             android:parentActivityName=".screens.VehicleTabbedDetail">
         </activity>
+        <activity
+            android:name=".screens.edit.AddVehicle"
+            android:label="Add Vehicle"
+            android:parentActivityName=".screens.VehicleList">
+
+        </activity>
     </application>
 
 </manifest>

@@ -1,0 +1,160 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    tools:context=".screens.edit.AddVehicle" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:weightSum="2" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_car_activity_nick"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <RelativeLayout
+            android:id="@+id/rel_lay_nick"
+            style="@style/WhiteBlockStyle" >
+
+            <EditText
+                android:id="@+id/txt_addcar_nick"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:hint="@string/add_car_activity_nick_hint"
+                android:inputType="textCapWords"
+                android:textAppearance="?android:attr/textAppearanceSmall" >
+
+                <requestFocus />
+            </EditText>
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_car_activity_type"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <RelativeLayout
+            android:id="@+id/rel_lay_manufacturer"
+            style="@style/WhiteBlockStyle" >
+
+            <EditText
+                android:id="@+id/txt_type_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:hint="@string/add_car_activity_type_hint"
+                android:inputType="textCapWords"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_car_activity_mileage"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <RelativeLayout
+            android:id="@+id/rel_lay_type"
+            style="@style/WhiteBlockStyle" >
+
+            <EditText
+                android:id="@+id/txt_start_mileage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:hint="@string/add_car_activity_mileage_hint"
+                android:inputType="number"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </RelativeLayout>
+		
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_car_activity_units"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <LinearLayout
+            android:id="@+id/lin_lay_carUnits"
+            style="@style/WhiteBlockStyle" >
+			
+            <Spinner
+                android:id="@+id/spinner_currency"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:entries="@array/car_currency"
+                android:prompt="@string/add_car_activity_type_prompt"
+                android:spinnerMode="dropdown"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+                        
+            <Spinner
+                android:id="@+id/spinner_distance_units"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:entries="@array/car_distance_units"
+                android:prompt="@string/add_car_activity_type_prompt"
+                android:spinnerMode="dropdown"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        </LinearLayout>
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_car_activity_car_type"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <RelativeLayout
+            android:id="@+id/rel_lay_carType"
+            style="@style/WhiteBlockStyle" >
+
+            <Spinner
+                android:id="@+id/spinner_types"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:entries="@array/car_types_arrays"
+                android:prompt="@string/add_car_activity_type_prompt"
+                android:spinnerMode="dropdown"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/img_addcar_car"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="5dp"
+            android:clickable="true"
+            android:adjustViewBounds="true"
+            android:src="@android:drawable/ic_menu_camera"
+            />
+
+        <Button
+            android:id="@+id/btn_add"
+            style="@style/ConfirmButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp"
+            android:text="@string/add_car_activity_btn_add"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+           />
+    </LinearLayout>
+
+</ScrollView>

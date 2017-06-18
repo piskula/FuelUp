@@ -5,5 +5,5 @@ package sk.piskula.fuelup.entity.enums;
  * @version 16.6.2017
  */
 public enum DistanceUnit {
-    KM, MI
+    km, mi
 }

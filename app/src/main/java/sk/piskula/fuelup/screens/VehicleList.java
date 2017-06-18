@@ -40,9 +40,14 @@ import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.adapters.ListVehiclesAdapter;
 import sk.piskula.fuelup.data.DatabaseHelper;
 import sk.piskula.fuelup.entity.Vehicle;
+import sk.piskula.fuelup.entity.VehicleType;
+import sk.piskula.fuelup.entity.enums.DistanceUnit;
+import sk.piskula.fuelup.screens.edit.AddVehicle;
 
 public class VehicleList extends AppCompatActivity
         implements OnNavigationItemSelectedListener {
+
+    private static final String TAG = "VehicleList";
 
     private static final String SHARED_PREFERENCES_NAME = "sk.piskula.fuelup.preferences";
     private static final String PREFS_VEHICLE_ID_KEY = "vehicle_id";
@@ -99,6 +104,12 @@ public class VehicleList extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    @Override
+    protected void onRestart() {
+        adapter.refreshItems(this);
+        super.onRestart();
+    }
+
     private View.OnClickListener createAddNewVehicleFloatingButton() {
         return new View.OnClickListener() {
             @Override
@@ -146,13 +157,17 @@ public class VehicleList extends AppCompatActivity
                 advancedButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //TODO set all photos, units, and so on
+                        dialog.dismiss();
+                        Intent i = new Intent(view.getContext(), AddVehicle.class);
+                        startActivity(i);
                     }
                 });
                 dialog.show();
             }
         };
     }
+
+
 
     private Dialog createVehicleDialog() {
         return new Dialog(this);
@@ -161,8 +176,11 @@ public class VehicleList extends AppCompatActivity
     private void saveVehicle(String name, View view) {
         Vehicle vehicle = new Vehicle();
         vehicle.setName(name);
+        vehicle.setUnit(DistanceUnit.km);
 
         try {
+            VehicleType type = getHelper().getVehicleTypeDao().queryBuilder().queryForFirst();
+            vehicle.setType(type);
             getHelper().getVehicleDao().create(vehicle);
             adapter.refreshItems(this);
         } catch (SQLException e) {
@@ -174,7 +192,7 @@ public class VehicleList extends AppCompatActivity
             }
             Snackbar.make(view, "ERROR: " + status, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-            e.printStackTrace();
+            Log.e(TAG, status, e);
         }
     }
 

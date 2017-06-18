@@ -115,9 +115,6 @@ public class EditExpense extends AppCompatActivity implements OnClickListener {
                 Calendar serviceDate = Calendar.getInstance();
                 if (mode == Mode.UPDATING) {
                     serviceDate.setTimeInMillis(selectedExpense.getDate().getTime());
-//                    serviceDate.set(selectedExpense.getDate().get(Calendar.YEAR),
-//                            selectedExpense.getDate().get(Calendar.MONTH),
-//                            selectedExpense.getDate().get(Calendar.DAY_OF_MONTH));
                 }
                 serviceDate.set(year, monthOfYear, dayOfMonth);
                 mTxtDate.setText(android.text.format.DateFormat.getDateFormat(getApplicationContext()).format(serviceDate.getTime()));
@@ -127,11 +124,13 @@ public class EditExpense extends AppCompatActivity implements OnClickListener {
 
     private void initActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        if (mode == Mode.UPDATING) {
-            actionBar.setTitle("Update expense");
-        } else {
-            actionBar.setTitle("Create expense");
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            if (mode == Mode.UPDATING) {
+                actionBar.setTitle("Update expense");
+            } else {
+                actionBar.setTitle("Create expense");
+            }
         }
     }
 
@@ -153,12 +152,12 @@ public class EditExpense extends AppCompatActivity implements OnClickListener {
         }
     }
 
-    @Override
-    public Intent getParentActivityIntent() {
-        Intent intent = new Intent(this, VehicleTabbedDetail.class);
-        intent.putExtra(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT, selectedVehicle);
-        return intent;
-    }
+//    @Override
+//    public Intent getParentActivityIntent() {
+//        Intent intent = new Intent(this, VehicleTabbedDetail.class);
+//        intent.putExtra(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT, selectedVehicle);
+//        return intent;
+//    }
 
     private void getInstanceMode() {
         if (selectedExpense != null) {
@@ -205,7 +204,6 @@ public class EditExpense extends AppCompatActivity implements OnClickListener {
                             createdExpense.setPrice(createdPrice);
                             createdExpense.setVehicle(selectedVehicle);
 
-                            //TODO createExpense
                             try {
                                 getHelper().getExpenseDao().create(createdExpense);
                                 Toast.makeText(this, R.string.addExpense_Toast_createdSuccessfully, Toast.LENGTH_LONG).show();
