@@ -20,8 +20,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.Toast;
+
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+
+import java.sql.SQLException;
 
 import sk.piskula.fuelup.R;
+import sk.piskula.fuelup.data.DatabaseHelper;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.screens.detailfragments.ExpensesListFragment;
 import sk.piskula.fuelup.screens.detailfragments.FillUpsListFragment;
@@ -40,10 +46,11 @@ public class VehicleTabbedDetail extends AppCompatActivity {
 
     public static final String VEHICLE_TO_FRAGMENT = "fragment-vehicle";
 
-    private BottomNavigationView navigation;
     private Fragment fragment;
     private FragmentManager fragmentManager;
     private Vehicle vehicle;
+
+    private DatabaseHelper databaseHelper;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -55,12 +62,15 @@ public class VehicleTabbedDetail extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_fillUps:
                     fragment = new FillUpsListFragment();
+                    getSupportActionBar().setTitle("Fill Ups");
                     break;
                 case R.id.navigation_expenses:
                     fragment = new ExpensesListFragment();
+                    getSupportActionBar().setTitle("Expenses");
                     break;
                 case R.id.navigation_statistics:
                     fragment = new StatisticsFragment();
+                    getSupportActionBar().setTitle("Statistics");
                     break;
             }
             fragment.setArguments(bundle);
@@ -81,7 +91,7 @@ public class VehicleTabbedDetail extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
 
-        navigation = (BottomNavigationView) findViewById(R.id.vehicle_detail_navigation);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.vehicle_detail_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_fillUps);
     }
@@ -113,9 +123,8 @@ public class VehicleTabbedDetail extends AppCompatActivity {
         confirmDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
+                //only styling here, no business logic
                 Button negative = confirmDialog.getButton(confirmDialog.BUTTON_NEGATIVE);
-//                    negative.setBackground(ContextCompat.getDrawable(VehicleTabbedDetail.this, R.drawable.orange_button));
-//                    negative.setTextColor(Color.parseColor("#FFFFFF"));
                 negative.setFocusable(true);
                 negative.setFocusableInTouchMode(true);
                 negative.requestFocus();
@@ -130,11 +139,6 @@ public class VehicleTabbedDetail extends AppCompatActivity {
         startActivity(i);
     }
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//    }
-
     private AlertDialog confirmDeletion()
     {
         return new AlertDialog.Builder(this)
@@ -145,8 +149,20 @@ public class VehicleTabbedDetail extends AppCompatActivity {
                 .setIcon(R.drawable.tow)
                 .setPositiveButton("Yes, delete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        //your deleting code
+
                         dialog.dismiss();
+                        try {
+                            getHelper().getVehicleDao().delete(vehicle);
+                        } catch (SQLException e) {
+                            String msg = "Failed to remove vehicle '" + vehicle.getName() + "'.";
+                            Log.e(TAG, msg, e);
+                            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                        }
+                        String msg = "Vehicle removed successfully.";
+                        Log.i(TAG, msg);
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+
+                        finish();
                     }
                 })
 
@@ -156,5 +172,12 @@ public class VehicleTabbedDetail extends AppCompatActivity {
                     }
                 })
                 .create();
+    }
+
+    private DatabaseHelper getHelper() {
+        if (databaseHelper == null) {
+            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+        }
+        return databaseHelper;
     }
 }
