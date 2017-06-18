@@ -8,4 +8,9 @@
         android:title="@string/remove"
         app:showAsAction="always"/>
 
+    <item
+        android:id="@+id/btn_vehicle_update"
+        android:icon="@drawable/ic_build_black_24dp"
+        android:title="@string/update"
+        app:showAsAction="always"/>
 </menu>

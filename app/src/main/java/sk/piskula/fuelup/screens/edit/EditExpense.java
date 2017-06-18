@@ -67,14 +67,14 @@ public class EditExpense extends AppCompatActivity implements OnClickListener {
 
         Intent intent = getIntent();
 
-        if (intent != null) {
-            selectedVehicle = (Vehicle) intent.getSerializableExtra(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT);
-            selectedExpense = (Expense) intent.getSerializableExtra(ExpensesListFragment.EXPENSE_TO_EDIT);
-            getInstanceMode();
-
-            if (mode == Mode.UPDATING) {
-                selectedVehicle = selectedExpense.getVehicle();
-            }
+        selectedExpense = (Expense) intent.getSerializableExtra(ExpensesListFragment.EXPENSE_TO_EDIT);
+        //getInstanceMode();
+        if (selectedExpense != null) {
+            selectedVehicle = selectedExpense.getVehicle();
+            mode = Mode.UPDATING;
+        } else {
+            selectedVehicle = (Vehicle) intent.getSerializableExtra(ExpensesListFragment.VEHICLE_FROM_FRAGMENT_TO_EDIT_EXPENSE);
+            mode = Mode.CREATING;
         }
 
         //DB

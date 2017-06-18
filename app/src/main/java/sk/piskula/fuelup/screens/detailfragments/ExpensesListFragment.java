@@ -35,6 +35,7 @@ public class ExpensesListFragment extends ListFragment {
 
     public static final String EXPENSE_TO_EDIT = "expense to edit";
     public static final int REQUEST_CODE_UPDATE_EXPENSE = 31;
+    public static final String VEHICLE_FROM_FRAGMENT_TO_EDIT_EXPENSE = "fromFragmentToExpense";
 
     private Bundle args;
     private Vehicle vehicle;
@@ -55,7 +56,7 @@ public class ExpensesListFragment extends ListFragment {
 
         View view = inflater.inflate(R.layout.expenses_list, container, false);
 
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_add_expense);
+        FloatingActionButton fab = view.findViewById(R.id.fab_add_expense);
         fab.setOnClickListener(addNewExpenseFloatingButton());
 
         return view;
@@ -65,10 +66,8 @@ public class ExpensesListFragment extends ListFragment {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Add new Expense", Snackbar.LENGTH_SHORT)
-//                        .setAction("Action", null).show();
                 Intent i = new Intent(getActivity(), EditExpense.class);
-                i.putExtra(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT, vehicle);
+                i.putExtra(VEHICLE_FROM_FRAGMENT_TO_EDIT_EXPENSE, vehicle);
                 startActivity(i);
             }
         };
@@ -77,8 +76,6 @@ public class ExpensesListFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView list, View v, int position, long id) {
         super.onListItemClick(list, v, position, id);
-//        Snackbar.make(list, "update expense", Snackbar.LENGTH_SHORT)
-//                .setAction("Action", null).show();
         Expense clickedExpense = adapter.getItem(position);
 
         Intent i = new Intent(getActivity(), EditExpense.class);

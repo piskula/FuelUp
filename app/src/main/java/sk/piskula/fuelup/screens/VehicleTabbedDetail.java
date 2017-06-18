@@ -26,6 +26,7 @@ import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.screens.detailfragments.ExpensesListFragment;
 import sk.piskula.fuelup.screens.detailfragments.FillUpsListFragment;
 import sk.piskula.fuelup.screens.detailfragments.StatisticsFragment;
+import sk.piskula.fuelup.screens.edit.UpdateVehicle;
 
 import static android.R.attr.id;
 
@@ -93,25 +94,46 @@ public class VehicleTabbedDetail extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.btn_vehicle_remove) {
-            final AlertDialog confirmDialog = confirmDeletion();
-            confirmDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialogInterface) {
-                    Button negative = confirmDialog.getButton(confirmDialog.BUTTON_NEGATIVE);
-//                    negative.setBackground(ContextCompat.getDrawable(VehicleTabbedDetail.this, R.drawable.orange_button));
-//                    negative.setTextColor(Color.parseColor("#FFFFFF"));
-                    negative.setFocusable(true);
-                    negative.setFocusableInTouchMode(true);
-                    negative.requestFocus();
-                }
-            });
-            confirmDialog.show();
-            return true;
+        switch (item.getItemId()) {
+            case R.id.btn_vehicle_remove:
+                removeVehicle();
+                return true;
+            case R.id.btn_vehicle_update:
+                updateVehicle();
+                return true;
+            default:
+                break;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void removeVehicle() {
+        final AlertDialog confirmDialog = confirmDeletion();
+        confirmDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button negative = confirmDialog.getButton(confirmDialog.BUTTON_NEGATIVE);
+//                    negative.setBackground(ContextCompat.getDrawable(VehicleTabbedDetail.this, R.drawable.orange_button));
+//                    negative.setTextColor(Color.parseColor("#FFFFFF"));
+                negative.setFocusable(true);
+                negative.setFocusableInTouchMode(true);
+                negative.requestFocus();
+            }
+        });
+        confirmDialog.show();
+    }
+
+    private void updateVehicle() {
+        Intent i = new Intent(this, UpdateVehicle.class);
+        i.putExtra(VEHICLE_TO_FRAGMENT, vehicle);
+        startActivity(i);
+    }
+
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//    }
 
     private AlertDialog confirmDeletion()
     {

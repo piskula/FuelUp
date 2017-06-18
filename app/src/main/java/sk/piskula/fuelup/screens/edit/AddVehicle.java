@@ -17,10 +17,12 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -57,16 +59,19 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
     private EditText mTxtActualMileage;
     private Spinner mTypeSpinner;
     private Spinner mCurrencySpinner;
-    private Spinner mDistanceSpinner;
+    private RadioGroup mDistanceUnitRadioGroup;
     private Button mBtnAdd;
     private ImageView mImgCarPhoto;
+    private LinearLayout layout;
 
     private DatabaseHelper databaseHelper = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_car);
+        setContentView(R.layout.add_vehicle);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         initViews();
     }
@@ -83,21 +88,22 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState.containsKey(PHOTO)) {
             mCurrentPhotoLarge = savedInstanceState.getParcelable(PHOTO);
-            ImageView im = (ImageView) findViewById(R.id.img_addcar_car);
+            ImageView im = (ImageView) findViewById(R.id.img_addVehicle_photo);
             im.setImageBitmap(mCurrentPhotoLarge);
         }
     }
 
     private void initViews() {
-        this.mTxtNick = (EditText) findViewById(R.id.txt_addcar_nick);
-        this.mTxtTypeName = (EditText) findViewById(R.id.txt_type_name);
-        this.mTxtActualMileage = (EditText) findViewById(R.id.txt_start_mileage);
+        this.mTxtNick = (EditText) findViewById(R.id.txt_addVehicle_name);
+        this.mTxtTypeName = (EditText) findViewById(R.id.txt_addVehicle_manufacturer);
+        this.mTxtActualMileage = (EditText) findViewById(R.id.txt_addVehicle_mileage);
         this.mBtnAdd = (Button) findViewById(R.id.btn_add);
         this.mTypeSpinner = (Spinner) findViewById(R.id.spinner_types);
         this.mCurrencySpinner = (Spinner) findViewById(R.id.spinner_currency);
-        this.mDistanceSpinner = (Spinner) findViewById(R.id.spinner_distance_units);
-        //TODO Camera photos
-        this.mImgCarPhoto = (ImageView) findViewById(R.id.img_addcar_car);
+        this.mDistanceUnitRadioGroup = (RadioGroup) findViewById(R.id.radio_distance_unit);
+        this.mDistanceUnitRadioGroup.check(R.id.radio_km);
+        this.layout = (LinearLayout) findViewById(R.id.addVehicle_layout);
+        this.mImgCarPhoto = (ImageView) findViewById(R.id.img_addVehicle_photo);
 
         mTxtActualMileage.setRawInputType(Configuration.KEYBOARD_QWERTY);
 
@@ -112,9 +118,9 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
             case R.id.btn_add:
                 saveCar();
                 break;
-            case R.id.img_addcar_car:
+            case R.id.img_addVehicle_photo:
                 //TODO camera photos
-                //createImageChooserDialog();
+                createImageChooserDialog();
                 break;
             default:
                 break;
@@ -157,7 +163,9 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
                     Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
                     finish();
                 }
-                createdVehicle.setUnit(DistanceUnit.valueOf(mDistanceSpinner.getSelectedItem().toString()));
+                //TODO vehicle distance unit
+//                createdVehicle.setUnit(DistanceUnit.valueOf(mDistanceSpinner.getSelectedItem().toString()));
+                createdVehicle.setUnit(DistanceUnit.km);
                 createdVehicle.setImage(mCurrentPhotoLarge);
 
                 Log.d(TAG, getString(R.string.addCarActivity_LOG_wantToAdd) + " "
@@ -173,6 +181,7 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
                     String errorMsg = "Error occured while saving new Vehicle to DB.";
                     Log.e(TAG, errorMsg, e);
                     Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show();
+                    finish();
                 }
 
                 Log.d(TAG, getString(R.string.addCarActivity_LOG_added) + " "
@@ -205,12 +214,13 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                //TODO repair photos
                 if (which == TAKE_PHOTO) {
-                    takePhoto();
+                    //takePhoto();
                 } else if (which == SELECT_PHOTO) {
-                    selectImageFromGallery();
+                    //selectImageFromGallery();
                 } else if (which == DELETE_PHOTO) {
-                    deletePhoto();
+                    //deletePhoto();
                 }
                 dialog.dismiss();
             }
