@@ -25,7 +25,7 @@ public class Expense implements Serializable {
     @DatabaseField
     private BigDecimal price;
 
-    @DatabaseField
+    @DatabaseField(canBeNull = false)
     private Date date;
 
     @DatabaseField(canBeNull = false)

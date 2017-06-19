@@ -58,9 +58,8 @@
     <string name="add_expense_activity_btn_add">Add</string>
     <string name="add_expense_activity_title">Add new expense</string>
     <string name="add_expense_activity_price">Price</string>
-    <string name="add_expense_activity_price_hint">Enter price of expense</string>
     <string name="add_expense_activity_info">Info</string>
-    <string name="add_expense_activity_info_hint">Enter information about expense</string>
+    <string name="add_expense_activity_info_hint">Information about expense</string>
     <string name="add_expense_activity_date">Date</string>
     <string name="add_expense_activity_date_hint">Click to show date picker</string>
     <string name="addExpenseActivity_emptyFields">One or more fields are empty!</string>
