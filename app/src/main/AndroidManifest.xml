@@ -24,7 +24,11 @@
             android:name=".screens.VehicleTabbedDetail"
             android:label="Detail"
             android:launchMode="singleTop"
-            android:parentActivityName=".screens.VehicleList">
+            android:parentActivityName=".screens.VehicleList"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sk.piskula.fuelup.screens.VehicleList" />
         </activity>
         <activity
             android:name=".screens.edit.EditExpense"

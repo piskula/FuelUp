@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="8dp" >
 
     <TextView
@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:text="@string/list_item_fillup_is_full"
         android:textColor="@android:color/darker_gray" />
-  
+
     <TextView
         android:id="@+id/txt_itemfillup_price_total"
         android:layout_marginTop="3dp"
@@ -52,7 +52,7 @@
         android:layout_alignParentRight="true"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/l_100km" />
-    
+
 
     <TextView
         android:id="@+id/txt_itemfillup_avg_symbol"
@@ -73,7 +73,7 @@
         android:text="@string/per_litre_symbol"
         android:textColor="@android:color/holo_green_dark"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-    
+
     <TextView
         android:id="@+id/txt_itemfillup_price_per_liter_symbol"
         android:layout_width="wrap_content"
@@ -82,7 +82,7 @@
         android:layout_toRightOf="@+id/txt_itemfillup_price_per_litre"
         android:text="@string/per_litre_symbol"
         android:textAppearance="?android:attr/textAppearanceSmall" />
-    
+
     <TextView
         android:id="@+id/txt_itemfillup_distance"
         android:layout_width="wrap_content"
@@ -91,7 +91,7 @@
         android:layout_alignParentTop="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="bold" />
-    
+
     <TextView
         android:id="@+id/txt_itemfillup_driven"
         android:layout_margin="2dp"
@@ -100,7 +100,7 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/txt_itemfillup_distance" />
 
-	
+
     <ImageView
         android:id="@+id/img_itemfillup_pump"
         android:layout_width="60dp"
@@ -119,7 +119,7 @@
         android:layout_toRightOf="@+id/txt_itemfillup_price_total"
         android:text="@string/euro"
         android:textAppearance="?android:attr/textAppearanceSmall" />
-    
+
     <TextView
         android:id="@+id/txt_itemfillup_fuel_volume_symbol"
         android:layout_width="wrap_content"
@@ -128,6 +128,6 @@
         android:layout_toRightOf="@+id/txt_itemfillup_fuel_volume"
         android:text="@string/litre"
         android:textAppearance="?android:attr/textAppearanceSmall" />
-    
-    
+
+
 </RelativeLayout>
