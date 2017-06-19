@@ -48,12 +48,12 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
 
     public static final String TAG = "AddCarActivity";
     private static final String PHOTO = "photo";
-    public static final int REQUEST_PICTURE = 123456789;
-    public static final int REQUEST_TAKE_PHOTOS = 98765;
+    public static final int REQUEST_PICTURE = 1113;
+    public static final int REQUEST_TAKE_PHOTOS = 1112;
     public static final int REQUEST_PIC_CROP = 1111;
 
     private String mCurrentPhotoPath;
-    private Bitmap mCurrentPhotoLarge;
+    private Bitmap currentPhoto;
     private EditText mTxtNick;
     private EditText mTxtTypeName;
     private EditText mTxtActualMileage;
@@ -79,17 +79,18 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (mCurrentPhotoLarge != null)
-            outState.putParcelable(PHOTO, mCurrentPhotoLarge);
+        if (currentPhoto != null)
+            outState.putParcelable(PHOTO, currentPhoto);
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState.containsKey(PHOTO)) {
-            mCurrentPhotoLarge = savedInstanceState.getParcelable(PHOTO);
-            ImageView im = (ImageView) findViewById(R.id.img_addVehicle_photo);
-            im.setImageBitmap(mCurrentPhotoLarge);
+            currentPhoto = savedInstanceState.getParcelable(PHOTO);
+            mImgCarPhoto.setImageResource(R.drawable.ic_camera_deny);
+//            ImageView im = (ImageView) findViewById(R.id.img_addVehicle_photo);
+//            im.setImageBitmap(currentPhoto);
         }
     }
 
@@ -120,7 +121,11 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
                 break;
             case R.id.img_addVehicle_photo:
                 //TODO camera photos
-                createImageChooserDialog();
+                if (currentPhoto != null) {
+                    deletePhoto();
+                } else {
+                    createImageChooserDialog();
+                }
                 break;
             default:
                 break;
@@ -166,7 +171,7 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
                 //TODO vehicle distance unit
 //                createdVehicle.setUnit(DistanceUnit.valueOf(mDistanceSpinner.getSelectedItem().toString()));
                 createdVehicle.setUnit(DistanceUnit.km);
-                createdVehicle.setImage(mCurrentPhotoLarge);
+                createdVehicle.setImage(currentPhoto);
 
                 Log.d(TAG, getString(R.string.addCarActivity_LOG_wantToAdd) + " "
                         + createdVehicle.getName() + "-"
@@ -195,37 +200,6 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
         } else {
             Toast.makeText(this, getString(R.string.addCarActivity_Toast_emptyFields), Toast.LENGTH_LONG).show();
         }
-    }
-
-    public void createImageChooserDialog() {
-        final int TAKE_PHOTO = 0;
-        final int SELECT_PHOTO = 1;
-        final int DELETE_PHOTO = 2;
-
-        final CharSequence[] opsWithDelete = {getResources().getString(R.string.add_car_activity_take_photo), getResources().getString(R.string.add_car_activity_select_photo),getResources().getString(R.string.add_car_activity_delete_photo)};
-        final CharSequence[] opsWithOutDelete = {getResources().getString(R.string.add_car_activity_take_photo), getResources().getString(R.string.add_car_activity_select_photo)};
-
-        final CharSequence[] opsChars = mCurrentPhotoLarge == null ? opsWithOutDelete : opsWithDelete;
-
-        AlertDialog.Builder getImageFrom = new AlertDialog.Builder(this);
-        getImageFrom.setTitle("Select:");
-
-        getImageFrom.setItems(opsChars, new android.content.DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //TODO repair photos
-                if (which == TAKE_PHOTO) {
-                    //takePhoto();
-                } else if (which == SELECT_PHOTO) {
-                    //selectImageFromGallery();
-                } else if (which == DELETE_PHOTO) {
-                    //deletePhoto();
-                }
-                dialog.dismiss();
-            }
-        });
-        getImageFrom.create().show();
     }
 
     @Override
@@ -263,10 +237,33 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
         }
     }
 
+    public void createImageChooserDialog() {
+        final int TAKE_PHOTO = 0;
+        final int SELECT_PHOTO = 1;
+
+        final CharSequence[] opsChars = {getResources().getString(R.string.add_car_activity_take_photo), getResources().getString(R.string.add_car_activity_select_photo)};
+
+        AlertDialog.Builder getImageDialog = new AlertDialog.Builder(this);
+        getImageDialog.setTitle("Select:");
+        getImageDialog.setItems(opsChars, new android.content.DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //TODO repair photos
+                if (which == TAKE_PHOTO) {
+                    takePhoto();
+                } else if (which == SELECT_PHOTO) {
+                    selectImageFromGallery();
+                }
+                dialog.dismiss();
+            }
+        });
+        getImageDialog.create().show();
+    }
+
     private void selectImageFromGallery() {
         Intent i = new Intent(
                 Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
         startActivityForResult(i, REQUEST_PICTURE);
     }
 
@@ -287,13 +284,12 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
                         Uri.fromFile(photoFile));
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTOS);
             }
-
         }
     }
 
     public void deletePhoto() {
-        mCurrentPhotoLarge = null;
-        mImgCarPhoto.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_camera));
+        currentPhoto = null;
+        mImgCarPhoto.setImageResource(R.drawable.ic_camera);
     }
 
     private File createImageFile() throws IOException {
@@ -319,8 +315,9 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = 1;
         bmOptions.inPurgeable = true;
-        mCurrentPhotoLarge = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        mImgCarPhoto.setImageBitmap(mCurrentPhotoLarge);
+        currentPhoto = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        mImgCarPhoto.setImageResource(R.drawable.ic_camera_deny);
+//        mImgCarPhoto.setImageBitmap(currentPhoto);
     }
 
     private void performCrop() {

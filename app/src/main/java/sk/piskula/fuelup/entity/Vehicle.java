@@ -124,7 +124,7 @@ public class Vehicle implements Serializable {
 
     @Override
     public int hashCode(){
-        return Objects.hash(name);
+        return name != null ? name.hashCode() : 0;
     }
 
     @Override
