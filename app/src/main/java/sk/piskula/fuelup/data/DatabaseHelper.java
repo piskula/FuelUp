@@ -53,10 +53,17 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, FillUp.class);
             TableUtils.createTable(connectionSource, Expense.class);
             TableUtils.createTable(connectionSource, VehicleType.class);
+            Log.i(TAG, "Tables created successfully.");
         } catch (SQLException e) {
             Log.e(TAG, "Unable to create databases.", e);
         }
-        initSamlpeData();
+
+        try {
+            initSamlpeData();
+            Log.i(TAG, "Sample data initialized.");
+        } catch (SQLException e) {
+            Log.e(TAG, "Unable to create sample data.", e);
+        }
     }
 
     @Override
@@ -108,98 +115,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return vehicleTypeDao;
     }
 
-    private List<VehicleType> initVehicleTypes() {
-        List<String> types = Arrays.asList("Sedan", "Hatchback", "Combi", "Van", "Motocycle", "Pickup", "Quad", "Sport", "SUV", "Coupe");
-        List<VehicleType> result = new ArrayList<>();
-        for (String type : types) {
-            try {
-                getVehicleTypeDao().create(vehicleType(type));
-                result.add(getVehicleTypeDao().queryBuilder().where().eq("name", type).query().get(0));
-            } catch (SQLException e) {
-                Log.e(TAG, "Unable to create sample VehicleType " + type, e);
-            }
-        }
-        return result;
-    }
+    private void initSamlpeData() throws SQLException {
+        List<VehicleType> types = SampleDataUtils.addVehicleTypes(getVehicleTypeDao());
+        List<Vehicle> vehicles = SampleDataUtils.addVehicles(getVehicleDao(), types);
+        SampleDataUtils.addFillUps(getFillUpDao(), vehicles);
 
-    private void initSamlpeData() {
-        List<VehicleType> types = initVehicleTypes();
-
-        Vehicle mercedes = createCar("Sprinterik", "Mercedes", types.get(3), DistanceUnit.km, 227880L);
-        Vehicle civic = createCar("Civic", "Honda", types.get(1), DistanceUnit.mi, 142000L);
-
-
-        // create sample fill ups
-        for (int i = 1; i < 10; i++) {
-            createFillUp(mercedes, i * 20, 15.1 * i, true, i, 2017, i, i + 1);
-            createFillUp(civic, i * 10, 5 * i, true, i, 2016, i, i + 10);
-        }
-
-        // create sample expenses
-        for (int i = 1; i < 11; i++) {
-            createExpense(mercedes, 2017, i, i + 10, "My Sprinter expense " + i, i * 15.5);
-            createExpense(civic, 2016, i, i , "My Civic expense " + i, i * 5.5);
-        }
-    }
-
-    private VehicleType vehicleType(String name) {
-        VehicleType vehicleType = new VehicleType();
-        vehicleType.setName(name);
-        return vehicleType;
-    }
-
-
-    private Vehicle createCar(String name, String maker, VehicleType type, DistanceUnit unit, long mileage) {
-        Vehicle car = new Vehicle();
-        car.setName(name);
-        car.setVehicleMaker(maker);
-        car.setType(type);
-        car.setUnit(unit);
-        car.setStartMileage(mileage);
-
-        try {
-            getVehicleDao().create(car);
-        } catch (SQLException e) {
-            Log.e(TAG, "Unable to create sample Vehicle " + car.getName(), e);
-        }
-        return car;
-    }
-
-    private void createFillUp(Vehicle vehicle, long distanceFromLast, double fuelVolume, boolean isFull, double pricePerLitre,
-                              int year, int month, int day) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(year, month, day);
-
-        FillUp fillUp = new FillUp();
-        fillUp.setVehicle(vehicle);
-        fillUp.setDate(cal.getTime());
-        fillUp.setDistanceFromLastFillUp(distanceFromLast);
-        fillUp.setFuelVolume(fuelVolume);
-        fillUp.setFullFillUp(isFull);
-        fillUp.setFuelPricePerLitre(BigDecimal.valueOf(pricePerLitre));
-        fillUp.setFuelPriceTotal(BigDecimal.valueOf(fillUp.getFuelVolume() * pricePerLitre));
-
-        try {
-            getFillUpDao().create(fillUp);
-        } catch (SQLException e) {
-            Log.e(TAG, "Unable to create sample FillUps.", e);
-        }
-    }
-
-    private void createExpense(Vehicle vehicle, int year, int month, int day, String info, double price) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(year, month, day);
-
-        Expense expense = new Expense();
-        expense.setVehicle(vehicle);
-        expense.setDate(cal.getTime());
-        expense.setInfo(info);
-        expense.setPrice(BigDecimal.valueOf(price));
-
-        try {
-            getExpenseDao().create(expense);
-        } catch (SQLException e) {
-            Log.e(TAG, "Unable to create sample Expenses.", e);
-        }
     }
 }
