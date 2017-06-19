@@ -111,7 +111,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private List<VehicleType> initVehicleTypes() {
         List<String> types = Arrays.asList("Sedan", "Hatchback", "Combi", "Van", "Motocycle", "Pickup", "Quad", "Sport", "SUV", "Coupe");
         List<VehicleType> result = new ArrayList<>();
-        for(String type : types) {
+        for (String type : types) {
             try {
                 getVehicleTypeDao().create(vehicleType(type));
                 result.add(getVehicleTypeDao().queryBuilder().where().eq("name", type).query().get(0));
@@ -125,74 +125,20 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private void initSamlpeData() {
         List<VehicleType> types = initVehicleTypes();
 
-        Vehicle mercedes = new Vehicle();
-        mercedes.setName("Sprinterik");
-        mercedes.setVehicleMaker("Mercedes");
-        mercedes.setType(types.get(3));
-        mercedes.setUnit(DistanceUnit.km);
-        mercedes.setStartMileage(227880L);
+        Vehicle mercedes = createCar("Sprinterik", "Mercedes", types.get(3), DistanceUnit.km, 227880L);
+        Vehicle civic = createCar("Civic", "Honda", types.get(1), DistanceUnit.mi, 142000L);
 
-        try {
-            getVehicleDao().create(mercedes);
-        } catch (SQLException e) {
-            Log.e(TAG, "Unable to create sample Vehicle " + mercedes.getName(), e);
+
+        // create sample fill ups
+        for (int i = 1; i < 10; i++) {
+            createFillUp(mercedes, i * 20, 15.1 * i, true, i, 2017, i, i + 1);
+            createFillUp(civic, i * 10, 5 * i, true, i, 2016, i, i + 10);
         }
 
-        Calendar cal = Calendar.getInstance();
-        cal.set(2017, Calendar.JUNE, 17);
-
-        FillUp fillUp1 = new FillUp();
-        fillUp1.setVehicle(mercedes);
-        fillUp1.setDate(cal.getTime());
-        fillUp1.setDistanceFromLastFillUp(350L);
-        fillUp1.setFuelVolume(29.4d);
-        fillUp1.setFullFillUp(true);
-        fillUp1.setFuelPricePerLitre(BigDecimal.valueOf(1.176));
-        fillUp1.setFuelPriceTotal(BigDecimal.valueOf(fillUp1.getFuelVolume() * 1.176));
-
-        Calendar cal2 = Calendar.getInstance();
-        cal2.set(2017, Calendar.JUNE, 16);
-
-        FillUp fillUp2 = new FillUp();
-        fillUp2.setVehicle(mercedes);
-        fillUp2.setDate(cal2.getTime());
-        fillUp2.setDistanceFromLastFillUp(450L);
-        fillUp2.setFuelVolume(41.0d);
-        fillUp2.setFullFillUp(true);
-        fillUp2.setFuelPricePerLitre(BigDecimal.valueOf(1.099));
-        fillUp2.setFuelPriceTotal(BigDecimal.valueOf(fillUp2.getFuelVolume() * 1.099));
-
-        try {
-            getFillUpDao().create(fillUp1);
-            getFillUpDao().create(fillUp2);
-        } catch (SQLException e) {
-            Log.e(TAG, "Unable to create sample FillUps.", e);
-        }
-
-        Calendar cal3 = Calendar.getInstance();
-        cal3.set(2017, Calendar.JUNE, 18);
-
-        Expense tyreChange = new Expense();
-        tyreChange.setVehicle(mercedes);
-        tyreChange.setDate(cal3.getTime());
-        tyreChange.setInfo("Tyre change");
-        tyreChange.setPrice(BigDecimal.valueOf(40.0d));
-
-        Calendar cal4 = Calendar.getInstance();
-        cal4.set(2017, Calendar.JUNE, 19);
-
-        Expense windowClean = new Expense();
-        windowClean.setVehicle(mercedes);
-        windowClean.setDate(cal4.getTime());
-        windowClean.setInfo("window clean");
-        windowClean.setPrice(BigDecimal.valueOf(7.0d));
-
-
-        try {
-            getExpenseDao().create(tyreChange);
-            getExpenseDao().create(windowClean);
-        } catch (SQLException e) {
-            Log.e(TAG, "Unable to create sample Expenses.", e);
+        // create sample expenses
+        for (int i = 1; i < 11; i++) {
+            createExpense(mercedes, 2017, i, i + 10, "My Sprinter expense " + i, i * 15.5);
+            createExpense(civic, 2016, i, i , "My Civic expense " + i, i * 5.5);
         }
     }
 
@@ -200,5 +146,60 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         VehicleType vehicleType = new VehicleType();
         vehicleType.setName(name);
         return vehicleType;
+    }
+
+
+    private Vehicle createCar(String name, String maker, VehicleType type, DistanceUnit unit, long mileage) {
+        Vehicle car = new Vehicle();
+        car.setName(name);
+        car.setVehicleMaker(maker);
+        car.setType(type);
+        car.setUnit(unit);
+        car.setStartMileage(mileage);
+
+        try {
+            getVehicleDao().create(car);
+        } catch (SQLException e) {
+            Log.e(TAG, "Unable to create sample Vehicle " + car.getName(), e);
+        }
+        return car;
+    }
+
+    private void createFillUp(Vehicle vehicle, long distanceFromLast, double fuelVolume, boolean isFull, double pricePerLitre,
+                              int year, int month, int day) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month, day);
+
+        FillUp fillUp = new FillUp();
+        fillUp.setVehicle(vehicle);
+        fillUp.setDate(cal.getTime());
+        fillUp.setDistanceFromLastFillUp(distanceFromLast);
+        fillUp.setFuelVolume(fuelVolume);
+        fillUp.setFullFillUp(isFull);
+        fillUp.setFuelPricePerLitre(BigDecimal.valueOf(pricePerLitre));
+        fillUp.setFuelPriceTotal(BigDecimal.valueOf(fillUp.getFuelVolume() * pricePerLitre));
+
+        try {
+            getFillUpDao().create(fillUp);
+        } catch (SQLException e) {
+            Log.e(TAG, "Unable to create sample FillUps.", e);
+        }
+    }
+
+    private void createExpense(Vehicle vehicle, int year, int month, int day, String info, double price) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month, day);
+
+        Expense expense = new Expense();
+        expense.setVehicle(vehicle);
+        expense.setDate(cal.getTime());
+        expense.setInfo(info);
+        expense.setPrice(BigDecimal.valueOf(price));
+
+        try {
+            getExpenseDao().create(expense);
+        } catch (SQLException e) {
+            Log.e(TAG, "Unable to create sample Expenses.", e);
+        }
     }
 }
