@@ -29,7 +29,7 @@ deploy:
   file_glob: "true"
   skip_cleanup: true
   on:
-  branch: master
+    branch: master
     repo: piskula/FuelUp
 after_success:
   set_tags.sh
