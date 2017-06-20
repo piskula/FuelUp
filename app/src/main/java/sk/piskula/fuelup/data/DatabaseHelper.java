@@ -119,6 +119,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         List<VehicleType> types = SampleDataUtils.addVehicleTypes(getVehicleTypeDao());
         List<Vehicle> vehicles = SampleDataUtils.addVehicles(getVehicleDao(), types);
         SampleDataUtils.addFillUps(getFillUpDao(), vehicles);
-
+        SampleDataUtils.addExpenses(getExpenseDao(), vehicles);
     }
 }

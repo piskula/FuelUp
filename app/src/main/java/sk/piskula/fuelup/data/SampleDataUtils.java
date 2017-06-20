@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import sk.piskula.fuelup.entity.Expense;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.VehicleType;
@@ -72,7 +73,11 @@ public class SampleDataUtils {
             Calendar cal = Calendar.getInstance();
             cal.set(2017, random.nextInt(11), random.nextInt(27) + 1);
             int dist = random.nextInt(5) + 6;
-            fillUpDao.create(fillUp(vehicles.get(i % 2), BigDecimal.valueOf(random.nextDouble() * 8), cal.getTime(), Long.valueOf(dist * 40) , (dist + 3 * random.nextDouble())* 4 * 0.8 ));
+            fillUpDao.create(fillUp(vehicles.get(random.nextInt(vehicles.size())),
+                    BigDecimal.valueOf((random.nextDouble() + 1) * 5.2),
+                    cal.getTime(),
+                    Long.valueOf(dist * 40) ,
+                    (dist + 3 * random.nextDouble())* 4 * 0.8 ));
         }
 
     }
@@ -91,5 +96,35 @@ public class SampleDataUtils {
         fillUp.setFuelPriceTotal(fillUp.getFuelPricePerLitre().multiply(BigDecimal.valueOf(fillUp.getFuelVolume())));
 
         return fillUp;
+    }
+
+    public static void addExpenses(Dao<Expense, Integer> expenseDao, List<Vehicle> vehicles) throws SQLException {
+        List<String> issues = Arrays.asList("winter wheels", "new clutch", "exhaust tuning",
+                "summer wheels", "air condition service", "oil change", "fuel filter change",
+                "front bumber", "rear window", "steering wheel", "new stereo", "Brembo breaks",
+                "NOS nitro tuning", "Yearly insurance", "tyres interchange", "air freshener");
+        List<Double> prices = Arrays.asList(7d, 50d, 20000d, 3.6d, 220d, 315d, 450d, 11700d, 7400d, 3200d, 42000d, 12d, 15d, 18d, 45d, 52d, 110d, 95d);
+        final int COUNT = 30;
+        Random random = new Random();
+
+        for (int i = 0; i < COUNT; i++) {
+            Calendar cal = Calendar.getInstance();
+            cal.set(2017, random.nextInt(11), random.nextInt(27) + 1);
+            expenseDao.create(expense(vehicles.get(random.nextInt(vehicles.size())),
+                    issues.get(random.nextInt(issues.size())),
+                    BigDecimal.valueOf(prices.get(random.nextInt(prices.size()))),
+                    cal.getTime()));
+        }
+    }
+
+    private static Expense expense(Vehicle vehicle, String info, BigDecimal price, Date date) {
+        Expense expense = new Expense();
+
+        expense.setVehicle(vehicle);
+        expense.setInfo(info);
+        expense.setPrice(price);
+        expense.setDate(date);
+
+        return expense;
     }
 }
