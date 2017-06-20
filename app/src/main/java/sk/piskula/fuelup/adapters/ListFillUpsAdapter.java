@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import sk.piskula.fuelup.R;
@@ -26,9 +27,9 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
     private Callback callback;
 
 
-    public ListFillUpsAdapter(Callback callback, List<FillUp> items) {
+    public ListFillUpsAdapter(Callback callback) {
         super();
-        this.items = items;
+        this.items = new ArrayList<>();
         this.callback = callback;
     }
 
