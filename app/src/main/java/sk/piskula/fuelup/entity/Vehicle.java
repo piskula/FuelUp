@@ -8,7 +8,12 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Currency;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import sk.piskula.fuelup.entity.enums.DistanceUnit;
 
@@ -20,6 +25,14 @@ import sk.piskula.fuelup.entity.enums.DistanceUnit;
 public class Vehicle implements Serializable {
 
     private static final long serialVersionUID = -7406082437623008261L;
+
+    private static final Map<Currency, String> customCurrencySymbols;
+    static {
+        customCurrencySymbols = new HashMap<>();
+        customCurrencySymbols.put(Currency.getInstance("CZK"), "Kc");
+        customCurrencySymbols.put(Currency.getInstance("PLN"), "zl");
+        customCurrencySymbols.put(Currency.getInstance("HUF"), "Ft");
+    }
 
     @DatabaseField(generatedId = true)
     private Long id;
@@ -42,8 +55,10 @@ public class Vehicle implements Serializable {
     @DatabaseField(columnName = "start_mileage")
     private Long startMileage;
 
-    //end of attributes
+    @DatabaseField(canBeNull = false)
+    private String currency;
 
+    //end of attributes
     public Long getId() {
         return id;
     }
@@ -107,6 +122,14 @@ public class Vehicle implements Serializable {
         this.startMileage = startMileage;
     }
 
+    public Currency getCurrency() {
+        return Currency.getInstance(currency);
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency.getCurrencyCode();
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -135,6 +158,8 @@ public class Vehicle implements Serializable {
                 + ", type=" + type
                 + ", unit=" + unit
                 + ", vehicleMaker=" + vehicleMaker
+                + ", startMileage=" + startMileage
+                + ", currency=" + currency
                 +"}";
     }
 
@@ -161,6 +186,30 @@ public class Vehicle implements Serializable {
             if(image == null) return null;
             return BitmapFactory.decodeByteArray(image, 0, image.length);
         }
+    }
+
+    public String getCurrencySymbol() {
+        if (customCurrencySymbols.containsKey(this.getCurrency())) {
+            return customCurrencySymbols.get(this.getCurrency());
+        }
+        return this.getCurrency().getSymbol();
+    }
+
+    public static String getCurrencySymbol(Currency currency) {
+        if (customCurrencySymbols.containsKey(currency)) {
+            return customCurrencySymbols.get(currency);
+        }
+        return currency.getSymbol();
+    }
+
+    public static List<Currency> getSupportedCurrencies(){
+        List<String> currenciesStrings = Arrays.asList("EUR", "CZK", "USD", "GBP", "PLN", "HUF");
+        List<Currency> currencies = new ArrayList<>();
+
+        for (String currencyString : currenciesStrings)
+            currencies.add(Currency.getInstance(currencyString));
+
+        return currencies;
     }
 
 }

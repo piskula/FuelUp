@@ -12,6 +12,7 @@ import java.util.List;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.Expense;
+import sk.piskula.fuelup.entity.Vehicle;
 
 /**
  * Created by Martin Styk on 19.06.2017.
@@ -48,9 +49,7 @@ public class ListExpensesAdapter extends RecyclerView.Adapter<ListExpensesAdapte
         if (currentItem != null) {
             DecimalFormat bddf = new DecimalFormat();
 
-            holder.txtPriceSymbol.setText("USD");
-            //TODO string representation of distance unit
-//            holder.txtPriceSymbol.setText(currentItem.getVehicle().getCurrencyFormatted());
+            holder.txtPriceSymbol.setText(currentItem.getVehicle().getCurrencySymbol());
             holder.txtInfo.setText(currentItem.getInfo());
             holder.txtPrice.setText(bddf.format(currentItem.getPrice()));
             holder.txtDate.setText(android.text.format.DateFormat.getDateFormat(context).format(currentItem.getDate().getTime()));

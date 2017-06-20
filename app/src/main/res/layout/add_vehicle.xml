@@ -65,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/addVehicle_mileage"
-                android:inputType="textCapWords"
+                android:inputType="number"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
 
@@ -77,7 +77,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Currency"
+                android:text="@string/currency"
                 android:textColor="@color/colorAccent"
                 android:paddingTop="15dp"
                 android:paddingBottom="2dp"/>
@@ -85,8 +85,7 @@
             <Spinner
                 android:id="@+id/spinner_currency"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:entries="@array/car_currency">
+                android:layout_height="wrap_content">
             </Spinner>
 
         </LinearLayout>
@@ -99,7 +98,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Currency"
+                android:text="@string/vehicle_type"
                 android:textColor="@color/colorAccent"
                 android:paddingTop="15dp"
                 android:paddingBottom="2dp"/>
@@ -107,8 +106,7 @@
             <Spinner
                 android:id="@+id/spinner_types"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:entries="@array/car_types_arrays">
+                android:layout_height="wrap_content">
             </Spinner>
 
         </LinearLayout>
@@ -121,7 +119,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Distance units"
+                android:text="@string/distance_units"
                 android:textColor="@color/colorAccent"
                 android:paddingTop="15dp"
                 android:paddingBottom="2dp"/>

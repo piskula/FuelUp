@@ -29,8 +29,10 @@ public class ListVehiclesAdapter extends BaseAdapter {
 
     private List<Vehicle> mItems;
     private LayoutInflater mInflater;
+    private TextView noVehicleText;
 
-    public ListVehiclesAdapter(Context context) {
+    public ListVehiclesAdapter(Context context, TextView noVehicleText) {
+        this.noVehicleText = noVehicleText;
         refreshItems(context);
         this.mInflater = LayoutInflater.from(context);
     }
@@ -42,6 +44,10 @@ public class ListVehiclesAdapter extends BaseAdapter {
             //TODO LOG
             mItems = new ArrayList<>();
         }
+
+        if (mItems.isEmpty()) noVehicleText.setVisibility(View.VISIBLE);
+        else noVehicleText.setVisibility(View.GONE);
+
         notifyDataSetChanged();
     }
 

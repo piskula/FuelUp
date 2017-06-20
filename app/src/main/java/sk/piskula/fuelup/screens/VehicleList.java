@@ -19,16 +19,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import java.sql.SQLException;
+import java.util.Currency;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.adapters.ListVehiclesAdapter;
@@ -52,13 +55,15 @@ public class VehicleList extends AppCompatActivity
     private SharedPreferences sharedPreferences;
 
     private ListView listView;
+    private TextView noVehicleText;
     private ListVehiclesAdapter adapter;
 
     private void initVehicleList() {
+        noVehicleText = (TextView) findViewById(R.id.txt_not_vehicle);
         listView = (ListView) findViewById(R.id.list_cars);
         listView.setVisibility(View.VISIBLE);
 
-        adapter = new ListVehiclesAdapter(this);
+        adapter = new ListVehiclesAdapter(this, noVehicleText);
         listView.setAdapter(adapter);
 
         listView.setFocusable(false);
@@ -171,6 +176,7 @@ public class VehicleList extends AppCompatActivity
         Vehicle vehicle = new Vehicle();
         vehicle.setName(name);
         vehicle.setUnit(DistanceUnit.km);
+        vehicle.setCurrency(Currency.getInstance("EUR"));
 
         try {
             VehicleType type = getHelper().getVehicleTypeDao().queryBuilder().queryForFirst();

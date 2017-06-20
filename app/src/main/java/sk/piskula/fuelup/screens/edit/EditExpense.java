@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,7 +20,6 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
@@ -52,7 +49,7 @@ public class EditExpense extends AppCompatActivity {
 
     private Vehicle vehicle;
     private Expense expense;
-    private Calendar expenseDate = Calendar.getInstance();
+    private Calendar _expenseDate;
     private Mode mode;
 
     private DatabaseHelper databaseHelper = null;
@@ -77,6 +74,7 @@ public class EditExpense extends AppCompatActivity {
             mode = Mode.CREATING;
             vehicle = (Vehicle) intent.getSerializableExtra(ExpensesListFragment.VEHICLE_FROM_FRAGMENT_TO_EDIT_EXPENSE);
             expense = new Expense();
+            setExpenseDate(Calendar.getInstance());
             expense.setVehicle(vehicle);
         }
 
@@ -121,7 +119,7 @@ public class EditExpense extends AppCompatActivity {
     }
 
     private void setExpenseDate(Calendar calendar) {
-        this.expenseDate = calendar;
+        this._expenseDate = calendar;
         mTxtDate.setText(android.text.format.DateFormat.getDateFormat(getApplicationContext()).format(calendar.getTime()));
     }
 
@@ -144,9 +142,9 @@ public class EditExpense extends AppCompatActivity {
                         serviceDate.set(y, m, d);
                         setExpenseDate(serviceDate);
                     }
-                }, expenseDate.get(Calendar.YEAR),
-                        expenseDate.get(Calendar.MONTH),
-                        expenseDate.get(Calendar.DAY_OF_MONTH)).show();
+                }, _expenseDate.get(Calendar.YEAR),
+                        _expenseDate.get(Calendar.MONTH),
+                        _expenseDate.get(Calendar.DAY_OF_MONTH)).show();
             }
         };
     }

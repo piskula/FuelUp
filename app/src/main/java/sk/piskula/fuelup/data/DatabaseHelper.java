@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.field.types.StringBytesType;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -14,7 +15,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Currency;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.Expense;
@@ -34,10 +38,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final String DATABASE_NAME = "fuelup.db";
     private static final int DATABASE_VERSION = 1;
 
-    private Dao<Vehicle, Integer> vehicleDao;
-    private Dao<FillUp, Integer> fillUpDao;
-    private Dao<Expense, Integer> expenseDao;
-    private Dao<VehicleType, Integer> vehicleTypeDao;
+    private Dao<Vehicle, Long> vehicleDao;
+    private Dao<FillUp, Long> fillUpDao;
+    private Dao<Expense, Long> expenseDao;
+    private Dao<VehicleType, Long> vehicleTypeDao;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION, R.raw.ormlite_config);
@@ -87,14 +91,14 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
     }
 
-    public Dao<Vehicle, Integer> getVehicleDao() throws SQLException {
+    public Dao<Vehicle, Long> getVehicleDao() throws SQLException {
         if (vehicleDao == null) {
             vehicleDao = getDao(Vehicle.class);
         }
         return vehicleDao;
     }
 
-    public Dao<FillUp, Integer> getFillUpDao() {
+    public Dao<FillUp, Long> getFillUpDao() {
         if (fillUpDao == null) {
             try {
                 fillUpDao = getDao(FillUp.class);
@@ -105,14 +109,14 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return fillUpDao;
     }
 
-    public Dao<Expense, Integer> getExpenseDao() throws SQLException {
+    public Dao<Expense, Long> getExpenseDao() throws SQLException {
         if (expenseDao == null) {
             expenseDao = getDao(Expense.class);
         }
         return expenseDao;
     }
 
-    public Dao<VehicleType, Integer> getVehicleTypeDao() throws SQLException {
+    public Dao<VehicleType, Long> getVehicleTypeDao() throws SQLException {
         if (vehicleTypeDao == null) {
             vehicleTypeDao = getDao(VehicleType.class);
         }

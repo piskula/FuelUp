@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -23,7 +24,7 @@ import sk.piskula.fuelup.entity.enums.DistanceUnit;
  */
 public class SampleDataUtils {
 
-    public static List<VehicleType> addVehicleTypes(Dao<VehicleType, Integer> vehicleTypeDao) throws SQLException {
+    public static List<VehicleType> addVehicleTypes(Dao<VehicleType, Long> vehicleTypeDao) throws SQLException {
         List<String> types = Arrays.asList("Sedan", "Hatchback", "Combi", "Van", "Motocycle", "Pickup", "Quad", "Sport", "SUV", "Coupe");
         List<VehicleType> result = new ArrayList<>();
         for (String type : types) {
@@ -41,19 +42,19 @@ public class SampleDataUtils {
         return vehicleType;
     }
 
-    public static List<Vehicle> addVehicles(Dao<Vehicle, Integer> vehicleDao, List<VehicleType> types) throws SQLException {
+    public static List<Vehicle> addVehicles(Dao<Vehicle, Long> vehicleDao, List<VehicleType> types) throws SQLException {
         List<Vehicle> vehicles = new ArrayList<>();
 
-        vehicleDao.create(vehicle("Sprinterik", "Mercedes", DistanceUnit.km, types.get(3), 227880L));
+        vehicleDao.create(vehicle("Sprinterik", "Mercedes", DistanceUnit.mi, types.get(3), 227880L, Currency.getInstance("CZK")));
         vehicles.add(vehicleDao.queryBuilder().where().eq("name", "Sprinterik").query().get(0));
-        vehicleDao.create(vehicle("Civic", "Honda", DistanceUnit.km, types.get(1), 227880L));
+        vehicleDao.create(vehicle("Civic", "Honda", DistanceUnit.km, types.get(1), 227880L, Currency.getInstance("EUR")));
         vehicles.add(vehicleDao.queryBuilder().where().eq("name", "Civic").query().get(0));
 
         return vehicles;
     }
 
-    private static Vehicle vehicle(String name, String maker,
-                            DistanceUnit unit, VehicleType type, Long mileage) {
+    private static Vehicle vehicle(String name, String maker, DistanceUnit unit,
+                                   VehicleType type, Long mileage, Currency currency) {
         Vehicle vehicle = new Vehicle();
 
         vehicle.setName(name);
@@ -61,11 +62,12 @@ public class SampleDataUtils {
         vehicle.setUnit(unit);
         vehicle.setType(type);
         vehicle.setStartMileage(mileage);
+        vehicle.setCurrency(currency);
 
         return vehicle;
     }
 
-    public static void addFillUps(Dao<FillUp, Integer> fillUpDao, List<Vehicle> vehicles) throws SQLException {
+    public static void addFillUps(Dao<FillUp, Long> fillUpDao, List<Vehicle> vehicles) throws SQLException {
         final int COUNT = 30;
         Random random = new Random();
 
@@ -98,7 +100,7 @@ public class SampleDataUtils {
         return fillUp;
     }
 
-    public static void addExpenses(Dao<Expense, Integer> expenseDao, List<Vehicle> vehicles) throws SQLException {
+    public static void addExpenses(Dao<Expense, Long> expenseDao, List<Vehicle> vehicles) throws SQLException {
         List<String> issues = Arrays.asList("winter wheels", "new clutch", "exhaust tuning",
                 "summer wheels", "air condition service", "oil change", "fuel filter change",
                 "front bumber", "rear window", "steering wheel", "new stereo", "Brembo breaks",

@@ -2,7 +2,6 @@ package sk.piskula.fuelup.screens.edit;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,8 +11,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,9 +29,12 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Currency;
 import java.util.Date;
 
 import sk.piskula.fuelup.R;
+import sk.piskula.fuelup.adapters.SpinnerCurrencyAdapter;
+import sk.piskula.fuelup.adapters.SpinnerVehicleTypesAdapter;
 import sk.piskula.fuelup.data.DatabaseHelper;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.VehicleType;
@@ -61,7 +61,7 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
     private Spinner mCurrencySpinner;
     private RadioGroup mDistanceUnitRadioGroup;
     private Button mBtnAdd;
-    private ImageView mImgCarPhoto;
+    private ImageView mImgCarPhotoStatus;
     private LinearLayout layout;
 
     private DatabaseHelper databaseHelper = null;
@@ -71,9 +71,8 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_vehicle);
 
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
         initViews();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     @Override
@@ -88,9 +87,7 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState.containsKey(PHOTO)) {
             currentPhoto = savedInstanceState.getParcelable(PHOTO);
-            mImgCarPhoto.setImageResource(R.drawable.ic_camera_deny);
-//            ImageView im = (ImageView) findViewById(R.id.img_addVehicle_photo);
-//            im.setImageBitmap(currentPhoto);
+            mImgCarPhotoStatus.setImageResource(R.drawable.ic_camera_deny);
         }
     }
 
@@ -104,20 +101,20 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
         this.mDistanceUnitRadioGroup = (RadioGroup) findViewById(R.id.radio_distance_unit);
         this.mDistanceUnitRadioGroup.check(R.id.radio_km);
         this.layout = (LinearLayout) findViewById(R.id.addVehicle_layout);
-        this.mImgCarPhoto = (ImageView) findViewById(R.id.img_addVehicle_photo);
+        this.mImgCarPhotoStatus = (ImageView) findViewById(R.id.img_addVehicle_photo);
 
-        mTxtActualMileage.setRawInputType(Configuration.KEYBOARD_QWERTY);
+        mCurrencySpinner.setAdapter(new SpinnerCurrencyAdapter(this));
+        mTypeSpinner.setAdapter(new SpinnerVehicleTypesAdapter(this));
 
-        mImgCarPhoto.setOnClickListener(this);
-
-        this.mBtnAdd.setOnClickListener(this);
+        mImgCarPhotoStatus.setOnClickListener(this);
+        mBtnAdd.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add:
-                saveCar();
+                saveVehicle();
                 break;
             case R.id.img_addVehicle_photo:
                 //TODO camera photos
@@ -132,74 +129,43 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
         }
     }
 
-    private void saveCar() {
-        Editable nick = mTxtNick.getText();
-        Editable typeName = mTxtTypeName.getText();
-        Editable actualMileage = mTxtActualMileage.getText();
+    private void saveVehicle() {
+        String nick = mTxtNick.getText().toString();
+        String typeName = mTxtTypeName.getText().toString();
+        String actualMileage = mTxtActualMileage.getText().toString();
 
-        if (!TextUtils.isEmpty(nick)
-                && !TextUtils.isEmpty(typeName)
-                && !TextUtils.isEmpty(actualMileage)) {
-            // add the car to database
-            Vehicle createdVehicle = new Vehicle();
-            Long createdMileage = Long.valueOf(0);
-            String msg = null;
-
-            try {
-                createdMileage = Long.parseLong(actualMileage.toString());
-            } catch (NumberFormatException ex) {
-                Log.d(TAG, getString(R.string.addCarActivity_LOG_badLongNumberFormat));
-                msg = getString(R.string.addCarActivity_wrong_number_format);
-            }
-            if (msg == null) {
-                createdVehicle.setName(nick.toString());
-                createdVehicle.setVehicleMaker(typeName.toString());
-                createdVehicle.setStartMileage(createdMileage);
-                //TODO set other fields
-//                createdVehicle.setActualMileage(createdMileage);
-//                createdVehicle.setAvgFuelConsumption(0.0);
-//                createdVehicle.setCarCurrency(Car.CarCurrency.valueOf(mCurrencySpinner.getSelectedItem().toString()));
-                try {
-                    VehicleType type = getHelper().getVehicleTypeDao().queryBuilder().where().eq("name", mTypeSpinner.getSelectedItem().toString()).queryForFirst();
-                    createdVehicle.setType(type);
-                } catch (SQLException e) {
-                    msg = "Choosen vehicleType does not exist";
-                    Log.e(TAG, msg, e);
-                    Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-                    finish();
-                }
-                //TODO vehicle distance unit
-//                createdVehicle.setUnit(DistanceUnit.valueOf(mDistanceSpinner.getSelectedItem().toString()));
-                createdVehicle.setUnit(DistanceUnit.km);
-                createdVehicle.setImage(currentPhoto);
-
-                Log.d(TAG, getString(R.string.addCarActivity_LOG_wantToAdd) + " "
-                        + createdVehicle.getName() + "-"
-                        + createdVehicle.getVehicleMaker() + ":" + createdVehicle.getType().getName() + ":"
-                    //  + createdVehicle.getCarCurrency().toString() + ":"
-                        + createdVehicle.getUnit().toString());
-
-                try {
-                    getHelper().getVehicleDao().create(createdVehicle);
-                    Toast.makeText(this, R.string.addCarActivity_Toast_successfullyCreated, Toast.LENGTH_LONG).show();
-                } catch (SQLException e) {
-                    String errorMsg = "Error occured while saving new Vehicle to DB.";
-                    Log.e(TAG, errorMsg, e);
-                    Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show();
-                    finish();
-                }
-
-                Log.d(TAG, getString(R.string.addCarActivity_LOG_added) + " "
-                        + createdVehicle.getName() + "-"
-                        + createdVehicle.getType());
-
-                finish();
-            } else {
-                Toast.makeText(this, msg + "- actualMileage", Toast.LENGTH_LONG).show();
-            }
-        } else {
+        if (nick.isEmpty() || typeName.isEmpty() || actualMileage.isEmpty()) {
             Toast.makeText(this, getString(R.string.addCarActivity_Toast_emptyFields), Toast.LENGTH_LONG).show();
+            return;
         }
+
+        // add vehicle to database
+        Vehicle createdVehicle = new Vehicle();
+        createdVehicle.setName(nick);
+        createdVehicle.setVehicleMaker(typeName);
+        createdVehicle.setCurrency((Currency) mCurrencySpinner.getSelectedItem());
+        createdVehicle.setType((VehicleType) mTypeSpinner.getSelectedItem());
+        createdVehicle.setUnit(mDistanceUnitRadioGroup
+                .getCheckedRadioButtonId() == R.id.radio_km ? DistanceUnit.km : DistanceUnit.mi);
+
+        try {
+            createdVehicle.setStartMileage(Long.parseLong(actualMileage));
+        } catch (NumberFormatException ex) {
+            Log.e(TAG, getString(R.string.addCarActivity_LOG_badLongNumberFormat));
+            Toast.makeText(this, R.string.addCarActivity_LOG_badLongNumberFormat, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            getHelper().getVehicleDao().create(createdVehicle);
+            Log.i(TAG, "Successfully persisted new Vehicle: " + createdVehicle);
+            Toast.makeText(this, R.string.addCarActivity_Toast_successfullyCreated, Toast.LENGTH_LONG).show();
+        } catch (SQLException e) {
+            String errorMsg = "Error occured while saving new Vehicle to DB.";
+            Log.e(TAG, errorMsg, e);
+            Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show();
+        }
+        finish();
     }
 
     @Override
@@ -289,7 +255,7 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
 
     public void deletePhoto() {
         currentPhoto = null;
-        mImgCarPhoto.setImageResource(R.drawable.ic_camera);
+        mImgCarPhotoStatus.setImageResource(R.drawable.ic_camera);
     }
 
     private File createImageFile() throws IOException {
@@ -316,8 +282,8 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
         bmOptions.inSampleSize = 1;
         bmOptions.inPurgeable = true;
         currentPhoto = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        mImgCarPhoto.setImageResource(R.drawable.ic_camera_deny);
-//        mImgCarPhoto.setImageBitmap(currentPhoto);
+        mImgCarPhotoStatus.setImageResource(R.drawable.ic_camera_deny);
+//        mImgCarPhotoStatus.setImageBitmap(currentPhoto);
     }
 
     private void performCrop() {
@@ -356,7 +322,7 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
 
     private DatabaseHelper getHelper() {
         if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(this,DatabaseHelper.class);
+            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
         }
         return databaseHelper;
     }

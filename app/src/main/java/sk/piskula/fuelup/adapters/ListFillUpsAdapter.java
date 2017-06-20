@@ -14,6 +14,7 @@ import java.util.List;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.FillUp;
+import sk.piskula.fuelup.entity.Vehicle;
 
 import static android.content.ContentValues.TAG;
 
@@ -50,7 +51,6 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
             //set views
             holder.txtDistanceFromLastFillUp.setText(currentItem.getDistanceFromLastFillUp().toString());
             holder.txtDriven.setText(currentItem.getVehicle().getUnit().toString());
-            //TODO string representation of distance unit
             holder.txtConsumptionSymbol.setText("l/100" + currentItem.getVehicle().getUnit().toString());
 
             if (currentItem.isFullFillUp()) {
@@ -59,9 +59,8 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
                 holder.txtIsFullFillUp.setText(R.string.listFillUps_isNotFull);
             }
 
-//            String currency = " " + currentItem.getCar().getCurrencyFormatted();
-            String currency = " USD";   //TODO
-            holder.txtPriceTotalSymbol.setText(currency);
+            String currency = " " + currentItem.getVehicle().getCurrencySymbol();
+            holder.txtPriceTotalSymbol.setText(" " + currency);
             currency += "/l";
             holder.txtPricePerLitreSymbol.setText(currency);
 
@@ -109,8 +108,8 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
+    class ViewHolder extends RecyclerView.ViewHolder {
+        final View mView;
 
         TextView txtDistanceFromLastFillUp;
         TextView txtIsFullFillUp;
@@ -124,7 +123,7 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
         TextView txtPricePerLitreSymbol;
         TextView txtPriceTotalSymbol;
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             super(v);
             mView = v;
             txtDistanceFromLastFillUp = v.findViewById(R.id.txt_itemfillup_distance);
