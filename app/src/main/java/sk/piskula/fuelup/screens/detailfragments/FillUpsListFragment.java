@@ -11,21 +11,18 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.adapters.ListFillUpsAdapter;
-import sk.piskula.fuelup.data.DatabaseHelper;
+import sk.piskula.fuelup.data.DatabaseProvider;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.loaders.FillUpLoader;
@@ -51,7 +48,7 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
     private CollapsingToolbarLayout appBarLayout;
     private FloatingActionButton addButton;
 
-    private DatabaseHelper databaseHelper = null;
+    //    private DatabaseHelper databaseHelper = null;
     private Dao<FillUp, Integer> fillUpDao = null;
 
     @Override
@@ -91,22 +88,22 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
 
         return view;
     }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        if (databaseHelper != null) {
-            OpenHelperManager.releaseHelper();
-            databaseHelper = null;
-        }
-    }
+//
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//
+//        if (databaseHelper != null) {
+//            OpenHelperManager.releaseHelper();
+//            databaseHelper = null;
+//        }
+//    }
 
     @Override
     public Loader<List<FillUp>> onCreateLoader(int id, Bundle args) {
         Vehicle vehicle = (Vehicle) args.getSerializable(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT);
         long vehicleId = vehicle.getId();
-        return new FillUpLoader(getActivity(), vehicleId, getDao());
+        return new FillUpLoader(getActivity(), vehicleId, DatabaseProvider.get(getActivity()).getFillUpDao());
     }
 
     @Override
@@ -138,16 +135,17 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
         }
     }
 
-    private Dao<FillUp, Integer> getDao() {
-        if (databaseHelper == null)
-            databaseHelper = OpenHelperManager.getHelper(getActivity(), DatabaseHelper.class);
-        if (fillUpDao == null) {
-            try {
-                fillUpDao = databaseHelper.getFillUpDao();
-            } catch (SQLException e) {
-                Log.e(TAG, "Error getting fillUpDao", e);
-            }
-        }
-        return fillUpDao;
-    }
+//    private Dao<FillUp, Integer> getDao() {
+////        if (databaseHelper == null)
+////            databaseHelper = OpenHelperManager.getHelper(getActivity(), DatabaseHelper.class);
+////        if (fillUpDao == null) {
+////            try {
+////                return databaseHelper.getFillUpDao();
+////            } catch (SQLException e) {
+////                Log.e(TAG, "Error getting fillUpDao", e);
+////            }
+////        }
+////        return null;
+//
+//    }
 }

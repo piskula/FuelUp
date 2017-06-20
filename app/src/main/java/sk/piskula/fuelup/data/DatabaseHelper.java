@@ -94,9 +94,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return vehicleDao;
     }
 
-    public Dao<FillUp, Integer> getFillUpDao() throws SQLException {
+    public Dao<FillUp, Integer> getFillUpDao() {
         if (fillUpDao == null) {
-            fillUpDao = getDao(FillUp.class);
+            try {
+                fillUpDao = getDao(FillUp.class);
+            }catch (SQLException e){
+                Log.i(TAG, "Can not create fillup dao.");
+            }
         }
         return fillUpDao;
     }
