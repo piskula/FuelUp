@@ -1,6 +1,8 @@
 package sk.piskula.fuelup.screens.detailfragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -19,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sk.piskula.fuelup.R;
-import sk.piskula.fuelup.adapters.ListFillUpsAdapter1;
+import sk.piskula.fuelup.adapters.ListFillUpsAdapter;
 import sk.piskula.fuelup.data.DatabaseHelper;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
@@ -29,18 +31,26 @@ import sk.piskula.fuelup.screens.VehicleTabbedDetail;
  * @author Ondrej Oravcok
  * @version 17.6.2017
  */
-public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter1.Callback {
+public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.Callback, View.OnClickListener {
 
     private static final String TAG = "FillUpsListFragment";
 
     private Bundle args;
     private Vehicle vehicle;
     private List<FillUp> listFillUps;
-    private ListFillUpsAdapter1 adapter;
+    private ListFillUpsAdapter adapter;
 
     private RecyclerView recyclerView;
+    private CollapsingToolbarLayout appBarLayout;
+    private FloatingActionButton addButton;
 
     private DatabaseHelper databaseHelper = null;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,12 +65,19 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter1
 
         View view = inflater.inflate(R.layout.fillups_list, container, false);
 
+        appBarLayout = getActivity().findViewById(R.id.toolbar_layout);
+        appBarLayout.setTitle(getResources().getString(R.string.title_fillUps));
+
+        addButton = getActivity().findViewById(R.id.fab_add);
+        addButton.setVisibility(View.VISIBLE);
+        addButton.setOnClickListener(this);
+
         recyclerView = view.findViewById(R.id.fill_ups_list);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
                 ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation()));
 
-
-        adapter = new ListFillUpsAdapter1(this, listFillUps);
+        if (adapter == null)
+            adapter = new ListFillUpsAdapter(this, listFillUps);
         recyclerView.setAdapter(adapter);
 
         return view;
@@ -114,5 +131,13 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter1
         // TODO this is called when item is clicked
         Snackbar.make(v, "update fillup", Snackbar.LENGTH_SHORT)
                 .setAction("Action", null).show();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == addButton.getId()) {
+            Snackbar.make(view, "Add FillUp", Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show();
+        }
     }
 }

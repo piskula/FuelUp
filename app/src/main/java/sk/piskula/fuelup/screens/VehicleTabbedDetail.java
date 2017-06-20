@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -17,7 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -31,16 +28,13 @@ import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.screens.detailfragments.ExpensesListFragment;
 import sk.piskula.fuelup.screens.detailfragments.FillUpsListFragment;
 import sk.piskula.fuelup.screens.detailfragments.StatisticsFragment;
-import sk.piskula.fuelup.screens.edit.EditExpense;
 import sk.piskula.fuelup.screens.edit.UpdateVehicle;
-
-import static sk.piskula.fuelup.screens.detailfragments.ExpensesListFragment.VEHICLE_FROM_FRAGMENT_TO_EDIT_EXPENSE;
 
 /**
  * @author Ondrej Oravcok
  * @version 17.6.2017
  */
-public class VehicleTabbedDetail extends AppCompatActivity implements View.OnClickListener {
+public class VehicleTabbedDetail extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "VehicleTabbedDetail";
 
@@ -50,41 +44,7 @@ public class VehicleTabbedDetail extends AppCompatActivity implements View.OnCli
     private FragmentManager fragmentManager;
     private Vehicle vehicle;
 
-    private FloatingActionButton addButton;
-
     private DatabaseHelper databaseHelper;
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(VEHICLE_TO_FRAGMENT, vehicle);
-            switch (item.getItemId()) {
-                case R.id.navigation_fillUps:
-                    fragment = new FillUpsListFragment();
-                    getSupportActionBar().setTitle("Fill Ups");
-                    addButton.setVisibility(View.VISIBLE);
-                    break;
-                case R.id.navigation_expenses:
-                    fragment = new ExpensesListFragment();
-                    getSupportActionBar().setTitle("Expenses");
-                    addButton.setVisibility(View.VISIBLE);
-                    break;
-                case R.id.navigation_statistics:
-                    fragment = new StatisticsFragment();
-                    getSupportActionBar().setTitle("Statistics");
-                    addButton.setVisibility(View.GONE);
-                    break;
-            }
-            fragment.setArguments(bundle);
-            final FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.vehicle_detail_frame, fragment).commit();
-            return false;
-        }
-
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,16 +60,22 @@ public class VehicleTabbedDetail extends AppCompatActivity implements View.OnCli
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        addButton = (FloatingActionButton) findViewById(R.id.fab_add);
-        addButton.setOnClickListener(this);
         Intent intent = getIntent();
         vehicle = (Vehicle) intent.getSerializableExtra(VehicleList.EXTRA_ADDED_CAR);
 
         fragmentManager = getSupportFragmentManager();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.vehicle_detail_navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        navigation.setSelectedItemId(R.id.navigation_fillUps);
+        navigation.setOnNavigationItemSelectedListener(this);
+
+        if (savedInstanceState == null) {
+            fragment = new FillUpsListFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(VEHICLE_TO_FRAGMENT, vehicle);
+            fragment.setArguments(bundle);
+            final FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.vehicle_detail_frame, fragment).commit();
+        }
     }
 
 
@@ -199,16 +165,23 @@ public class VehicleTabbedDetail extends AppCompatActivity implements View.OnCli
     }
 
     @Override
-    public void onClick(View view) {
-        if (view.getId() == addButton.getId() && fragment instanceof FillUpsListFragment) {
-            Snackbar.make(view, "Add FillUp", Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show();
-            return;
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(VEHICLE_TO_FRAGMENT, vehicle);
+        switch (item.getItemId()) {
+            case R.id.navigation_fillUps:
+                fragment = new FillUpsListFragment();
+                break;
+            case R.id.navigation_expenses:
+                fragment = new ExpensesListFragment();
+                break;
+            case R.id.navigation_statistics:
+                fragment = new StatisticsFragment();
+                break;
         }
-        if (view.getId() == addButton.getId() && fragment instanceof ExpensesListFragment) {
-            Intent i = new Intent(this, EditExpense.class);
-            i.putExtra(VEHICLE_FROM_FRAGMENT_TO_EDIT_EXPENSE, vehicle);
-            startActivity(i);
-        }
+        fragment.setArguments(bundle);
+        final FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.vehicle_detail_frame, fragment).commit();
+        return false;
     }
 }

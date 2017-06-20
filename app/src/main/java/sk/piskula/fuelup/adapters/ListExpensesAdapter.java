@@ -1,60 +1,51 @@
 package sk.piskula.fuelup.adapters;
 
 import android.content.Context;
-import android.util.Log;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.Expense;
 
 /**
- * @author Ondrej Oravcok
- * @version 17.6.2017
+ * Created by Martin Styk on 19.06.2017.
  */
-public class ListExpensesAdapter extends BaseAdapter {
+public class ListExpensesAdapter extends RecyclerView.Adapter<ListExpensesAdapter.ViewHolder> {
 
     private static final String TAG = "ListExpensesAdapter";
 
+    private Context context;
     private List<Expense> items;
-    private LayoutInflater inflater;
+    private Callback callback;
 
-    public ListExpensesAdapter(Context context, List<Expense> listExpenses) {
-        this.setItems(listExpenses);
-        this.inflater = LayoutInflater.from(context);
+
+    public ListExpensesAdapter(Context context, Callback callback, List<Expense> items) {
+        super();
+        this.context = context;
+        this.items = items;
+        this.callback = callback;
+    }
+
+    public interface Callback {
+        void onItemClick(View v, Expense expense, int position);
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
-        View v = view;
-        ViewHolder holder;
-        if(v == null) {
-            v = inflater.inflate(R.layout.list_item_expense, parent, false);
-            holder = new ViewHolder();
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_expense, parent, false);
+        return new ViewHolder(view);
+    }
 
-            //init views
-            holder.txtPriceSymbol = (TextView) v.findViewById(R.id.txt_itemexpense_price_currency);
-            holder.txtInfo = (TextView) v.findViewById(R.id.txt_itemexpense_title);
-            holder.txtPrice = (TextView) v.findViewById(R.id.txt_itemexpense_price);
-            holder.txtDate = (TextView) v.findViewById(R.id.txt_itemexpense_date);
-
-            v.setTag(holder);
-        }
-        else {
-            holder = (ViewHolder) v.getTag();
-        }
-
-        Expense currentItem = getItem(position);
-        if(currentItem != null) {
+    @Override
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        Expense currentItem = items.get(position);
+        if (currentItem != null) {
             DecimalFormat bddf = new DecimalFormat();
 
             holder.txtPriceSymbol.setText("USD");
@@ -62,45 +53,44 @@ public class ListExpensesAdapter extends BaseAdapter {
 //            holder.txtPriceSymbol.setText(currentItem.getVehicle().getCurrencyFormatted());
             holder.txtInfo.setText(currentItem.getInfo());
             holder.txtPrice.setText(bddf.format(currentItem.getPrice()));
-            holder.txtDate.setText(android.text.format.DateFormat.getDateFormat(parent.getContext()).format(currentItem.getDate().getTime()));
+            holder.txtDate.setText(android.text.format.DateFormat.getDateFormat(context).format(currentItem.getDate().getTime()));
         }
 
-        return v;
-    }
-
-    @Override
-    public int getCount() {
-        return (getItems() != null && !getItems().isEmpty()) ? getItems().size() : 0;
-    }
-
-    @Override
-    public Expense getItem(int position) {
-        return (getItems() != null && !getItems().isEmpty()) ? getItems().get(position) : null;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return (getItems() != null && !getItems().isEmpty()) ? getItems().get(position).getId() : position;
-    }
-
-    private List<Expense> getItems() {
-        return items;
-    }
-
-    private void setItems(List<Expense> mItems) {
-        Collections.sort(mItems, new Comparator<Expense>() {
+        holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public int compare(Expense f1, Expense f2) {
-                return f2.getDate().compareTo(f1.getDate());
+            public void onClick(View v) {
+                callback.onItemClick(v, items.get(position), position);
             }
         });
-        this.items = mItems;
     }
 
-    class ViewHolder {
+    @Override
+    public int getItemCount() {
+        return items.size();
+    }
+
+    public void dataChange(List<Expense> items) {
+        this.items = items;
+        notifyDataSetChanged();
+    }
+
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public final View mView;
+
         TextView txtInfo;
         TextView txtPrice;
         TextView txtPriceSymbol;
         TextView txtDate;
+
+        public ViewHolder(View v) {
+            super(v);
+            mView = v;
+            txtPriceSymbol = v.findViewById(R.id.txt_itemexpense_price_currency);
+            txtInfo = v.findViewById(R.id.txt_itemexpense_title);
+            txtPrice = v.findViewById(R.id.txt_itemexpense_price);
+            txtDate = v.findViewById(R.id.txt_itemexpense_date);
+        }
+
     }
 }

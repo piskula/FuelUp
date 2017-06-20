@@ -1,64 +1,50 @@
 package sk.piskula.fuelup.adapters;
 
-import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.FillUp;
 
-/**
- * @author Ondrej Oravcok
- * @version 17.6.2017
- */
-public class ListFillUpsAdapter extends BaseAdapter {
+import static android.content.ContentValues.TAG;
 
-    private static final String TAG = "ListFillUpsAdapter";
+/**
+ * Created by Martin Styk on 19.06.2017.
+ */
+
+public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.ViewHolder> {
 
     private List<FillUp> items;
-    private LayoutInflater inflater;
+    private Callback callback;
 
-    public ListFillUpsAdapter(Context context, List<FillUp> listFillUps) {
-        this.setItems(listFillUps);
-        this.inflater = LayoutInflater.from(context);
+
+    public ListFillUpsAdapter(Callback callback, List<FillUp> items) {
+        super();
+        this.items = items;
+        this.callback = callback;
+    }
+
+    public interface Callback {
+        void onItemClick(View v, FillUp fillUp, int position);
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
-        View v = view;
-        ViewHolder holder;
-        if (v == null) {
-            v = inflater.inflate(R.layout.list_item_fillup, parent, false);
-            holder = new ViewHolder();
-            //init views
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_fillup, parent, false);
+        return new ViewHolder(view);
+    }
 
-            holder.txtDistanceFromLastFillUp = v.findViewById(R.id.txt_itemfillup_distance);
-            holder.txtIsFullFillUp = v.findViewById(R.id.txt_itemfillup_isfullfillup);
-            holder.txtFuelVolume = v.findViewById(R.id.txt_itemfillup_fuel_volume);
-            holder.txtPriceTotal = v.findViewById(R.id.txt_itemfillup_price_total);
-            holder.txtPricePerLitre = v.findViewById(R.id.txt_itemfillup_price_per_litre);
-            holder.txtConsumptionSymbol = v.findViewById(R.id.txt_itemfillup_consumption_symbol);
-            holder.txtAvgSymbol = v.findViewById(R.id.txt_itemfillup_avg_symbol);
-            holder.txtConsumption = v.findViewById(R.id.txt_itemfillup_consumption);
-            holder.txtDriven = v.findViewById(R.id.txt_itemfillup_driven);
-            holder.txtPricePerLitreSymbol = v.findViewById(R.id.txt_itemfillup_price_per_liter_symbol);
-            holder.txtPriceTotalSymbol = v.findViewById(R.id.txt_itemfillup_price_total_symbol);
-            v.setTag(holder);
-        } else {
-            holder = (ViewHolder) v.getTag();
-        }
-
-        FillUp currentItem = getItem(position);
+    @Override
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        FillUp currentItem = items.get(position);
         if (currentItem != null) {
             //set views
             holder.txtDistanceFromLastFillUp.setText(currentItem.getDistanceFromLastFillUp().toString());
@@ -103,39 +89,28 @@ public class ListFillUpsAdapter extends BaseAdapter {
             }
         }
 
-        return v;
-    }
-
-    @Override
-    public int getCount() {
-        return (getItems() != null && !getItems().isEmpty()) ? getItems().size() : 0;
-    }
-
-    @Override
-    public FillUp getItem(int position) {
-        return (getItems() != null && !getItems().isEmpty()) ? getItems().get(position) : null;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return (getItems() != null && !getItems().isEmpty()) ? getItems().get(position).getId() : position;
-    }
-
-    private List<FillUp> getItems() {
-        return items;
-    }
-
-    private void setItems(List<FillUp> mItems) {
-        Collections.sort(mItems, new Comparator<FillUp>() {
+        holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public int compare(FillUp f1, FillUp f2) {
-                return f2.getDate().compareTo(f1.getDate());
+            public void onClick(View v) {
+                callback.onItemClick(v, items.get(position), position);
             }
         });
-        this.items = mItems;
     }
 
-    class ViewHolder {
+    @Override
+    public int getItemCount() {
+        return items.size();
+    }
+
+    public void dataChange(List<FillUp> items) {
+        this.items = items;
+        notifyDataSetChanged();
+    }
+
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public final View mView;
+
         TextView txtDistanceFromLastFillUp;
         TextView txtIsFullFillUp;
         TextView txtFuelVolume;
@@ -147,5 +122,22 @@ public class ListFillUpsAdapter extends BaseAdapter {
         TextView txtDriven;
         TextView txtPricePerLitreSymbol;
         TextView txtPriceTotalSymbol;
+
+        public ViewHolder(View v) {
+            super(v);
+            mView = v;
+            txtDistanceFromLastFillUp = v.findViewById(R.id.txt_itemfillup_distance);
+            txtIsFullFillUp = v.findViewById(R.id.txt_itemfillup_isfullfillup);
+            txtFuelVolume = v.findViewById(R.id.txt_itemfillup_fuel_volume);
+            txtPriceTotal = v.findViewById(R.id.txt_itemfillup_price_total);
+            txtPricePerLitre = v.findViewById(R.id.txt_itemfillup_price_per_litre);
+            txtConsumptionSymbol = v.findViewById(R.id.txt_itemfillup_consumption_symbol);
+            txtAvgSymbol = v.findViewById(R.id.txt_itemfillup_avg_symbol);
+            txtConsumption = v.findViewById(R.id.txt_itemfillup_consumption);
+            txtDriven = v.findViewById(R.id.txt_itemfillup_driven);
+            txtPricePerLitreSymbol = v.findViewById(R.id.txt_itemfillup_price_per_liter_symbol);
+            txtPriceTotalSymbol = v.findViewById(R.id.txt_itemfillup_price_total_symbol);
+        }
+
     }
 }
