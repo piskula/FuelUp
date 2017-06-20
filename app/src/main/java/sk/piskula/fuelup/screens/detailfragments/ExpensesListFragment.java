@@ -2,14 +2,14 @@ package sk.piskula.fuelup.screens.detailfragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sk.piskula.fuelup.R;
-import sk.piskula.fuelup.adapters.ListExpensesAdapter;
+import sk.piskula.fuelup.adapters.ListExpensesAdapter1;
 import sk.piskula.fuelup.data.DatabaseHelper;
 import sk.piskula.fuelup.entity.Expense;
 import sk.piskula.fuelup.entity.Vehicle;
@@ -29,7 +29,7 @@ import sk.piskula.fuelup.screens.edit.EditExpense;
  * @author Ondrej Oravcok
  * @version 17.6.2017
  */
-public class ExpensesListFragment extends ListFragment {
+public class ExpensesListFragment extends Fragment implements ListExpensesAdapter1.Callback {
 
     private static final String TAG = "ExpensesListFragment";
 
@@ -40,7 +40,9 @@ public class ExpensesListFragment extends ListFragment {
     private Bundle args;
     private Vehicle vehicle;
     private List<Expense> listExpenses;
-    private ListExpensesAdapter adapter;
+    private ListExpensesAdapter1 adapter;
+
+    private RecyclerView recyclerView;
 
     private DatabaseHelper databaseHelper = null;
 
@@ -56,31 +58,15 @@ public class ExpensesListFragment extends ListFragment {
 
         View view = inflater.inflate(R.layout.expenses_list, container, false);
 
-        FloatingActionButton fab = view.findViewById(R.id.fab_add_expense);
-        fab.setOnClickListener(addNewExpenseFloatingButton());
+        recyclerView = view.findViewById(R.id.expense_list);
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
+                ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation()));
+
+
+        adapter = new ListExpensesAdapter1(getActivity(), this, listExpenses);
+        recyclerView.setAdapter(adapter);
 
         return view;
-    }
-
-    private View.OnClickListener addNewExpenseFloatingButton() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getActivity(), EditExpense.class);
-                i.putExtra(VEHICLE_FROM_FRAGMENT_TO_EDIT_EXPENSE, vehicle);
-                startActivity(i);
-            }
-        };
-    }
-
-    @Override
-    public void onListItemClick(ListView list, View v, int position, long id) {
-        super.onListItemClick(list, v, position, id);
-        Expense clickedExpense = adapter.getItem(position);
-
-        Intent i = new Intent(getActivity(), EditExpense.class);
-        i.putExtra(EXPENSE_TO_EDIT, clickedExpense);
-        startActivityForResult(i, REQUEST_CODE_UPDATE_EXPENSE);
     }
 
     private List<Expense> expensesOfVehicle(Vehicle vehicle) {
@@ -92,14 +78,13 @@ public class ExpensesListFragment extends ListFragment {
         }
     }
 
-    private void refreshList(){
+    private void refreshList() {
         if (args != null) {
             vehicle = (Vehicle) args.getSerializable(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT);
         }
         if (vehicle != null) {
             listExpenses = expensesOfVehicle(vehicle);
-            adapter = new ListExpensesAdapter(getActivity(), listExpenses);
-            setListAdapter(adapter);
+            adapter.dataChange(listExpenses);
         }
     }
 
@@ -124,6 +109,13 @@ public class ExpensesListFragment extends ListFragment {
     public void onResume() {
         refreshList();
         super.onResume();
+    }
+
+    @Override
+    public void onItemClick(View v, Expense expense, int position) {
+        Intent i = new Intent(getActivity(), EditExpense.class);
+        i.putExtra(EXPENSE_TO_EDIT, expense);
+        startActivityForResult(i, REQUEST_CODE_UPDATE_EXPENSE);
     }
 
 }

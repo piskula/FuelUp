@@ -27,18 +27,20 @@ import java.sql.SQLException;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.data.DatabaseHelper;
-import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.screens.detailfragments.ExpensesListFragment;
 import sk.piskula.fuelup.screens.detailfragments.FillUpsListFragment;
 import sk.piskula.fuelup.screens.detailfragments.StatisticsFragment;
+import sk.piskula.fuelup.screens.edit.EditExpense;
 import sk.piskula.fuelup.screens.edit.UpdateVehicle;
+
+import static sk.piskula.fuelup.screens.detailfragments.ExpensesListFragment.VEHICLE_FROM_FRAGMENT_TO_EDIT_EXPENSE;
 
 /**
  * @author Ondrej Oravcok
  * @version 17.6.2017
  */
-public class VehicleTabbedDetail extends AppCompatActivity implements View.OnClickListener{
+public class VehicleTabbedDetail extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "VehicleTabbedDetail";
 
@@ -198,14 +200,15 @@ public class VehicleTabbedDetail extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == addButton.getId() && fragment instanceof FillUpsListFragment){
+        if (view.getId() == addButton.getId() && fragment instanceof FillUpsListFragment) {
             Snackbar.make(view, "Add FillUp", Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show();
             return;
         }
-        if(view.getId() == addButton.getId() && fragment instanceof ExpensesListFragment){
-            Snackbar.make(view, "Add Expense", Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show();
+        if (view.getId() == addButton.getId() && fragment instanceof ExpensesListFragment) {
+            Intent i = new Intent(this, EditExpense.class);
+            i.putExtra(VEHICLE_FROM_FRAGMENT_TO_EDIT_EXPENSE, vehicle);
+            startActivity(i);
         }
     }
 }
