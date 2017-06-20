@@ -107,6 +107,9 @@
     <string name="currency">Currency</string>
     <string name="vehicle_type">Vehicle type</string>
     <string name="distance_units">Distance units</string>
+    <string name="no_vehicle_created_yet">No vehicle created yet.</string>
+    <string name="miles">miles</string>
+    <string name="kilometres">kilometres</string>
 
     <string-array name="car_currency">
         <item>EUR</item>

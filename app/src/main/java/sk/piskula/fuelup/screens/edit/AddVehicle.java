@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.IdRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -57,6 +59,7 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
     private EditText mTxtNick;
     private EditText mTxtTypeName;
     private EditText mTxtActualMileage;
+    private TextView mTxtActualMileageDistanceUnit;
     private Spinner mTypeSpinner;
     private Spinner mCurrencySpinner;
     private RadioGroup mDistanceUnitRadioGroup;
@@ -95,11 +98,11 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
         this.mTxtNick = (EditText) findViewById(R.id.txt_addVehicle_name);
         this.mTxtTypeName = (EditText) findViewById(R.id.txt_addVehicle_manufacturer);
         this.mTxtActualMileage = (EditText) findViewById(R.id.txt_addVehicle_mileage);
+        this.mTxtActualMileageDistanceUnit = (TextView) findViewById(R.id.txt_addVehicle_mileage_distanceUnit);
         this.mBtnAdd = (Button) findViewById(R.id.btn_add);
         this.mTypeSpinner = (Spinner) findViewById(R.id.spinner_types);
         this.mCurrencySpinner = (Spinner) findViewById(R.id.spinner_currency);
         this.mDistanceUnitRadioGroup = (RadioGroup) findViewById(R.id.radio_distance_unit);
-        this.mDistanceUnitRadioGroup.check(R.id.radio_km);
         this.layout = (LinearLayout) findViewById(R.id.addVehicle_layout);
         this.mImgCarPhotoStatus = (ImageView) findViewById(R.id.img_addVehicle_photo);
 
@@ -108,6 +111,14 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
 
         mImgCarPhotoStatus.setOnClickListener(this);
         mBtnAdd.setOnClickListener(this);
+        mDistanceUnitRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
+                if (radioGroup.getCheckedRadioButtonId() == R.id.radio_km) mTxtActualMileageDistanceUnit.setText(DistanceUnit.km.toString());
+                else mTxtActualMileageDistanceUnit.setText(DistanceUnit.mi.toString());
+            }
+        });
+        this.mDistanceUnitRadioGroup.check(R.id.radio_km);
     }
 
     @Override

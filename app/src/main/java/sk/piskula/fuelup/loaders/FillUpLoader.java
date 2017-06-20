@@ -31,9 +31,9 @@ public class FillUpLoader extends AsyncTaskLoader<List<FillUp>> {
 
     private List<FillUp> items;
     private long vehicleId;
-    private Dao<FillUp, Integer> dao;
+    private Dao<FillUp, Long> dao;
 
-    public FillUpLoader(Context context, long vehicleId, Dao<FillUp, Integer> dao) {
+    public FillUpLoader(Context context, long vehicleId, Dao<FillUp, Long> dao) {
         super(context);
         this.vehicleId = vehicleId;
         this.dao = dao;

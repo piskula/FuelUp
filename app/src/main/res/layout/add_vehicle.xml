@@ -30,6 +30,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/addVehicle_name"
+                    android:layout_marginEnd="5dp"
                     android:inputType="textCapWords"
                     android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
@@ -37,9 +38,13 @@
             <ImageView
                 android:id="@+id/img_addVehicle_photo"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_camera"/>
+                android:layout_weight="1"
+                android:adjustViewBounds="false"
+                android:cropToPadding="false"
+                android:paddingEnd="4dp"
+                android:paddingStart="4dp"
+                android:src="@drawable/ic_camera" />
 
         </LinearLayout>
 
@@ -56,18 +61,37 @@
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/txt_addVehicle_mileage"
-                android:layout_width="match_parent"
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/addVehicle_mileage"
-                android:inputType="number"
-                android:maxLines="1" />
-        </android.support.design.widget.TextInputLayout>
+                android:layout_weight="6">
+
+                <EditText
+                    android:id="@+id/txt_addVehicle_mileage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/addVehicle_mileage"
+                    android:layout_marginEnd="5dp"
+                    android:inputType="number"
+                    android:maxLines="1" />
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/txt_addVehicle_mileage_distanceUnit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="km"
+                android:textAlignment="center"
+                android:textSize="16sp" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -79,8 +103,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/currency"
                 android:textColor="@color/colorAccent"
-                android:paddingTop="15dp"
-                android:paddingBottom="2dp"/>
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"/>
 
             <Spinner
                 android:id="@+id/spinner_currency"
@@ -100,8 +124,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/vehicle_type"
                 android:textColor="@color/colorAccent"
-                android:paddingTop="15dp"
-                android:paddingBottom="2dp"/>
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"/>
 
             <Spinner
                 android:id="@+id/spinner_types"
@@ -114,6 +138,7 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="8dp"
             android:orientation="vertical">
 
             <TextView
@@ -121,8 +146,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/distance_units"
                 android:textColor="@color/colorAccent"
-                android:paddingTop="15dp"
-                android:paddingBottom="2dp"/>
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"/>
 
             <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/radio_distance_unit"
@@ -136,14 +161,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="kilometres" />
+                    android:text="@string/kilometres"
+                    android:textSize="18sp"/>
 
                 <RadioButton
                     android:id="@+id/radio_mi"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="miles" />
+                    android:text="@string/miles"
+                    android:textSize="18sp"/>
             </RadioGroup>
 
         </LinearLayout>
@@ -153,8 +180,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingBottom="2dp"
-            android:paddingTop="2dp"
+            android:layout_marginTop="15dp"
             android:text="@string/add_car_activity_btn_add"
             android:textAppearance="?android:attr/textAppearanceMedium"
            />

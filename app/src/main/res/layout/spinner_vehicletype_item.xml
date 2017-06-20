@@ -3,16 +3,17 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:paddingTop="5dp"
+    android:paddingBottom="7dp"
     android:gravity="center_vertical">
 
     <ImageView
         android:id="@+id/spinner_item_vehicletype_pic"
-        android:gravity="center"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:paddingEnd="10dp"
-        android:paddingStart="1dp"
-        />
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:adjustViewBounds="true"/>
 
     <TextView
         android:id="@+id/spinner_item_vehicletype_name"

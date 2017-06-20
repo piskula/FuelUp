@@ -33,7 +33,7 @@
         android:id="@+id/txt_not_vehicle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No vehicle created yet."
+        android:text="@string/no_vehicle_created_yet"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

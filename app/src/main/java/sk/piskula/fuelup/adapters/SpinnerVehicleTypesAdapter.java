@@ -63,9 +63,9 @@ public class SpinnerVehicleTypesAdapter extends BaseAdapter implements SpinnerAd
             spinView = view;
         }
         ImageView vehiclePic = spinView.findViewById(R.id.spinner_item_vehicletype_pic);
-        TextView currencyName = spinView.findViewById(R.id.spinner_item_vehicletype_name);
+        TextView type = spinView.findViewById(R.id.spinner_item_vehicletype_name);
 
-        currencyName.setText(vehicleTypes.get(position).getName());
+        type.setText(vehicleTypes.get(position).getName());
         vehiclePic.setImageResource(activity.getResources()
                 .getIdentifier("ic_type_" + vehicleTypes.get(position).getName().toLowerCase(),
                         "drawable", activity.getPackageName()));
