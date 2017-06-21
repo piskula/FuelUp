@@ -85,6 +85,10 @@
     <string name="updateCarActivity_Toast_carNoUpdate">No change</string>
     <string name="updateCarActivity_emptyFields">One or more fields are empty!</string>
 
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+
 
     <string-array name="car_types_arrays">
         <item>Sedan</item>

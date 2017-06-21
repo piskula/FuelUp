@@ -24,6 +24,7 @@ import java.sql.SQLException;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.data.DatabaseHelper;
+import sk.piskula.fuelup.data.DatabaseProvider;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.screens.detailfragments.ExpensesListFragment;
 import sk.piskula.fuelup.screens.detailfragments.FillUpsListFragment;
@@ -130,7 +131,7 @@ public class VehicleTabbedDetail extends AppCompatActivity implements BottomNavi
                 .setMessage("Do you want to completely remove vehicle '" + vehicle.getName()
                         + "' and all its data? You can never get it back.")
                 .setIcon(R.drawable.tow)
-                .setPositiveButton("Yes, delete", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
 
                         dialog.dismiss();
@@ -149,7 +150,7 @@ public class VehicleTabbedDetail extends AppCompatActivity implements BottomNavi
                     }
                 })
 
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
@@ -158,10 +159,7 @@ public class VehicleTabbedDetail extends AppCompatActivity implements BottomNavi
     }
 
     private DatabaseHelper getHelper() {
-        if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
-        }
-        return databaseHelper;
+        return DatabaseProvider.get(this);
     }
 
     @Override

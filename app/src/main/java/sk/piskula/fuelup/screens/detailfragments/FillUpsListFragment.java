@@ -1,5 +1,6 @@
 package sk.piskula.fuelup.screens.detailfragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -25,6 +26,7 @@ import sk.piskula.fuelup.adapters.ListFillUpsAdapter;
 import sk.piskula.fuelup.data.DatabaseProvider;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
+import sk.piskula.fuelup.loaders.ExpenseLoader;
 import sk.piskula.fuelup.loaders.FillUpLoader;
 import sk.piskula.fuelup.screens.VehicleTabbedDetail;
 
@@ -37,6 +39,8 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
         LoaderManager.LoaderCallbacks<List<FillUp>> {
 
     private static final String TAG = "FillUpsListFragment";
+    public static final int FILLUP_ACTION_REQUEST_CODE = 32;
+
 
     private Bundle args;
     private Vehicle vehicle;
@@ -123,6 +127,14 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
         if (view.getId() == addButton.getId()) {
             // add fill up here
         }
+    }
+
+    //todo start activity for result when updateing/creating fillup
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == FILLUP_ACTION_REQUEST_CODE) // todo set resultcode and check if loading is necessary
+            getLoaderManager().getLoader(ExpenseLoader.ID).onContentChanged();
     }
 
 }

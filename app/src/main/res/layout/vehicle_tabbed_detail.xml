@@ -51,17 +51,6 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_marginBottom="60dp"/>
 
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|start"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/stat_notify_chat"
-        app:layout_anchor="@+id/vehicle_detail_frame"
-        app:layout_anchorGravity="top|end" />
-
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/vehicle_detail_navigation"
         android:layout_width="match_parent"
