@@ -30,6 +30,8 @@ import sk.piskula.fuelup.loaders.ExpenseLoader;
 import sk.piskula.fuelup.loaders.FillUpLoader;
 import sk.piskula.fuelup.screens.VehicleTabbedDetail;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * @author Ondrej Oravcok
  * @author Martin Styk
@@ -133,7 +135,7 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == FILLUP_ACTION_REQUEST_CODE) // todo set resultcode and check if loading is necessary
+        if (requestCode == FILLUP_ACTION_REQUEST_CODE && requestCode == RESULT_OK)
             getLoaderManager().getLoader(ExpenseLoader.ID).onContentChanged();
     }
 

@@ -27,6 +27,8 @@ import sk.piskula.fuelup.loaders.ExpenseLoader;
 import sk.piskula.fuelup.screens.VehicleTabbedDetail;
 import sk.piskula.fuelup.screens.edit.EditExpense;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * @author Ondrej Oravcok
  * @author Martin Styk
@@ -133,7 +135,7 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == EXPENSE_ACTION_REQUEST_CODE) // todo set resultcode and check if loading is necessary
+        if (requestCode == EXPENSE_ACTION_REQUEST_CODE && resultCode == RESULT_OK)
             getLoaderManager().getLoader(ExpenseLoader.ID).onContentChanged();
     }
 }

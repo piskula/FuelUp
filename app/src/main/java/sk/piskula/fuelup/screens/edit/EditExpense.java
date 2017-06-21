@@ -185,8 +185,10 @@ public class EditExpense extends AppCompatActivity {
                                     ? R.string.addExpense_Toast_updatedSuccessfully
                                     : R.string.addExpense_Toast_createdSuccessfully,
                             Toast.LENGTH_LONG).show();
+                    setResult(RESULT_OK);
                 } catch (SQLException e) {
                     Log.e(TAG, "Error occured while saving Expense to DB.");
+                    setResult(RESULT_CANCELED);
                 }
                 finish();
             }
