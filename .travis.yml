@@ -11,6 +11,7 @@ android:
   - extra-google-m2repository
 before_install:
 - chmod +x gradlew
+  set_accept_licenses.sh
 script:
 - "./gradlew clean build connectedAndroidTest -PdisablePreDex --stacktrace"
 notifications:
