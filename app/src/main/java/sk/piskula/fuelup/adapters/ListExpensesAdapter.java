@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import sk.piskula.fuelup.R;
@@ -26,10 +27,9 @@ public class ListExpensesAdapter extends RecyclerView.Adapter<ListExpensesAdapte
     private Callback callback;
 
 
-    public ListExpensesAdapter(Context context, Callback callback, List<Expense> items) {
+    public ListExpensesAdapter(ListExpensesAdapter.Callback callback) {
         super();
-        this.context = context;
-        this.items = items;
+        this.items = new ArrayList<>();
         this.callback = callback;
     }
 

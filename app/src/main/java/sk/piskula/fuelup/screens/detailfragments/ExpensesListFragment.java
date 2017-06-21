@@ -6,34 +6,34 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
-import com.j256.ormlite.android.apptools.OpenHelperManager;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.adapters.ListExpensesAdapter;
-import sk.piskula.fuelup.data.DatabaseHelper;
+import sk.piskula.fuelup.data.DatabaseProvider;
 import sk.piskula.fuelup.entity.Expense;
 import sk.piskula.fuelup.entity.Vehicle;
+import sk.piskula.fuelup.loaders.ExpenseLoader;
 import sk.piskula.fuelup.screens.VehicleTabbedDetail;
 import sk.piskula.fuelup.screens.edit.EditExpense;
 
 /**
  * @author Ondrej Oravcok
  * @author Martin Styk
- * @version 17.6.2017
+ * @version 21.6.2017
  */
-public class ExpensesListFragment extends Fragment implements ListExpensesAdapter.Callback, View.OnClickListener {
+public class ExpensesListFragment extends Fragment implements ListExpensesAdapter.Callback, View.OnClickListener,
+        LoaderManager.LoaderCallbacks<List<Expense>> {
 
     private static final String TAG = "ExpensesListFragment";
 
@@ -43,14 +43,14 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
 
     private Bundle args;
     private Vehicle vehicle;
-    private List<Expense> listExpenses;
+    private List<Expense> data;
     private ListExpensesAdapter adapter;
 
     private RecyclerView recyclerView;
+    private ProgressBar loadingBar;
+
     private CollapsingToolbarLayout appBarLayout;
     private FloatingActionButton addButton;
-
-    private DatabaseHelper databaseHelper = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,16 +62,15 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        args = getArguments();
-        if (args != null) {
-            vehicle = (Vehicle) args.getSerializable(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT);
-            listExpenses = expensesOfVehicle(vehicle);
-        }
-
         View view = inflater.inflate(R.layout.expenses_list, container, false);
+
+        args = getArguments();
+        vehicle = (Vehicle) args.getSerializable(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT);
 
         appBarLayout = getActivity().findViewById(R.id.toolbar_layout);
         appBarLayout.setTitle(getResources().getString(R.string.title_expenses));
+
+        loadingBar = view.findViewById(R.id.expense_list_loading);
 
         addButton = getActivity().findViewById(R.id.fab_add);
         addButton.setVisibility(View.VISIBLE);
@@ -81,54 +80,35 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
                 ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation()));
 
-        if(adapter == null){
-            adapter = new ListExpensesAdapter(getActivity(), this, listExpenses);
-        }
+        if (adapter == null)
+            adapter = new ListExpensesAdapter(this);
+
         recyclerView.setAdapter(adapter);
+
+        getLoaderManager().initLoader(ExpenseLoader.ID, args, this);
 
         return view;
     }
 
-    private List<Expense> expensesOfVehicle(Vehicle vehicle) {
-        try {
-            return getHelper().getExpenseDao().queryBuilder().where().eq("vehicle_id", vehicle.getId()).query();
-        } catch (SQLException e) {
-            Log.e(TAG, "Error getting expenses from DB for vehicle " + vehicle, e);
-            return new ArrayList<>();
-        }
-    }
-
-    private void refreshList() {
-        if (args != null) {
-            vehicle = (Vehicle) args.getSerializable(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT);
-        }
-        if (vehicle != null) {
-            listExpenses = expensesOfVehicle(vehicle);
-            adapter.dataChange(listExpenses);
-        }
-    }
-
-    private DatabaseHelper getHelper() {
-        if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(getActivity(), DatabaseHelper.class);
-        }
-        return databaseHelper;
+    @Override
+    public Loader<List<Expense>> onCreateLoader(int id, Bundle args) {
+        Vehicle vehicle = (Vehicle) args.getSerializable(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT);
+        long vehicleId = vehicle.getId();
+        return new ExpenseLoader(getActivity(), vehicleId, DatabaseProvider.get(getActivity()).getExpenseDao());
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        if (databaseHelper != null) {
-            OpenHelperManager.releaseHelper();
-            databaseHelper = null;
-        }
+    public void onLoadFinished(Loader<List<Expense>> loader, List<Expense> data) {
+        this.data = data;
+        adapter.dataChange(data);
+        loadingBar.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void onResume() {
-        refreshList();
-        super.onResume();
+    public void onLoaderReset(Loader<List<Expense>> loader) {
+        if (!data.isEmpty())
+            data.clear();
     }
 
     @Override
@@ -146,4 +126,6 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
             startActivity(i);
         }
     }
+
+    
 }

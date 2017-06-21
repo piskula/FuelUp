@@ -13,22 +13,22 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import sk.piskula.fuelup.entity.FillUp;
+import sk.piskula.fuelup.entity.Expense;
 
 
 /**
- * Loader async task FillUps
+ * Loader async task for Expenses
  * <p>
  * Created by Martin Styk on 15.06.2017.
  */
-public class FillUpLoader extends FuelUpAbstractAsyncLoader<List<FillUp>> {
-    private static final String TAG = FillUpLoader.class.getSimpleName();
-    public static final int ID = 1;
+public class ExpenseLoader extends FuelUpAbstractAsyncLoader<List<Expense>> {
+    private static final String TAG = ExpenseLoader.class.getSimpleName();
+    public static final int ID = 2;
 
-    private Dao<FillUp, Long> dao;
+    private Dao<Expense, Long> dao;
     private long vehicleId;
 
-    public FillUpLoader(Context context, long vehicleId, Dao<FillUp, Long> dao) {
+    public ExpenseLoader(Context context, long vehicleId, Dao<Expense, Long> dao) {
         super(context);
         this.vehicleId = vehicleId;
         this.dao = dao;
@@ -40,13 +40,7 @@ public class FillUpLoader extends FuelUpAbstractAsyncLoader<List<FillUp>> {
      * data to be published by the loader.
      */
     @Override
-    public List<FillUp> loadInBackground() {
-        try {
-            //TODO remove this is just for debugging purposes
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public List<Expense> loadInBackground() {
         try {
             return dao.queryBuilder().where().eq("vehicle_id", vehicleId).query();
         } catch (SQLException e) {

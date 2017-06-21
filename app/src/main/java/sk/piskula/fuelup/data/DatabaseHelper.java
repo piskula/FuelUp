@@ -6,26 +6,17 @@ import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.field.types.StringBytesType;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
-import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Currency;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.Expense;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.VehicleType;
-import sk.piskula.fuelup.entity.enums.DistanceUnit;
 
 /**
  * @author Ondrej Oravcok
@@ -102,16 +93,20 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         if (fillUpDao == null) {
             try {
                 fillUpDao = getDao(FillUp.class);
-            }catch (SQLException e){
+            } catch (SQLException e) {
                 Log.i(TAG, "Can not create fillup dao.");
             }
         }
         return fillUpDao;
     }
 
-    public Dao<Expense, Long> getExpenseDao() throws SQLException {
+    public Dao<Expense, Long> getExpenseDao() {
         if (expenseDao == null) {
-            expenseDao = getDao(Expense.class);
+            try {
+                expenseDao = getDao(Expense.class);
+            } catch (SQLException e) {
+                Log.i(TAG, "Can not create expense dao.");
+            }
         }
         return expenseDao;
     }

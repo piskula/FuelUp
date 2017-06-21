@@ -30,7 +30,8 @@ import sk.piskula.fuelup.screens.VehicleTabbedDetail;
 
 /**
  * @author Ondrej Oravcok
- * @version 17.6.2017
+ * @author Martin Styk
+ * @version 21.6.2017
  */
 public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.Callback, View.OnClickListener,
         LoaderManager.LoaderCallbacks<List<FillUp>> {
@@ -88,16 +89,6 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
 
         return view;
     }
-//
-//    @Override
-//    public void onDestroy() {
-//        super.onDestroy();
-//
-//        if (databaseHelper != null) {
-//            OpenHelperManager.releaseHelper();
-//            databaseHelper = null;
-//        }
-//    }
 
     @Override
     public Loader<List<FillUp>> onCreateLoader(int id, Bundle args) {
@@ -134,17 +125,4 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
         }
     }
 
-//    private Dao<FillUp, Integer> getDao() {
-////        if (databaseHelper == null)
-////            databaseHelper = OpenHelperManager.getHelper(getActivity(), DatabaseHelper.class);
-////        if (fillUpDao == null) {
-////            try {
-////                return databaseHelper.getFillUpDao();
-////            } catch (SQLException e) {
-////                Log.e(TAG, "Error getting fillUpDao", e);
-////            }
-////        }
-////        return null;
-//
-//    }
 }
