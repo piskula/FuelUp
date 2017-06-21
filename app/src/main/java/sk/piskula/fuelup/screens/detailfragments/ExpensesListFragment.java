@@ -38,7 +38,7 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
     private static final String TAG = "ExpensesListFragment";
 
     public static final String EXPENSE_TO_EDIT = "expense to edit";
-    public static final int REQUEST_CODE_UPDATE_EXPENSE = 31;
+    public static final int EXPENSE_ACTION_REQUEST_CODE = 31;
     public static final String VEHICLE_FROM_FRAGMENT_TO_EDIT_EXPENSE = "fromFragmentToExpense";
 
     private Bundle args;
@@ -115,7 +115,7 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
     public void onItemClick(View v, Expense expense, int position) {
         Intent i = new Intent(getActivity(), EditExpense.class);
         i.putExtra(EXPENSE_TO_EDIT, expense);
-        startActivityForResult(i, REQUEST_CODE_UPDATE_EXPENSE);
+        startActivityForResult(i, EXPENSE_ACTION_REQUEST_CODE);
     }
 
     @Override
@@ -123,9 +123,17 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
         if (view.getId() == addButton.getId()) {
             Intent i = new Intent(getActivity(), EditExpense.class);
             i.putExtra(VEHICLE_FROM_FRAGMENT_TO_EDIT_EXPENSE, vehicle);
-            startActivity(i);
+            startActivityForResult(i, EXPENSE_ACTION_REQUEST_CODE);
         }
     }
 
-    
+    /**
+     * Take care of notifying loader that data refresh is needed
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == EXPENSE_ACTION_REQUEST_CODE) // todo set resultcode and check if loading is necessary
+            getLoaderManager().getLoader(ExpenseLoader.ID).onContentChanged();
+    }
 }

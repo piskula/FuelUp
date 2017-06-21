@@ -56,7 +56,8 @@
     <string name="add_car_activity_delete_photo">Delete photo</string>
 
     <string name="add_expense_activity_btn_add">Add</string>
-    <string name="add_expense_activity_title">Add new expense</string>
+    <string name="add_expense_activity_title">Add expense</string>
+    <string name="update_expense_activity_title">Update expense</string>
     <string name="add_expense_activity_price">Price</string>
     <string name="add_expense_activity_info">Info</string>
     <string name="add_expense_activity_info_hint">Information about expense</string>

@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -26,6 +27,7 @@ import java.util.Date;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.data.DatabaseHelper;
+import sk.piskula.fuelup.data.DatabaseProvider;
 import sk.piskula.fuelup.entity.Expense;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.screens.detailfragments.ExpensesListFragment;
@@ -99,9 +101,10 @@ public class EditExpense extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             if (mode == Mode.UPDATING) {
-                actionBar.setTitle("Update expense");
+                actionBar.setTitle(R.string.update_expense_activity_title);
             } else {
-                actionBar.setTitle("Create expense");
+                actionBar.setTitle(R.string.add_expense_activity_title);
+
             }
         }
     }
@@ -158,8 +161,7 @@ public class EditExpense extends AppCompatActivity {
                 String date = mTxtDate.getText().toString();
 
                 if (info.isEmpty() || price.isEmpty() || date.isEmpty()) {
-                    Toast.makeText(EditExpense.this, R.string.addExpenseActivity_emptyFields,
-                            Toast.LENGTH_LONG).show();
+                    Snackbar.make(view, R.string.addExpenseActivity_emptyFields, Snackbar.LENGTH_LONG).show();
                     return;
                 }
 
@@ -171,8 +173,6 @@ public class EditExpense extends AppCompatActivity {
                     createdDate = getDateFormatter().parse(date);
                 } catch (NumberFormatException | ParseException e) {
                     Log.e(TAG, "Error formatting data for Expense while saving.");
-                    Toast.makeText(EditExpense.this, "ERROR: Bad format of input data, see logs.",
-                            Toast.LENGTH_LONG).show();
                 }
 
                 expense.setDate(createdDate);
@@ -186,9 +186,7 @@ public class EditExpense extends AppCompatActivity {
                                     : R.string.addExpense_Toast_createdSuccessfully,
                             Toast.LENGTH_LONG).show();
                 } catch (SQLException e) {
-                    String errorMsg = "Error occured while saving Expense to DB.";
-                    Log.e(TAG, errorMsg, e);
-                    Toast.makeText(EditExpense.this, errorMsg, Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "Error occured while saving Expense to DB.");
                 }
                 finish();
             }
@@ -213,9 +211,6 @@ public class EditExpense extends AppCompatActivity {
     }
 
     private DatabaseHelper getHelper() {
-        if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(this,DatabaseHelper.class);
-        }
-        return databaseHelper;
+        return DatabaseProvider.get(this);
     }
 }
