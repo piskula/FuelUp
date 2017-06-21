@@ -130,8 +130,7 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
     @Override
     public void onClick(View view) {
         if (view.getId() == addButton.getId()) {
-            Snackbar.make(view, "Add FillUp", Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show();
+            // add fill up here
         }
     }
 

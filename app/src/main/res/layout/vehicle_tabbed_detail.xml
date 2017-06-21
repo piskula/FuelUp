@@ -75,11 +75,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:layout_margin="@dimen/fab_margin"
         android:tint="@android:color/white"
         app:layout_anchorGravity="top|end"
         app:layout_anchor="@+id/vehicle_detail_navigation"
         app:srcCompat="@android:drawable/ic_input_add"
+        app:useCompatPadding="true"
         />
 
 </android.support.design.widget.CoordinatorLayout>
