@@ -43,4 +43,4 @@ deploy:
     branch: master
     repo: piskula/FuelUp
 after_success:
-  set_tags.sh
+  #set_tags.sh
