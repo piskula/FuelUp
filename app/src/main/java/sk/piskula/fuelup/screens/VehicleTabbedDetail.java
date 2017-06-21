@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -45,6 +46,8 @@ public class VehicleTabbedDetail extends AppCompatActivity implements BottomNavi
     private FragmentManager fragmentManager;
     private Vehicle vehicle;
 
+    private ImageView toolbarImage;
+
     private DatabaseHelper databaseHelper;
 
     @Override
@@ -68,6 +71,9 @@ public class VehicleTabbedDetail extends AppCompatActivity implements BottomNavi
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.vehicle_detail_navigation);
         navigation.setOnNavigationItemSelectedListener(this);
+
+        toolbarImage = (ImageView) findViewById(R.id.toolbar_layout_image);
+        toolbarImage.setImageBitmap(vehicle.getImage());
 
         if (savedInstanceState == null) {
             fragment = new FillUpsListFragment();
