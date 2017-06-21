@@ -26,9 +26,7 @@ import sk.piskula.fuelup.entity.FillUp;
 public class FillUpLoader extends AsyncTaskLoader<List<FillUp>> {
     private static final String TAG = FillUpLoader.class.getSimpleName();
     public static final int ID = 1;
-
-    private DatabaseHelper databaseHelper = null;
-
+    
     private List<FillUp> items;
     private long vehicleId;
     private Dao<FillUp, Long> dao;

@@ -12,6 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/list_item_expense"/>
+        tools:listitem="@layout/list_item_expense"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="true"/>
 
 </FrameLayout>
