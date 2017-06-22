@@ -30,7 +30,7 @@ import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.screens.detailfragments.ExpensesListFragment;
 import sk.piskula.fuelup.screens.detailfragments.FillUpsListFragment;
 import sk.piskula.fuelup.screens.detailfragments.StatisticsFragment;
-import sk.piskula.fuelup.screens.edit.UpdateVehicle;
+import sk.piskula.fuelup.screens.edit.EditVehicle;
 
 /**
  * @author Ondrej Oravcok
@@ -125,7 +125,7 @@ public class VehicleTabbedDetail extends AppCompatActivity implements BottomNavi
     }
 
     private void updateVehicle() {
-        Intent i = new Intent(this, UpdateVehicle.class);
+        Intent i = new Intent(this, EditVehicle.class);
         i.putExtra(VEHICLE_TO_FRAGMENT, vehicle);
         startActivity(i);
     }

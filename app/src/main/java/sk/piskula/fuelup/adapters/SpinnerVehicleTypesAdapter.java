@@ -12,6 +12,7 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import sk.piskula.fuelup.R;
@@ -36,6 +37,10 @@ public class SpinnerVehicleTypesAdapter extends BaseAdapter implements SpinnerAd
         } catch (SQLException e) {
             this.vehicleTypes = new ArrayList<>();
         }
+    }
+
+    public List<VehicleType> getVehicleTypes() {
+        return Collections.unmodifiableList(vehicleTypes);
     }
 
     @Override

@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -40,12 +41,10 @@ public class EditExpense extends AppCompatActivity {
 
     private static final String TAG = "EditExpense";
 
-//    private Bundle savedInstanceState;
-
     private EditText mTxtInfo;
     private EditText mTxtPrice;
     private EditText mTxtDate;
-//    private TextView mTxtPriceUnit;
+    private TextView mTxtPriceUnit;
 
     private Button mBtnAdd;
 
@@ -55,8 +54,6 @@ public class EditExpense extends AppCompatActivity {
     private Mode mode;
 
     private DatabaseHelper databaseHelper = null;
-
-//    private DatePickerDialog datePickerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +80,7 @@ public class EditExpense extends AppCompatActivity {
         initActionBar();
         mTxtDate.setOnClickListener(getDatePickerListener());
         mBtnAdd.setOnClickListener(getSaveButtonOnClickListener());
-        //TODO currency formatted
-        // mTxtPriceUnit.setText("USD");
+        mTxtPriceUnit.setText(vehicle.getCurrencySymbol());
     }
 
     private void initViews() {
@@ -92,8 +88,7 @@ public class EditExpense extends AppCompatActivity {
         this.mTxtPrice = (EditText) findViewById(R.id.txt_addexpense_price);
         this.mTxtDate = (EditText) findViewById(R.id.txt_addexpense_date);
         this.mBtnAdd = (Button) findViewById(R.id.btn_addexpense_add);
-        //TODO currency formatted
-        // this.mTxtPriceUnit = (TextView) findViewById(R.id.txt_addexpense_priceunit);
+        this.mTxtPriceUnit = (TextView) findViewById(R.id.txt_addexpense_priceunit);
     }
 
     private void initActionBar() {
@@ -129,8 +124,6 @@ public class EditExpense extends AppCompatActivity {
     private String getPrice(BigDecimal price) {
         DecimalFormat bddf = new DecimalFormat();
         bddf.setGroupingUsed(false);
-//        bddf.setMinimumFractionDigits(0);
-//        bddf.setMinimumFractionDigits(2);
         return bddf.format(price.doubleValue());
     }
 
@@ -208,7 +201,7 @@ public class EditExpense extends AppCompatActivity {
         }
     }
 
-    enum Mode {
+    private enum Mode {
         UPDATING, CREATING
     }
 

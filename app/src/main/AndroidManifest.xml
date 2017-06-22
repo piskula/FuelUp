@@ -41,8 +41,8 @@
             android:parentActivityName=".screens.VehicleList">
         </activity>
         <activity
-            android:name=".screens.edit.UpdateVehicle"
-            android:label="Update Vehicle"
+            android:name=".screens.edit.EditVehicle"
+            android:label="Edit Vehicle"
             android:parentActivityName=".screens.VehicleTabbedDetail">
         </activity>
     </application>

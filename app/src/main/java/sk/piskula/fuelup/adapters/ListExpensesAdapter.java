@@ -2,6 +2,7 @@ package sk.piskula.fuelup.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,6 @@ import java.util.List;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.Expense;
-import sk.piskula.fuelup.entity.Vehicle;
 
 /**
  * Created by Martin Styk on 19.06.2017.
@@ -52,7 +52,7 @@ public class ListExpensesAdapter extends RecyclerView.Adapter<ListExpensesAdapte
             holder.txtPriceSymbol.setText(currentItem.getVehicle().getCurrencySymbol());
             holder.txtInfo.setText(currentItem.getInfo());
             holder.txtPrice.setText(bddf.format(currentItem.getPrice()));
-            holder.txtDate.setText(android.text.format.DateFormat.getDateFormat(context).format(currentItem.getDate().getTime()));
+            holder.txtDate.setText(DateFormat.getDateFormat(holder.txtInfo.getContext()).format(currentItem.getDate().getTime()));
         }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {

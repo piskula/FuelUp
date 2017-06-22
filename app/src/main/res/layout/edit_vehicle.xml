@@ -1,0 +1,96 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    tools:context=".screens.edit.AddVehicle" >
+
+    <LinearLayout
+        android:id="@+id/addVehicle_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:weightSum="2"
+        android:descendantFocusability="beforeDescendants"
+        android:focusable="true"
+        android:focusableInTouchMode="true" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_weight="6"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/txt_editVehicle_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/vehicleName"
+                    android:layout_marginEnd="5dp"
+                    android:inputType="textCapWords"
+                    android:maxLines="1" />
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/img_editVehicle_photo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:adjustViewBounds="false"
+                android:cropToPadding="false"
+                android:paddingEnd="4dp"
+                android:paddingStart="4dp"
+                android:src="@drawable/ic_camera" />
+
+        </LinearLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/txt_editVehicle_manufacturer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/addVehicle_manufacturer"
+                android:inputType="textCapWords"
+                android:maxLines="1" />
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/vehicle_type"
+                android:textColor="@color/colorAccent"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"/>
+
+            <Spinner
+                android:id="@+id/spinner_editVehicle_types"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+            </Spinner>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_editVehicle_add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:text="@string/update"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+           />
+    </LinearLayout>
+
+</ScrollView>

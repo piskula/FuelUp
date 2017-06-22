@@ -29,7 +29,7 @@
                     android:id="@+id/txt_addVehicle_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/addVehicle_name"
+                    android:hint="@string/vehicleName"
                     android:layout_marginEnd="5dp"
                     android:inputType="textCapWords"
                     android:maxLines="1" />
@@ -87,9 +87,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="km"
                 android:textAlignment="center"
-                android:textSize="16sp" />
+                android:paddingTop="10dp"
+                android:textSize="20sp" />
 
         </LinearLayout>
 
@@ -128,7 +128,7 @@
                 android:paddingBottom="0dp"/>
 
             <Spinner
-                android:id="@+id/spinner_types"
+                android:id="@+id/spinner_addVehicle_types"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
             </Spinner>
@@ -176,12 +176,12 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btn_add"
+            android:id="@+id/btn_addVehicle_add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_marginTop="15dp"
-            android:text="@string/add_car_activity_btn_add"
+            android:text="@string/add"
             android:textAppearance="?android:attr/textAppearanceMedium"
            />
     </LinearLayout>

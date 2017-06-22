@@ -19,7 +19,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -48,7 +47,7 @@ import sk.piskula.fuelup.entity.enums.DistanceUnit;
  */
 public class AddVehicle extends AppCompatActivity implements OnClickListener {
 
-    public static final String TAG = "AddCarActivity";
+    public static final String TAG = "AddVehicle";
     private static final String PHOTO = "photo";
     public static final int REQUEST_PICTURE = 1113;
     public static final int REQUEST_TAKE_PHOTOS = 1112;
@@ -56,16 +55,15 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
 
     private String mCurrentPhotoPath;
     private Bitmap currentPhoto;
-    private EditText mTxtNick;
-    private EditText mTxtTypeName;
-    private EditText mTxtActualMileage;
-    private TextView mTxtActualMileageDistanceUnit;
-    private Spinner mTypeSpinner;
-    private Spinner mCurrencySpinner;
-    private RadioGroup mDistanceUnitRadioGroup;
-    private Button mBtnAdd;
-    private ImageView mImgCarPhotoStatus;
-    private LinearLayout layout;
+    private EditText txtName;
+    private EditText txtManufacturer;
+    private EditText txtActualMileage;
+    private TextView txtActualMileageDistanceUnit;
+    private Spinner spinnerType;
+    private Spinner spinnerCurrency;
+    private RadioGroup radioGroupDistanceUnit;
+    private Button buttonAdd;
+    private ImageView imgCarPhotoStatus;
 
     private DatabaseHelper databaseHelper = null;
 
@@ -90,41 +88,40 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState.containsKey(PHOTO)) {
             currentPhoto = savedInstanceState.getParcelable(PHOTO);
-            mImgCarPhotoStatus.setImageResource(R.drawable.ic_camera_deny);
+            imgCarPhotoStatus.setImageResource(R.drawable.ic_camera_deny);
         }
     }
 
     private void initViews() {
-        this.mTxtNick = (EditText) findViewById(R.id.txt_addVehicle_name);
-        this.mTxtTypeName = (EditText) findViewById(R.id.txt_addVehicle_manufacturer);
-        this.mTxtActualMileage = (EditText) findViewById(R.id.txt_addVehicle_mileage);
-        this.mTxtActualMileageDistanceUnit = (TextView) findViewById(R.id.txt_addVehicle_mileage_distanceUnit);
-        this.mBtnAdd = (Button) findViewById(R.id.btn_add);
-        this.mTypeSpinner = (Spinner) findViewById(R.id.spinner_types);
-        this.mCurrencySpinner = (Spinner) findViewById(R.id.spinner_currency);
-        this.mDistanceUnitRadioGroup = (RadioGroup) findViewById(R.id.radio_distance_unit);
-        this.layout = (LinearLayout) findViewById(R.id.addVehicle_layout);
-        this.mImgCarPhotoStatus = (ImageView) findViewById(R.id.img_addVehicle_photo);
+        this.txtName = (EditText) findViewById(R.id.txt_addVehicle_name);
+        this.txtManufacturer = (EditText) findViewById(R.id.txt_addVehicle_manufacturer);
+        this.txtActualMileage = (EditText) findViewById(R.id.txt_addVehicle_mileage);
+        this.txtActualMileageDistanceUnit = (TextView) findViewById(R.id.txt_addVehicle_mileage_distanceUnit);
+        this.buttonAdd = (Button) findViewById(R.id.btn_addVehicle_add);
+        this.spinnerType = (Spinner) findViewById(R.id.spinner_addVehicle_types);
+        this.spinnerCurrency = (Spinner) findViewById(R.id.spinner_currency);
+        this.radioGroupDistanceUnit = (RadioGroup) findViewById(R.id.radio_distance_unit);
+        this.imgCarPhotoStatus = (ImageView) findViewById(R.id.img_addVehicle_photo);
 
-        mCurrencySpinner.setAdapter(new SpinnerCurrencyAdapter(this));
-        mTypeSpinner.setAdapter(new SpinnerVehicleTypesAdapter(this));
+        spinnerCurrency.setAdapter(new SpinnerCurrencyAdapter(this));
+        spinnerType.setAdapter(new SpinnerVehicleTypesAdapter(this));
 
-        mImgCarPhotoStatus.setOnClickListener(this);
-        mBtnAdd.setOnClickListener(this);
-        mDistanceUnitRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        imgCarPhotoStatus.setOnClickListener(this);
+        buttonAdd.setOnClickListener(this);
+        radioGroupDistanceUnit.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-                if (radioGroup.getCheckedRadioButtonId() == R.id.radio_km) mTxtActualMileageDistanceUnit.setText(DistanceUnit.km.toString());
-                else mTxtActualMileageDistanceUnit.setText(DistanceUnit.mi.toString());
+                if (radioGroup.getCheckedRadioButtonId() == R.id.radio_km) txtActualMileageDistanceUnit.setText(DistanceUnit.km.toString());
+                else txtActualMileageDistanceUnit.setText(DistanceUnit.mi.toString());
             }
         });
-        this.mDistanceUnitRadioGroup.check(R.id.radio_km);
+        this.radioGroupDistanceUnit.check(R.id.radio_km);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_add:
+            case R.id.btn_addVehicle_add:
                 saveVehicle();
                 break;
             case R.id.img_addVehicle_photo:
@@ -141,9 +138,9 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
     }
 
     private void saveVehicle() {
-        String nick = mTxtNick.getText().toString();
-        String typeName = mTxtTypeName.getText().toString();
-        String actualMileage = mTxtActualMileage.getText().toString();
+        String nick = txtName.getText().toString();
+        String typeName = txtManufacturer.getText().toString();
+        String actualMileage = txtActualMileage.getText().toString();
 
         if (nick.isEmpty() || typeName.isEmpty() || actualMileage.isEmpty()) {
             Toast.makeText(this, getString(R.string.addCarActivity_Toast_emptyFields), Toast.LENGTH_LONG).show();
@@ -154,9 +151,9 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
         Vehicle createdVehicle = new Vehicle();
         createdVehicle.setName(nick);
         createdVehicle.setVehicleMaker(typeName);
-        createdVehicle.setCurrency((Currency) mCurrencySpinner.getSelectedItem());
-        createdVehicle.setType((VehicleType) mTypeSpinner.getSelectedItem());
-        createdVehicle.setUnit(mDistanceUnitRadioGroup
+        createdVehicle.setCurrency((Currency) spinnerCurrency.getSelectedItem());
+        createdVehicle.setType((VehicleType) spinnerType.getSelectedItem());
+        createdVehicle.setUnit(radioGroupDistanceUnit
                 .getCheckedRadioButtonId() == R.id.radio_km ? DistanceUnit.km : DistanceUnit.mi);
 
         try {
@@ -266,7 +263,7 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
 
     public void deletePhoto() {
         currentPhoto = null;
-        mImgCarPhotoStatus.setImageResource(R.drawable.ic_camera);
+        imgCarPhotoStatus.setImageResource(R.drawable.ic_camera);
     }
 
     private File createImageFile() throws IOException {
@@ -293,8 +290,8 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
         bmOptions.inSampleSize = 1;
         bmOptions.inPurgeable = true;
         currentPhoto = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        mImgCarPhotoStatus.setImageResource(R.drawable.ic_camera_deny);
-//        mImgCarPhotoStatus.setImageBitmap(currentPhoto);
+        imgCarPhotoStatus.setImageResource(R.drawable.ic_camera_deny);
+//        imgCarPhotoStatus.setImageBitmap(currentPhoto);
     }
 
     private void performCrop() {

@@ -23,18 +23,36 @@
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/txt_addexpense_price"
-                android:layout_width="match_parent"
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_weight="6"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/txt_addexpense_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/add_expense_activity_price"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1" />
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/txt_addexpense_priceunit"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/add_expense_activity_price"
-                android:inputType="numberDecimal"
-                android:maxLines="1" />
-        </android.support.design.widget.TextInputLayout>
+                android:layout_weight="1"
+                android:paddingTop="10dp"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+        </LinearLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -44,10 +62,10 @@
                 android:id="@+id/txt_addexpense_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/add_expense_activity_date"
-                android:focusable="false"
                 android:clickable="false"
+                android:focusable="false"
                 android:freezesText="true"
+                android:hint="@string/add_expense_activity_date"
                 android:inputType="date"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
@@ -59,7 +77,7 @@
             android:gravity="center"
             android:paddingBottom="2dp"
             android:paddingTop="2dp"
-            android:text="@string/add_expense_activity_btn_add"
+            android:text="@string/add"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
 </ScrollView>

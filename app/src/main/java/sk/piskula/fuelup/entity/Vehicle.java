@@ -29,8 +29,8 @@ public class Vehicle implements Serializable {
     private static final Map<Currency, String> customCurrencySymbols;
     static {
         customCurrencySymbols = new HashMap<>();
-        customCurrencySymbols.put(Currency.getInstance("CZK"), "Kc");
-        customCurrencySymbols.put(Currency.getInstance("PLN"), "zl");
+        customCurrencySymbols.put(Currency.getInstance("CZK"), "K\u010D");
+        customCurrencySymbols.put(Currency.getInstance("PLN"), "z\u0142");
         customCurrencySymbols.put(Currency.getInstance("HUF"), "Ft");
     }
 
