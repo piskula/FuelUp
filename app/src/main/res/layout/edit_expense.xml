@@ -18,7 +18,7 @@
                 android:id="@+id/txt_addexpense_information"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/add_expense_activity_info_hint"
+                android:hint="@string/editExpense_info_hint"
                 android:inputType="textCapWords"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
@@ -38,7 +38,7 @@
                     android:id="@+id/txt_addexpense_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/add_expense_activity_price"
+                    android:hint="@string/price"
                     android:inputType="numberDecimal"
                     android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
@@ -65,7 +65,7 @@
                 android:clickable="false"
                 android:focusable="false"
                 android:freezesText="true"
-                android:hint="@string/add_expense_activity_date"
+                android:hint="@string/Date"
                 android:inputType="date"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>

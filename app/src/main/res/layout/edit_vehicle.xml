@@ -56,7 +56,7 @@
                 android:id="@+id/txt_editVehicle_manufacturer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/addVehicle_manufacturer"
+                android:hint="@string/title_vehicleManufacturer"
                 android:inputType="textCapWords"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
@@ -91,6 +91,11 @@
             android:text="@string/update"
             android:textAppearance="?android:attr/textAppearanceMedium"
            />
+
+        <ImageView
+            android:id="@+id/vehicleImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 
 </ScrollView>

@@ -73,7 +73,7 @@ public class VehicleTabbedDetail extends AppCompatActivity implements BottomNavi
         navigation.setOnNavigationItemSelectedListener(this);
 
         toolbarImage = (ImageView) findViewById(R.id.toolbar_layout_image);
-        toolbarImage.setImageBitmap(vehicle.getImage());
+        toolbarImage.setImageBitmap(vehicle.getPicture());
 
         if (savedInstanceState == null) {
             fragment = new FillUpsListFragment();

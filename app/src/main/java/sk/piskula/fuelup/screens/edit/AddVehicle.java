@@ -53,7 +53,7 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
     public static final int REQUEST_TAKE_PHOTOS = 1112;
     public static final int REQUEST_PIC_CROP = 1111;
 
-    private String mCurrentPhotoPath;
+    private String vehiclePicturePath;
     private Bitmap currentPhoto;
     private EditText txtName;
     private EditText txtManufacturer;
@@ -138,36 +138,37 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
     }
 
     private void saveVehicle() {
-        String nick = txtName.getText().toString();
-        String typeName = txtManufacturer.getText().toString();
+        String name = txtName.getText().toString();
+        String manufacturer = txtManufacturer.getText().toString();
         String actualMileage = txtActualMileage.getText().toString();
 
-        if (nick.isEmpty() || typeName.isEmpty() || actualMileage.isEmpty()) {
-            Toast.makeText(this, getString(R.string.addCarActivity_Toast_emptyFields), Toast.LENGTH_LONG).show();
+        if (name.isEmpty() || manufacturer.isEmpty() || actualMileage.isEmpty()) {
+            Toast.makeText(this, getString(R.string.toast_emptyFields), Toast.LENGTH_LONG).show();
             return;
         }
 
         // add vehicle to database
         Vehicle createdVehicle = new Vehicle();
-        createdVehicle.setName(nick);
-        createdVehicle.setVehicleMaker(typeName);
+        createdVehicle.setName(name);
+        createdVehicle.setVehicleMaker(manufacturer);
         createdVehicle.setCurrency((Currency) spinnerCurrency.getSelectedItem());
         createdVehicle.setType((VehicleType) spinnerType.getSelectedItem());
+        createdVehicle.setPathToPicture(vehiclePicturePath);
         createdVehicle.setUnit(radioGroupDistanceUnit
                 .getCheckedRadioButtonId() == R.id.radio_km ? DistanceUnit.km : DistanceUnit.mi);
 
         try {
             createdVehicle.setStartMileage(Long.parseLong(actualMileage));
         } catch (NumberFormatException ex) {
-            Log.e(TAG, getString(R.string.addCarActivity_LOG_badLongNumberFormat));
-            Toast.makeText(this, R.string.addCarActivity_LOG_badLongNumberFormat, Toast.LENGTH_SHORT).show();
+            Log.e(TAG, getString(R.string.LOG_badLongNumberFormat));
+            Toast.makeText(this, R.string.LOG_badLongNumberFormat, Toast.LENGTH_SHORT).show();
             return;
         }
 
         try {
             getHelper().getVehicleDao().create(createdVehicle);
             Log.i(TAG, "Successfully persisted new Vehicle: " + createdVehicle);
-            Toast.makeText(this, R.string.addCarActivity_Toast_successfullyCreated, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.addVehicle_Toast_successfullyCreated, Toast.LENGTH_LONG).show();
         } catch (SQLException e) {
             String errorMsg = "Error occured while saving new Vehicle to DB.";
             Log.e(TAG, errorMsg, e);
@@ -188,16 +189,13 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
                 cursor.moveToFirst();
 
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                mCurrentPhotoPath = cursor.getString(columnIndex);
+                vehiclePicturePath = cursor.getString(columnIndex);
                 cursor.close();
                 performCrop();
 
             }
             if (requestCode == REQUEST_TAKE_PHOTOS) {
                 performCrop();
-            }
-            if (requestCode == REQUEST_PIC_CROP) {
-                setPictureLarge();
             }
         }
     }
@@ -215,7 +213,7 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
         final int TAKE_PHOTO = 0;
         final int SELECT_PHOTO = 1;
 
-        final CharSequence[] opsChars = {getResources().getString(R.string.add_car_activity_take_photo), getResources().getString(R.string.add_car_activity_select_photo)};
+        final CharSequence[] opsChars = {getResources().getString(R.string.addVehicle_takePhoto), getResources().getString(R.string.addVehicle_selectPhotoFromGallery)};
 
         AlertDialog.Builder getImageDialog = new AlertDialog.Builder(this);
         getImageDialog.setTitle("Select:");
@@ -280,7 +278,7 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
         File image = new File(storageDir, imageFileName + ".jpg");
 
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
+        vehiclePicturePath = image.getAbsolutePath();
         return image;
     }
 
@@ -289,16 +287,15 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = 1;
         bmOptions.inPurgeable = true;
-        currentPhoto = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        currentPhoto = BitmapFactory.decodeFile(vehiclePicturePath, bmOptions);
         imgCarPhotoStatus.setImageResource(R.drawable.ic_camera_deny);
-//        imgCarPhotoStatus.setImageBitmap(currentPhoto);
     }
 
     private void performCrop() {
         Intent cropIntent = new Intent("com.android.camera.action.CROP");
 
         //indicate image type and Uri
-        cropIntent.setDataAndType(Uri.fromFile(new File(mCurrentPhotoPath)), "image/*");
+        cropIntent.setDataAndType(Uri.fromFile(new File(vehiclePicturePath)), "image/*");
 
         cropIntent.putExtra("crop", "true");
         //indicate aspect of desired crop

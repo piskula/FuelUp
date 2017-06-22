@@ -96,9 +96,9 @@ public class EditExpense extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             if (mode == Mode.UPDATING) {
-                actionBar.setTitle(R.string.update_expense_activity_title);
+                actionBar.setTitle(R.string.editExpense_updateExpense);
             } else {
-                actionBar.setTitle(R.string.add_expense_activity_title);
+                actionBar.setTitle(R.string.editExpense_addExpense);
 
             }
         }
@@ -112,7 +112,7 @@ public class EditExpense extends AppCompatActivity {
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(selectedExpense.getDate().getTime());
             setExpenseDate(cal);
-            mBtnAdd.setText(getString(R.string.addExpenseActivity_btnTxt_update));
+            mBtnAdd.setText(getString(R.string.update));
         }
     }
 
@@ -154,7 +154,7 @@ public class EditExpense extends AppCompatActivity {
                 String date = mTxtDate.getText().toString();
 
                 if (info.isEmpty() || price.isEmpty() || date.isEmpty()) {
-                    Snackbar.make(view, R.string.addExpenseActivity_emptyFields, Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, R.string.toast_emptyFields, Snackbar.LENGTH_LONG).show();
                     return;
                 }
 
@@ -175,8 +175,8 @@ public class EditExpense extends AppCompatActivity {
                 try {
                     getHelper().getExpenseDao().createOrUpdate(expense);
                     Toast.makeText(EditExpense.this, mode == Mode.UPDATING
-                                    ? R.string.addExpense_Toast_updatedSuccessfully
-                                    : R.string.addExpense_Toast_createdSuccessfully,
+                                    ? R.string.editExpense_toast_updatedSuccessfully
+                                    : R.string.editExpense_toast_createdSuccessfully,
                             Toast.LENGTH_LONG).show();
                     setResult(RESULT_OK);
                 } catch (SQLException e) {

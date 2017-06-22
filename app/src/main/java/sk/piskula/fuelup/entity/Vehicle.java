@@ -46,9 +46,6 @@ public class Vehicle implements Serializable {
     @DatabaseField(unknownEnumName = "km")
     private DistanceUnit unit;
 
-    @DatabaseField(persisted = false)
-    private byte[] image;
-
     @DatabaseField(columnName = "vehicle_maker")
     private String vehicleMaker;
 
@@ -57,6 +54,9 @@ public class Vehicle implements Serializable {
 
     @DatabaseField(canBeNull = false)
     private String currency;
+
+    @DatabaseField(columnName = "path_to_picture", canBeNull = true)
+    private String pathToPicture;
 
     //end of attributes
     public Long getId() {
@@ -97,21 +97,6 @@ public class Vehicle implements Serializable {
 
     public void setVehicleMaker(String vehicleMaker) {
         this.vehicleMaker = vehicleMaker;
-    }
-
-    public Bitmap getImage() {
-        return DbBitmapUtility.getImage(image);
-    }
-    public byte[] getImageBytes() {
-        return image;
-    }
-
-    public void setImage(Bitmap image) {
-        this.image = DbBitmapUtility.getBytes(image);
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
     }
 
     public Long getStartMileage() {
@@ -163,30 +148,46 @@ public class Vehicle implements Serializable {
                 +"}";
     }
 
-    private static class DbBitmapUtility {
-        private static  byte[] EMPTY_BITMAP = new byte[]{1};
-        // convert from bitmap to byte array
-        public static byte[] getBytes(Bitmap bitmap) {
-
-            if(bitmap == null){
-                return EMPTY_BITMAP;
-            }
-
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
-            return stream.toByteArray();
-        }
-
-        // convert from byte array to bitmap
-        public static Bitmap getImage(byte[] image) {
-            if(image == null || EMPTY_BITMAP.equals(image)){
-                return null;
-            }
-
-            if(image == null) return null;
-            return BitmapFactory.decodeByteArray(image, 0, image.length);
+    public Bitmap getPicture() {
+        if (this.pathToPicture == null || this.pathToPicture.isEmpty()) {
+            return null;
+        } else {
+            return BitmapFactory.decodeFile(this.pathToPicture);
         }
     }
+
+    public String getPathToPicture() {
+        return pathToPicture;
+    }
+
+    public void setPathToPicture(String pathToPicture) {
+        this.pathToPicture = pathToPicture;
+    }
+
+//    private static class DbBitmapUtility {
+//        private static  byte[] EMPTY_BITMAP = new byte[]{1};
+//        // convert from bitmap to byte array
+//        public static byte[] getBytes(Bitmap bitmap) {
+//
+//            if(bitmap == null){
+//                return EMPTY_BITMAP;
+//            }
+//
+//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//            bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
+//            return stream.toByteArray();
+//        }
+//
+//        // convert from byte array to bitmap
+//        public static Bitmap getImage(byte[] image) {
+//            if(image == null || EMPTY_BITMAP.equals(image)){
+//                return null;
+//            }
+//
+//            if(image == null) return null;
+//            return BitmapFactory.decodeByteArray(image, 0, image.length);
+//        }
+//    }
 
     public String getCurrencySymbol() {
         if (customCurrencySymbols.containsKey(this.getCurrency())) {
