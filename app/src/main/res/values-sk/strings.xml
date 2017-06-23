@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+
+    <string name="add">Pridať</string>
+    <string name="advanced">Pokročilé</string>
+    <string name="cancel">Zruš</string>
+    <string name="create">Vytvoriť</string>
+    <string name="Date">Dátum</string>
+    <string name="ok">OK</string>
+    <string name="password">Heslo</string>
+    <string name="price">Cena</string>
+    <string name="remove">Odstrániť</string>
+    <string name="update">Upraviť</string>
+    <string name="vehicleName">Názov vozidla</string>
+
+    <string name="toast_emptyFields">Je potrebné vyplniť viac údajov.</string>
+    <string name="title_expenses">Výdaje</string>
+    <string name="title_fillUps">Tankovania</string>
+    <string name="title_mileage">Nájazd</string>
+    <string name="title_settings">Nastavenia</string>
+    <string name="title_statistics">Štatitiky</string>
+    <string name="title_vehicleManufacturer">Výrobca</string>
+
+    <string name="LOG_badLongNumberFormat">Zlý formát čísla.</string>
+
+    <string name="noExpenseInTheDatabase">Pre toto vozidlo ste zatiaľ nezadali žiadne výdaje. Výdaj zadáte kliknutím na tlačítko \'plus\' vpravo dole.</string>
+    <string name="noFillupInTheDatabase">Pre toto vozidlo ste zatiaľ nezadali žiadny z8znam o tankovaní. Nový zadáte kliknutím na tlačítko \'plus\' vpravo dole.</string>
+
+    <string name="addVehicle">Nové vozidlo</string>
+    <string name="addVehicle_takePhoto">Fotoaparát</string>
+    <string name="addVehicle_selectPhotoFromGallery">Vybrať foto zo zariadenia</string>
+    <string name="addVehicle_Toast_successfullyCreated">Vytvorili ste nové vozidlo.</string>
+
+    <string name="editVehicle_toast_oldPhotoWasNotRemovedDueToError">Chyba: Pôvodný obrázok sa nepodarilo odstrániť !!!</string>
+    <string name="editVehicle_toast_photoWillBeRemoved">Fotografia bude odstránená po stlačení tlačidla \'Upraviť\'.</string>
+
+    <string name="delete_vehicle_dialog_message">Naozaj chcete odstrániť \'%1$s\' aj všetky záznamy?</string>
+    <string name="delete_vehicle_dialog_title">Odstrániť \'%1$s\'</string>
+    <string name="delete_vehicle_fail">Nepodarilo sa odstrániť vozidlo \'%1$s\'</string>
+    <string name="delete_vehicle_success">\'%1$s\' úspešne odstránené.</string>
+
+
+</resources>

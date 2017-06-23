@@ -50,7 +50,7 @@ public class DeleteDialog extends DialogFragment {
                 .setTitle(title)
                 .setMessage(message)
                 .setIcon(icon)
-                .setPositiveButton(R.string.delete,
+                .setPositiveButton(R.string.remove,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 ((Callback) getActivity()).onDeleteDialogPositiveClick(DeleteDialog.this);

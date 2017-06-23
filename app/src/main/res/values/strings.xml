@@ -14,7 +14,6 @@
     <string name="price">Price</string>
     <string name="remove">Remove</string>
     <string name="update">Update</string>
-    <string name="delete">Delete</string>
     <string name="vehicleName">Vehicle name</string>
 
     <string name="toast_emptyFields">There are some empty fields above.</string>
@@ -38,11 +37,10 @@
     <string name="editVehicle_toast_oldPhotoWasNotRemovedDueToError">Error: Old picture was not removed !!!</string>
     <string name="editVehicle_toast_photoWillBeRemoved">Photo of your Vehicle will be removed after submitting update.</string>
 
-    <string name="delete_vehicle_dialog_title">Delete %1$s</string>
-    <string name="delete_vehicle_dialog_message">Do you want to completely remove vehicle %1$s and all its data?</string>
-    <string name="delete_vehicle_fail">Failed to remove vehicle %1$s</string>
-    <string name="delete_vehicle_success">%1$s deleted successfully</string>
-
+    <string name="delete_vehicle_dialog_message">Do you want to completely remove vehicle \'%1$s\' and all its data?</string>
+    <string name="delete_vehicle_dialog_title">Delete \'%1$s\'</string>
+    <string name="delete_vehicle_fail">Failed to remove vehicle \'%1$s\'</string>
+    <string name="delete_vehicle_success">\'%1$s\' deleted successfully</string>
 
     <string name="editExpense_addExpense">Add expense</string>
     <string name="editExpense_info_hint">Information about expense</string>
