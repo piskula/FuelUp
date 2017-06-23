@@ -37,7 +37,7 @@ import static android.app.Activity.RESULT_OK;
 public class ExpensesListFragment extends Fragment implements ListExpensesAdapter.Callback, View.OnClickListener,
         LoaderManager.LoaderCallbacks<List<Expense>> {
 
-    private static final String TAG = "ExpensesListFragment";
+    private static final String TAG = ExpensesListFragment.class.getSimpleName();
 
     public static final String EXPENSE_TO_EDIT = "expense to edit";
     public static final int EXPENSE_ACTION_REQUEST_CODE = 31;

@@ -17,8 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.j256.ormlite.dao.Dao;
-
 import java.util.List;
 
 import sk.piskula.fuelup.R;
@@ -28,9 +26,9 @@ import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.loaders.ExpenseLoader;
 import sk.piskula.fuelup.loaders.FillUpLoader;
-import sk.piskula.fuelup.screens.VehicleTabbedDetail;
 
 import static android.app.Activity.RESULT_OK;
+import static sk.piskula.fuelup.screens.VehicleTabbedDetail.VEHICLE_TO_FRAGMENT;
 
 /**
  * @author Ondrej Oravcok
@@ -43,8 +41,6 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
     private static final String TAG = "FillUpsListFragment";
     public static final int FILLUP_ACTION_REQUEST_CODE = 32;
 
-
-    private Bundle args;
     private Vehicle vehicle;
     private List<FillUp> data;
     private ListFillUpsAdapter adapter;
@@ -54,9 +50,6 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
 
     private CollapsingToolbarLayout appBarLayout;
     private FloatingActionButton addButton;
-
-    //    private DatabaseHelper databaseHelper = null;
-    private Dao<FillUp, Integer> fillUpDao = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,8 +63,8 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
 
         View view = inflater.inflate(R.layout.fillups_list, container, false);
 
-        args = getArguments();
-        vehicle = (Vehicle) args.getSerializable(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT);
+        Bundle args = getArguments();
+        vehicle = (Vehicle) args.getSerializable(VEHICLE_TO_FRAGMENT);
 
         appBarLayout = getActivity().findViewById(R.id.toolbar_layout);
         appBarLayout.setTitle(getResources().getString(R.string.title_fillUps));
@@ -98,7 +91,7 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
 
     @Override
     public Loader<List<FillUp>> onCreateLoader(int id, Bundle args) {
-        Vehicle vehicle = (Vehicle) args.getSerializable(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT);
+        Vehicle vehicle = (Vehicle) args.getSerializable(VEHICLE_TO_FRAGMENT);
         long vehicleId = vehicle.getId();
         return new FillUpLoader(getActivity(), vehicleId, DatabaseProvider.get(getActivity()).getFillUpDao());
     }
@@ -119,7 +112,7 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
 
     @Override
     public void onItemClick(View v, FillUp fillUp, int position) {
-        // TODO this is called when item is clicked
+        // TODO this is called when item is clicked - update fillup
         Snackbar.make(v, "update fillup", Snackbar.LENGTH_SHORT)
                 .setAction("Action", null).show();
     }
@@ -127,11 +120,11 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
     @Override
     public void onClick(View view) {
         if (view.getId() == addButton.getId()) {
-            // add fill up here
+            // todo add fill up here
         }
     }
 
-    //todo start activity for result when updateing/creating fillup
+    //todo start activity for result when updating/creating fillup
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
