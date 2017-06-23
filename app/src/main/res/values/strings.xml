@@ -30,6 +30,7 @@
     <string name="noExpenseInTheDatabase">No expense available for this car. Add a new one by clicking the add button on the bottom right</string>
     <string name="noFillupInTheDatabase">No fill-up available for this car. Add a new one by clicking the add button on the bottom right</string>
 
+    <string name="addVehicle">Create vehicle</string>
     <string name="addVehicle_takePhoto">Take photo</string>
     <string name="addVehicle_selectPhotoFromGallery">Select photo from gallery</string>
     <string name="addVehicle_Toast_successfullyCreated">Vehicle have been successfully created.</string>

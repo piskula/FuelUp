@@ -82,9 +82,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
     }
 
-    public Dao<Vehicle, Long> getVehicleDao() throws SQLException {
+    public Dao<Vehicle, Long> getVehicleDao() {
         if (vehicleDao == null) {
-            vehicleDao = getDao(Vehicle.class);
+            try {
+                vehicleDao = getDao(Vehicle.class);
+            } catch (SQLException e) {
+                Log.i(TAG, "Can not create fillup dao.");
+            }
         }
         return vehicleDao;
     }
@@ -111,9 +115,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return expenseDao;
     }
 
-    public Dao<VehicleType, Long> getVehicleTypeDao() throws SQLException {
+    public Dao<VehicleType, Long> getVehicleTypeDao() {
         if (vehicleTypeDao == null) {
-            vehicleTypeDao = getDao(VehicleType.class);
+            try {
+                vehicleTypeDao = getDao(VehicleType.class);
+            } catch (SQLException e) {
+                Log.i(TAG, "Can not create vehicle type dao.");
+            }
         }
         return vehicleTypeDao;
     }

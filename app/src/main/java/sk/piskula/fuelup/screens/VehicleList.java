@@ -1,48 +1,32 @@
 package sk.piskula.fuelup.screens;
 
-import android.app.Dialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
-import android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.j256.ormlite.android.apptools.OpenHelperManager;
-
-import java.sql.SQLException;
-import java.util.Currency;
-
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.adapters.ListVehiclesAdapter;
-import sk.piskula.fuelup.data.DatabaseHelper;
-import sk.piskula.fuelup.entity.Vehicle;
-import sk.piskula.fuelup.entity.VehicleType;
-import sk.piskula.fuelup.entity.enums.DistanceUnit;
+import sk.piskula.fuelup.business.VehicleService;
+import sk.piskula.fuelup.screens.dialog.CreateVehicleDialog;
 import sk.piskula.fuelup.screens.edit.AddVehicle;
 
 public class VehicleList extends AppCompatActivity
-        implements OnNavigationItemSelectedListener {
+        implements OnNavigationItemSelectedListener, View.OnClickListener, ListView.OnItemClickListener,
+        CreateVehicleDialog.Callback {
 
     private static final String TAG = "VehicleList";
 
@@ -50,54 +34,37 @@ public class VehicleList extends AppCompatActivity
     private static final String PREFS_VEHICLE_ID_KEY = "vehicle_id";
     public static final String EXTRA_ADDED_CAR = "extra_key_added_car";
 
-    private DatabaseHelper databaseHelper = null;
-
-    private SharedPreferences sharedPreferences;
+    private FloatingActionButton addCarBtn;
 
     private ListView listView;
-    private TextView noVehicleText;
     private ListVehiclesAdapter adapter;
 
-    private void initVehicleList() {
-        noVehicleText = (TextView) findViewById(R.id.txt_not_vehicle);
-        listView = (ListView) findViewById(R.id.list_cars);
-        listView.setVisibility(View.VISIBLE);
-
-        adapter = new ListVehiclesAdapter(this, noVehicleText);
-        listView.setAdapter(adapter);
-
-        listView.setFocusable(false);
-        listView.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Intent i = new Intent(view.getContext(), VehicleTabbedDetail.class);
-                i.putExtra(EXTRA_ADDED_CAR, adapter.getItem(position));
-                startActivity(i);
-            }
-        });
-    }
+    private VehicleService vehicleService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 
+        vehicleService = new VehicleService(this);
         //TODO open last viewed car if possible
 
         setContentView(R.layout.vehicle_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        initVehicleList();
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_vehicle);
-        fab.setOnClickListener(createAddNewVehicleFloatingButton());
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        adapter = new ListVehiclesAdapter(this, (TextView) findViewById(R.id.txt_not_vehicle));
+
+        listView = (ListView) findViewById(R.id.list_cars);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(this);
+
+        addCarBtn = (FloatingActionButton) findViewById(R.id.fab_add_vehicle);
+        addCarBtn.setOnClickListener(this);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -109,98 +76,33 @@ public class VehicleList extends AppCompatActivity
         super.onRestart();
     }
 
-    private View.OnClickListener createAddNewVehicleFloatingButton() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                final Dialog dialog = createVehicleDialog();
-                dialog.setContentView(R.layout.create_vehicle_dialog);
-                dialog.setTitle("Create Vehicle");
-
-                final Button advancedButton = dialog.findViewById(R.id.createVehicleDialog_advanced);
-                final Button okButton = dialog.findViewById(R.id.createVehicleDialog_ok);
-                final EditText nameTextView = dialog.findViewById(R.id.createVehicleDialog_name);
-
-                okButton.setEnabled(false);
-                okButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        saveVehicle(nameTextView.getText().toString(), view);
-                        dialog.dismiss();
-                    }
-                });
-
-                nameTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                    @Override
-                    public void onFocusChange(View view, boolean hasFocus) {
-                        if (hasFocus) {
-                            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                        }
-                    }
-                });
-                nameTextView.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence,int i,int i1, int i2) {}
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-                    @Override
-                    public void afterTextChanged(Editable editable) {
-                        if (editable.toString().isEmpty()) {
-                            okButton.setEnabled(false);
-                        } else {
-                            okButton.setEnabled(true);
-                        }
-                    }
-                });
-
-                advancedButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                        Intent i = new Intent(view.getContext(), AddVehicle.class);
-                        startActivity(i);
-                    }
-                });
-                dialog.show();
-            }
-        };
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        Intent i = new Intent(view.getContext(), VehicleTabbedDetail.class);
+        i.putExtra(EXTRA_ADDED_CAR, adapter.getItem(position));
+        startActivity(i);
     }
 
-
-
-    private Dialog createVehicleDialog() {
-        return new Dialog(this);
-    }
-
-    private void saveVehicle(String name, View view) {
-        Vehicle vehicle = new Vehicle();
-        vehicle.setName(name);
-        vehicle.setUnit(DistanceUnit.km);
-        vehicle.setCurrency(Currency.getInstance("EUR"));
-
-        try {
-            VehicleType type = getHelper().getVehicleTypeDao().queryBuilder().queryForFirst();
-            vehicle.setType(type);
-            getHelper().getVehicleDao().create(vehicle);
-            adapter.refreshItems(this);
-        } catch (SQLException e) {
-            String status;
-            if (e.getCause().getCause().getMessage().contains("UNIQUE")) {
-                status = "Cannot create duplicate vehicle";
-            } else {
-                status = "Unexpected error. See logs for details.";
-            }
-            Snackbar.make(view, "ERROR: " + status, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            Log.e(TAG, status, e);
+    @Override
+    public void onClick(final View view) {
+        if (view.getId() == addCarBtn.getId()) {
+            new CreateVehicleDialog().show(getSupportFragmentManager(), CreateVehicleDialog.class.getSimpleName());
         }
     }
 
-    private DatabaseHelper getHelper() {
-        if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(this,DatabaseHelper.class);
-        }
-        return databaseHelper;
+    @Override
+    public void onDialogCreateBtnClick(CreateVehicleDialog dialog, Editable vehicleName) {
+        vehicleService.save(vehicleName.toString());
+        adapter.refreshItems(this);
+        dialog.dismiss();
+    }
+
+    @Override
+    public void onDialogAdvancedBtnClick(CreateVehicleDialog dialog, Editable vehicleName) {
+        dialog.dismiss();
+        Intent i = new Intent(this, AddVehicle.class);
+        i.putExtra("vehicleName", vehicleName.toString());
+        startActivity(i);
     }
 
     @Override
@@ -221,12 +123,8 @@ public class VehicleList extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -257,16 +155,6 @@ public class VehicleList extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        if (databaseHelper != null) {
-            OpenHelperManager.releaseHelper();
-            databaseHelper = null;
-        }
     }
 
 }

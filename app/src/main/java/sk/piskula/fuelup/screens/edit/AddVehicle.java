@@ -71,8 +71,16 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_vehicle);
+        Intent intent = getIntent();
+
 
         initViews();
+
+        String name = intent.getStringExtra("vehicleName");
+        if ( name != null) {
+            txtName.setText(name);
+        }
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
@@ -111,7 +119,8 @@ public class AddVehicle extends AppCompatActivity implements OnClickListener {
         radioGroupDistanceUnit.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-                if (radioGroup.getCheckedRadioButtonId() == R.id.radio_km) txtActualMileageDistanceUnit.setText(DistanceUnit.km.toString());
+                if (radioGroup.getCheckedRadioButtonId() == R.id.radio_km)
+                    txtActualMileageDistanceUnit.setText(DistanceUnit.km.toString());
                 else txtActualMileageDistanceUnit.setText(DistanceUnit.mi.toString());
             }
         });
