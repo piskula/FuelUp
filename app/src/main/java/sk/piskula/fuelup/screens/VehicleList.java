@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.adapters.ListVehiclesAdapter;
+import sk.piskula.fuelup.business.ServiceResult;
 import sk.piskula.fuelup.business.VehicleService;
 import sk.piskula.fuelup.screens.dialog.CreateVehicleDialog;
 import sk.piskula.fuelup.screens.edit.AddVehicle;
@@ -92,9 +94,15 @@ public class VehicleList extends AppCompatActivity
 
     @Override
     public void onDialogCreateBtnClick(CreateVehicleDialog dialog, Editable vehicleName) {
-        vehicleService.save(vehicleName.toString());
-        adapter.refreshItems(this);
-        dialog.dismiss();
+        ServiceResult serviceResult = vehicleService.save(vehicleName.toString());
+        if(ServiceResult.SUCCESS.equals(serviceResult)){
+            adapter.refreshItems(this);
+            dialog.dismiss();
+            Snackbar.make(this.getCurrentFocus(), R.string.addVehicle_success, Snackbar.LENGTH_LONG).show();
+        }else {
+            Snackbar.make(this.getCurrentFocus(), R.string.addVehicle_fail, Snackbar.LENGTH_LONG).show();
+        }
+
     }
 
     @Override

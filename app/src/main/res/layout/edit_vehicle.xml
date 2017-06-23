@@ -89,7 +89,6 @@
             android:gravity="center"
             android:layout_marginTop="15dp"
             android:text="@string/update"
-            android:textAppearance="?android:attr/textAppearanceMedium"
            />
 
         <ImageView

@@ -40,7 +40,9 @@
                 android:cropToPadding="false"
                 android:paddingEnd="4dp"
                 android:paddingStart="4dp"
-                android:src="@drawable/ic_camera" />
+                android:src="@drawable/ic_camera"
+                android:onClick="onClickPhoto"
+                />
 
         </LinearLayout>
 
@@ -178,7 +180,7 @@
             android:gravity="center"
             android:layout_marginTop="15dp"
             android:text="@string/add"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:onClick="onClickAdd"
            />
     </LinearLayout>
 

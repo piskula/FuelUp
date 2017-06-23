@@ -36,7 +36,7 @@ public class VehicleService {
      * @param name name of car
      * @return success result
      */
-    public boolean save(String name) {
+    public ServiceResult save(String name) {
         Vehicle vehicle = new Vehicle();
         vehicle.setName(name);
         vehicle.setUnit(DistanceUnit.km);
@@ -52,19 +52,18 @@ public class VehicleService {
      * @param vehicle
      * @return success result
      */
-    public boolean save(Vehicle vehicle) {
+    public ServiceResult save(Vehicle vehicle) {
         try {
             vehicleDao.create(vehicle);
-            return true;
+            Log.i(TAG, "Successfully persisted new Vehicle: " + vehicle);
+            return ServiceResult.SUCCESS;
         } catch (SQLException e) {
-            String status;
             if (e.getCause().getCause().getMessage().contains("UNIQUE")) {
-                status = "Cannot create duplicate vehicle";
+                return ServiceResult.ERROR_DUPLICATE;
             } else {
-                status = "Unexpected error. See logs for details.";
+                Log.e(TAG, "Unexpected error. See logs for details.", e);
             }
-            Log.e(TAG, status, e);
         }
-        return false;
+        return ServiceResult.ERROR;
     }
 }

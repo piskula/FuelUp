@@ -1,6 +1,7 @@
 package sk.piskula.fuelup.screens;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -56,7 +57,8 @@ public class VehicleTabbedDetail extends AppCompatActivity implements BottomNavi
 
         ((BottomNavigationView) findViewById(R.id.vehicle_detail_navigation)).setOnNavigationItemSelectedListener(this);
 
-        ((ImageView) findViewById(R.id.toolbar_layout_image)).setImageBitmap(vehicle.getPicture());
+        Bitmap bmp = vehicle.getPicture();
+        ((ImageView) findViewById(R.id.toolbar_layout_image)).setImageBitmap(bmp);
 
         if (savedInstanceState == null) {
             fragment = new FillUpsListFragment();
