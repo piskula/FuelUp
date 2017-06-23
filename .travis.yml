@@ -14,13 +14,19 @@ android:
   - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
+addons:
+  ssh_known_hosts: aisa.fi.muni.cz
+before_deploy:
+- openssl aes-256-cbc -K $encrypted_16f2641c5068_key -iv $encrypted_16f2641c5068_iv -in deploy_rsa.enc -out deploy_rsa -d
+- eval "$(ssh-agent -s)"
+- chmod 600 /tmp/deploy_rsa
+- ssh-add /tmp/deploy_rsa
 before_install:
 - chmod +x gradlew
 - mkdir "$ANDROID_HOME/licenses" || true
 - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
 - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
 script:
-#- "./gradlew clean build connectedAndroidTest -PdisablePreDex --stacktrace"
 - "./gradlew clean build --stacktrace"
 notifications:
   email: false
@@ -32,15 +38,10 @@ cache:
   - "$HOME/.gradle"
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
-#deploy:
-#  provider: releases
-#  api_key:
-#    secure: EunWgE9XfzUO/4DLqmNLSa0VZYP365AZQFFxxiFOD7hLOAleqk2dlC5IRM3QSudS5RBijAWrrxvJvZZ3zC2762SOPTtmp1k5SvWnrKFNuo0Q/pi73MfQ1NvrKGRuHlbGbDLC9b91Aspr9WPwIVLkW8FNNmvG31vnc6bXf0snwzUCYf8lEln1e7nj540lnfIzy+OTlO7bZx7z6Q7byuYMkBtAiaJoa+0IRqm/KbaQH35Z1uWmF27zcL0p/kb/Hh/yf5Z4D7pQqr+zRPohKsnkOBuTZOg5DspGL1AdpSw7chNvpvZMdJ2mWs8nvlip7jCm1+AVhKOtifJXGzcr79XaHmsPMhRQ9TzMK+z9h+vzJsw0mMsQ3x7NoZ6LDkgOXYxrBFNVy2h2jt6tLHr4QJj2BtRWOejTY1MLOc7yp/9bGK4RiXVpZPno5E7ThPkhijE3OVebwDLpwiQbhogno20BbROzW1xL0Nrlg93mb7JMwmnPa4rNaNUwRmTNMUuIDOY8UDonLrvthG94zoXzhlLRwvukF8gU/E6ZWIVnjF0qCr5c5nTagKnm2CISRf6l+x/a7O/Sv40dbQQBb3wuLLgGpsIS/wxI7Z/vxjclEzOmvHoXFC1JukNAUhhJ3MrDkkyO4OwgbpB6NpzRTc8GDzMirka/XCDwXv+l9pEXjeNY8b0=
-#  file: app/build/outputs/apk/app-debug.apk
-#  file_glob: "true"
-#  skip_cleanup: true
-#  on:
-#    branch: master
-#    repo: piskula/FuelUp
-after_success:
-  #set_tags.sh
+after_success: 
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/public xoravcok@aisa.fi.muni.cz:/home/xoravcok/public_html
+    on:
+      branch: master
