@@ -43,5 +43,5 @@ deploy:
   provider: script
   skip_cleanup: true
   script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/public xoravcok@aisa.fi.muni.cz:/home/xoravcok/public_html
-    on:
-      branch: master
+  on:
+    branch: master
