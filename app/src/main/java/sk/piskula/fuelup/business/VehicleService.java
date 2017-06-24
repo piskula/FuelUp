@@ -66,4 +66,15 @@ public class VehicleService {
         }
         return ServiceResult.ERROR;
     }
+
+    public ServiceResult update(Vehicle vehicle) {
+        try {
+            vehicleDao.update(vehicle);
+            Log.i(TAG, "Successfully updated Vehicle: " + vehicle);
+            return ServiceResult.SUCCESS;
+        } catch (SQLException e) {
+            Log.e(TAG, "Unexpected error. See logs for details.", e);
+        }
+        return ServiceResult.ERROR;
+    }
 }

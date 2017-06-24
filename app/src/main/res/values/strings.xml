@@ -39,7 +39,7 @@
     <string name="addVehicle_fail_duplicate">Vehicle with this name already exists</string>
     <string name="addVehicle_picture_added">Picture added</string>
     <string name="permission_image_not_granted">Permissions required for work with images not granted. Image will not be used</string>
-    
+
     <string name="editVehicle_toast_oldPhotoWasNotRemovedDueToError">Error: Old picture was not removed !!!</string>
     <string name="editVehicle_toast_photoWillBeRemoved">Photo of your Vehicle will be removed after submitting update.</string>
 
@@ -58,7 +58,9 @@
 
     <string name="carUpdate_delete_btn">Delete</string>
     <string name="carUpdate_manufacturer">Car manufacturer and type name</string>
-    <string name="carUpdate_Toast_successfullyUpdated">Vehicle have been successfully updated.</string>
+    <string name="carUpdate_Toast_successfullyUpdated">Vehicle have been successfully updated</string>
+    <string name="carUpdate_Toast_updateFail">Vehicle update failed</string>
+
     <string name="updateCarActivity_LOG_badLongNumberFormat">tryed bad number format of Distance travelled</string>
     <string name="updateCarActivity_LOG_updateBtnClicked">update button clicked</string>
     <string name="updateCarActivity_LOG_deleteBtnClicked">delete button clicked</string>
@@ -66,7 +68,7 @@
     <string name="updateCarActivity_LOG_dialogDecline">dialog window declined</string>
     <string name="updateCarActivity_wrong_number_format">Wrong number format</string>
     <string name="updateCarActivity_Toast_carUpdatedSuccesfully01">Car</string>
-    <string name="updateCarActivity_Toast_carUpdatedSuccesfully02">updated successfully</string>
+    <string name="updateCarActivity_Toast_carUpdatedSuccesfully02">Update sucessfull</string>
     <string name="updateCarActivity_Toast_carNoUpdate">No change</string>
     <string name="updateCarActivity_emptyFields">One or more fields are empty!</string>
 
