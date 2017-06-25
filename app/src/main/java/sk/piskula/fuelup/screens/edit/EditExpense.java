@@ -9,26 +9,21 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.j256.ormlite.android.apptools.OpenHelperManager;
-
 import java.math.BigDecimal;
-import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
 import sk.piskula.fuelup.R;
-import sk.piskula.fuelup.data.DatabaseHelper;
-import sk.piskula.fuelup.data.DatabaseProvider;
+import sk.piskula.fuelup.business.ExpenseService;
+import sk.piskula.fuelup.business.ServiceResult;
 import sk.piskula.fuelup.entity.Expense;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.screens.detailfragments.ExpensesListFragment;
@@ -39,7 +34,7 @@ import sk.piskula.fuelup.screens.detailfragments.ExpensesListFragment;
  */
 public class EditExpense extends AppCompatActivity {
 
-    private static final String TAG = "EditExpense";
+    private static final String TAG = EditExpense.class.getSimpleName();
 
     private EditText mTxtInfo;
     private EditText mTxtPrice;
@@ -50,15 +45,12 @@ public class EditExpense extends AppCompatActivity {
 
     private Vehicle vehicle;
     private Expense expense;
-    private Calendar _expenseDate;
+    private Calendar expenseDate;
     private Mode mode;
-
-    private DatabaseHelper databaseHelper = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.edit_expense);
         initViews();
 
@@ -77,9 +69,6 @@ public class EditExpense extends AppCompatActivity {
             expense.setVehicle(vehicle);
         }
 
-        initActionBar();
-        mTxtDate.setOnClickListener(getDatePickerListener());
-        mBtnAdd.setOnClickListener(getSaveButtonOnClickListener());
         mTxtPriceUnit.setText(vehicle.getCurrencySymbol());
     }
 
@@ -89,9 +78,6 @@ public class EditExpense extends AppCompatActivity {
         this.mTxtDate = (EditText) findViewById(R.id.txt_addexpense_date);
         this.mBtnAdd = (Button) findViewById(R.id.btn_addexpense_add);
         this.mTxtPriceUnit = (TextView) findViewById(R.id.txt_addexpense_priceunit);
-    }
-
-    private void initActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -102,6 +88,7 @@ public class EditExpense extends AppCompatActivity {
 
             }
         }
+
     }
 
     private void populateFields(Expense selectedExpense) {
@@ -116,8 +103,69 @@ public class EditExpense extends AppCompatActivity {
         }
     }
 
+    /**
+     * On click listener for add button
+     * @param view
+     */
+    public void onClickAdd(View view) {
+        saveExpense();
+    }
+
+
+    /**
+     * OnClick listener for date text view
+     */
+    public void onClickDatePicker(View view) {
+        new DatePickerDialog(EditExpense.this, new OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int y, int m, int d) {
+                Calendar serviceDate = Calendar.getInstance();
+                serviceDate.set(y, m, d);
+                setExpenseDate(serviceDate);
+            }
+        }, expenseDate.get(Calendar.YEAR), expenseDate.get(Calendar.MONTH), expenseDate.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    private void saveExpense(){
+        String info = mTxtInfo.getText().toString();
+        String price = mTxtPrice.getText().toString();
+        String date = mTxtDate.getText().toString();
+
+        if (info.isEmpty() || price.isEmpty() || date.isEmpty()) {
+            Snackbar.make(findViewById(android.R.id.content), R.string.toast_emptyFields, Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
+        BigDecimal createdPrice = null;
+        Date createdDate = null;
+
+        try {
+            createdPrice = new BigDecimal(price.toString());
+            createdDate = android.text.format.DateFormat.getDateFormat(getApplicationContext()).parse(date);
+        } catch (NumberFormatException | ParseException e) {
+            Log.e(TAG, "Error formatting data for Expense while saving.");
+        }
+
+        expense.setDate(createdDate);
+        expense.setInfo(info);
+        expense.setPrice(createdPrice);
+
+        ExpenseService expenseService = new ExpenseService(EditExpense.this);
+        ServiceResult result = (mode == Mode.UPDATING) ? expenseService.update(expense) : expenseService.save(expense);
+
+        if (ServiceResult.SUCCESS.equals(result)) {
+            Toast.makeText(EditExpense.this, mode == Mode.UPDATING ? R.string.editExpense_toast_updatedSuccessfully : R.string.editExpense_toast_createdSuccessfully, Toast.LENGTH_LONG).show();
+            setResult(RESULT_OK);
+        }
+        if (ServiceResult.ERROR.equals(result)) {
+            Toast.makeText(EditExpense.this, mode == Mode.UPDATING ? R.string.editExpense_toast_updateFailed : R.string.editExpense_toast_createFailed, Toast.LENGTH_LONG).show();
+            setResult(RESULT_CANCELED);
+        }
+        finish();
+    }
+
     private void setExpenseDate(Calendar calendar) {
-        this._expenseDate = calendar;
+        this.expenseDate = calendar;
         mTxtDate.setText(android.text.format.DateFormat.getDateFormat(getApplicationContext()).format(calendar.getTime()));
     }
 
@@ -127,85 +175,8 @@ public class EditExpense extends AppCompatActivity {
         return bddf.format(price.doubleValue());
     }
 
-    private OnClickListener getDatePickerListener() {
-        return new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new DatePickerDialog(EditExpense.this, new OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int y, int m, int d) {
-                        Calendar serviceDate = Calendar.getInstance();
-                        serviceDate.set(y, m, d);
-                        setExpenseDate(serviceDate);
-                    }
-                }, _expenseDate.get(Calendar.YEAR),
-                        _expenseDate.get(Calendar.MONTH),
-                        _expenseDate.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        };
-    }
-
-    private OnClickListener getSaveButtonOnClickListener() {
-        return new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String info = mTxtInfo.getText().toString();
-                String price = mTxtPrice.getText().toString();
-                String date = mTxtDate.getText().toString();
-
-                if (info.isEmpty() || price.isEmpty() || date.isEmpty()) {
-                    Snackbar.make(view, R.string.toast_emptyFields, Snackbar.LENGTH_LONG).show();
-                    return;
-                }
-
-                BigDecimal createdPrice = null;
-                Date createdDate = null;
-
-                try {
-                    createdPrice = new BigDecimal(price.toString());
-                    createdDate = getDateFormatter().parse(date);
-                } catch (NumberFormatException | ParseException e) {
-                    Log.e(TAG, "Error formatting data for Expense while saving.");
-                }
-
-                expense.setDate(createdDate);
-                expense.setInfo(info);
-                expense.setPrice(createdPrice);
-
-                try {
-                    getHelper().getExpenseDao().createOrUpdate(expense);
-                    Toast.makeText(EditExpense.this, mode == Mode.UPDATING
-                                    ? R.string.editExpense_toast_updatedSuccessfully
-                                    : R.string.editExpense_toast_createdSuccessfully,
-                            Toast.LENGTH_LONG).show();
-                    setResult(RESULT_OK);
-                } catch (SQLException e) {
-                    Log.e(TAG, "Error occured while saving Expense to DB.");
-                    setResult(RESULT_CANCELED);
-                }
-                finish();
-            }
-        };
-    }
-
-    private DateFormat getDateFormatter() {
-        return android.text.format.DateFormat.getDateFormat(getApplicationContext());
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (databaseHelper != null) {
-            OpenHelperManager.releaseHelper();
-            databaseHelper = null;
-        }
-    }
 
     private enum Mode {
         UPDATING, CREATING
-    }
-
-    private DatabaseHelper getHelper() {
-        return DatabaseProvider.get(this);
     }
 }

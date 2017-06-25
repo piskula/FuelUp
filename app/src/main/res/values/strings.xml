@@ -55,6 +55,8 @@
     <string name="editExpense_updateExpense">Update expense</string>
     <string name="editExpense_toast_createdSuccessfully">Expense created successfully</string>
     <string name="editExpense_toast_updatedSuccessfully">Expense updated successfully</string>
+    <string name="editExpense_toast_createFailed">Expense create failed</string>
+    <string name="editExpense_toast_updateFailed">Expense update failed</string>
 
     <string name="carUpdate_delete_btn">Delete</string>
     <string name="carUpdate_manufacturer">Car manufacturer and type name</string>

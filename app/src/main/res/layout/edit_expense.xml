@@ -31,8 +31,8 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
-                android:layout_weight="6"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="6">
 
                 <EditText
                     android:id="@+id/txt_addexpense_price"
@@ -67,7 +67,8 @@
                 android:freezesText="true"
                 android:hint="@string/Date"
                 android:inputType="date"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:onClick="onClickDatePicker" />
         </android.support.design.widget.TextInputLayout>
 
         <Button
@@ -75,9 +76,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:onClick="onClickAdd"
             android:paddingBottom="2dp"
             android:paddingTop="2dp"
-            android:text="@string/add"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:text="@string/add" />
     </LinearLayout>
 </ScrollView>

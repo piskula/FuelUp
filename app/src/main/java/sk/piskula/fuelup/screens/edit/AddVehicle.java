@@ -158,7 +158,7 @@ public class AddVehicle extends AppCompatActivity implements ImageChooserDialog.
         if (ServiceResult.ERROR_DUPLICATE.equals(result)) {
             Snackbar.make(findViewById(android.R.id.content), R.string.addVehicle_fail_duplicate, Snackbar.LENGTH_LONG).show();
         }
-        if (ServiceResult.ERROR_DUPLICATE.equals(result)) {
+        if (ServiceResult.ERROR.equals(result)) {
             Snackbar.make(findViewById(android.R.id.content), R.string.addVehicle_fail, Snackbar.LENGTH_LONG).show();
         }
     }
