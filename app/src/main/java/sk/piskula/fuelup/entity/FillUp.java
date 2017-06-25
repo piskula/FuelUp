@@ -1,9 +1,11 @@
 package sk.piskula.fuelup.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -12,9 +14,7 @@ import java.util.Date;
  * @version 17.6.2017
  */
 @DatabaseTable(tableName = "fill_ups")
-public class FillUp implements Serializable {
-
-    private static final long serialVersionUID = -7406089937623011561L;
+public class FillUp implements Parcelable {
 
     @DatabaseField(generatedId = true)
     private Long id;
@@ -42,8 +42,6 @@ public class FillUp implements Serializable {
 
     @DatabaseField
     private String info;
-
-    //end of atributes
 
     public Long getId() {
         return id;
@@ -118,7 +116,7 @@ public class FillUp implements Serializable {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "FillUp{"
                 + "id=" + id
                 + ", date=" + date
@@ -129,7 +127,52 @@ public class FillUp implements Serializable {
                 + ", fuelPricePerLitre=" + fuelPricePerLitre
                 + ", fuelPriceTotlal=" + fuelPriceTotal
                 + ", isFullFillUp=" + isFullFillUp
-                +"}";
+                + "}";
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.id);
+        dest.writeParcelable(this.vehicle, flags);
+        dest.writeValue(this.distanceFromLastFillUp);
+        dest.writeDouble(this.fuelVolume);
+        dest.writeSerializable(this.fuelPricePerLitre);
+        dest.writeSerializable(this.fuelPriceTotal);
+        dest.writeByte(this.isFullFillUp ? (byte) 1 : (byte) 0);
+        dest.writeLong(this.date != null ? this.date.getTime() : -1);
+        dest.writeString(this.info);
+    }
+
+    public FillUp() {
+    }
+
+    protected FillUp(Parcel in) {
+        this.id = (Long) in.readValue(Long.class.getClassLoader());
+        this.vehicle = in.readParcelable(Vehicle.class.getClassLoader());
+        this.distanceFromLastFillUp = (Long) in.readValue(Long.class.getClassLoader());
+        this.fuelVolume = in.readDouble();
+        this.fuelPricePerLitre = (BigDecimal) in.readSerializable();
+        this.fuelPriceTotal = (BigDecimal) in.readSerializable();
+        this.isFullFillUp = in.readByte() != 0;
+        long tmpDate = in.readLong();
+        this.date = tmpDate == -1 ? null : new Date(tmpDate);
+        this.info = in.readString();
+    }
+
+    public static final Parcelable.Creator<FillUp> CREATOR = new Parcelable.Creator<FillUp>() {
+        @Override
+        public FillUp createFromParcel(Parcel source) {
+            return new FillUp(source);
+        }
+
+        @Override
+        public FillUp[] newArray(int size) {
+            return new FillUp[size];
+        }
+    };
 }

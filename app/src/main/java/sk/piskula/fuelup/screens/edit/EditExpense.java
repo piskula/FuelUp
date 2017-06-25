@@ -55,7 +55,7 @@ public class EditExpense extends AppCompatActivity {
         initViews();
 
         Intent intent = getIntent();
-        expense = (Expense) intent.getSerializableExtra(ExpensesListFragment.EXPENSE_TO_EDIT);
+        expense = intent.getParcelableExtra(ExpensesListFragment.EXPENSE_TO_EDIT);
 
         if (expense != null) {
             mode = Mode.UPDATING;
@@ -63,7 +63,7 @@ public class EditExpense extends AppCompatActivity {
             populateFields(expense);
         } else {
             mode = Mode.CREATING;
-            vehicle = (Vehicle) intent.getSerializableExtra(ExpensesListFragment.VEHICLE_FROM_FRAGMENT_TO_EDIT_EXPENSE);
+            vehicle = intent.getParcelableExtra(ExpensesListFragment.VEHICLE_FROM_FRAGMENT_TO_EDIT_EXPENSE);
             expense = new Expense();
             setExpenseDate(Calendar.getInstance());
             expense.setVehicle(vehicle);

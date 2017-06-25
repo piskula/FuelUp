@@ -212,6 +212,9 @@ public class Vehicle implements Parcelable {
         return currencies;
     }
 
+    public Vehicle() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -221,7 +224,7 @@ public class Vehicle implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(this.id);
         dest.writeString(this.name);
-        dest.writeSerializable(this.type);
+        dest.writeParcelable(this.type, flags);
         dest.writeInt(this.unit == null ? -1 : this.unit.ordinal());
         dest.writeString(this.vehicleMaker);
         dest.writeValue(this.startMileage);
@@ -229,13 +232,10 @@ public class Vehicle implements Parcelable {
         dest.writeString(this.pathToPicture);
     }
 
-    public Vehicle() {
-    }
-
     protected Vehicle(Parcel in) {
         this.id = (Long) in.readValue(Long.class.getClassLoader());
         this.name = in.readString();
-        this.type = (VehicleType) in.readSerializable();
+        this.type = in.readParcelable(VehicleType.class.getClassLoader());
         int tmpUnit = in.readInt();
         this.unit = tmpUnit == -1 ? null : DistanceUnit.values()[tmpUnit];
         this.vehicleMaker = in.readString();
@@ -244,7 +244,7 @@ public class Vehicle implements Parcelable {
         this.pathToPicture = in.readString();
     }
 
-    public static final Parcelable.Creator<Vehicle> CREATOR = new Parcelable.Creator<Vehicle>() {
+    public static final Creator<Vehicle> CREATOR = new Creator<Vehicle>() {
         @Override
         public Vehicle createFromParcel(Parcel source) {
             return new Vehicle(source);
