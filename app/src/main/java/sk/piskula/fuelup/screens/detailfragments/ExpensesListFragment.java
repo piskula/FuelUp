@@ -20,7 +20,7 @@ import java.util.List;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.adapters.ListExpensesAdapter;
-import sk.piskula.fuelup.data.DatabaseProvider;
+import sk.piskula.fuelup.business.ExpenseService;
 import sk.piskula.fuelup.entity.Expense;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.loaders.ExpenseLoader;
@@ -96,7 +96,7 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
     public Loader<List<Expense>> onCreateLoader(int id, Bundle args) {
         Vehicle vehicle = args.getParcelable(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT);
         long vehicleId = vehicle.getId();
-        return new ExpenseLoader(getActivity(), vehicleId, DatabaseProvider.get(getActivity()).getExpenseDao());
+        return new ExpenseLoader(getActivity(), vehicleId, new ExpenseService(getActivity()));
     }
 
     @Override

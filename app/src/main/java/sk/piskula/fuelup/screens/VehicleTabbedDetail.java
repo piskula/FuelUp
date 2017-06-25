@@ -10,17 +10,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.sql.SQLException;
-
 import sk.piskula.fuelup.R;
+import sk.piskula.fuelup.business.ServiceResult;
 import sk.piskula.fuelup.business.VehicleService;
-import sk.piskula.fuelup.data.DatabaseProvider;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.screens.detailfragments.ExpensesListFragment;
 import sk.piskula.fuelup.screens.detailfragments.FillUpsListFragment;
@@ -141,19 +138,17 @@ public class VehicleTabbedDetail extends AppCompatActivity implements BottomNavi
 
     @Override
     public void onDeleteDialogPositiveClick(DeleteDialog dialog) {
-        dialog.dismiss();
-        try {
-            DatabaseProvider.get(getParent()).getVehicleDao().delete(vehicle);
-        } catch (SQLException e) {
-            String msg = getString(R.string.delete_vehicle_fail, vehicle.getName());
-            Log.e(TAG, msg, e);
-            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+        VehicleService vehicleService = new VehicleService(VehicleTabbedDetail.this);
+        ServiceResult result = vehicleService.delete(vehicle);
+
+        if (ServiceResult.SUCCESS.equals(result)) {
+            Toast.makeText(getApplicationContext(), getString(R.string.delete_vehicle_success, vehicle.getName()), Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), R.string.delete_vehicle_fail, Toast.LENGTH_LONG).show();
         }
-        String msg = getString(R.string.delete_vehicle_success, vehicle.getName());
-        Log.i(TAG, msg);
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
 
         // close detail activity when we delete vehicle
+        dialog.dismiss();
         finish();
     }
 

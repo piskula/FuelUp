@@ -7,14 +7,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.j256.ormlite.android.apptools.OpenHelperManager;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import sk.piskula.fuelup.R;
-import sk.piskula.fuelup.data.DatabaseHelper;
+import sk.piskula.fuelup.business.VehicleService;
 import sk.piskula.fuelup.entity.Vehicle;
 
 /**
@@ -23,39 +19,29 @@ import sk.piskula.fuelup.entity.Vehicle;
  */
 public class ListVehiclesAdapter extends BaseAdapter {
 
-    private static final String TAG = "ListVehiclesAdapter";
-
-    private DatabaseHelper databaseHelper = null;
+    private static final String TAG = ListVehiclesAdapter.class.getSimpleName();
 
     private List<Vehicle> mItems;
     private LayoutInflater mInflater;
     private TextView noVehicleText;
 
+    private VehicleService vehicleService;
+
     public ListVehiclesAdapter(Context context, TextView noVehicleText) {
+        vehicleService = new VehicleService(context);
         this.noVehicleText = noVehicleText;
-        refreshItems(context);
+        refreshItems();
         this.mInflater = LayoutInflater.from(context);
     }
 
-    public void refreshItems(Context context) {
-        try {
-            mItems = getHelper(context).getVehicleDao().queryForAll();
-        } catch (SQLException e) {
-            //TODO LOG
-            mItems = new ArrayList<>();
-        }
+    public void refreshItems() {
+
+        mItems = vehicleService.findAll();
 
         if (mItems.isEmpty()) noVehicleText.setVisibility(View.VISIBLE);
         else noVehicleText.setVisibility(View.GONE);
 
         notifyDataSetChanged();
-    }
-
-    private DatabaseHelper getHelper(Context context) {
-        if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(context,DatabaseHelper.class);
-        }
-        return databaseHelper;
     }
 
     public List<Vehicle> getItems() {

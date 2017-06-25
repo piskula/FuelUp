@@ -74,7 +74,7 @@ public class VehicleList extends AppCompatActivity
 
     @Override
     protected void onRestart() {
-        adapter.refreshItems(this);
+        adapter.refreshItems();
         super.onRestart();
     }
 
@@ -95,12 +95,12 @@ public class VehicleList extends AppCompatActivity
     @Override
     public void onDialogCreateBtnClick(CreateVehicleDialog dialog, Editable vehicleName) {
         ServiceResult serviceResult = vehicleService.save(vehicleName.toString());
-        if(ServiceResult.SUCCESS.equals(serviceResult)){
-            adapter.refreshItems(this);
+        if (ServiceResult.SUCCESS.equals(serviceResult)) {
+            adapter.refreshItems();
             dialog.dismiss();
-            Snackbar.make(this.getCurrentFocus(), R.string.addVehicle_success, Snackbar.LENGTH_LONG).show();
-        }else {
-            Snackbar.make(this.getCurrentFocus(), R.string.addVehicle_fail, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(findViewById(android.R.id.content), R.string.addVehicle_success, Snackbar.LENGTH_LONG).show();
+        } else {
+            Snackbar.make(findViewById(android.R.id.content), R.string.addVehicle_fail, Snackbar.LENGTH_LONG).show();
         }
 
     }

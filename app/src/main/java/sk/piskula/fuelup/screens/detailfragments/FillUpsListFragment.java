@@ -21,7 +21,7 @@ import java.util.List;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.adapters.ListFillUpsAdapter;
-import sk.piskula.fuelup.data.DatabaseProvider;
+import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.loaders.ExpenseLoader;
@@ -93,7 +93,7 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
     public Loader<List<FillUp>> onCreateLoader(int id, Bundle args) {
         Vehicle vehicle = args.getParcelable(VEHICLE_TO_FRAGMENT);
         long vehicleId = vehicle.getId();
-        return new FillUpLoader(getActivity(), vehicleId, DatabaseProvider.get(getActivity()).getFillUpDao());
+        return new FillUpLoader(getActivity(), vehicleId, new FillUpService(getActivity()));
     }
 
     @Override

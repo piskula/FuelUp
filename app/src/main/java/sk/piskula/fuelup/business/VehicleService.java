@@ -7,6 +7,7 @@ import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
 import java.util.Currency;
+import java.util.List;
 
 import sk.piskula.fuelup.data.DatabaseProvider;
 import sk.piskula.fuelup.entity.Vehicle;
@@ -86,5 +87,26 @@ public class VehicleService {
             Log.e(TAG, "Unexpected error. See logs for details.", e);
         }
         return vehicle;
+    }
+
+    public List<Vehicle> findAll() {
+        List<Vehicle> vehicles = null;
+        try {
+            vehicles = vehicleDao.queryForAll();
+        } catch (SQLException e) {
+            Log.e(TAG, "Unexpected error. See logs for details.", e);
+        }
+        return vehicles;
+    }
+
+    public ServiceResult delete(Vehicle vehicle) {
+        try {
+            vehicleDao.update(vehicle);
+            Log.i(TAG, "Successfully deleted Vehicle: " + vehicle);
+            return ServiceResult.SUCCESS;
+        } catch (SQLException e) {
+            Log.e(TAG, "Unexpected error. See logs for details.", e);
+        }
+        return ServiceResult.ERROR;
     }
 }
