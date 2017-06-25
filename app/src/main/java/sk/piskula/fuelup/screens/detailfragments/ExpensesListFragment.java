@@ -67,7 +67,7 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
         View view = inflater.inflate(R.layout.expenses_list, container, false);
 
         args = getArguments();
-        vehicle = (Vehicle) args.getSerializable(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT);
+        vehicle = args.getParcelable(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT);
 
         appBarLayout = getActivity().findViewById(R.id.toolbar_layout);
         appBarLayout.setTitle(getResources().getString(R.string.title_expenses));
@@ -94,7 +94,7 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
 
     @Override
     public Loader<List<Expense>> onCreateLoader(int id, Bundle args) {
-        Vehicle vehicle = (Vehicle) args.getSerializable(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT);
+        Vehicle vehicle = args.getParcelable(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT);
         long vehicleId = vehicle.getId();
         return new ExpenseLoader(getActivity(), vehicleId, DatabaseProvider.get(getActivity()).getExpenseDao());
     }

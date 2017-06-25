@@ -19,6 +19,7 @@ import android.widget.Toast;
 import java.sql.SQLException;
 
 import sk.piskula.fuelup.R;
+import sk.piskula.fuelup.business.VehicleService;
 import sk.piskula.fuelup.data.DatabaseProvider;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.screens.detailfragments.ExpensesListFragment;
@@ -38,6 +39,8 @@ public class VehicleTabbedDetail extends AppCompatActivity implements BottomNavi
 
     public static final String VEHICLE_TO_FRAGMENT = "fragment-vehicle";
 
+    private static final int UPDATE_VEHICLE_REQUEST = 123;
+
     private Fragment fragment;
     private FragmentManager fragmentManager;
     private Vehicle vehicle;
@@ -50,26 +53,33 @@ public class VehicleTabbedDetail extends AppCompatActivity implements BottomNavi
         setSupportActionBar((Toolbar) findViewById(R.id.detail_toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Intent intent = getIntent();
-        vehicle = (Vehicle) intent.getSerializableExtra(VehicleList.EXTRA_ADDED_CAR);
-
         fragmentManager = getSupportFragmentManager();
 
         ((BottomNavigationView) findViewById(R.id.vehicle_detail_navigation)).setOnNavigationItemSelectedListener(this);
 
-        Bitmap bmp = vehicle.getPicture();
-        ((ImageView) findViewById(R.id.toolbar_layout_image)).setImageBitmap(bmp);
-
         if (savedInstanceState == null) {
+            Intent intent = getIntent();
+            vehicle = intent.getParcelableExtra(VehicleList.EXTRA_ADDED_CAR);
+
             fragment = new FillUpsListFragment();
             Bundle bundle = new Bundle();
-            bundle.putSerializable(VEHICLE_TO_FRAGMENT, vehicle);
+            bundle.putParcelable(VEHICLE_TO_FRAGMENT, vehicle);
             fragment.setArguments(bundle);
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.vehicle_detail_frame, fragment).commit();
+        } else {
+            vehicle = savedInstanceState.getParcelable(VEHICLE_TO_FRAGMENT);
         }
+
+        Bitmap bmp = vehicle.getPicture();
+        ((ImageView) findViewById(R.id.toolbar_layout_image)).setImageBitmap(bmp);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(VEHICLE_TO_FRAGMENT, vehicle);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -89,7 +99,7 @@ public class VehicleTabbedDetail extends AppCompatActivity implements BottomNavi
                 return true;
             case R.id.btn_vehicle_update:
                 Intent i = new Intent(this, EditVehicle.class).putExtra(VEHICLE_TO_FRAGMENT, vehicle);
-                startActivity(i);
+                startActivityForResult(i, UPDATE_VEHICLE_REQUEST);
                 return true;
             default:
                 break;
@@ -101,7 +111,7 @@ public class VehicleTabbedDetail extends AppCompatActivity implements BottomNavi
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable(VEHICLE_TO_FRAGMENT, vehicle);
+        bundle.putParcelable(VEHICLE_TO_FRAGMENT, vehicle);
         switch (item.getItemId()) {
             case R.id.navigation_fillUps:
                 fragment = new FillUpsListFragment();
@@ -117,6 +127,16 @@ public class VehicleTabbedDetail extends AppCompatActivity implements BottomNavi
         final FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.vehicle_detail_frame, fragment).commit();
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == UPDATE_VEHICLE_REQUEST && resultCode == RESULT_OK) {
+            vehicle = new VehicleService(this).find(vehicle.getId());
+            Bitmap bmp = vehicle.getPicture();
+            ((ImageView) findViewById(R.id.toolbar_layout_image)).setImageBitmap(bmp);
+        }
     }
 
     @Override

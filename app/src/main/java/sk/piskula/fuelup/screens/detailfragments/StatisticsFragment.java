@@ -30,7 +30,7 @@ public class StatisticsFragment extends Fragment {
 
         args = getArguments();
         if (args != null) {
-            vehicle = (Vehicle) args.getSerializable(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT);
+            vehicle = (Vehicle) args.getParcelable(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT);
         }
 
         appBarLayout = getActivity().findViewById(R.id.toolbar_layout);

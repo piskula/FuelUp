@@ -77,4 +77,14 @@ public class VehicleService {
         }
         return ServiceResult.ERROR;
     }
+
+    public Vehicle find(long vehicleId) {
+        Vehicle vehicle = null;
+        try {
+            vehicle = vehicleDao.queryBuilder().where().eq("id", vehicleId).queryForFirst();
+        } catch (SQLException e) {
+            Log.e(TAG, "Unexpected error. See logs for details.", e);
+        }
+        return vehicle;
+    }
 }

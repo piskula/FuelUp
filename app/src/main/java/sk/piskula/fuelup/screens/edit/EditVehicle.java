@@ -56,7 +56,7 @@ public class EditVehicle extends AppCompatActivity implements ImageChooserDialog
         setContentView(R.layout.edit_vehicle);
 
         Intent intent = getIntent();
-        vehicle = (Vehicle) intent.getSerializableExtra(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT);
+        vehicle = intent.getParcelableExtra(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT);
 
         if (vehicle == null) {
             setResult(RESULT_CANCELED);
@@ -178,8 +178,9 @@ public class EditVehicle extends AppCompatActivity implements ImageChooserDialog
         ServiceResult result = vehicleService.update(vehicle);
         if (ServiceResult.SUCCESS.equals(result)) {
             Toast.makeText(this, R.string.carUpdate_Toast_successfullyUpdated, Toast.LENGTH_LONG).show();
-            finish();
+            setResult(RESULT_OK);
         } else {
+            setResult(RESULT_CANCELED);
             Snackbar.make(findViewById(android.R.id.content), R.string.carUpdate_Toast_updateFail, Snackbar.LENGTH_LONG).show();
         }
         finish();

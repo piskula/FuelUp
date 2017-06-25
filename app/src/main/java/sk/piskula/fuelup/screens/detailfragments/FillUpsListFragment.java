@@ -64,7 +64,7 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
         View view = inflater.inflate(R.layout.fillups_list, container, false);
 
         Bundle args = getArguments();
-        vehicle = (Vehicle) args.getSerializable(VEHICLE_TO_FRAGMENT);
+        vehicle = args.getParcelable(VEHICLE_TO_FRAGMENT);
 
         appBarLayout = getActivity().findViewById(R.id.toolbar_layout);
         appBarLayout.setTitle(getResources().getString(R.string.title_fillUps));
@@ -91,7 +91,7 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
 
     @Override
     public Loader<List<FillUp>> onCreateLoader(int id, Bundle args) {
-        Vehicle vehicle = (Vehicle) args.getSerializable(VEHICLE_TO_FRAGMENT);
+        Vehicle vehicle = args.getParcelable(VEHICLE_TO_FRAGMENT);
         long vehicleId = vehicle.getId();
         return new FillUpLoader(getActivity(), vehicleId, DatabaseProvider.get(getActivity()).getFillUpDao());
     }

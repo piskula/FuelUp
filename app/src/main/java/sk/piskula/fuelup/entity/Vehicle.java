@@ -2,12 +2,12 @@ package sk.piskula.fuelup.entity;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import java.io.ByteArrayOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Currency;
@@ -22,11 +22,10 @@ import sk.piskula.fuelup.entity.enums.DistanceUnit;
  * @version 16.6.2017.
  */
 @DatabaseTable(tableName = "vehicles")
-public class Vehicle implements Serializable {
-
-    private static final long serialVersionUID = -7406082437623008261L;
+public class Vehicle implements Parcelable {
 
     private static final Map<Currency, String> customCurrencySymbols;
+
     static {
         customCurrencySymbols = new HashMap<>();
         customCurrencySymbols.put(Currency.getInstance("CZK"), "K\u010D");
@@ -131,12 +130,12 @@ public class Vehicle implements Serializable {
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return name != null ? name.hashCode() : 0;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Vehicle{"
                 + "id=" + id
                 + ", name=" + name
@@ -145,7 +144,7 @@ public class Vehicle implements Serializable {
                 + ", vehicleMaker=" + vehicleMaker
                 + ", startMileage=" + startMileage
                 + ", currency=" + currency
-                +"}";
+                + "}";
     }
 
     public Bitmap getPicture() {
@@ -203,7 +202,7 @@ public class Vehicle implements Serializable {
         return currency.getSymbol();
     }
 
-    public static List<Currency> getSupportedCurrencies(){
+    public static List<Currency> getSupportedCurrencies() {
         List<String> currenciesStrings = Arrays.asList("EUR", "CZK", "USD", "GBP", "PLN", "HUF");
         List<Currency> currencies = new ArrayList<>();
 
@@ -213,4 +212,47 @@ public class Vehicle implements Serializable {
         return currencies;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.id);
+        dest.writeString(this.name);
+        dest.writeSerializable(this.type);
+        dest.writeInt(this.unit == null ? -1 : this.unit.ordinal());
+        dest.writeString(this.vehicleMaker);
+        dest.writeValue(this.startMileage);
+        dest.writeString(this.currency);
+        dest.writeString(this.pathToPicture);
+    }
+
+    public Vehicle() {
+    }
+
+    protected Vehicle(Parcel in) {
+        this.id = (Long) in.readValue(Long.class.getClassLoader());
+        this.name = in.readString();
+        this.type = (VehicleType) in.readSerializable();
+        int tmpUnit = in.readInt();
+        this.unit = tmpUnit == -1 ? null : DistanceUnit.values()[tmpUnit];
+        this.vehicleMaker = in.readString();
+        this.startMileage = (Long) in.readValue(Long.class.getClassLoader());
+        this.currency = in.readString();
+        this.pathToPicture = in.readString();
+    }
+
+    public static final Parcelable.Creator<Vehicle> CREATOR = new Parcelable.Creator<Vehicle>() {
+        @Override
+        public Vehicle createFromParcel(Parcel source) {
+            return new Vehicle(source);
+        }
+
+        @Override
+        public Vehicle[] newArray(int size) {
+            return new Vehicle[size];
+        }
+    };
 }
