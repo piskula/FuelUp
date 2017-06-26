@@ -10,12 +10,12 @@
         android:id="@+id/fill_ups_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/list_item_fillup"
-        android:visibility="gone"
+        android:fadeScrollbars="true"
+        android:nestedScrollingEnabled="false"
         android:scrollbars="vertical"
-        android:fadeScrollbars="true"/>
+        android:visibility="gone"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/list_item_fillup" />
 
     <ProgressBar
         android:id="@+id/fill_ups_list_loading"
