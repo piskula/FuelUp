@@ -65,11 +65,11 @@ public class AddVehicle extends AppCompatActivity implements ImageChooserDialog.
 
         initViews();
 
-        if (intent.getStringExtra("vehicleName") != null) {
-            txtName.setText(intent.getStringExtra("vehicleName"));
+        String nameFromDialog = intent.getStringExtra("vehicleName");
+        if ( nameFromDialog != null) {
+            txtName.setText(nameFromDialog);
+            txtName.setSelection(nameFromDialog.length());
         }
-
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     @Override
