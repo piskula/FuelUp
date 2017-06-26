@@ -86,6 +86,7 @@
             android:id="@+id/btn_editVehicle_add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/ConfirmButton"
             android:layout_marginTop="15dp"
             android:gravity="center"
             android:onClick="onClickAdd"

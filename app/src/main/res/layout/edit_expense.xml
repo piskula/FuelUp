@@ -75,6 +75,7 @@
             android:id="@+id/btn_addexpense_add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/ConfirmButton"
             android:gravity="center"
             android:onClick="onClickAdd"
             android:paddingBottom="2dp"
