@@ -67,6 +67,11 @@ public class VehicleTabbedDetail extends AppCompatActivity implements BottomNavi
         } else {
             vehicle = savedInstanceState.getParcelable(VEHICLE_TO_FRAGMENT);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
         Bitmap bmp = vehicle.getPicture();
         ((ImageView) findViewById(R.id.toolbar_layout_image)).setImageBitmap(bmp);
@@ -131,8 +136,6 @@ public class VehicleTabbedDetail extends AppCompatActivity implements BottomNavi
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == UPDATE_VEHICLE_REQUEST && resultCode == RESULT_OK) {
             vehicle = new VehicleService(this).find(vehicle.getId());
-            Bitmap bmp = vehicle.getPicture();
-            ((ImageView) findViewById(R.id.toolbar_layout_image)).setImageBitmap(bmp);
         }
     }
 
