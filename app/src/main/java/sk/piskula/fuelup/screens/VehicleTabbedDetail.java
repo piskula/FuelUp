@@ -128,7 +128,7 @@ public class VehicleTabbedDetail extends AppCompatActivity implements BottomNavi
         fragment.setArguments(bundle);
         final FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.vehicle_detail_frame, fragment).commit();
-        return false;
+        return true;
     }
 
     @Override

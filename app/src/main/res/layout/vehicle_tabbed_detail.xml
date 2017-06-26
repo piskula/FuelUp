@@ -59,7 +59,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="?android:attr/windowBackground"
-        app:menu="@menu/vehicle_detail_tabs" />
+        app:menu="@menu/vehicle_detail_tabs"
+        app:itemIconTint="@drawable/bottom_navigation_selector"
+        app:itemTextColor="@drawable/bottom_navigation_selector"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add"
