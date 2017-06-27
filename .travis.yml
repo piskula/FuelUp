@@ -22,8 +22,7 @@ before_install:
 - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
 - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
 before_deploy:
-- ls $TRAVIS_BUILD_DIR
-- ls $TRAVIS_BUILD_DIR/public
+- ls $TRAVIS_BUILD_DIR/app/build/outputs/apk
 script:
 - "./gradlew clean build --stacktrace"
 notifications:
@@ -41,7 +40,7 @@ deploy:
   provider: script
   skip_cleanup: true
 #  script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/public xoravcok@aisa.fi.muni.cz:/home/xoravcok/public_html
-  script: rsync --rsh="sshpass -p $super_secret_password ssh -l $super_secret_login" $TRAVIS_BUILD_DIR/public aisa.fi.muni.cz:/home/xoravcok/public_html
+  script: rsync --rsh="sshpass -p $super_secret_password ssh -l $super_secret_login" $TRAVIS_BUILD_DIR/app/build/outputs/apk aisa.fi.muni.cz:/home/xoravcok/public_html
   on:
     branch: master
 addons:
