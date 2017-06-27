@@ -35,7 +35,7 @@ cache:
   - "$HOME/.gradle/wrapper/"
 after_success:
 - ls $TRAVIS_BUILD_DIR/app/build/outputs/apk/app-debug.apk
-- sshpass -p $super_secret_password sudo scp -o StrictHostKeyChecking=no $TRAVIS_BUILD_DIR/app/build/outputs/apk/app-debug.apk $super_secret_login@aisa.fi.muni.cz:~/
+- sshpass -p $super_secret_password scp -o StrictHostKeyChecking=no $TRAVIS_BUILD_DIR/app/build/outputs/apk/app-debug.apk $super_secret_login@aisa.fi.muni.cz:~/
 addons:
   apt:
     packages:
