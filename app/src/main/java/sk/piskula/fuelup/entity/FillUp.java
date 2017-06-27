@@ -27,7 +27,7 @@ public class FillUp implements Parcelable, Comparable<FillUp> {
     private Long distanceFromLastFillUp;
 
     @DatabaseField(canBeNull = false, columnName = "fuel_volume")
-    private double fuelVolume;
+    private BigDecimal fuelVolume;
 
     @DatabaseField(columnName = "fuel_price_per_litre")
     private BigDecimal fuelPricePerLitre;
@@ -68,11 +68,11 @@ public class FillUp implements Parcelable, Comparable<FillUp> {
         this.distanceFromLastFillUp = distanceFromLastFillUp;
     }
 
-    public double getFuelVolume() {
+    public BigDecimal getFuelVolume() {
         return fuelVolume;
     }
 
-    public void setFuelVolume(double fuelVolume) {
+    public void setFuelVolume(BigDecimal fuelVolume) {
         this.fuelVolume = fuelVolume;
     }
 
@@ -141,7 +141,7 @@ public class FillUp implements Parcelable, Comparable<FillUp> {
         dest.writeValue(this.id);
         dest.writeParcelable(this.vehicle, flags);
         dest.writeValue(this.distanceFromLastFillUp);
-        dest.writeDouble(this.fuelVolume);
+        dest.writeSerializable(this.fuelVolume);
         dest.writeSerializable(this.fuelPricePerLitre);
         dest.writeSerializable(this.fuelPriceTotal);
         dest.writeByte(this.isFullFillUp ? (byte) 1 : (byte) 0);
@@ -156,7 +156,7 @@ public class FillUp implements Parcelable, Comparable<FillUp> {
         this.id = (Long) in.readValue(Long.class.getClassLoader());
         this.vehicle = in.readParcelable(Vehicle.class.getClassLoader());
         this.distanceFromLastFillUp = (Long) in.readValue(Long.class.getClassLoader());
-        this.fuelVolume = in.readDouble();
+        this.fuelVolume = (BigDecimal) in.readSerializable();
         this.fuelPricePerLitre = (BigDecimal) in.readSerializable();
         this.fuelPriceTotal = (BigDecimal) in.readSerializable();
         this.isFullFillUp = in.readByte() != 0;

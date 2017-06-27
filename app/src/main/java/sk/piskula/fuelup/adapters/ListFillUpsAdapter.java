@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +81,7 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
             holder.txtPricePerLitre.setText(bddf.format(currentItem.getFuelPricePerLitre()));
             if (currentItem.isFullFillUp()) {
                 Log.w(TAG, currentItem.getFuelVolume() + " * 100 / " + currentItem.getDistanceFromLastFillUp());
-                Double consumption = currentItem.getFuelVolume() * 100 / (currentItem.getDistanceFromLastFillUp());
+                BigDecimal consumption = currentItem.getFuelVolume().multiply(new BigDecimal(100)).divide(new BigDecimal(currentItem.getDistanceFromLastFillUp()),2, RoundingMode.HALF_UP);
                 bddf.setMinimumFractionDigits(2);
                 bddf.setMaximumFractionDigits(2);
                 holder.txtConsumption.setText(bddf.format(consumption));

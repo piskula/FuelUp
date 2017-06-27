@@ -45,6 +45,16 @@
             android:label="Edit Vehicle"
             android:parentActivityName=".screens.VehicleTabbedDetail">
         </activity>
+        <activity
+            android:name=".screens.edit.AddFillUp"
+            android:label="Add Fill Up"
+            android:parentActivityName=".screens.VehicleTabbedDetail">
+        </activity>
+        <activity
+            android:name=".screens.edit.EditFillUp"
+            android:label="Edit Fill Up"
+            android:parentActivityName=".screens.VehicleTabbedDetail">
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>

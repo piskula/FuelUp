@@ -92,10 +92,10 @@ public class SampleDataUtils {
         fillUp.setFullFillUp(true);
         fillUp.setDate(date);
         fillUp.setDistanceFromLastFillUp(distanceFromLast);
-        fillUp.setFuelVolume(amount);
+        fillUp.setFuelVolume(BigDecimal.valueOf(amount));
         fillUp.setInfo("");
 
-        fillUp.setFuelPriceTotal(fillUp.getFuelPricePerLitre().multiply(BigDecimal.valueOf(fillUp.getFuelVolume())));
+        fillUp.setFuelPriceTotal(fillUp.getFuelPricePerLitre().multiply(fillUp.getFuelVolume()));
 
         return fillUp;
     }

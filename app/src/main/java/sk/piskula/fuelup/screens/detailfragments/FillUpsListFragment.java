@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -24,11 +23,14 @@ import sk.piskula.fuelup.adapters.ListFillUpsAdapter;
 import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
-import sk.piskula.fuelup.loaders.ExpenseLoader;
 import sk.piskula.fuelup.loaders.FillUpLoader;
+import sk.piskula.fuelup.screens.edit.AddFillUp;
+import sk.piskula.fuelup.screens.edit.EditFillUp;
 
 import static android.app.Activity.RESULT_OK;
 import static sk.piskula.fuelup.screens.VehicleTabbedDetail.VEHICLE_TO_FRAGMENT;
+import static sk.piskula.fuelup.screens.edit.AddFillUp.EXTRA_CAR;
+import static sk.piskula.fuelup.screens.edit.EditFillUp.EXTRA_FILLUP;
 
 /**
  * @author Ondrej Oravcok
@@ -112,24 +114,25 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
 
     @Override
     public void onItemClick(View v, FillUp fillUp, int position) {
-        // TODO this is called when item is clicked - update fillup
-        Snackbar.make(v, "update fillup", Snackbar.LENGTH_SHORT)
-                .setAction("Action", null).show();
+        Intent i = new Intent(getActivity(), EditFillUp.class);
+        i.putExtra(EXTRA_FILLUP, fillUp);
+        startActivityForResult(i, FILLUP_ACTION_REQUEST_CODE);
     }
 
     @Override
     public void onClick(View view) {
         if (view.getId() == addButton.getId()) {
-            // todo add fill up here
+            Intent i = new Intent(getActivity(), AddFillUp.class);
+            i.putExtra(EXTRA_CAR, vehicle);
+            startActivityForResult(i, FILLUP_ACTION_REQUEST_CODE);
         }
     }
 
-    //todo start activity for result when updating/creating fillup
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == FILLUP_ACTION_REQUEST_CODE && requestCode == RESULT_OK)
-            getLoaderManager().getLoader(ExpenseLoader.ID).onContentChanged();
+        if (requestCode == FILLUP_ACTION_REQUEST_CODE && resultCode == RESULT_OK)
+            getLoaderManager().getLoader(FillUpLoader.ID).onContentChanged();
     }
 
 }

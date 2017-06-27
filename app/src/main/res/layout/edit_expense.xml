@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="8dp"
+    android:layout_margin="@dimen/activity_vertical_margin"
     tools:context="sk.piskula.fuelup.screens.edit.EditExpense">
 
     <LinearLayout
@@ -76,10 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/ConfirmButton"
-            android:gravity="center"
             android:onClick="onClickAdd"
-            android:paddingBottom="2dp"
-            android:paddingTop="2dp"
             android:text="@string/add" />
     </LinearLayout>
 </ScrollView>

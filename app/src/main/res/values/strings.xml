@@ -74,6 +74,34 @@
     <string name="updateCarActivity_Toast_carNoUpdate">No change</string>
     <string name="updateCarActivity_emptyFields">One or more fields are empty!</string>
 
+    <string name="add_fillup_title_create">Create fill up</string>
+    <string name="add_fillup_title_update">Update fill up</string>
+
+    <string name="add_fillup_pricePerLitre">Price per litre</string>
+    <string name="add_fillup_priceTotal">Total price</string>
+    <string name="add_fillup_distance_overall">Overall distance</string>
+    <string name="add_fillup_distance_from_last">Distance from last fill up</string>
+    <string name="add_fillup_update">Update</string>
+    <string name="add_fillup_success">Fill up created</string>
+    <string name="add_fillup_fail">Fill up create failed</string>
+    <string name="add_fillup_success_update">Fill up updated</string>
+    <string name="add_fillup_fail_update">Fill up update failed</string>
+
+    <string name="add_fillup_pricePerLitre_short">Per litre</string>
+    <string name="add_fillup_priceTotal_short">Total</string>
+    <string name="add_fillup_distanceFromLast_short">From last</string>
+    <string name="add_fillup_distanceTotal_short">Total</string>
+    <string name="add_fillup_distance">Distance</string>
+    <string name="add_fillup_price">Price</string>
+    <string name="add_fillup_fuel_volume">Fuel volume</string>
+    <string name="add_fillup_full_fillup">Full fill up</string>
+    <string name="add_fillup_info">Note</string>
+
+
+    <string name="add_fillup_distance_mode_update_rejected">It is not possible to switch distance modes on edit</string>
+
+
+
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
