@@ -37,8 +37,7 @@ after_success:
 deploy:
   provider: script
   skip_cleanup: true
-#  script: rsync --rsh="sshpass -p $super_secret_password ssh -l $super_secret_login" $TRAVIS_BUILD_DIR/app/build/outputs/apk aisa.fi.muni.cz:/home/xoravcok/public_html
-  script: sshpass -p $super_secret_password scp $TRAVIS_BUILD_DIR/app/build/outputs/apk $super_secret_login@aisa.fi.muni.cz:/home/xoravcok/public_html
+  script: sshpass -p $super_secret_password scp $TRAVIS_BUILD_DIR/app/build/outputs/apk/app-debug.apk $super_secret_login@aisa.fi.muni.cz:/home/xoravcok/public_html
   on:
     branch: master
 addons:
