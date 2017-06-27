@@ -19,10 +19,9 @@ addons:
 before_deploy:
 - eval "$(ssh-agent -s)"
 - chmod 600 /tmp/rsa_key
-- ssh-add /tmp/rsa_key
+#- "./travis-helper.sh"
 before_install:
-- openssl aes-256-cbc -K $encrypted_16be9e3dd447_key -iv $encrypted_16be9e3dd447_iv -k 'mamakami'
-  -in rsa_key.enc -out /tmp/rsa_key -d
+- echo $super_secret_password | gpg --passphrase-fd 0 super_secret.txt.gpg
 - chmod +x gradlew
 - mkdir "$ANDROID_HOME/licenses" || true
 - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
@@ -39,10 +38,13 @@ cache:
   - "$HOME/.gradle"
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
-after_success: 
+after_success:
 deploy:
   provider: script
   skip_cleanup: true
   script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/public xoravcok@aisa.fi.muni.cz:/home/xoravcok/public_html
   on:
     branch: master
+env:
+  global:
+    secure: LlX+He92rKvzKnJSSUW3UDLqGuh1lWt7px++yyqohqhzLUYoVZPqZml1013t36UAim49Y5yeaxVLHnMivUmg5QsCh/BLiNh9XRWqd0IkofRo7cYl0yV6jLlBtVbH6A/joWiyXajBwuILq7regA+u65sMuzIwVzizi8wSuZb7Z4+6LqS69aq4bABTKogoz2YCZ1B+bbZDZV7ajdjJlfE6qHrye/Bdbv8lrtl1DS1HMuMgsUECeVnemRwvI31jbDUEenM8eXOXwrDK6h19EEAiQxHNQ+l599ieDojQ71IvhK1B52N1A/W1wpCDQZk+bjDWncgkUk7Z2indYvsEAPgV6BE4TPXX2F1hufaD1+6nILfu8qbKHjUjCOd3Nkyp6yvvuSC0DgDKzK7+SmsSosC5dngxDZf9HGwpX/sTm+2CpwhbmbvMjjR6Zzmgu2kGXDOIyMVii7UHPwpCdIlkN1WF5ItxXDde5NjdOg0Zbuiimxxc6eSZEtVL5bMT6YdKqPhY0v/5TjZbzs9g5qPj6R4EYpqK/5RWrrPVn0XYZ35Ot1cCqFi/4tdHcqL0u2Ojo2BwolqhKSWVpYZKS+DTYog3pUnLEncBnIF5z1KWFRdMXYqv3PqHuzZ3CG4sqI+JGziXjaoczHwpkFlYCGFYGMWzGbK4W07QYj3if3JrqHhHTwI=
