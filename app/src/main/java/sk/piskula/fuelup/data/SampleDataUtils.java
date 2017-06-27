@@ -3,6 +3,7 @@ package sk.piskula.fuelup.data;
 import com.j256.ormlite.dao.Dao;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.entity.Expense;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
@@ -93,6 +95,7 @@ public class SampleDataUtils {
         fillUp.setDate(date);
         fillUp.setDistanceFromLastFillUp(distanceFromLast);
         fillUp.setFuelVolume(BigDecimal.valueOf(amount));
+        fillUp.setFuelConsumption(fillUp.getFuelVolume().multiply(new BigDecimal(100)).divide(new BigDecimal(fillUp.getDistanceFromLastFillUp()),2, RoundingMode.HALF_UP));
         fillUp.setInfo("");
 
         fillUp.setFuelPriceTotal(fillUp.getFuelPricePerLitre().multiply(fillUp.getFuelVolume()));

@@ -176,7 +176,7 @@ public class EditFillUp extends AppCompatActivity implements CompoundButton.OnCh
         mSelectedFillUp.setDate(createdDate.getTime());
         mSelectedFillUp.setInfo(info.toString());
 
-        ServiceResult serviceResultUpdate = fillUpService.update(mSelectedFillUp);
+        ServiceResult serviceResultUpdate = fillUpService.updateWithConsumptionCalculation(mSelectedFillUp);
         if (ServiceResult.SUCCESS.equals(serviceResultUpdate)) {
             Toast.makeText(this, R.string.add_fillup_success_update, Toast.LENGTH_LONG).show();
             setResult(RESULT_OK);

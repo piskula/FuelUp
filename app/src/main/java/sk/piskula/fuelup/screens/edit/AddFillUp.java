@@ -134,7 +134,6 @@ public class AddFillUp extends AppCompatActivity implements CompoundButton.OnChe
 
         FillUpService fillUpService = new FillUpService(getApplicationContext());
 
-
         FillUp newFillUp = new FillUp();
         newFillUp.setFullFillUp(mCheckBoxIsFullFill.isChecked());
         if (distanceMode == SwitchDistance.fromLast) {
@@ -155,7 +154,7 @@ public class AddFillUp extends AppCompatActivity implements CompoundButton.OnChe
         newFillUp.setInfo(info.toString());
         newFillUp.setVehicle(mSelectedCar);
 
-        ServiceResult serviceResult = fillUpService.save(newFillUp);
+        ServiceResult serviceResult = fillUpService.saveWithConsumptionCalculation(newFillUp);
         if (ServiceResult.SUCCESS.equals(serviceResult)) {
             Toast.makeText(this, R.string.add_fillup_success, Toast.LENGTH_LONG).show();
             setResult(RESULT_OK);

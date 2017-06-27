@@ -38,6 +38,9 @@ public class FillUp implements Parcelable, Comparable<FillUp> {
     @DatabaseField(columnName = "is_full")
     private boolean isFullFillUp;
 
+    @DatabaseField(columnName = "consumption")
+    private BigDecimal fuelConsumption;
+
     @DatabaseField(canBeNull = false)
     private Date date;
 
@@ -100,6 +103,14 @@ public class FillUp implements Parcelable, Comparable<FillUp> {
         isFullFillUp = fullFillUp;
     }
 
+    public BigDecimal getFuelConsumption() {
+        return fuelConsumption;
+    }
+
+    public void setFuelConsumption(BigDecimal fuelConsumption) {
+        this.fuelConsumption = fuelConsumption;
+    }
+
     public Date getDate() {
         return date;
     }
@@ -118,17 +129,25 @@ public class FillUp implements Parcelable, Comparable<FillUp> {
 
     @Override
     public String toString() {
-        return "FillUp{"
-                + "id=" + id
-                + ", date=" + date
-                + ", info=" + info
-                + ", vehicle=" + vehicle
-                + ", distanceFromLastFillUp=" + distanceFromLastFillUp
-                + ", fuelVolume=" + fuelVolume
-                + ", fuelPricePerLitre=" + fuelPricePerLitre
-                + ", fuelPriceTotlal=" + fuelPriceTotal
-                + ", isFullFillUp=" + isFullFillUp
-                + "}";
+        return "FillUp{" +
+                "id=" + id +
+                ", vehicle=" + vehicle +
+                ", distanceFromLastFillUp=" + distanceFromLastFillUp +
+                ", fuelVolume=" + fuelVolume +
+                ", fuelPricePerLitre=" + fuelPricePerLitre +
+                ", fuelPriceTotal=" + fuelPriceTotal +
+                ", isFullFillUp=" + isFullFillUp +
+                ", fuelConsumption=" + fuelConsumption +
+                ", date=" + date +
+                ", info='" + info + '\'' +
+                '}';
+    }
+
+    @Override
+    public int compareTo(@NonNull FillUp other) {
+        if (date != null && other != null && other.getDate() != null)
+            return date.compareTo(other.getDate());
+        return 0;
     }
 
     @Override
@@ -145,6 +164,7 @@ public class FillUp implements Parcelable, Comparable<FillUp> {
         dest.writeSerializable(this.fuelPricePerLitre);
         dest.writeSerializable(this.fuelPriceTotal);
         dest.writeByte(this.isFullFillUp ? (byte) 1 : (byte) 0);
+        dest.writeSerializable(this.fuelConsumption);
         dest.writeLong(this.date != null ? this.date.getTime() : -1);
         dest.writeString(this.info);
     }
@@ -160,12 +180,13 @@ public class FillUp implements Parcelable, Comparable<FillUp> {
         this.fuelPricePerLitre = (BigDecimal) in.readSerializable();
         this.fuelPriceTotal = (BigDecimal) in.readSerializable();
         this.isFullFillUp = in.readByte() != 0;
+        this.fuelConsumption = (BigDecimal) in.readSerializable();
         long tmpDate = in.readLong();
         this.date = tmpDate == -1 ? null : new Date(tmpDate);
         this.info = in.readString();
     }
 
-    public static final Parcelable.Creator<FillUp> CREATOR = new Parcelable.Creator<FillUp>() {
+    public static final Creator<FillUp> CREATOR = new Creator<FillUp>() {
         @Override
         public FillUp createFromParcel(Parcel source) {
             return new FillUp(source);
@@ -176,11 +197,4 @@ public class FillUp implements Parcelable, Comparable<FillUp> {
             return new FillUp[size];
         }
     };
-
-    @Override
-    public int compareTo(@NonNull FillUp other) {
-        if (date != null && other != null && other.getDate() != null)
-            return date.compareTo(other.getDate());
-        return 0;
-    }
 }
