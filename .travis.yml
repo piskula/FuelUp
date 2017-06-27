@@ -21,7 +21,10 @@ before_deploy:
 - chmod 600 /tmp/rsa_key
 #- "./travis-helper.sh"
 before_install:
-- echo $super_secret_password | gpg --passphrase-fd 0 super_secret.txt.gpg
+- echo $super_secret_password | gpg --passphrase-fd 0 super_secret_key.txt.gpg
+- echo $super_secret_password | gpg --passphrase-fd 0 super_secret_server.txt.gpg
+- cat super_secret_server.txt
+- cat super_secret_key.txt
 - chmod +x gradlew
 - mkdir "$ANDROID_HOME/licenses" || true
 - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
