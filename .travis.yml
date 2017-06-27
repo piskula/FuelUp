@@ -19,7 +19,7 @@ addons:
 before_deploy:
 - eval "$(ssh-agent -s)"
 - chmod 600 /tmp/rsa_key
-- ./travis-helper.sh
+- ssh-add /tmp/rsa_key
 before_install:
 - openssl aes-256-cbc -K $encrypted_16be9e3dd447_key -iv $encrypted_16be9e3dd447_iv -k 'mamakami'
   -in rsa_key.enc -out /tmp/rsa_key -d
