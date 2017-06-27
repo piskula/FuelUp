@@ -130,7 +130,8 @@ public class EditVehicle extends AppCompatActivity implements ImageChooserDialog
         if (requestCode == REQUEST_TAKE_PHOTOS) {
             currentPhotoPath = ImageUtils.performCrop(this, currentPhotoPath);
         }
-        Snackbar.make(findViewById(android.R.id.content), R.string.addVehicle_picture_added, Snackbar.LENGTH_SHORT).show();
+        if (currentPhotoPath != null)
+            Snackbar.make(findViewById(android.R.id.content), R.string.addVehicle_picture_added, Snackbar.LENGTH_SHORT).show();
     }
 
 

@@ -10,7 +10,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -66,7 +65,7 @@ public class AddVehicle extends AppCompatActivity implements ImageChooserDialog.
         initViews();
 
         String nameFromDialog = intent.getStringExtra("vehicleName");
-        if ( nameFromDialog != null) {
+        if (nameFromDialog != null) {
             txtName.setText(nameFromDialog);
             txtName.setSelection(nameFromDialog.length());
         }
@@ -172,7 +171,8 @@ public class AddVehicle extends AppCompatActivity implements ImageChooserDialog.
             if (requestCode == REQUEST_TAKE_PHOTOS) {
                 vehiclePicturePath = ImageUtils.performCrop(this, vehiclePicturePath);
             }
-            Snackbar.make(findViewById(android.R.id.content), R.string.addVehicle_picture_added, Snackbar.LENGTH_SHORT).show();
+            if (vehiclePicturePath != null)
+                Snackbar.make(findViewById(android.R.id.content), R.string.addVehicle_picture_added, Snackbar.LENGTH_SHORT).show();
         }
     }
 

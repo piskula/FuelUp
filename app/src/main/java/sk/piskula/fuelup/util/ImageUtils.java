@@ -56,6 +56,9 @@ public class ImageUtils {
      * @return path to image file
      */
     public static String onActivityResultTakePhoto(@NonNull Activity caller, @NonNull Intent data) {
+        if(data == null){
+            return null;
+        }
         Uri selectedImage = data.getData();
         String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
