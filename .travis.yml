@@ -34,8 +34,8 @@ cache:
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
 after_success:
-- ls $TRAVIS_BUILD_DIR/app/build/outputs/apk/app-debug.apk
-- sshpass -p $super_secret_password scp $TRAVIS_BUILD_DIR/app/build/outputs/apk/app-debug.apk $super_secret_login@aisa.fi.muni.cz:/home/xoravcok/public_html
+- ls $TRAVIS_BUILD_DIR/app/build/outputs/apk
+- rsync --rsh="sshpass -p $super_secret_password ssh -l $super_secret_login" $TRAVIS_BUILD_DIR/app/build/outputs/apk aisa.fi.muni.cz:/home/xoravcok/public_html
 addons:
   apt:
     packages:
