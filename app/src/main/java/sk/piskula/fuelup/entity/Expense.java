@@ -2,6 +2,7 @@ package sk.piskula.fuelup.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -14,7 +15,7 @@ import java.util.Date;
  * @version 17.6.2017
  */
 @DatabaseTable(tableName = "expenses")
-public class Expense implements Parcelable {
+public class Expense implements Parcelable, Comparable<Expense> {
 
     @DatabaseField(generatedId = true)
     private Long id;
@@ -121,4 +122,11 @@ public class Expense implements Parcelable {
             return new Expense[size];
         }
     };
+
+    @Override
+    public int compareTo(@NonNull Expense other) {
+        if (date != null && other != null && other.getDate() != null)
+            return date.compareTo(other.getDate());
+        return 0;
+    }
 }

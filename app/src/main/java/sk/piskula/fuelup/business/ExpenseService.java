@@ -53,7 +53,7 @@ public class ExpenseService {
     public List<Expense> findExpensesOfVehicle(long vehicleId) {
         List<Expense> expenses = new ArrayList<>();
         try {
-            expenses = expensesDao.queryBuilder().where().eq("vehicle_id", vehicleId).query();
+            expenses = expensesDao.queryBuilder().orderBy("date", false).where().eq("vehicle_id", vehicleId).query();
             Log.i(TAG, "Successfully found expenses of vehicle id " + vehicleId);
         } catch (SQLException e) {
             Log.e(TAG, "Unexpected error. See logs for details.", e);
