@@ -53,7 +53,7 @@ public class FillUpService {
     public List<FillUp> findFillUpsOfVehicle(long vehicleId) {
         List<FillUp> fillUps = new ArrayList<>();
         try {
-            fillUps = fillUpDao.queryBuilder().where().eq("vehicle_id", vehicleId).query();
+            fillUps = fillUpDao.queryBuilder().orderBy("date", false).where().eq("vehicle_id", vehicleId).query();
             Log.i(TAG, "Successfully found expenses of vehicle id " + vehicleId);
         } catch (SQLException e) {
             Log.e(TAG, "Unexpected error. See logs for details.", e);

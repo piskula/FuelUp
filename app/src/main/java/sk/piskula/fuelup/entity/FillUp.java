@@ -2,6 +2,7 @@ package sk.piskula.fuelup.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -14,7 +15,7 @@ import java.util.Date;
  * @version 17.6.2017
  */
 @DatabaseTable(tableName = "fill_ups")
-public class FillUp implements Parcelable {
+public class FillUp implements Parcelable, Comparable<FillUp> {
 
     @DatabaseField(generatedId = true)
     private Long id;
@@ -37,7 +38,7 @@ public class FillUp implements Parcelable {
     @DatabaseField(columnName = "is_full")
     private boolean isFullFillUp;
 
-    @DatabaseField
+    @DatabaseField(canBeNull = false)
     private Date date;
 
     @DatabaseField
@@ -175,4 +176,11 @@ public class FillUp implements Parcelable {
             return new FillUp[size];
         }
     };
+
+    @Override
+    public int compareTo(@NonNull FillUp other) {
+        if (date != null && other != null && other.getDate() != null)
+            return date.compareTo(other.getDate());
+        return 0;
+    }
 }
