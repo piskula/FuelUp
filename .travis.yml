@@ -34,12 +34,8 @@ cache:
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
 after_success:
-deploy:
-  provider: script
-  skip_cleanup: true
-  script: sshpass -p $super_secret_password scp $TRAVIS_BUILD_DIR/app/build/outputs/apk/app-debug.apk $super_secret_login@aisa.fi.muni.cz:/home/xoravcok/public_html
-  on:
-    branch: master
+- ls $TRAVIS_BUILD_DIR/app/build/outputs/apk/app-debug.apk
+- sshpass -p $super_secret_password scp $TRAVIS_BUILD_DIR/app/build/outputs/apk/app-debug.apk $super_secret_login@aisa.fi.muni.cz:/home/xoravcok/public_html
 addons:
   apt:
     packages:
