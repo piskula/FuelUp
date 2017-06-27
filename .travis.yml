@@ -1,4 +1,4 @@
-sudo: false
+sudo: true
 language: android
 jdk: oraclejdk8
 android:
@@ -16,10 +16,6 @@ android:
   - adb shell input keyevent 82 &
 addons:
   ssh_known_hosts: aisa.fi.muni.cz
-before_deploy:
-#- eval "$(ssh-agent -s)"
-- chmod 600 /tmp/rsa_key
-#- "./travis-helper.sh"
 before_install:
 - echo $super_secret_password
 - echo $super_secret_login
@@ -43,9 +39,14 @@ after_success:
 deploy:
   provider: script
   skip_cleanup: true
-  script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/public xoravcok@aisa.fi.muni.cz:/home/xoravcok/public_html
+#  script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/public xoravcok@aisa.fi.muni.cz:/home/xoravcok/public_html
+  script: rsync --rsh="sshpass -p $super_secret_password ssh -l $super_secret_login" $TRAVIS_BUILD_DIR/public aisa.fi.muni.cz:/home/xoravcok/public_html
   on:
     branch: master
+addons:
+  apt:
+    packages:
+    - sshpass
 env:
   global:
   - secure: GfDdPFECDHb3/Uass2pK8H4fbMHE2WjgHbHo/lSUPak8mUUADcrC7mLUrni9oGgS3rQQ3kh4sXY+qTMZh4BKbM86aZT2dqXuHjMgl5lNrRouJrNISjl7TctMSRi8NdbwABiGIcPR1KwpqchXxMOMyI58udFcXJ6UcgaFjcECXYCNdXGmb9kxySlyXTcEdr0LdoTkgDXOFlS3HPkLbvN6TiWmSZ5WmLMZ2pqroUEZO4uRYp1MvetuW/2l/miH5wbFJBSRL40z7i9m7KUbEH6fP0jviZr78K0u9o6LRm4eGpIt3J/GRwFf9X86zGA+Tuon8DqPNYSkhU5XGd1c8TMZPNA8j0Uf+svBNs1HXLxpT/v0jo3mMOZ2bYhOXOt794PMWrw5na3LCe4xLdzZMNInkO/9dHz44roCZfvCx6X0GHjhBXHuXTEJyO8Rvj6+tSQ1cVo3sED/O51kyNL9OhAcjJCqE7mGbDr7MVteTrIXSzVSfLrSoj/dJBlIyFKBLAi7+XvZf5Z2UQLDHfTuow94dgcCRPxs4MG03NUdpWSEbZbuHwnkBuc6gR/Se51zSH5nMWsZ2zTXuK+zDmECg8FvqwlZSsYEtVf5eE5xu5/PxqvjhS4HK7E2m0h8Y8Pc3jW54at5KXiVCdj3bEtuniwhVZyJzToJ/Bn++qq5pab0+DI=
