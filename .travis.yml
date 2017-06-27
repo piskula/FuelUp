@@ -17,14 +17,12 @@ android:
 addons:
   ssh_known_hosts: aisa.fi.muni.cz
 before_deploy:
-- eval "$(ssh-agent -s)"
+#- eval "$(ssh-agent -s)"
 - chmod 600 /tmp/rsa_key
 #- "./travis-helper.sh"
 before_install:
-- echo $super_secret_password | gpg --passphrase-fd 0 super_secret_key.txt.gpg
-- echo $super_secret_password | gpg --passphrase-fd 0 super_secret_server.txt.gpg
-- cat super_secret_server.txt
-- cat super_secret_key.txt
+- echo $super_secret_password
+- echo $super_secret_login
 - chmod +x gradlew
 - mkdir "$ANDROID_HOME/licenses" || true
 - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
@@ -50,4 +48,5 @@ deploy:
     branch: master
 env:
   global:
-    secure: LlX+He92rKvzKnJSSUW3UDLqGuh1lWt7px++yyqohqhzLUYoVZPqZml1013t36UAim49Y5yeaxVLHnMivUmg5QsCh/BLiNh9XRWqd0IkofRo7cYl0yV6jLlBtVbH6A/joWiyXajBwuILq7regA+u65sMuzIwVzizi8wSuZb7Z4+6LqS69aq4bABTKogoz2YCZ1B+bbZDZV7ajdjJlfE6qHrye/Bdbv8lrtl1DS1HMuMgsUECeVnemRwvI31jbDUEenM8eXOXwrDK6h19EEAiQxHNQ+l599ieDojQ71IvhK1B52N1A/W1wpCDQZk+bjDWncgkUk7Z2indYvsEAPgV6BE4TPXX2F1hufaD1+6nILfu8qbKHjUjCOd3Nkyp6yvvuSC0DgDKzK7+SmsSosC5dngxDZf9HGwpX/sTm+2CpwhbmbvMjjR6Zzmgu2kGXDOIyMVii7UHPwpCdIlkN1WF5ItxXDde5NjdOg0Zbuiimxxc6eSZEtVL5bMT6YdKqPhY0v/5TjZbzs9g5qPj6R4EYpqK/5RWrrPVn0XYZ35Ot1cCqFi/4tdHcqL0u2Ojo2BwolqhKSWVpYZKS+DTYog3pUnLEncBnIF5z1KWFRdMXYqv3PqHuzZ3CG4sqI+JGziXjaoczHwpkFlYCGFYGMWzGbK4W07QYj3if3JrqHhHTwI=
+  - secure: GfDdPFECDHb3/Uass2pK8H4fbMHE2WjgHbHo/lSUPak8mUUADcrC7mLUrni9oGgS3rQQ3kh4sXY+qTMZh4BKbM86aZT2dqXuHjMgl5lNrRouJrNISjl7TctMSRi8NdbwABiGIcPR1KwpqchXxMOMyI58udFcXJ6UcgaFjcECXYCNdXGmb9kxySlyXTcEdr0LdoTkgDXOFlS3HPkLbvN6TiWmSZ5WmLMZ2pqroUEZO4uRYp1MvetuW/2l/miH5wbFJBSRL40z7i9m7KUbEH6fP0jviZr78K0u9o6LRm4eGpIt3J/GRwFf9X86zGA+Tuon8DqPNYSkhU5XGd1c8TMZPNA8j0Uf+svBNs1HXLxpT/v0jo3mMOZ2bYhOXOt794PMWrw5na3LCe4xLdzZMNInkO/9dHz44roCZfvCx6X0GHjhBXHuXTEJyO8Rvj6+tSQ1cVo3sED/O51kyNL9OhAcjJCqE7mGbDr7MVteTrIXSzVSfLrSoj/dJBlIyFKBLAi7+XvZf5Z2UQLDHfTuow94dgcCRPxs4MG03NUdpWSEbZbuHwnkBuc6gR/Se51zSH5nMWsZ2zTXuK+zDmECg8FvqwlZSsYEtVf5eE5xu5/PxqvjhS4HK7E2m0h8Y8Pc3jW54at5KXiVCdj3bEtuniwhVZyJzToJ/Bn++qq5pab0+DI=
+  - secure: vK5U2IXlYHjzNMq3OeqQy3ulAi2tYdd49I2bF/2SXP8p0ppzNcEu9GcZUMJpHvge0iuZqYsT3ZuOswdTCzjtikXj1wQOiuYyio0tXIaT5QwPw3tG655SfmUzLPwt32LwIGPNxktoeQmtzhg1DxEZlXLSqXlM1CIqrg7Avk04Va/j76FhjDBIDIyU0FzP+C1sm9yGIR3KRpRCyNLtw2+vQE7LnlC2qOoWriZHHlY7nWnJ9AIHzQSmVEyDygrFy7tK2Uf03d/bzz9KJIrS8RctaP9F56GecYtFRII9VYbn0/vHpRI2pdwpYq5Ns+An174nYLh+fZxQCmCH5Xk6pVd4+ymZdkYC6AGFIJrGG35n+czORRwdwIG7tXp/wUA+hFBqqhp2ZDpGZl6oJ8ySMSREJcSdh8jgF7bb8lEzy1xDqKYL9hv8aRAeMCW6IN0f/dfYr5UZ7E5FPFBKUzigDl9w7w5qriipCiz/jBTzExaFDYqnksRbuIk2oPBG1fzgW1qb8WETXjITbEaujnStJI443swnd+JGh0dLs4TEALEtKzyEcaROTlgsLb2EdgJv42AWYvq6l9PeFkltg4IH85fJmgtxEPcjuUYQDeB3WFEHvROy1a5WTDCKfOi6aMqP/fX5pKz67FbiHp3cVj6yavHZN7bgU6kvH2zG4xPNKtNxcic=
