@@ -23,8 +23,12 @@ before_install:
 - mkdir "$ANDROID_HOME/licenses" || true
 - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
 - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
-script:
+install:
 - "./gradlew clean build --stacktrace"
+before_script:
+- export SSHPASS=$super_secret_password
+script:
+- sshpass -e scp -o StrictHostKeyChecking=no $TRAVIS_BUILD_DIR/app/build/outputs/apk $super_secret_login@aisa.fi.muni.cz:/home/$super_secret_login/public_html
 notifications:
   email: false
 before_cache:
@@ -35,9 +39,6 @@ cache:
   - "$HOME/.gradle"
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
-after_success:
-- export SSHPASS=$super_secret_password
-- sshpass -e scp -o StrictHostKeyChecking=no README.md xoravcok@aisa.fi.muni.cz:/home/xoravcok
 env:
   global:
   - secure: R7eOeDBqCeXWnQCk7PY0rqaT88g4GrCOT9WCfiTqNinRKMec5Wrt6vjx1mNdHv514XD4MUL1X/c43VA6tCgt/prU4SqWVuJoen2iFtAWxingaWQ0RjUno6CedSUJA9SCnxOGPFJXZ1nh3QxkUuIwUOt5+hxp7cF3g+EKsYLBlFDRjoU+8nMjq8Efqt7LRSsMZe0SL3fyHrdUrmuykVIJP338bpzCrmOXIQOYzqTR+1BhDosDmLcyJuHp/zV3lBROYAAwZZXVDuPK4hyYVMKUWUAEgFHD8q6nestmGtIMrdqWZwVHER8ziX1bR1yb3qTAlUE9gKDncSskFEB8Rshg9e6/rg0v4L431hFuEFxizTCmWf9peSFowbc/yBOHDA371HFCgZeqV/CNvauVWr1xK9K7XRAVMsacufgrzwiRJUL2W5RbAXMTTta0GLAWUG94LSTX/a+5qVxkY1OB9xMp9W1/hly2JmoE95qxyMeSQZrOcaYeEBMnvf/v/9tDR+JEjji+luh5a1ckgOz5123ej9i90z7sLwL6JIZk8hVEmaluKJLhPOE0GM5lUCpzqcihGcCpm/AgFdN50/FN81EsjnbDve6QOmPDDobUxfT8+hRpsr8LBCxlGAtLjx8tHc5dBssEDV9cTUfadjMKtwFf5ApZ+VHLXYsquEp8yNxSqsI=
