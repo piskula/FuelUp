@@ -52,17 +52,17 @@ public class EditExpense extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_expense);
-        initViews();
 
         Intent intent = getIntent();
         expense = intent.getParcelableExtra(ExpensesListFragment.EXPENSE_TO_EDIT);
+        mode = expense == null ? Mode.CREATING : Mode.UPDATING;
 
-        if (expense != null) {
-            mode = Mode.UPDATING;
+        initViews();
+
+        if (mode == Mode.UPDATING) {
             vehicle = expense.getVehicle();
             populateFields(expense);
-        } else {
-            mode = Mode.CREATING;
+        } else if (mode == Mode.CREATING){
             vehicle = intent.getParcelableExtra(ExpensesListFragment.VEHICLE_FROM_FRAGMENT_TO_EDIT_EXPENSE);
             expense = new Expense();
             setExpenseDate(Calendar.getInstance());

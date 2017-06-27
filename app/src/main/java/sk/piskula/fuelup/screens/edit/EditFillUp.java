@@ -124,7 +124,7 @@ public class EditFillUp extends AppCompatActivity implements CompoundButton.OnCh
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(R.string.add_fillup_title_create);
+        actionBar.setTitle(R.string.add_fillup_title_update);
     }
 
     /**
