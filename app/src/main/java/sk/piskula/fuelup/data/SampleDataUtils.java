@@ -69,33 +69,35 @@ public class SampleDataUtils {
         return vehicle;
     }
 
-    public static void addFillUps(Dao<FillUp, Long> fillUpDao, List<Vehicle> vehicles) throws SQLException {
-        final int COUNT = 30;
+    public static void addFillUps(FillUpService fillUpService, List<Vehicle> vehicles) throws SQLException {
+
+        final int COUNT = 40;
         Random random = new Random();
 
         for (int i = 0; i < COUNT; i++) {
             Calendar cal = Calendar.getInstance();
             cal.set(2017, random.nextInt(11), random.nextInt(27) + 1);
             int dist = random.nextInt(5) + 6;
-            fillUpDao.create(fillUp(vehicles.get(random.nextInt(vehicles.size())),
+
+            fillUpService.saveWithConsumptionCalculation(fillUp(vehicles.get(random.nextInt(vehicles.size())),
                     BigDecimal.valueOf((random.nextDouble() + 1) * 5.2),
                     cal.getTime(),
                     Long.valueOf(dist * 40) ,
-                    (dist + 3 * random.nextDouble())* 4 * 0.8 ));
+                    (dist + 3 * random.nextDouble())* 4 * 0.8 ,
+                    random.nextBoolean()));
         }
 
     }
 
-    private static FillUp fillUp(Vehicle vehicle, BigDecimal perLitre, Date date, Long distanceFromLast, double amount) {
+    private static FillUp fillUp(Vehicle vehicle, BigDecimal perLitre, Date date, Long distanceFromLast, double amount, boolean isFull) {
         FillUp fillUp = new FillUp();
 
         fillUp.setVehicle(vehicle);
         fillUp.setFuelPricePerLitre(perLitre);
-        fillUp.setFullFillUp(true);
+        fillUp.setFullFillUp(isFull);
         fillUp.setDate(date);
         fillUp.setDistanceFromLastFillUp(distanceFromLast);
         fillUp.setFuelVolume(BigDecimal.valueOf(amount));
-        fillUp.setFuelConsumption(fillUp.getFuelVolume().multiply(new BigDecimal(100)).divide(new BigDecimal(fillUp.getDistanceFromLastFillUp()),2, RoundingMode.HALF_UP));
         fillUp.setInfo("");
 
         fillUp.setFuelPriceTotal(fillUp.getFuelPricePerLitre().multiply(fillUp.getFuelVolume()));
