@@ -97,8 +97,12 @@
     <string name="add_fillup_full_fillup">Full fill up</string>
     <string name="add_fillup_info">Note</string>
 
-
     <string name="add_fillup_distance_mode_update_rejected">It is not possible to switch distance modes on edit</string>
+
+    <string name="remove_fillup_dialog_title">Delete Fill Up</string>
+    <string name="remove_fillup_dialog_message">Do you want to remove this fill up?</string>
+    <string name="remove_fillup_success">Fill Up removed</string>
+    <string name="remove_fillup_fail">Fill Up remove failed</string>
 
 
 

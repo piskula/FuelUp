@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -31,9 +33,10 @@ import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.business.ServiceResult;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
+import sk.piskula.fuelup.screens.dialog.DeleteDialog;
 
 
-public class EditFillUp extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
+public class EditFillUp extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, DeleteDialog.Callback {
 
     public static final String TAG = EditFillUp.class.getSimpleName();
 
@@ -172,7 +175,7 @@ public class EditFillUp extends AppCompatActivity implements CompoundButton.OnCh
             mSelectedFillUp.setFuelPriceTotal(createdFuelVol.multiply(createdPrice));
         } else {
             mSelectedFillUp.setFuelPriceTotal(createdPrice);
-            mSelectedFillUp.setFuelPricePerLitre(createdPrice.divide(createdFuelVol,2, BigDecimal.ROUND_HALF_UP));
+            mSelectedFillUp.setFuelPricePerLitre(createdPrice.divide(createdFuelVol, 2, BigDecimal.ROUND_HALF_UP));
         }
         mSelectedFillUp.setDate(createdDate.getTime());
         mSelectedFillUp.setInfo(info.toString());
@@ -228,6 +231,49 @@ public class EditFillUp extends AppCompatActivity implements CompoundButton.OnCh
                 mTxtInputPrice.setHint(getString(R.string.add_fillup_pricePerLitre));
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.fillup_edit, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.btn_delete_fillup:
+                DeleteDialog.newInstance(getString(R.string.remove_fillup_dialog_title),
+                        getString(R.string.remove_fillup_dialog_message), R.drawable.tow)
+                        .show(getSupportFragmentManager(), DeleteDialog.class.getSimpleName());
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDeleteDialogPositiveClick(DeleteDialog dialog) {
+        //TODO do with consumption recomputation
+        FillUpService service = new FillUpService(EditFillUp.this);
+        ServiceResult result = service.delete(mSelectedFillUp);
+
+        if (ServiceResult.SUCCESS.equals(result)) {
+            Toast.makeText(getApplicationContext(), getString(R.string.remove_fillup_success), Toast.LENGTH_LONG).show();
+            setResult(RESULT_OK);
+        } else {
+            Toast.makeText(getApplicationContext(), getString(R.string.remove_fillup_fail), Toast.LENGTH_LONG).show();
+            setResult(RESULT_CANCELED);
+        }
+
+        // close detail activity when we delete vehicle
+        dialog.dismiss();
+        finish();
+    }
+
+    @Override
+    public void onDeleteDialogNegativeClick(DeleteDialog dialog) {
+        dialog.dismiss();
     }
 
     enum SwitchPrice {

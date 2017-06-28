@@ -75,6 +75,17 @@ public class FillUpService {
         return ServiceResult.ERROR;
     }
 
+    public ServiceResult delete(FillUp fillUp) {
+        try {
+            fillUpDao.delete(fillUp);
+            Log.i(TAG, "Successfully updated Expense: " + fillUp);
+            return ServiceResult.SUCCESS;
+        } catch (SQLException e) {
+            Log.e(TAG, "Unexpected error. See logs for details.", e);
+        }
+        return ServiceResult.ERROR;
+    }
+
     public List<FillUp> findFillUpsOfVehicle(long vehicleId) {
         List<FillUp> fillUps = new ArrayList<>();
         try {
