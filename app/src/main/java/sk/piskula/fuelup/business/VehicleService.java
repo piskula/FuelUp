@@ -101,7 +101,7 @@ public class VehicleService {
 
     public ServiceResult delete(Vehicle vehicle) {
         try {
-            vehicleDao.update(vehicle);
+            vehicleDao.delete(vehicle);
             Log.i(TAG, "Successfully deleted Vehicle: " + vehicle);
             return ServiceResult.SUCCESS;
         } catch (SQLException e) {

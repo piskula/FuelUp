@@ -1,23 +1,18 @@
 package sk.piskula.fuelup.adapters;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.FillUp;
-import sk.piskula.fuelup.entity.Vehicle;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Martin Styk on 19.06.2017.
@@ -79,7 +74,7 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
             bddf.setMaximumFractionDigits(3);
             bddf.setMinimumFractionDigits(3);
             holder.txtPricePerLitre.setText(bddf.format(currentItem.getFuelPricePerLitre()));
-            if (currentItem.isFullFillUp()) {
+            if (currentItem.getFuelConsumption() != null) {
                 BigDecimal consumption = currentItem.getFuelConsumption();
                 bddf.setMinimumFractionDigits(2);
                 bddf.setMaximumFractionDigits(2);

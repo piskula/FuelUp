@@ -33,12 +33,6 @@ public class FillUpLoader extends FuelUpAbstractAsyncLoader<List<FillUp>> {
      */
     @Override
     public List<FillUp> loadInBackground() {
-        try {
-            //TODO remove this is just for debugging purposes
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         return fillUpService.findFillUpsOfVehicle(vehicleId);
     }
 }

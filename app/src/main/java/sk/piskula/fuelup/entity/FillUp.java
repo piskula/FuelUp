@@ -145,8 +145,11 @@ public class FillUp implements Parcelable, Comparable<FillUp> {
 
     @Override
     public int compareTo(@NonNull FillUp other) {
-        if (date != null && other != null && other.getDate() != null)
-            return date.compareTo(other.getDate());
+        if (date != null && other != null && other.getDate() != null) {
+            int dateCompare = date.compareTo(other.getDate());
+            if (dateCompare != 0) return dateCompare;
+            else return id.compareTo(other.getId());
+        }
         return 0;
     }
 
@@ -184,6 +187,45 @@ public class FillUp implements Parcelable, Comparable<FillUp> {
         long tmpDate = in.readLong();
         this.date = tmpDate == -1 ? null : new Date(tmpDate);
         this.info = in.readString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FillUp fillUp = (FillUp) o;
+
+        if (isFullFillUp != fillUp.isFullFillUp) return false;
+        if (vehicle != null ? !vehicle.equals(fillUp.vehicle) : fillUp.vehicle != null)
+            return false;
+        if (distanceFromLastFillUp != null ? !distanceFromLastFillUp.equals(fillUp.distanceFromLastFillUp) : fillUp.distanceFromLastFillUp != null)
+            return false;
+        if (fuelVolume != null ? !fuelVolume.equals(fillUp.fuelVolume) : fillUp.fuelVolume != null)
+            return false;
+        if (fuelPricePerLitre != null ? !fuelPricePerLitre.equals(fillUp.fuelPricePerLitre) : fillUp.fuelPricePerLitre != null)
+            return false;
+        if (fuelPriceTotal != null ? !fuelPriceTotal.equals(fillUp.fuelPriceTotal) : fillUp.fuelPriceTotal != null)
+            return false;
+        if (fuelConsumption != null ? !fuelConsumption.equals(fillUp.fuelConsumption) : fillUp.fuelConsumption != null)
+            return false;
+        if (date != null ? !date.equals(fillUp.date) : fillUp.date != null) return false;
+        return info != null ? info.equals(fillUp.info) : fillUp.info == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = vehicle != null ? vehicle.hashCode() : 0;
+        result = 31 * result + (distanceFromLastFillUp != null ? distanceFromLastFillUp.hashCode() : 0);
+        result = 31 * result + (fuelVolume != null ? fuelVolume.hashCode() : 0);
+        result = 31 * result + (fuelPricePerLitre != null ? fuelPricePerLitre.hashCode() : 0);
+        result = 31 * result + (fuelPriceTotal != null ? fuelPriceTotal.hashCode() : 0);
+        result = 31 * result + (isFullFillUp ? 1 : 0);
+        result = 31 * result + (fuelConsumption != null ? fuelConsumption.hashCode() : 0);
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (info != null ? info.hashCode() : 0);
+        return result;
     }
 
     public static final Creator<FillUp> CREATOR = new Creator<FillUp>() {

@@ -99,6 +99,7 @@ public class EditFillUp extends AppCompatActivity implements CompoundButton.OnCh
 
         mBtnAdd.setText(R.string.add_fillup_update);
         mBtnSwitchDistance.setEnabled(false);
+        mTxtDate.setEnabled(false);
 
         mTxtCurrencySymbol.setText(mSelectedCar.getCurrencySymbol());
         mTxtDistanceUnit.setText(mSelectedCar.getUnit().toString());
