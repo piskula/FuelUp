@@ -34,7 +34,7 @@ public class FillUpService {
     public ServiceResult save(@NonNull FillUp fillUp) {
         try {
             fillUpDao.create(fillUp);
-            Log.i(TAG, "Successfully persisted new v: " + fillUp);
+            Log.i(TAG, "Successfully persisted new FillUp: " + fillUp);
             return ServiceResult.SUCCESS;
         } catch (SQLException e) {
             Log.e(TAG, "Unexpected error. See logs for details.", e);
@@ -113,10 +113,13 @@ public class FillUpService {
             }
         }
 
+        boolean isOlderFullFillUp = false;
+
         //find first full older deleted fill up
         for (int i = indexOfNewFillUp + 1; i < allFillUps.size(); i++) {
             FillUp lookingAtFillUp = allFillUps.get(i);
             if (lookingAtFillUp.isFullFillUp()) {
+                isOlderFullFillUp = true;
                 break;
             }
             fuelVol = fuelVol.add(lookingAtFillUp.getFuelVolume());
@@ -124,7 +127,7 @@ public class FillUpService {
             fillUpsToUpdate.add(lookingAtFillUp);
         }
 
-        BigDecimal avgConsumption = isNewerFullFillUp ? fuelVol.multiply(new BigDecimal(100)).divide(new BigDecimal(distance), 2, RoundingMode.HALF_UP) : null;
+        BigDecimal avgConsumption = isNewerFullFillUp & isOlderFullFillUp ? fuelVol.multiply(new BigDecimal(100)).divide(new BigDecimal(distance), 2, RoundingMode.HALF_UP) : null;
 
         for (FillUp fUp : fillUpsToUpdate) {
             fUp.setFuelConsumption(avgConsumption);
@@ -149,20 +152,19 @@ public class FillUpService {
         List<FillUp> allFillUps = findFillUpsOfVehicle(fillUp.getVehicle().getId());
         int indexOfNewFillUp = allFillUps.indexOf(fillUp);
 
-        //we can not compute consumption from first fill up
-        if (allFillUps.size() - 1 == indexOfNewFillUp) {
-            return;
-        }
-
         if (fillUp.isFullFillUp()) {
             //find first (excl. current) full before current fill up and update consumption
             List<FillUp> olderFillUpsToUpdate = new ArrayList<>();
             olderFillUpsToUpdate.add(fillUp);
             BigDecimal fuelVol = fillUp.getFuelVolume();
             Long distance = fillUp.getDistanceFromLastFillUp();
+
+            boolean existsOlderFullFillUp = false;
+
             for (int i = indexOfNewFillUp + 1; i < allFillUps.size(); i++) {
                 FillUp lookingAtFillUp = allFillUps.get(i);
                 if (lookingAtFillUp.isFullFillUp()) {
+                    existsOlderFullFillUp = true;
                     break;
                 }
                 fuelVol = fuelVol.add(lookingAtFillUp.getFuelVolume());
@@ -170,7 +172,7 @@ public class FillUpService {
                 olderFillUpsToUpdate.add(lookingAtFillUp);
             }
 
-            BigDecimal avgConsumption = fuelVol.multiply(new BigDecimal(100)).divide(new BigDecimal(distance), 2, RoundingMode.HALF_UP);
+            BigDecimal avgConsumption = existsOlderFullFillUp ? fuelVol.multiply(new BigDecimal(100)).divide(new BigDecimal(distance), 2, RoundingMode.HALF_UP) : null;
 
             for (FillUp fUp : olderFillUpsToUpdate) {
                 fUp.setFuelConsumption(avgConsumption);
@@ -178,69 +180,70 @@ public class FillUpService {
             }
 
             // if this is not most recent fillup, find closest full newer and compute consumption
-            if (indexOfNewFillUp != 0) {
-                List<FillUp> newerFillUpsToUpdate = new ArrayList<>();
-                BigDecimal fuelVol1 = BigDecimal.ZERO;
-                Long distance1 = 0l;
-                for (int i = indexOfNewFillUp - 1; i >= 0; i--) {
-                    FillUp lookingAtFillUp = allFillUps.get(i);
-                    fuelVol1 = fuelVol1.add(lookingAtFillUp.getFuelVolume());
-                    distance1 += lookingAtFillUp.getDistanceFromLastFillUp();
-                    newerFillUpsToUpdate.add(lookingAtFillUp);
-                    if (lookingAtFillUp.isFullFillUp()) {
-                        break;
-                    }
+
+            List<FillUp> newerFillUpsToUpdate = new ArrayList<>();
+            BigDecimal fuelVol1 = BigDecimal.ZERO;
+            Long distance1 = 0l;
+
+            boolean existsNewerFullFillUp = false;
+
+            for (int i = indexOfNewFillUp - 1; i >= 0; i--) {
+                FillUp lookingAtFillUp = allFillUps.get(i);
+                fuelVol1 = fuelVol1.add(lookingAtFillUp.getFuelVolume());
+                distance1 += lookingAtFillUp.getDistanceFromLastFillUp();
+                newerFillUpsToUpdate.add(lookingAtFillUp);
+                if (lookingAtFillUp.isFullFillUp()) {
+                    existsNewerFullFillUp = true;
+                    break;
                 }
+            }
 
-                BigDecimal avgConsumption1 = fuelVol1.multiply(new BigDecimal(100)).divide(new BigDecimal(distance1), 2, RoundingMode.HALF_UP);
+            BigDecimal avgConsumption1 = existsNewerFullFillUp ? fuelVol1.multiply(new BigDecimal(100)).divide(new BigDecimal(distance1), 2, RoundingMode.HALF_UP) : null;
 
-                for (FillUp fUp : newerFillUpsToUpdate) {
-                    fUp.setFuelConsumption(avgConsumption1);
-                    update(fUp);
-                }
-
+            for (FillUp fUp : newerFillUpsToUpdate) {
+                fUp.setFuelConsumption(avgConsumption1);
+                update(fUp);
             }
 
         } else if (!fillUp.isFullFillUp()) {
 
-            if (indexOfNewFillUp != 0) {
+            // if it is not the most recent one, find two closest full and recompute consumption
+            // otherwise we can not compute
+            List<FillUp> fillUpsToUpdate = new ArrayList<>();
+            fillUpsToUpdate.add(fillUp);
+            BigDecimal fuelVol = BigDecimal.ZERO;
+            Long distance = 0l;
 
-                // if it is not the most recent one, find two closest full and recompute consumption
-                // otherwise we can not compute
-                List<FillUp> fillUpsToUpdate = new ArrayList<>();
-                fillUpsToUpdate.add(fillUp);
-                BigDecimal fuelVol = BigDecimal.ZERO;
-                Long distance = 0l;
-                for (int i = indexOfNewFillUp + 1; i < allFillUps.size(); i++) {
-                    FillUp lookingAtFillUp = allFillUps.get(i);
-                    if (lookingAtFillUp.isFullFillUp()) {
-                        break;
-                    }
-                    fuelVol = fuelVol.add(lookingAtFillUp.getFuelVolume());
-                    distance += lookingAtFillUp.getDistanceFromLastFillUp();
-                    fillUpsToUpdate.add(lookingAtFillUp);
-                }
-                boolean existsNewerFull = false;
-                for (int i = indexOfNewFillUp; i >= 0; i--) {
-                    FillUp lookingAtFillUp = allFillUps.get(i);
-                    fuelVol = fuelVol.add(lookingAtFillUp.getFuelVolume());
-                    distance += lookingAtFillUp.getDistanceFromLastFillUp();
-                    fillUpsToUpdate.add(lookingAtFillUp);
-                    if (lookingAtFillUp.isFullFillUp()) {
-                        existsNewerFull = true;
-                        break;
-                    }
-                }
-                BigDecimal avgConsumption1 = existsNewerFull ? fuelVol.multiply(new BigDecimal(100)).divide(new BigDecimal(distance), 2, RoundingMode.HALF_UP) : null;
+            boolean existsOlderFullFillUp = false;
 
-                for (FillUp fUp : fillUpsToUpdate) {
-                    fUp.setFuelConsumption(avgConsumption1);
-                    update(fUp);
+            for (int i = indexOfNewFillUp + 1; i < allFillUps.size(); i++) {
+                FillUp lookingAtFillUp = allFillUps.get(i);
+                if (lookingAtFillUp.isFullFillUp()) {
+                    existsOlderFullFillUp = true;
+                    break;
                 }
-            } else {
-                fillUp.setFuelConsumption(null);
-                update(fillUp);
+                fuelVol = fuelVol.add(lookingAtFillUp.getFuelVolume());
+                distance += lookingAtFillUp.getDistanceFromLastFillUp();
+                fillUpsToUpdate.add(lookingAtFillUp);
+            }
+            boolean existsNewerFullFillUp = false;
+            for (int i = indexOfNewFillUp; i >= 0; i--) {
+                FillUp lookingAtFillUp = allFillUps.get(i);
+                fuelVol = fuelVol.add(lookingAtFillUp.getFuelVolume());
+                distance += lookingAtFillUp.getDistanceFromLastFillUp();
+                fillUpsToUpdate.add(lookingAtFillUp);
+                if (lookingAtFillUp.isFullFillUp()) {
+                    existsNewerFullFillUp = true;
+                    break;
+                }
+            }
+            BigDecimal avgConsumption1 = existsNewerFullFillUp && existsOlderFullFillUp ? fuelVol.multiply(new BigDecimal(100)).divide(new BigDecimal(distance), 2, RoundingMode.HALF_UP) : null;
+
+            for (FillUp fUp : fillUpsToUpdate) {
+                fUp.setFuelConsumption(avgConsumption1);
+                update(fUp);
             }
         }
     }
 }
+
