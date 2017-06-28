@@ -236,7 +236,7 @@ public class EditFillUp extends AppCompatActivity implements CompoundButton.OnCh
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.fillup_edit, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -266,7 +266,6 @@ public class EditFillUp extends AppCompatActivity implements CompoundButton.OnCh
             setResult(RESULT_CANCELED);
         }
 
-        // close detail activity when we delete vehicle
         dialog.dismiss();
         finish();
     }

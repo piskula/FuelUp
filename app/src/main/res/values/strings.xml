@@ -58,6 +58,11 @@
     <string name="editExpense_toast_createFailed">Expense create failed</string>
     <string name="editExpense_toast_updateFailed">Expense update failed</string>
 
+    <string name="remove_expense_dialog_title">Delete Expense</string>
+    <string name="remove_expense_dialog_message">Do you want to remove this expense?</string>
+    <string name="remove_expense_success">Expense removed</string>
+    <string name="remove_expense_fail">Expense remove failed</string>
+
     <string name="carUpdate_delete_btn">Delete</string>
     <string name="carUpdate_manufacturer">Car manufacturer and type name</string>
     <string name="carUpdate_Toast_successfullyUpdated">Vehicle have been successfully updated</string>

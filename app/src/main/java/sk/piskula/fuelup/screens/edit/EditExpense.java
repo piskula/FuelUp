@@ -8,6 +8,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -23,16 +25,18 @@ import java.util.Date;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.business.ExpenseService;
+import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.business.ServiceResult;
 import sk.piskula.fuelup.entity.Expense;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.screens.detailfragments.ExpensesListFragment;
+import sk.piskula.fuelup.screens.dialog.DeleteDialog;
 
 /**
  * @author Ondrej Oravcok
  * @version 18.6.2017
  */
-public class EditExpense extends AppCompatActivity {
+public class EditExpense extends AppCompatActivity implements DeleteDialog.Callback {
 
     private static final String TAG = EditExpense.class.getSimpleName();
 
@@ -62,7 +66,7 @@ public class EditExpense extends AppCompatActivity {
         if (mode == Mode.UPDATING) {
             vehicle = expense.getVehicle();
             populateFields(expense);
-        } else if (mode == Mode.CREATING){
+        } else if (mode == Mode.CREATING) {
             vehicle = intent.getParcelableExtra(ExpensesListFragment.VEHICLE_FROM_FRAGMENT_TO_EDIT_EXPENSE);
             expense = new Expense();
             setExpenseDate(Calendar.getInstance());
@@ -105,6 +109,7 @@ public class EditExpense extends AppCompatActivity {
 
     /**
      * On click listener for add button
+     *
      * @param view
      */
     public void onClickAdd(View view) {
@@ -126,7 +131,7 @@ public class EditExpense extends AppCompatActivity {
         }, expenseDate.get(Calendar.YEAR), expenseDate.get(Calendar.MONTH), expenseDate.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    private void saveExpense(){
+    private void saveExpense() {
         String info = mTxtInfo.getText().toString();
         String price = mTxtPrice.getText().toString();
         String date = mTxtDate.getText().toString();
@@ -175,6 +180,47 @@ public class EditExpense extends AppCompatActivity {
         return bddf.format(price.doubleValue());
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (mode == Mode.UPDATING)
+            getMenuInflater().inflate(R.menu.expense_edit, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.btn_delete_expense:
+                DeleteDialog.newInstance(getString(R.string.remove_expense_dialog_title),
+                        getString(R.string.remove_expense_dialog_message), R.drawable.tow)
+                        .show(getSupportFragmentManager(), DeleteDialog.class.getSimpleName());
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDeleteDialogPositiveClick(DeleteDialog dialog) {
+        ExpenseService service = new ExpenseService(EditExpense.this);
+        ServiceResult result = service.delete(expense);
+
+        if (ServiceResult.SUCCESS.equals(result)) {
+            Toast.makeText(getApplicationContext(), getString(R.string.remove_expense_success), Toast.LENGTH_LONG).show();
+            setResult(RESULT_OK);
+        } else {
+            Toast.makeText(getApplicationContext(), getString(R.string.remove_expense_fail), Toast.LENGTH_LONG).show();
+            setResult(RESULT_CANCELED);
+        }
+
+        dialog.dismiss();
+        finish();
+    }
+
+    @Override
+    public void onDeleteDialogNegativeClick(DeleteDialog dialog) {
+        dialog.dismiss();
+    }
 
     private enum Mode {
         UPDATING, CREATING
