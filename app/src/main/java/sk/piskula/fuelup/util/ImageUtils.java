@@ -13,9 +13,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static sk.piskula.fuelup.screens.edit.AddVehicle.REQUEST_PICTURE;
-import static sk.piskula.fuelup.screens.edit.AddVehicle.REQUEST_PIC_CROP;
-import static sk.piskula.fuelup.screens.edit.AddVehicle.REQUEST_TAKE_PHOTOS;
+import static sk.piskula.fuelup.screens.edit.AddVehicleActivity.REQUEST_PICTURE;
+import static sk.piskula.fuelup.screens.edit.AddVehicleActivity.REQUEST_PIC_CROP;
+import static sk.piskula.fuelup.screens.edit.AddVehicleActivity.REQUEST_TAKE_PHOTOS;
 
 /**
  * Created by Martin Styk on 23.06.2017.

@@ -68,7 +68,7 @@ public class ListVehiclesAdapter extends BaseAdapter {
         View v = convertView;
         ViewHolder holder;
         if (v == null) {
-            v = mInflater.inflate(R.layout.vehicle_list_item, parent, false);
+            v = mInflater.inflate(R.layout.list_item_vehicle, parent, false);
             holder = new ViewHolder();
 
             holder.txtname = v.findViewById(R.id.txt_itemcar_nick);

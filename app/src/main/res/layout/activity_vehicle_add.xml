@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="8dp"
-    tools:context=".screens.edit.AddVehicle" >
+    tools:context=".screens.edit.AddVehicleActivity" >
 
     <LinearLayout
         android:id="@+id/addVehicle_layout"

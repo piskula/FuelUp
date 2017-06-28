@@ -31,9 +31,9 @@ import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
 
 
-public class AddFillUp extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
+public class AddFillUpActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
-    public static final String TAG = AddFillUp.class.getSimpleName();
+    public static final String TAG = AddFillUpActivity.class.getSimpleName();
 
     public static final String EXTRA_CAR = "extra_car_to_add_fillup";
 
@@ -62,7 +62,7 @@ public class AddFillUp extends AppCompatActivity implements CompoundButton.OnChe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_fillup);
+        setContentView(R.layout.activity_fillup_edit);
         initViews();
 
         Intent intent = getIntent();
@@ -170,7 +170,7 @@ public class AddFillUp extends AppCompatActivity implements CompoundButton.OnChe
      */
 
     public void onClickDatePicker(View view) {
-        new DatePickerDialog(AddFillUp.this, new DatePickerDialog.OnDateSetListener() {
+        new DatePickerDialog(AddFillUpActivity.this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int y, int m, int d) {
                 Calendar serviceDate = Calendar.getInstance();

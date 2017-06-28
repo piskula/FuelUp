@@ -24,8 +24,8 @@ import sk.piskula.fuelup.business.ExpenseService;
 import sk.piskula.fuelup.entity.Expense;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.loaders.ExpenseLoader;
-import sk.piskula.fuelup.screens.VehicleTabbedDetail;
-import sk.piskula.fuelup.screens.edit.EditExpense;
+import sk.piskula.fuelup.screens.VehicleTabbedDetailActivity;
+import sk.piskula.fuelup.screens.edit.EditExpenseActivity;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -64,10 +64,10 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        View view = inflater.inflate(R.layout.expenses_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_expenses_list, container, false);
 
         args = getArguments();
-        vehicle = args.getParcelable(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT);
+        vehicle = args.getParcelable(VehicleTabbedDetailActivity.VEHICLE_TO_FRAGMENT);
 
         appBarLayout = getActivity().findViewById(R.id.toolbar_layout);
         appBarLayout.setTitle(getResources().getString(R.string.title_expenses));
@@ -94,7 +94,7 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
 
     @Override
     public Loader<List<Expense>> onCreateLoader(int id, Bundle args) {
-        Vehicle vehicle = args.getParcelable(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT);
+        Vehicle vehicle = args.getParcelable(VehicleTabbedDetailActivity.VEHICLE_TO_FRAGMENT);
         long vehicleId = vehicle.getId();
         return new ExpenseLoader(getActivity(), vehicleId, new ExpenseService(getActivity()));
     }
@@ -115,7 +115,7 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
 
     @Override
     public void onItemClick(View v, Expense expense, int position) {
-        Intent i = new Intent(getActivity(), EditExpense.class);
+        Intent i = new Intent(getActivity(), EditExpenseActivity.class);
         i.putExtra(EXPENSE_TO_EDIT, expense);
         startActivityForResult(i, EXPENSE_ACTION_REQUEST_CODE);
     }
@@ -123,7 +123,7 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
     @Override
     public void onClick(View view) {
         if (view.getId() == addButton.getId()) {
-            Intent i = new Intent(getActivity(), EditExpense.class);
+            Intent i = new Intent(getActivity(), EditExpenseActivity.class);
             i.putExtra(VEHICLE_FROM_FRAGMENT_TO_EDIT_EXPENSE, vehicle);
             startActivityForResult(i, EXPENSE_ACTION_REQUEST_CODE);
         }

@@ -36,7 +36,7 @@ public class CreateVehicleDialog extends DialogFragment implements Dialog.OnShow
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.create_vehicle_dialog, null);
+        View dialogView = inflater.inflate(R.layout.dialog_vehicle_add, null);
 
         final AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setView(dialogView)

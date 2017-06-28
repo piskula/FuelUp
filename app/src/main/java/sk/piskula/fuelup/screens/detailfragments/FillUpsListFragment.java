@@ -24,13 +24,13 @@ import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.loaders.FillUpLoader;
-import sk.piskula.fuelup.screens.edit.AddFillUp;
-import sk.piskula.fuelup.screens.edit.EditFillUp;
+import sk.piskula.fuelup.screens.edit.AddFillUpActivity;
+import sk.piskula.fuelup.screens.edit.EditFillUpActivity;
 
 import static android.app.Activity.RESULT_OK;
-import static sk.piskula.fuelup.screens.VehicleTabbedDetail.VEHICLE_TO_FRAGMENT;
-import static sk.piskula.fuelup.screens.edit.AddFillUp.EXTRA_CAR;
-import static sk.piskula.fuelup.screens.edit.EditFillUp.EXTRA_FILLUP;
+import static sk.piskula.fuelup.screens.VehicleTabbedDetailActivity.VEHICLE_TO_FRAGMENT;
+import static sk.piskula.fuelup.screens.edit.AddFillUpActivity.EXTRA_CAR;
+import static sk.piskula.fuelup.screens.edit.EditFillUpActivity.EXTRA_FILLUP;
 
 /**
  * @author Ondrej Oravcok
@@ -114,7 +114,7 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
 
     @Override
     public void onItemClick(View v, FillUp fillUp, int position) {
-        Intent i = new Intent(getActivity(), EditFillUp.class);
+        Intent i = new Intent(getActivity(), EditFillUpActivity.class);
         i.putExtra(EXTRA_FILLUP, fillUp);
         startActivityForResult(i, FILLUP_ACTION_REQUEST_CODE);
     }
@@ -122,7 +122,7 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
     @Override
     public void onClick(View view) {
         if (view.getId() == addButton.getId()) {
-            Intent i = new Intent(getActivity(), AddFillUp.class);
+            Intent i = new Intent(getActivity(), AddFillUpActivity.class);
             i.putExtra(EXTRA_CAR, vehicle);
             startActivityForResult(i, FILLUP_ACTION_REQUEST_CODE);
         }

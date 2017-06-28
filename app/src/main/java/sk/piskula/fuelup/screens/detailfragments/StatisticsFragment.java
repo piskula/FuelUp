@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.Vehicle;
-import sk.piskula.fuelup.screens.VehicleTabbedDetail;
+import sk.piskula.fuelup.screens.VehicleTabbedDetailActivity;
 
 /**
  * @author Ondrej Oravcok
@@ -30,7 +30,7 @@ public class StatisticsFragment extends Fragment {
 
         args = getArguments();
         if (args != null) {
-            vehicle = (Vehicle) args.getParcelable(VehicleTabbedDetail.VEHICLE_TO_FRAGMENT);
+            vehicle = (Vehicle) args.getParcelable(VehicleTabbedDetailActivity.VEHICLE_TO_FRAGMENT);
         }
 
         appBarLayout = getActivity().findViewById(R.id.toolbar_layout);

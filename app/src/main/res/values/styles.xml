@@ -31,11 +31,11 @@
     </style>
 
     <style name="ConfirmButton" parent="android:Widget.Button">
-        <item name="android:background">@drawable/btn_confirm_selector</item>
+        <item name="android:background">@drawable/selector_btn_confirm</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
     <style name="WarningButton" parent="android:Widget.Button">
-        <item name="android:background">@drawable/btn_warning_selector</item>
+        <item name="android:background">@drawable/selector_btn_warning</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 

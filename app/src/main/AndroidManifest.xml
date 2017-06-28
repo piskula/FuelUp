@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".screens.VehicleList"
+            android:name=".screens.VehicleListActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar">
@@ -21,39 +21,39 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".screens.VehicleTabbedDetail"
+            android:name=".screens.VehicleTabbedDetailActivity"
             android:label="Detail"
             android:launchMode="singleTop"
-            android:parentActivityName=".screens.VehicleList"
+            android:parentActivityName=".screens.VehicleListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="sk.piskula.fuelup.screens.VehicleList" />
+                android:value="sk.piskula.fuelup.screens.VehicleListActivity" />
         </activity>
         <activity
-            android:name=".screens.edit.EditExpense"
+            android:name=".screens.edit.EditExpenseActivity"
             android:label="Expense"
-            android:parentActivityName=".screens.VehicleTabbedDetail">
+            android:parentActivityName=".screens.VehicleTabbedDetailActivity">
         </activity>
         <activity
-            android:name=".screens.edit.AddVehicle"
+            android:name=".screens.edit.AddVehicleActivity"
             android:label="Add Vehicle"
-            android:parentActivityName=".screens.VehicleList">
+            android:parentActivityName=".screens.VehicleListActivity">
         </activity>
         <activity
-            android:name=".screens.edit.EditVehicle"
+            android:name=".screens.edit.EditVehicleActivity"
             android:label="Edit Vehicle"
-            android:parentActivityName=".screens.VehicleTabbedDetail">
+            android:parentActivityName=".screens.VehicleTabbedDetailActivity">
         </activity>
         <activity
-            android:name=".screens.edit.AddFillUp"
+            android:name=".screens.edit.AddFillUpActivity"
             android:label="Add Fill Up"
-            android:parentActivityName=".screens.VehicleTabbedDetail">
+            android:parentActivityName=".screens.VehicleTabbedDetailActivity">
         </activity>
         <activity
-            android:name=".screens.edit.EditFillUp"
+            android:name=".screens.edit.EditFillUpActivity"
             android:label="Edit Fill Up"
-            android:parentActivityName=".screens.VehicleTabbedDetail">
+            android:parentActivityName=".screens.VehicleTabbedDetailActivity">
         </activity>
     </application>
 

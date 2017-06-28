@@ -36,9 +36,9 @@ import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.screens.dialog.DeleteDialog;
 
 
-public class EditFillUp extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, DeleteDialog.Callback {
+public class EditFillUpActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, DeleteDialog.Callback {
 
-    public static final String TAG = EditFillUp.class.getSimpleName();
+    public static final String TAG = EditFillUpActivity.class.getSimpleName();
 
     public static final String EXTRA_FILLUP = "extra_fillup_to_update";
 
@@ -69,7 +69,7 @@ public class EditFillUp extends AppCompatActivity implements CompoundButton.OnCh
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_fillup);
+        setContentView(R.layout.activity_fillup_edit);
         initViews();
 
         Intent intent = getIntent();
@@ -196,7 +196,7 @@ public class EditFillUp extends AppCompatActivity implements CompoundButton.OnCh
      * OnClick listener for date text view
      */
     public void onClickDatePicker(View view) {
-        new DatePickerDialog(EditFillUp.this, new DatePickerDialog.OnDateSetListener() {
+        new DatePickerDialog(EditFillUpActivity.this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int y, int m, int d) {
                 Calendar serviceDate = Calendar.getInstance();
@@ -254,7 +254,7 @@ public class EditFillUp extends AppCompatActivity implements CompoundButton.OnCh
 
     @Override
     public void onDeleteDialogPositiveClick(DeleteDialog dialog) {
-        FillUpService service = new FillUpService(EditFillUp.this);
+        FillUpService service = new FillUpService(EditFillUpActivity.this);
         ServiceResult result = service.deleteWithConsumptionCalculation(mSelectedFillUp);
 
         if (ServiceResult.SUCCESS.equals(result)) {

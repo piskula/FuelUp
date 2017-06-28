@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/activity_vertical_margin"
-    tools:context="sk.piskula.fuelup.screens.edit.EditExpense">
+    tools:context="sk.piskula.fuelup.screens.edit.EditExpenseActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
