@@ -73,7 +73,7 @@ public class EditExpense extends AppCompatActivity implements DeleteDialog.Callb
             expense.setVehicle(vehicle);
         }
 
-        mTxtPriceUnit.setText(vehicle.getCurrencySymbol());
+        mTxtPriceUnit.setText(vehicle.getCurrencySymbol(this));
     }
 
     private void initViews() {
@@ -92,7 +92,6 @@ public class EditExpense extends AppCompatActivity implements DeleteDialog.Callb
 
             }
         }
-
     }
 
     private void populateFields(Expense selectedExpense) {

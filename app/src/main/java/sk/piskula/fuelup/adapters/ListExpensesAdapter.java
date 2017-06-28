@@ -39,7 +39,8 @@ public class ListExpensesAdapter extends RecyclerView.Adapter<ListExpensesAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_expense, parent, false);
+        this.context = parent.getContext();
+        View view = LayoutInflater.from(this.context).inflate(R.layout.list_item_expense, parent, false);
         return new ViewHolder(view);
     }
 
@@ -49,7 +50,7 @@ public class ListExpensesAdapter extends RecyclerView.Adapter<ListExpensesAdapte
         if (currentItem != null) {
             DecimalFormat bddf = new DecimalFormat();
 
-            holder.txtPriceSymbol.setText(currentItem.getVehicle().getCurrencySymbol());
+            holder.txtPriceSymbol.setText(currentItem.getVehicle().getCurrencySymbol(this.context));
             holder.txtInfo.setText(currentItem.getInfo());
             holder.txtPrice.setText(bddf.format(currentItem.getPrice()));
             holder.txtDate.setText(DateFormat.getDateFormat(holder.txtInfo.getContext()).format(currentItem.getDate().getTime()));

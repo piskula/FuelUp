@@ -1,5 +1,6 @@
 package sk.piskula.fuelup.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,7 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
 
     private List<FillUp> items;
     private Callback callback;
-
+    private Context context;
 
     public ListFillUpsAdapter(Callback callback) {
         super();
@@ -36,7 +37,8 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_fillup, parent, false);
+        this.context = parent.getContext();
+        View view = LayoutInflater.from(this.context).inflate(R.layout.list_item_fillup, parent, false);
         return new ViewHolder(view);
     }
 
@@ -55,7 +57,7 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
                 holder.txtIsFullFillUp.setText(R.string.listFillUps_isNotFull);
             }
 
-            String currency = " " + currentItem.getVehicle().getCurrencySymbol();
+            String currency = " " + currentItem.getVehicle().getCurrencySymbol(this.context);
             holder.txtPriceTotalSymbol.setText(" " + currency);
             currency += "/l";
             holder.txtPricePerLitreSymbol.setText(currency);

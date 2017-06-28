@@ -75,7 +75,7 @@ public class AddFillUp extends AppCompatActivity implements CompoundButton.OnChe
         super.onStart();
 
         setFillUpDate(Calendar.getInstance());
-        mTxtCurrencySymbol.setText(mSelectedCar.getCurrencySymbol());
+        mTxtCurrencySymbol.setText(mSelectedCar.getCurrencySymbol(this));
         mTxtDistanceUnit.setText(mSelectedCar.getUnit().toString());
     }
 

@@ -17,6 +17,7 @@ import java.util.Locale;
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.data.DatabaseHelper;
 import sk.piskula.fuelup.entity.Vehicle;
+import sk.piskula.fuelup.entity.util.CurrencyUtil;
 
 /**
  * @author Ondrej Oravcok
@@ -29,7 +30,7 @@ public class SpinnerCurrencyAdapter extends BaseAdapter implements SpinnerAdapte
 
     public SpinnerCurrencyAdapter(Activity activity) {
         this.activity = activity;
-        this.currencies = Vehicle.getSupportedCurrencies();
+        this.currencies = CurrencyUtil.getSupportedCurrencies();
     }
 
     @Override
@@ -61,7 +62,7 @@ public class SpinnerCurrencyAdapter extends BaseAdapter implements SpinnerAdapte
 
         //TODO getDisplayName() API level 19
         currencyName.setText(currencies.get(position).getCurrencyCode());
-        currencySymbol.setText(Vehicle.getCurrencySymbol(currencies.get(position)));
+        currencySymbol.setText(CurrencyUtil.getCurrencySymbol(currencies.get(position), activity.getApplicationContext()));
 
         return spinView;
     }
