@@ -33,6 +33,7 @@ import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.business.ServiceResult;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
+import sk.piskula.fuelup.entity.util.DateUtil;
 import sk.piskula.fuelup.screens.dialog.DeleteDialog;
 
 
@@ -96,13 +97,11 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         }
         mTxtInfo.setText(mSelectedFillUp.getInfo());
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(mSelectedFillUp.getDate().getTime());
-        setFillUpDate(cal);
+        setFillUpDate(DateUtil.transformToCal(mSelectedFillUp.getDate()));
+        mTxtDate.setEnabled(false);
 
         mBtnAdd.setText(R.string.update);
         mBtnSwitchDistance.setEnabled(false);
-        mTxtDate.setEnabled(false);
 
         mTxtCurrencySymbol.setText(mSelectedCar.getCurrencySymbol(this));
         mTxtDistanceUnit.setText(mSelectedCar.getUnit().toString());
@@ -139,9 +138,9 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         Editable fuelVol = mTxtFuelVolume.getText();
         Editable price = mTxtPrice.getText();
         Editable info = mTxtInfo.getText();
-        String date = mTxtDate.getText().toString();
+//        String date = mTxtDate.getText().toString();
 
-        if (TextUtils.isEmpty(distance) || TextUtils.isEmpty(fuelVol) || TextUtils.isEmpty(date) || TextUtils.isEmpty(price) && mSelectedCar != null) {
+        if (TextUtils.isEmpty(distance) || TextUtils.isEmpty(fuelVol) || TextUtils.isEmpty(price) && mSelectedCar != null) {
             Toast.makeText(this, R.string.toast_emptyFields, Toast.LENGTH_LONG).show();
             return;
         }
@@ -151,16 +150,14 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
 
         Long createdDistance = Long.parseLong(distance.toString());
 
-        Calendar createdDate = Calendar.getInstance();
-        DateFormat dateFormatter = android.text.format.DateFormat.getDateFormat(getApplicationContext());
         BigDecimal createdFuelVol = null;
         BigDecimal createdPrice = null;
+
         try {
             createdFuelVol = (BigDecimal) decimalFormat.parse(fuelVol.toString());
             createdPrice = (BigDecimal) decimalFormat.parse(price.toString());
-            createdDate.setTime(dateFormatter.parse(date));
         } catch (ParseException ex) {
-            Log.d(TAG, "tried bad date");
+            Log.d(TAG, "tried bad format");
             throw new RuntimeException(ex);
         }
 
@@ -177,7 +174,7 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
             mSelectedFillUp.setFuelPriceTotal(createdPrice);
             mSelectedFillUp.setFuelPricePerLitre(createdPrice.divide(createdFuelVol, 2, BigDecimal.ROUND_HALF_UP));
         }
-        mSelectedFillUp.setDate(createdDate.getTime());
+        mSelectedFillUp.setDate(fillUpDate.getTime());
         mSelectedFillUp.setInfo(info.toString());
 
         ServiceResult serviceResultUpdate = fillUpService.updateWithConsumptionCalculation(mSelectedFillUp);
@@ -208,7 +205,7 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
 
     private void setFillUpDate(Calendar calendar) {
         this.fillUpDate = calendar;
-        mTxtDate.setText(android.text.format.DateFormat.getDateFormat(getApplicationContext()).format(calendar.getTime()));
+        mTxtDate.setText(DateUtil.getDateLocalized(calendar));
     }
 
     @Override

@@ -14,6 +14,7 @@ import java.util.List;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.Expense;
+import sk.piskula.fuelup.entity.util.DateUtil;
 
 /**
  * Created by Martin Styk on 19.06.2017.
@@ -53,7 +54,7 @@ public class ListExpensesAdapter extends RecyclerView.Adapter<ListExpensesAdapte
             holder.txtPriceSymbol.setText(currentItem.getVehicle().getCurrencySymbol(this.context));
             holder.txtInfo.setText(currentItem.getInfo());
             holder.txtPrice.setText(bddf.format(currentItem.getPrice()));
-            holder.txtDate.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(currentItem.getDate()));
+            holder.txtDate.setText(DateUtil.getDateLocalized(currentItem.getDate()));
         }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -75,15 +76,15 @@ public class ListExpensesAdapter extends RecyclerView.Adapter<ListExpensesAdapte
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
+    class ViewHolder extends RecyclerView.ViewHolder {
+        final View mView;
 
         TextView txtInfo;
         TextView txtPrice;
         TextView txtPriceSymbol;
         TextView txtDate;
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             super(v);
             mView = v;
             txtPriceSymbol = v.findViewById(R.id.txt_itemexpense_price_currency);

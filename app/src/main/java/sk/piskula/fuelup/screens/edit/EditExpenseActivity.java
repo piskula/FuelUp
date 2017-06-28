@@ -28,6 +28,7 @@ import sk.piskula.fuelup.business.ExpenseService;
 import sk.piskula.fuelup.business.ServiceResult;
 import sk.piskula.fuelup.entity.Expense;
 import sk.piskula.fuelup.entity.Vehicle;
+import sk.piskula.fuelup.entity.util.DateUtil;
 import sk.piskula.fuelup.screens.detailfragments.ExpensesListFragment;
 import sk.piskula.fuelup.screens.dialog.DeleteDialog;
 
@@ -97,15 +98,9 @@ public class EditExpenseActivity extends AppCompatActivity implements DeleteDial
         if (selectedExpense != null) {
             mTxtInfo.setText(selectedExpense.getInfo());
             mTxtPrice.setText(getPrice(selectedExpense.getPrice()));
-            setExpenseDate(transformToCal(selectedExpense.getDate()));
+            setExpenseDate(DateUtil.transformToCal(selectedExpense.getDate()));
             mBtnAdd.setText(getString(R.string.update));
         }
-    }
-
-    private Calendar transformToCal(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(date.getTime());
-        return cal;
     }
 
     /**
@@ -170,7 +165,7 @@ public class EditExpenseActivity extends AppCompatActivity implements DeleteDial
 
     private void setExpenseDate(Calendar calendar) {
         this.expenseDate = calendar;
-        mTxtDate.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(calendar.getTime()));
+        mTxtDate.setText(DateUtil.getDateLocalized(calendar));
     }
 
     private String getPrice(BigDecimal price) {
