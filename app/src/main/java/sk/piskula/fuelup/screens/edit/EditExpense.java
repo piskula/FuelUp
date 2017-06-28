@@ -18,14 +18,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.business.ExpenseService;
-import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.business.ServiceResult;
 import sk.piskula.fuelup.entity.Expense;
 import sk.piskula.fuelup.entity.Vehicle;
@@ -98,12 +97,15 @@ public class EditExpense extends AppCompatActivity implements DeleteDialog.Callb
         if (selectedExpense != null) {
             mTxtInfo.setText(selectedExpense.getInfo());
             mTxtPrice.setText(getPrice(selectedExpense.getPrice()));
-            mTxtDate.setText(android.text.format.DateFormat.getDateFormat(getApplicationContext()).format(selectedExpense.getDate().getTime()));
-            Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(selectedExpense.getDate().getTime());
-            setExpenseDate(cal);
+            setExpenseDate(transformToCal(selectedExpense.getDate()));
             mBtnAdd.setText(getString(R.string.update));
         }
+    }
+
+    private Calendar transformToCal(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(date.getTime());
+        return cal;
     }
 
     /**
@@ -141,16 +143,14 @@ public class EditExpense extends AppCompatActivity implements DeleteDialog.Callb
         }
 
         BigDecimal createdPrice = null;
-        Date createdDate = null;
 
         try {
-            createdPrice = new BigDecimal(price.toString());
-            createdDate = android.text.format.DateFormat.getDateFormat(getApplicationContext()).parse(date);
-        } catch (NumberFormatException | ParseException e) {
-            Log.e(TAG, "Error formatting data for Expense while saving.");
+            createdPrice = new BigDecimal(price);
+        } catch (NumberFormatException e) {
+            Log.e(TAG, "Error formatting price for Expense while saving.");
         }
 
-        expense.setDate(createdDate);
+        expense.setDate(this.expenseDate.getTime());
         expense.setInfo(info);
         expense.setPrice(createdPrice);
 
@@ -170,7 +170,7 @@ public class EditExpense extends AppCompatActivity implements DeleteDialog.Callb
 
     private void setExpenseDate(Calendar calendar) {
         this.expenseDate = calendar;
-        mTxtDate.setText(android.text.format.DateFormat.getDateFormat(getApplicationContext()).format(calendar.getTime()));
+        mTxtDate.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(calendar.getTime()));
     }
 
     private String getPrice(BigDecimal price) {
