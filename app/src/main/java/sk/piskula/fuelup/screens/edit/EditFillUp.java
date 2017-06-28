@@ -254,9 +254,8 @@ public class EditFillUp extends AppCompatActivity implements CompoundButton.OnCh
 
     @Override
     public void onDeleteDialogPositiveClick(DeleteDialog dialog) {
-        //TODO do with consumption recomputation
         FillUpService service = new FillUpService(EditFillUp.this);
-        ServiceResult result = service.delete(mSelectedFillUp);
+        ServiceResult result = service.deleteWithConsumptionCalculation(mSelectedFillUp);
 
         if (ServiceResult.SUCCESS.equals(result)) {
             Toast.makeText(getApplicationContext(), getString(R.string.remove_fillup_success), Toast.LENGTH_LONG).show();
