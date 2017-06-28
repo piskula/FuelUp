@@ -33,12 +33,12 @@
     <string name="addVehicle_vehicle_picture">Select picture</string>
     <string name="addVehicle_takePhoto">Take photo</string>
     <string name="addVehicle_selectPhotoFromGallery">Select photo from gallery</string>
-    <string name="addVehicle_Toast_successfullyCreated">Vehicle have been successfully created.</string>
+    <string name="addVehicle_Toast_successfullyCreated">Vehicle have been successfully created</string>
     <string name="addVehicle_success">Vehicle created</string>
     <string name="addVehicle_fail">Vehicle create failed</string>
     <string name="addVehicle_fail_duplicate">Vehicle with this name already exists</string>
     <string name="addVehicle_picture_added">Picture added</string>
-    <string name="permission_image_not_granted">Permissions required for work with images not granted. Image will not be used</string>
+    <string name="permission_image_not_granted">Permissions required for work with images not granted. Image will not be used.</string>
 
     <string name="editVehicle_toast_oldPhotoWasNotRemovedDueToError">Error: Old picture was not removed !!!</string>
     <string name="editVehicle_toast_photoWillBeRemoved">Photo of your Vehicle will be removed after submitting update.</string>
@@ -47,7 +47,6 @@
     <string name="delete_vehicle_dialog_message">Do you want to completely remove vehicle %1$s and all its data?</string>
     <string name="delete_vehicle_fail">Failed to remove vehicle %1$s</string>
     <string name="delete_vehicle_success">%1$s deleted successfully</string>
-
     <string name="delete_vehicle_photo">Deleted picture of this vehicle</string>
 
     <string name="editExpense_addExpense">Add expense</string>
@@ -63,8 +62,8 @@
     <string name="remove_expense_success">Expense removed</string>
     <string name="remove_expense_fail">Expense remove failed</string>
 
-    <string name="carUpdate_delete_btn">Delete</string>
-    <string name="carUpdate_manufacturer">Car manufacturer and type name</string>
+    <string name="carUpdate_delete_btn">Delete vehicle</string>
+    <string name="carUpdate_manufacturer">Vehicle manufacturer</string>
     <string name="carUpdate_Toast_successfullyUpdated">Vehicle have been successfully updated</string>
     <string name="carUpdate_Toast_updateFail">Vehicle update failed</string>
 
@@ -82,22 +81,20 @@
     <string name="add_fillup_title_create">Create fill up</string>
     <string name="add_fillup_title_update">Update fill up</string>
 
+    <string name="add_fillup_price">Price</string>
     <string name="add_fillup_pricePerLitre">Price per litre</string>
+    <string name="add_fillup_pricePerLitre_short">Per litre</string>
     <string name="add_fillup_priceTotal">Total price</string>
+    <string name="add_fillup_priceTotal_short">Total</string>
+    <string name="add_fillup_distance">Distance</string>
     <string name="add_fillup_distance_overall">Overall distance</string>
-    <string name="add_fillup_distance_from_last">Distance from last fill up</string>
-    <string name="add_fillup_update">Update</string>
+    <string name="add_fillup_distanceFromLast">Distance from last fill up</string>
+    <string name="add_fillup_distanceFromLast_short">From last</string>
+    <string name="add_fillup_distanceTotal_short">Total</string>
     <string name="add_fillup_success">Fill up created</string>
     <string name="add_fillup_fail">Fill up create failed</string>
     <string name="add_fillup_success_update">Fill up updated</string>
     <string name="add_fillup_fail_update">Fill up update failed</string>
-
-    <string name="add_fillup_pricePerLitre_short">Per litre</string>
-    <string name="add_fillup_priceTotal_short">Total</string>
-    <string name="add_fillup_distanceFromLast_short">From last</string>
-    <string name="add_fillup_distanceTotal_short">Total</string>
-    <string name="add_fillup_distance">Distance</string>
-    <string name="add_fillup_price">Price</string>
     <string name="add_fillup_fuel_volume">Fuel volume</string>
     <string name="add_fillup_full_fillup">Full fill up</string>
     <string name="add_fillup_info">Note</string>
@@ -108,8 +105,6 @@
     <string name="remove_fillup_dialog_message">Do you want to remove this fill up?</string>
     <string name="remove_fillup_success">Fill Up removed</string>
     <string name="remove_fillup_fail">Fill Up remove failed</string>
-
-
 
     <string name="yes">Yes</string>
     <string name="no">No</string>

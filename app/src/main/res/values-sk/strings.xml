@@ -21,18 +21,24 @@
     <string name="title_fillUps">Tankovania</string>
     <string name="title_mileage">Nájazd</string>
     <string name="title_settings">Nastavenia</string>
-    <string name="title_statistics">Štatitiky</string>
+    <string name="title_statistics">Štatistiky</string>
     <string name="title_vehicleManufacturer">Výrobca</string>
 
     <string name="LOG_badLongNumberFormat">Zlý formát čísla.</string>
 
     <string name="noExpenseInTheDatabase">Pre toto vozidlo ste zatiaľ nezadali žiadne výdaje. Výdaj zadáte kliknutím na tlačítko \'plus\' vpravo dole.</string>
-    <string name="noFillupInTheDatabase">Pre toto vozidlo ste zatiaľ nezadali žiadny z8znam o tankovaní. Nový zadáte kliknutím na tlačítko \'plus\' vpravo dole.</string>
+    <string name="noFillupInTheDatabase">Pre toto vozidlo ste zatiaľ nezadali žiadny záznam o tankovaní. Nový zadáte kliknutím na tlačítko \'plus\' vpravo dole.</string>
 
     <string name="addVehicle">Nové vozidlo</string>
+    <string name="addVehicle_vehicle_picture">Vybrať obrázok</string>
     <string name="addVehicle_takePhoto">Fotoaparát</string>
     <string name="addVehicle_selectPhotoFromGallery">Vybrať foto zo zariadenia</string>
-    <string name="addVehicle_Toast_successfullyCreated">Vytvorili ste nové vozidlo.</string>
+    <string name="addVehicle_Toast_successfullyCreated">Vozidlo bolo úspešne vytvorené</string>
+    <string name="addVehicle_success">Vozidlo bolo vytvorené</string>
+    <string name="addVehicle_fail">Nepodarilo sa vytvoriť vozidlo</string>
+    <string name="addVehicle_fail_duplicate">Vozidlo s týmto názvom už existuje</string>
+    <string name="addVehicle_picture_added">Obrázok bol priradený</string>
+    <string name="permission_image_not_granted">Táto aplikácia nemá dostatočné práva pre prácu s galériou. Obrázok nebude použitý.</string>
 
     <string name="editVehicle_toast_oldPhotoWasNotRemovedDueToError">Chyba: Pôvodný obrázok sa nepodarilo odstrániť !!!</string>
     <string name="editVehicle_toast_photoWillBeRemoved">Fotografia bude odstránená po stlačení tlačidla \'Upraviť\'.</string>
@@ -40,7 +46,39 @@
     <string name="delete_vehicle_dialog_message">Naozaj chcete odstrániť \'%1$s\' aj všetky záznamy?</string>
     <string name="delete_vehicle_dialog_title">Odstrániť \'%1$s\'</string>
     <string name="delete_vehicle_fail">Nepodarilo sa odstrániť vozidlo \'%1$s\'</string>
-    <string name="delete_vehicle_success">\'%1$s\' úspešne odstránené.</string>
+    <string name="delete_vehicle_success">\'%1$s\' úspešne odstránené</string>
+    <string name="delete_vehicle_photo">Obrázok bol zrušený</string>
 
+    <string name="editExpense_addExpense">Pridať výdaj</string>
+    <string name="editExpense_info_hint">Informácia o výdaji</string>
+    <string name="editExpense_updateExpense">Upraviť výdaj</string>
+    <string name="editExpense_toast_createdSuccessfully">Výdaj bol vytvorený</string>
+    <string name="editExpense_toast_updatedSuccessfully">Výdaj bol upravený</string>
+    <string name="editExpense_toast_createFailed">Nepodarilo sa uložiť nový výdaj</string>
+    <string name="editExpense_toast_updateFailed">Nepodarilo sa upraviť výdaj</string>
+
+    <string name="remove_expense_dialog_title">Zmazať výdaj</string>
+    <string name="remove_expense_dialog_message">Chcete zmazať tento výdaj?</string>
+    <string name="remove_expense_success">Výdaj bol zmazaný</string>
+    <string name="remove_expense_fail">Nepodarilo sa zmazať výdaj</string>
+
+    <string name="carUpdate_delete_btn">Zmazať vozidlo</string>
+    <string name="carUpdate_manufacturer">Výrobca vozidla</string>
+    <string name="carUpdate_Toast_successfullyUpdated">Vozidlo bolo upravené</string>
+    <string name="carUpdate_Toast_updateFail">Nepodarilo sa upraviť vozidlo</string>
+
+
+
+
+
+
+
+
+
+
+
+
+    <string name="add_fillup_title_create">Vytvoriť tankovanie</string>
+    <string name="add_fillup_title_update">Upraviť tankovanie</string>
 
 </resources>

@@ -27,7 +27,7 @@
                     android:id="@+id/txt_addfillup_distance_from_last_fillup_adding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/add_fillup_distance_from_last"
+                    android:hint="@string/add_fillup_distanceFromLast"
                     android:inputType="number"
                     android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>

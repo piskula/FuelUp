@@ -193,7 +193,7 @@ public class AddFillUp extends AppCompatActivity implements CompoundButton.OnChe
                 mTxtInputDistance.setHint(getString(R.string.add_fillup_distance_overall));
             } else {
                 distanceMode = SwitchDistance.fromLast;
-                mTxtInputDistance.setHint(getString(R.string.add_fillup_distance_from_last));
+                mTxtInputDistance.setHint(getString(R.string.add_fillup_distanceFromLast));
             }
         }
         if (compoundButton.getId() == mBtnSwitchPrice.getId()) {

@@ -100,7 +100,7 @@ public class EditFillUp extends AppCompatActivity implements CompoundButton.OnCh
         cal.setTimeInMillis(mSelectedFillUp.getDate().getTime());
         setFillUpDate(cal);
 
-        mBtnAdd.setText(R.string.add_fillup_update);
+        mBtnAdd.setText(R.string.update);
         mBtnSwitchDistance.setEnabled(false);
         mTxtDate.setEnabled(false);
 
@@ -219,7 +219,7 @@ public class EditFillUp extends AppCompatActivity implements CompoundButton.OnCh
                 mTxtInputDistance.setHint(getString(R.string.add_fillup_distance_overall));
             } else {
                 distanceMode = SwitchDistance.fromLast;
-                mTxtInputDistance.setHint(getString(R.string.add_fillup_distance_from_last));
+                mTxtInputDistance.setHint(getString(R.string.add_fillup_distanceFromLast));
             }
         }
         if (compoundButton.getId() == mBtnSwitchPrice.getId()) {
