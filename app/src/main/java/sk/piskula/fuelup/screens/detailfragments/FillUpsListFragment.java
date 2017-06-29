@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
 
     private RecyclerView recyclerView;
     private ProgressBar loadingBar;
+    private TextView emptyList;
 
     private CollapsingToolbarLayout appBarLayout;
     private FloatingActionButton addButton;
@@ -72,6 +74,7 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
         appBarLayout.setTitle(getResources().getString(R.string.title_fillUps));
 
         loadingBar = view.findViewById(R.id.fill_ups_list_loading);
+        emptyList = view.findViewById(R.id.fill_ups_list_empty);
 
         addButton = getActivity().findViewById(R.id.fab_add);
         addButton.setOnClickListener(this);
@@ -102,7 +105,13 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
         this.data = data;
         adapter.dataChange(data);
         loadingBar.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.VISIBLE);
+        if (data.isEmpty()) {
+            emptyList.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            emptyList.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

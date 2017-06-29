@@ -17,6 +17,14 @@
         app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/list_item_expense" />
 
+    <TextView
+        android:id="@+id/expense_list_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="@string/no_expense_created_yet"/>
+
     <ProgressBar
         android:id="@+id/expense_list_loading"
         android:layout_width="wrap_content"

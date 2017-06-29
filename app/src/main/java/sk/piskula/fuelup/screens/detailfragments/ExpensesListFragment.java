@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
 
     private RecyclerView recyclerView;
     private ProgressBar loadingBar;
+    private TextView emptyList;
 
     private CollapsingToolbarLayout appBarLayout;
     private FloatingActionButton addButton;
@@ -73,6 +75,7 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
         appBarLayout.setTitle(getResources().getString(R.string.title_expenses));
 
         loadingBar = view.findViewById(R.id.expense_list_loading);
+        emptyList = view.findViewById(R.id.expense_list_empty);
 
         addButton = getActivity().findViewById(R.id.fab_add);
         addButton.setOnClickListener(this);
@@ -103,7 +106,13 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
         this.data = data;
         adapter.dataChange(data);
         loadingBar.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.VISIBLE);
+        if (data.isEmpty()) {
+            emptyList.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            emptyList.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
