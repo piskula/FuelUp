@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import sk.piskula.fuelup.R;
+import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.databinding.FragmentStatisticsBinding;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.screens.VehicleStatisticsActivity;
@@ -28,6 +29,8 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
     private CollapsingToolbarLayout appBarLayout;
     private FloatingActionButton floatingActionButton;
 
+    private FillUpService fillUpService;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +39,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         if (args != null) {
             vehicle = args.getParcelable(VehicleTabbedDetailActivity.VEHICLE_TO_FRAGMENT);
         }
+        fillUpService = new FillUpService(getActivity());
 
         appBarLayout = getActivity().findViewById(R.id.toolbar_layout);
         appBarLayout.setTitle(getResources().getString(R.string.title_statistics));
@@ -55,7 +59,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
 
     private void setFuelConsumption(FragmentStatisticsBinding binding) {
         binding.sFuelConsumption.fieldName.setText("Average Fuel Consumption");
-        binding.sFuelConsumption.fieldValue.setText("7,65");
+        binding.sFuelConsumption.fieldValue.setText(String.valueOf(fillUpService.getAverageConsumptionOfVehicle(vehicle.getId())));
         binding.sFuelConsumption.fieldUnit.setText("\u2113/" + vehicle.getUnit().toString());
     }
 
