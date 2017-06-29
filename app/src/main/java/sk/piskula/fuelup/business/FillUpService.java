@@ -153,7 +153,7 @@ public class FillUpService {
 
     public BigDecimal getAverageConsumptionOfVehicle(long vehicleId) {
         try {
-            GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT SUM(distance_from_last_fill_up * consumption) / SUM(distance_from_last_fill_up) FROM fill_ups WHERE vehicle_id = " + vehicleId);
+            GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT SUM(distance_from_last_fill_up * consumption) / SUM(distance_from_last_fill_up) FROM fill_ups WHERE consumption is not null and vehicle_id = " + vehicleId);
             DecimalFormat f = new DecimalFormat();
             f.setParseBigDecimal(true);
             return (BigDecimal) f.parseObject(results.getResults().get(0)[0]);
