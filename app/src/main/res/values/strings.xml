@@ -112,8 +112,8 @@
     <string name="desc_expensePic">service icon</string>
     <string name="list_item_fillup_is_full">full</string>
     <string name="list_item_fillup_txt_avg_symbol">ø</string>
-    <string name="l_100km">l/100km</string>
-    <string name="litre">l</string>
+    <string name="l_100km">\u2113/100km</string>
+    <string name="litre">\u2113</string>
     <string name="per_litre_symbol">€/l</string>
     <string name="desc_fillupPic">pump icon</string>
     <string name="euro">€</string>
@@ -122,7 +122,7 @@
 
     <string name="units_kilometres">km</string>
     <string name="units_miles">mi</string>
-    <string name="units_prefix">l/100</string>
+    <string name="units_litreper100">\u2113/100</string>
     <string name="currency">Currency</string>
     <string name="vehicle_type">Vehicle type</string>
     <string name="distance_units">Distance units</string>

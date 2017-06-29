@@ -49,7 +49,7 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
             //set views
             holder.txtDistanceFromLastFillUp.setText(currentItem.getDistanceFromLastFillUp().toString());
             holder.txtDriven.setText(currentItem.getVehicle().getUnit().toString());
-            holder.txtConsumptionSymbol.setText("l/100" + currentItem.getVehicle().getUnit().toString());
+            holder.txtConsumptionSymbol.setText(context.getString(R.string.units_litreper100) + currentItem.getVehicle().getUnit().toString());
 
             if (currentItem.isFullFillUp()) {
                 holder.txtIsFullFillUp.setText(R.string.listFillups_isFull);
@@ -59,7 +59,7 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
 
             String currency = " " + currentItem.getVehicle().getCurrencySymbol(this.context);
             holder.txtPriceTotalSymbol.setText(" " + currency);
-            currency += "/l";
+            currency += "/" + context.getString(R.string.litre);
             holder.txtPricePerLitreSymbol.setText(currency);
 
             DecimalFormat bddf = new DecimalFormat();

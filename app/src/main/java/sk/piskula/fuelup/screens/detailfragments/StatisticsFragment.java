@@ -1,5 +1,6 @@
 package sk.piskula.fuelup.screens.detailfragments;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import sk.piskula.fuelup.R;
+import sk.piskula.fuelup.databinding.FragmentStatisticsBinding;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.screens.VehicleTabbedDetailActivity;
 
@@ -40,7 +42,25 @@ public class StatisticsFragment extends Fragment {
         addButton = getActivity().findViewById(R.id.fab_add);
         addButton.setVisibility(View.GONE);
 
-        return inflater.inflate(R.layout.fragment_statistics, container, false);
+        FragmentStatisticsBinding binding = FragmentStatisticsBinding.inflate(inflater);
+
+        //TODO add more fields
+        setFuelConsumption(binding);
+        setPricePerDistance(binding);
+
+        return binding.getRoot();
+    }
+
+    private void setFuelConsumption(FragmentStatisticsBinding binding) {
+        binding.sFuelConsumption.fieldName.setText("Average Fuel Consumption");
+        binding.sFuelConsumption.fieldValue.setText("7,65");
+        binding.sFuelConsumption.fieldUnit.setText("\u2113/" + vehicle.getUnit().toString());
+    }
+
+    private void setPricePerDistance(FragmentStatisticsBinding binding) {
+        binding.sPricePerDistance.fieldName.setText("Price per " + vehicle.getUnit().toString());
+        binding.sPricePerDistance.fieldValue.setText("0,45");
+        binding.sPricePerDistance.fieldUnit.setText(vehicle.getCurrencySymbol(getActivity()));
     }
 
 }
