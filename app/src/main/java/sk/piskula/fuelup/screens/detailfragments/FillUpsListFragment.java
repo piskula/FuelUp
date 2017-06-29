@@ -63,7 +63,7 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        View view = inflater.inflate(R.layout.fillups_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_fillups_list, container, false);
 
         Bundle args = getArguments();
         vehicle = args.getParcelable(VEHICLE_TO_FRAGMENT);

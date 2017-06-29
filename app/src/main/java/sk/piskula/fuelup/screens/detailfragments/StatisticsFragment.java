@@ -40,7 +40,7 @@ public class StatisticsFragment extends Fragment {
         addButton = getActivity().findViewById(R.id.fab_add);
         addButton.setVisibility(View.GONE);
 
-        return inflater.inflate(R.layout.fillups_list, container, false);
+        return inflater.inflate(R.layout.fragment_statistics, container, false);
     }
 
 }
