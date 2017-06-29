@@ -75,7 +75,6 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
         loadingBar = view.findViewById(R.id.expense_list_loading);
 
         addButton = getActivity().findViewById(R.id.fab_add);
-        addButton.setVisibility(View.VISIBLE);
         addButton.setOnClickListener(this);
 
         recyclerView = view.findViewById(R.id.expense_list);

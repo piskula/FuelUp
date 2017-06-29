@@ -106,6 +106,8 @@
     <string name="remove_fillup_success">Fill Up removed</string>
     <string name="remove_fillup_fail">Fill Up remove failed</string>
 
+    <string name="statistics_title">Detailed Statistics</string>
+
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
@@ -129,6 +131,9 @@
     <string name="no_vehicle_created_yet">No vehicle created yet.</string>
     <string name="miles">miles</string>
     <string name="kilometres">kilometres</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

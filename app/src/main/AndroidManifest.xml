@@ -31,6 +31,16 @@
                 android:value="sk.piskula.fuelup.screens.VehicleListActivity" />
         </activity>
         <activity
+            android:name=".screens.VehicleStatisticsActivity"
+            android:label="Detailed Statistics"
+            android:launchMode="singleTop"
+            android:parentActivityName=".screens.VehicleTabbedDetailActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sk.piskula.fuelup.screens.VehicleTabbedDetailActivity" />
+        </activity>
+        <activity
             android:name=".screens.edit.EditExpenseActivity"
             android:label="Expense"
             android:parentActivityName=".screens.VehicleTabbedDetailActivity">

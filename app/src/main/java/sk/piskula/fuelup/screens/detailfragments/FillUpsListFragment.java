@@ -74,7 +74,6 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
         loadingBar = view.findViewById(R.id.fill_ups_list_loading);
 
         addButton = getActivity().findViewById(R.id.fab_add);
-        addButton.setVisibility(View.VISIBLE);
         addButton.setOnClickListener(this);
 
         recyclerView = view.findViewById(R.id.fill_ups_list);
