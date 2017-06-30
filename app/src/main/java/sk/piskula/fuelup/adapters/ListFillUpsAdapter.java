@@ -18,7 +18,6 @@ import sk.piskula.fuelup.entity.FillUp;
 /**
  * Created by Martin Styk on 19.06.2017.
  */
-
 public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.ViewHolder> {
 
     private List<FillUp> items;

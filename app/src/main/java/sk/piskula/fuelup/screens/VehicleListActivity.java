@@ -10,36 +10,41 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.adapters.ListVehiclesAdapter;
 import sk.piskula.fuelup.business.ServiceResult;
 import sk.piskula.fuelup.business.VehicleService;
+import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.screens.dialog.CreateVehicleDialog;
 import sk.piskula.fuelup.screens.edit.AddVehicleActivity;
 
 public class VehicleListActivity extends AppCompatActivity
-        implements OnNavigationItemSelectedListener, View.OnClickListener, ListView.OnItemClickListener,
-        CreateVehicleDialog.Callback {
+        implements OnNavigationItemSelectedListener, ListVehiclesAdapter.Callback,
+        View.OnClickListener, CreateVehicleDialog.Callback {
 
     private static final String TAG = "VehicleListActivity";
+    public static final int VEHICLE_ACTION_REQUEST_CODE = 33;
 
-    private static final String SHARED_PREFERENCES_NAME = "sk.piskula.fuelup.preferences";
-    private static final String PREFS_VEHICLE_ID_KEY = "vehicle_id";
     public static final String EXTRA_ADDED_CAR = "extra_key_added_car";
 
     private FloatingActionButton addCarBtn;
 
-    private ListView listView;
+    private RecyclerView recyclerView;
     private ListVehiclesAdapter adapter;
+
+    private TextView txtNoVehicle;
 
     private VehicleService vehicleService;
 
@@ -59,11 +64,20 @@ public class VehicleListActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        adapter = new ListVehiclesAdapter(this, (TextView) findViewById(R.id.txt_not_vehicle));
+        if (adapter == null)
+            adapter = new ListVehiclesAdapter(this);
 
-        listView = (ListView) findViewById(R.id.list_cars);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(this);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 1);
+
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
+                ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setOnClickListener(this);
+
+        txtNoVehicle = (TextView) findViewById(R.id.txt_noVehicle);
 
         addCarBtn = (FloatingActionButton) findViewById(R.id.fab_add_vehicle);
         addCarBtn.setOnClickListener(this);
@@ -73,16 +87,20 @@ public class VehicleListActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onRestart() {
-        adapter.refreshItems();
-        super.onRestart();
+    protected void onResume() {
+        adapter.dataChange((new VehicleService(getApplicationContext())).findAll());
+        if (adapter.getItemCount() == 0)
+            txtNoVehicle.setVisibility(View.VISIBLE);
+        else
+            txtNoVehicle.setVisibility(View.GONE);
+        super.onResume();
     }
 
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-        Intent i = new Intent(view.getContext(), VehicleTabbedDetailActivity.class);
-        i.putExtra(EXTRA_ADDED_CAR, adapter.getItem(position));
-        startActivity(i);
+    public void onItemClick(View v, Vehicle vehicle, int position) {
+        Intent i = new Intent(this, VehicleTabbedDetailActivity.class);
+        i.putExtra(EXTRA_ADDED_CAR, vehicle);
+        startActivityForResult(i, VEHICLE_ACTION_REQUEST_CODE);
     }
 
     @Override
@@ -96,7 +114,7 @@ public class VehicleListActivity extends AppCompatActivity
     public void onDialogCreateBtnClick(CreateVehicleDialog dialog, Editable vehicleName) {
         ServiceResult serviceResult = vehicleService.save(vehicleName.toString());
         if (ServiceResult.SUCCESS.equals(serviceResult)) {
-            adapter.refreshItems();
+            adapter.dataChange((new VehicleService(getApplicationContext())).findAll());
             dialog.dismiss();
             Snackbar.make(findViewById(android.R.id.content), R.string.addVehicle_success, Snackbar.LENGTH_LONG).show();
         } else {
