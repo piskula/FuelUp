@@ -3,9 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground">
+    android:background="@drawable/selector_list_item" >
 
     <TextView
         android:id="@+id/txt_itemfillup_isfullfillup"
@@ -111,7 +109,9 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:src="@drawable/gasoline_drop"
-        android:contentDescription="@string/desc_fillupPic" />
+        android:contentDescription="@string/desc_fillupPic"
+        android:clickable="false"
+        />
 
     <TextView
         android:id="@+id/txt_itemfillup_price_total_symbol"

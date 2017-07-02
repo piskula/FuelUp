@@ -3,9 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground" >
+    android:background="@drawable/selector_list_item"  >
 
 
     <ImageView
@@ -14,16 +12,16 @@
         android:layout_height="60dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/car_service"
-        android:contentDescription="@string/desc_expensePic" />
+        android:contentDescription="@string/desc_expensePic"
+        android:src="@drawable/car_service" />
 
     <TextView
         android:id="@+id/txt_itemexpense_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/img_itemexpense_pic"
         android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/img_itemexpense_pic"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="bold" />
 
@@ -35,25 +33,25 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-    
+
     <TextView
         android:id="@+id/txt_itemexpense_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/txt_itemexpense_price_currency"
         android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/txt_itemexpense_price_currency"
         android:maxLines="1"
-        android:textColor="@android:color/holo_orange_dark"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/holo_orange_dark" />
 
     <TextView
         android:id="@+id/txt_itemexpense_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/img_itemexpense_pic"
         android:layout_alignParentBottom="true"
-        android:maxLines="1"
         android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/img_itemexpense_pic"
+        android:maxLines="1"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>
