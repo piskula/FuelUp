@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sk.piskula.fuelup.R;
-import sk.piskula.fuelup.business.VehicleService;
 import sk.piskula.fuelup.entity.Vehicle;
 
 /**
@@ -51,8 +50,13 @@ public class ListVehiclesAdapter extends RecyclerView.Adapter<ListVehiclesAdapte
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         Vehicle vehicle = mItems.get(position);
+
         holder.title.setText(vehicle.getName());
         holder.count.setText(vehicle.getVehicleMaker());
+        holder.thumbnail.setImageBitmap(vehicle.getPicture());
+        holder.overflow.setImageResource(context.getResources()
+                .getIdentifier("ic_type_" + vehicle.getType().getName().toLowerCase(),
+                        "drawable", context.getPackageName()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,8 +64,6 @@ public class ListVehiclesAdapter extends RecyclerView.Adapter<ListVehiclesAdapte
                 callback.onItemClick(v, mItems.get(position), position);
             }
         });
-        // loading album cover using Glide library
-        //Glide.with(mContext).load(vehicle.getThumbnail()).into(holder.thumbnail);
     }
 
     @Override
@@ -88,7 +90,7 @@ public class ListVehiclesAdapter extends RecyclerView.Adapter<ListVehiclesAdapte
             title = view.findViewById(R.id.vehicle_item_title);
             count = view.findViewById(R.id.vehicle_item_count);
             thumbnail = view.findViewById(R.id.vehicle_item_thumbnail);
-            overflow = view.findViewById(R.id.vehicle_item_overflow);
+            overflow = view.findViewById(R.id.vehicle_item_vehicleType);
         }
     }
 
