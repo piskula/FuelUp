@@ -105,6 +105,10 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         DecimalFormat formatter = BigDecimalFormatter.getCommonFormat();
 
         binding.fuelConsumption.setValue(formatter.format(data.getAvgConsumption()));
+        binding.priceTotal.setValue(formatter.format(data.getTotalPrice()));
+        binding.priceTotalFuel.setValue(formatter.format(data.getTotalPriceFillUps()));
+        binding.priceTotalExpense.setValue(formatter.format(data.getTotalPriceExpenses()));
+
         binding.pricePerDistance.setValue(formatter.format(data.getTotalPricePerDistance()));
     }
 

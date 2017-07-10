@@ -3,32 +3,55 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="vehicle"
             type="sk.piskula.fuelup.entity.Vehicle" />
+
         <variable
             name="currency"
             type="java.lang.String" />
     </data>
 
-        <LinearLayout
+    <LinearLayout
+        style="@style/StatisticsItemDetailLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <sk.piskula.fuelup.view.StatisticsDetailItem
+            android:id="@+id/fuel_consumption"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            style="@style/StatisticsItemDetailLayout">
+            android:layout_height="?android:attr/listPreferredItemHeight"
+            app:name="@string/statistics_avg_consumption" />
 
-            <sk.piskula.fuelup.view.StatisticsDetailItem
-                android:id="@+id/fuel_consumption"
-                android:layout_width="match_parent"
-                android:layout_height="?android:attr/listPreferredItemHeight"
-                app:name="@string/statistics_avg_consumption" />
+        <sk.piskula.fuelup.view.StatisticsDetailItem
+            android:id="@+id/price_total"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/listPreferredItemHeight"
+            app:name="@string/statistics_price_total"
+            app:unit="@{currency}" />
 
-            <sk.piskula.fuelup.view.StatisticsDetailItem
-                android:id="@+id/price_per_distance"
-                android:layout_width="match_parent"
-                android:layout_height="?android:attr/listPreferredItemHeight"
-                app:name="@{@string/statistics_price_per_distance(vehicle.getUnit().toString())}"
-                app:unit="@{currency}"/>
-        </LinearLayout>
+        <sk.piskula.fuelup.view.StatisticsDetailItem
+            android:id="@+id/price_total_fuel"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/listPreferredItemHeight"
+            app:name="@string/statistics_price_total_fuel"
+            app:unit="@{currency}" />
+
+        <sk.piskula.fuelup.view.StatisticsDetailItem
+            android:id="@+id/price_total_expense"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/listPreferredItemHeight"
+            app:name="@string/statistics_price_total_expense"
+            app:unit="@{currency}" />
+
+        <sk.piskula.fuelup.view.StatisticsDetailItem
+            android:id="@+id/price_per_distance"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/listPreferredItemHeight"
+            app:name="@{@string/statistics_price_per_distance(vehicle.getUnit().toString())}"
+            app:unit="@{currency}" />
+    </LinearLayout>
 
 </layout>

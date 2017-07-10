@@ -135,6 +135,9 @@
     <string name="kilometres">kilometres</string>
 
     <string name="statistics_avg_consumption">Average Fuel Consumption</string>
+    <string name="statistics_price_total">Total price</string>
+    <string name="statistics_price_total_fuel">Total price fuel</string>
+    <string name="statistics_price_total_expense">Total price expense</string>
     <string name="statistics_price_per_distance">Price per %s</string>
 
 

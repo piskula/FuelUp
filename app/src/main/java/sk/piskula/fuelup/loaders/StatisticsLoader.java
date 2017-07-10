@@ -4,7 +4,6 @@ import android.content.Context;
 
 import java.math.BigDecimal;
 
-import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.business.StatisticsService;
 import sk.piskula.fuelup.entity.dto.StatisticsDTO;
 
@@ -37,8 +36,11 @@ public class StatisticsLoader extends FuelUpAbstractAsyncLoader<StatisticsDTO> {
         StatisticsDTO dto = new StatisticsDTO();
 
         dto.setAvgConsumption(statisticsService.getAverageConsumptionOfVehicle(vehicleId));
-        dto.setTotalPricePerDistance(new BigDecimal(10.5));
+        dto.setTotalPriceFillUps(statisticsService.getTotalPriceFillUps(vehicleId));
+        dto.setTotalPriceExpenses(statisticsService.getTotalPriceExpenses(vehicleId));
+        dto.setTotalPrice(dto.getTotalPriceFillUps().add(dto.getTotalPriceExpenses()));
 
+        dto.setTotalPricePerDistance(new BigDecimal("0.12"));
         return dto;
     }
 }
