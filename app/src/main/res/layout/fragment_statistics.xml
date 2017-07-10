@@ -6,6 +6,9 @@
         <variable
             name="vehicle"
             type="sk.piskula.fuelup.entity.Vehicle" />
+        <variable
+            name="currency"
+            type="java.lang.String" />
     </data>
 
         <LinearLayout
@@ -24,7 +27,8 @@
                 android:id="@+id/price_per_distance"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/listPreferredItemHeight"
-                app:name="@{@string/statistics_price_per_distance(vehicle.getUnit().toString())}" />
+                app:name="@{@string/statistics_price_per_distance(vehicle.getUnit().toString())}"
+                app:unit="@{currency}"/>
         </LinearLayout>
 
 </layout>
