@@ -30,7 +30,7 @@ import sk.piskula.fuelup.screens.edit.EditVehicleActivity;
  * @author Martin Styk
  * @version 17.6.2017
  */
-public class VehicleTabbedDetailActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, DeleteDialog.Callback {
+public class VehicleTabbedDetailActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = VehicleTabbedDetailActivity.class.getSimpleName();
 
@@ -92,13 +92,6 @@ public class VehicleTabbedDetailActivity extends AppCompatActivity implements Bo
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.btn_vehicle_remove:
-                DeleteDialog.newInstance(
-                        getString(R.string.delete_vehicle_dialog_title, vehicle.getName()),
-                        getString(R.string.delete_vehicle_dialog_message, vehicle.getName()),
-                        R.drawable.tow)
-                        .show(getSupportFragmentManager(), DeleteDialog.class.getSimpleName());
-                return true;
             case R.id.btn_vehicle_update:
                 Intent i = new Intent(this, EditVehicleActivity.class).putExtra(VEHICLE_TO_FRAGMENT, vehicle);
                 startActivityForResult(i, UPDATE_VEHICLE_REQUEST);
@@ -137,26 +130,5 @@ public class VehicleTabbedDetailActivity extends AppCompatActivity implements Bo
         if (requestCode == UPDATE_VEHICLE_REQUEST && resultCode == RESULT_OK) {
             vehicle = new VehicleService(this).find(vehicle.getId());
         }
-    }
-
-    @Override
-    public void onDeleteDialogPositiveClick(DeleteDialog dialog) {
-        VehicleService vehicleService = new VehicleService(VehicleTabbedDetailActivity.this);
-        ServiceResult result = vehicleService.delete(vehicle);
-
-        if (ServiceResult.SUCCESS.equals(result)) {
-            Toast.makeText(getApplicationContext(), getString(R.string.delete_vehicle_success, vehicle.getName()), Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(getApplicationContext(), R.string.delete_vehicle_fail, Toast.LENGTH_LONG).show();
-        }
-
-        // close detail activity when we delete vehicle
-        dialog.dismiss();
-        finish();
-    }
-
-    @Override
-    public void onDeleteDialogNegativeClick(DeleteDialog dialog) {
-        dialog.dismiss();
     }
 }

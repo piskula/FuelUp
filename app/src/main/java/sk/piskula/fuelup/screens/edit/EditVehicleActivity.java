@@ -25,7 +25,9 @@ import sk.piskula.fuelup.business.ServiceResult;
 import sk.piskula.fuelup.business.VehicleService;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.VehicleType;
+import sk.piskula.fuelup.screens.VehicleListActivity;
 import sk.piskula.fuelup.screens.VehicleTabbedDetailActivity;
+import sk.piskula.fuelup.screens.dialog.DeleteDialog;
 import sk.piskula.fuelup.screens.dialog.ImageChooserDialog;
 import sk.piskula.fuelup.util.ImageUtils;
 
@@ -37,7 +39,7 @@ import static sk.piskula.fuelup.screens.edit.AddVehicleActivity.STORAGE_PERMISSI
  * @author Ondrej Oravcok
  * @version 21.6.2017
  */
-public class EditVehicleActivity extends AppCompatActivity implements ImageChooserDialog.Callback, MenuItem.OnMenuItemClickListener {
+public class EditVehicleActivity extends AppCompatActivity implements ImageChooserDialog.Callback, MenuItem.OnMenuItemClickListener, DeleteDialog.Callback {
 
     public static final String TAG = EditVehicleActivity.class.getSimpleName();
 
@@ -86,7 +88,7 @@ public class EditVehicleActivity extends AppCompatActivity implements ImageChoos
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem actionViewItem = menu.findItem(R.id.btn_save_edit_create);
+        MenuItem actionViewItem = menu.findItem(R.id.btn_removeVehicle_bar);
         actionViewItem.setTitle(getString(R.string.update));
         actionViewItem.setOnMenuItemClickListener(this);
         return super.onPrepareOptionsMenu(menu);
@@ -94,8 +96,7 @@ public class EditVehicleActivity extends AppCompatActivity implements ImageChoos
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
-        saveVehicle();
-        return true;
+        return deleteVehicle();
     }
 
     private void populateFields() {
@@ -151,6 +152,15 @@ public class EditVehicleActivity extends AppCompatActivity implements ImageChoos
         Snackbar.make(findViewById(android.R.id.content), R.string.delete_vehicle_photo, Snackbar.LENGTH_SHORT).show();
     }
 
+    private boolean deleteVehicle() {
+        DeleteDialog.newInstance(
+                getString(R.string.delete_vehicle_dialog_title, vehicle.getName()),
+                getString(R.string.delete_vehicle_dialog_message, vehicle.getName()),
+                R.drawable.tow)
+                .show(getSupportFragmentManager(), DeleteDialog.class.getSimpleName());
+        return true;
+    }
+
     private void saveVehicle() {
         String name = txtName.getText().toString();
         String vehicleManufacturer = txtManufacturer.getText().toString();
@@ -196,5 +206,28 @@ public class EditVehicleActivity extends AppCompatActivity implements ImageChoos
             i++;
         }
         return i;
+    }
+
+    @Override
+    public void onDeleteDialogPositiveClick(DeleteDialog deleteDialog) {
+        deleteDialog.dismiss();
+
+        VehicleService vehicleService = new VehicleService(EditVehicleActivity.this);
+        ServiceResult result = vehicleService.delete(vehicle);
+
+        if (ServiceResult.SUCCESS.equals(result)) {
+            Toast.makeText(getApplicationContext(), getString(R.string.delete_vehicle_success, vehicle.getName()), Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), R.string.delete_vehicle_fail, Toast.LENGTH_LONG).show();
+        }
+
+        Intent intent = new Intent(this, VehicleListActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onDeleteDialogNegativeClick(DeleteDialog deleteDialog) {
+        deleteDialog.dismiss();
     }
 }
