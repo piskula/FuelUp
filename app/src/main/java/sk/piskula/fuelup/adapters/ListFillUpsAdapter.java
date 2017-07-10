@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.FillUp;
+import sk.piskula.fuelup.entity.util.DateUtil;
 
 /**
  * Created by Martin Styk on 19.06.2017.
@@ -49,12 +51,9 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
             holder.txtDistanceFromLastFillUp.setText(currentItem.getDistanceFromLastFillUp().toString());
             holder.txtDriven.setText(currentItem.getVehicle().getUnit().toString());
             holder.txtConsumptionSymbol.setText(context.getString(R.string.units_litreper100) + currentItem.getVehicle().getUnit().toString());
-
-            if (currentItem.isFullFillUp()) {
-                holder.txtIsFullFillUp.setText(R.string.listFillups_isFull);
-            } else {
-                holder.txtIsFullFillUp.setText(R.string.listFillUps_isNotFull);
-            }
+            holder.txtDate.setText(DateUtil.getDateLocalized(currentItem.getDate()));
+            holder.imgFullnessFillUpSymbol.setImageResource(context.getResources().getIdentifier(
+                    currentItem.isFullFillUp() ? "ic_gasolinedrop_full" : "ic_gasolinedrop_empty", "drawable", context.getPackageName()));
 
             String currency = " " + currentItem.getVehicle().getCurrencySymbol(this.context);
             holder.txtPriceTotalSymbol.setText(" " + currency);
@@ -108,7 +107,7 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
         final View mView;
 
         TextView txtDistanceFromLastFillUp;
-        TextView txtIsFullFillUp;
+        TextView txtDate;
         TextView txtFuelVolume;
         TextView txtPriceTotal;
         TextView txtPricePerLitre;
@@ -118,12 +117,13 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
         TextView txtDriven;
         TextView txtPricePerLitreSymbol;
         TextView txtPriceTotalSymbol;
+        ImageView imgFullnessFillUpSymbol;
 
         ViewHolder(View v) {
             super(v);
             mView = v;
             txtDistanceFromLastFillUp = v.findViewById(R.id.txt_itemfillup_distance);
-            txtIsFullFillUp = v.findViewById(R.id.txt_itemfillup_isfullfillup);
+            txtDate = v.findViewById(R.id.txt_itemfillup_date);
             txtFuelVolume = v.findViewById(R.id.txt_itemfillup_fuel_volume);
             txtPriceTotal = v.findViewById(R.id.txt_itemfillup_price_total);
             txtPricePerLitre = v.findViewById(R.id.txt_itemfillup_price_per_litre);
@@ -133,6 +133,7 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
             txtDriven = v.findViewById(R.id.txt_itemfillup_driven);
             txtPricePerLitreSymbol = v.findViewById(R.id.txt_itemfillup_price_per_liter_symbol);
             txtPriceTotalSymbol = v.findViewById(R.id.txt_itemfillup_price_total_symbol);
+            imgFullnessFillUpSymbol = v.findViewById(R.id.img_itemfillup_pump);
         }
 
     }
