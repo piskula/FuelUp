@@ -9,9 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/card_margin"
+        android:layout_margin="@dimen/vehicleItem_margin"
         android:elevation="3dp"
-        card_view:cardCornerRadius="@dimen/card_album_radius">
+        card_view:cardCornerRadius="@dimen/vehicleItem_radius">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             <ImageView
                 android:id="@+id/vehicle_item_thumbnail"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/album_cover_height"
+                android:layout_height="@dimen/vehicleItem_pic_height"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop" />
@@ -30,21 +30,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/vehicle_item_thumbnail"
-                android:paddingLeft="@dimen/album_title_padding"
-                android:paddingRight="@dimen/album_title_padding"
-                android:paddingTop="@dimen/album_title_padding"
+                android:paddingLeft="@dimen/vehicleItem_title_padding"
+                android:paddingRight="@dimen/vehicleItem_title_padding"
+                android:paddingTop="@dimen/vehicleItem_title_padding"
                 android:textColor="@color/colorAppOrange"
-                android:textSize="@dimen/album_title" />
+                android:textSize="@dimen/vehicleItem_title_size" />
 
             <TextView
                 android:id="@+id/vehicle_item_count"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/vehicle_item_title"
-                android:paddingBottom="@dimen/songs_count_padding_bottom"
-                android:paddingLeft="@dimen/album_title_padding"
-                android:paddingRight="@dimen/album_title_padding"
-                android:textSize="@dimen/songs_count" />
+                android:paddingBottom="@dimen/vehicleItem_maker_paddingBottom"
+                android:paddingLeft="@dimen/vehicleItem_title_padding"
+                android:paddingRight="@dimen/vehicleItem_title_padding"
+                android:textSize="@dimen/vehicleItem_subtitle_size" />
 
             <ImageView
                 android:id="@+id/vehicle_item_vehicleType"
