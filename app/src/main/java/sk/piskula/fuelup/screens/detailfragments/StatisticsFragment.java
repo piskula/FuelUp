@@ -34,6 +34,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FragmentStatisticsBinding binding = FragmentStatisticsBinding.inflate(inflater);
 
         args = getArguments();
         if (args != null) {
@@ -48,7 +49,8 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         floatingActionButton.setImageResource(android.R.drawable.ic_input_get);
         floatingActionButton.setOnClickListener(this);
 
-        FragmentStatisticsBinding binding = FragmentStatisticsBinding.inflate(inflater);
+
+        binding.setVehicle(vehicle);
 
         //TODO add more fields
         setFuelConsumption(binding);
@@ -58,15 +60,13 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
     }
 
     private void setFuelConsumption(FragmentStatisticsBinding binding) {
-        binding.sFuelConsumption.fieldName.setText("Average Fuel Consumption");
-        binding.sFuelConsumption.fieldValue.setText(String.valueOf(fillUpService.getAverageConsumptionOfVehicle(vehicle.getId())));
-        binding.sFuelConsumption.fieldUnit.setText("\u2113/" + vehicle.getUnit().toString());
+        binding.fuelConsumption.setValue(String.valueOf(fillUpService.getAverageConsumptionOfVehicle(vehicle.getId())));
+        binding.fuelConsumption.setUnit("\u2113/" + vehicle.getUnit().toString());
     }
 
     private void setPricePerDistance(FragmentStatisticsBinding binding) {
-        binding.sPricePerDistance.fieldName.setText("Price per " + vehicle.getUnit().toString());
-        binding.sPricePerDistance.fieldValue.setText("0,45");
-        binding.sPricePerDistance.fieldUnit.setText(vehicle.getCurrencySymbol(getActivity()));
+        binding.pricePerDistance.setValue("0,45");
+        binding.pricePerDistance.setUnit(vehicle.getCurrencySymbol(getActivity()));
     }
 
     @Override

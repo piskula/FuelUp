@@ -1,23 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    <data>
+        <variable
+            name="vehicle"
+            type="sk.piskula.fuelup.entity.Vehicle" />
+    </data>
 
-        <include
-            android:id="@+id/s_fuelConsumption"
-            layout="@layout/item_statistic" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            style="@style/StatisticsItemDetailLayout">
 
-        <include
-            android:id="@+id/s_pricePerDistance"
-            layout="@layout/item_statistic" />
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/fuel_consumption"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_avg_consumption" />
 
-    </LinearLayout>
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/price_per_distance"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@{@string/statistics_price_per_distance(vehicle.getUnit().toString())}" />
+        </LinearLayout>
 
-</FrameLayout>
 </layout>

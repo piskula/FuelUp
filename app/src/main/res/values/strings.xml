@@ -134,6 +134,10 @@
     <string name="miles">miles</string>
     <string name="kilometres">kilometres</string>
 
+    <string name="statistics_avg_consumption">Average Fuel Consumption</string>
+    <string name="statistics_price_per_distance">Price per %s</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

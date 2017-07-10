@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="statisticsDetailItemViewStyle">@style/StatisticsItemDetail</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -38,5 +39,12 @@
         <item name="android:background">@drawable/selector_btn_warning</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
-
+    <style name="StatisticsItemDetailLayout"  parent="Widget.AppCompat.ListView">
+        <item name="android:divider">?android:attr/listDivider</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:showDividers">middle</item>
+    </style>
+    <style name="StatisticsItemDetail"  parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:padding">@dimen/activity_horizontal_margin</item>
+    </style>
 </resources>

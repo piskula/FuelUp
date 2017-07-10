@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="StatisticsDetailItem">
+        <attr name="name" format="string" localization="suggested" />
+        <attr name="value" format="string" localization="suggested" />
+        <attr name="unit" format="string" localization="suggested" />
+    </declare-styleable>
+    <declare-styleable name="StatisticsDetailItemViewStyle">
+        <attr name="statisticsDetailItemViewStyle" format="reference"/>
+    </declare-styleable>
+</resources>
