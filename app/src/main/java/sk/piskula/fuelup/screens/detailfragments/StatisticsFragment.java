@@ -94,22 +94,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onLoadFinished(Loader<StatisticsDTO> loader, StatisticsDTO data) {
-        DecimalFormat formatter = BigDecimalFormatter.getCommonFormat();
-
-        binding.fuelConsumption.setValue(formatter.format(data.getAvgConsumption()));
-
-        binding.distanceDrivenTotal.setValue(String.valueOf(data.getTotalDrivenDistance()));
-
-        binding.fillUpsNumberTotal.setValue(String.valueOf(data.getTotalNumberFillUps()));
-        binding.expensesNumberTotal.setValue(String.valueOf(data.getTotalNumberExpenses()));
-
-        binding.priceTotal.setValue(formatter.format(data.getTotalPrice()));
-        binding.priceTotalFuel.setValue(formatter.format(data.getTotalPriceFillUps()));
-        binding.priceTotalExpense.setValue(formatter.format(data.getTotalPriceExpenses()));
-
-        binding.pricePerDistanceTotal.setValue(formatter.format(data.getTotalPricePerDistance()));
-        binding.pricePerDistanceFillUp.setValue(formatter.format(data.getFillUpPricePerDistance()));
-        binding.pricePerDistanceExpense.setValue(formatter.format(data.getExpensePricePerDistance()));
+        binding.setData(data);
     }
 
     @Override

@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="sk.piskula.fuelup.util.BigDecimalFormatter" />
+
         <variable
             name="vehicle"
             type="sk.piskula.fuelup.entity.Vehicle" />
@@ -11,6 +13,10 @@
         <variable
             name="currency"
             type="java.lang.String" />
+
+        <variable
+            name="data"
+            type="sk.piskula.fuelup.entity.dto.StatisticsDTO" />
     </data>
 
     <android.support.v4.widget.NestedScrollView
@@ -28,68 +34,87 @@
                 android:id="@+id/fuel_consumption"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/listPreferredItemHeight"
-                app:name="@string/statistics_avg_consumption" />
+                app:name="@string/statistics_avg_consumption"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.avgConsumption) : @string/na}" />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/distance_driven_total"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/listPreferredItemHeight"
                 app:name="@string/statistics_distance_driven_total"
-                app:unit="@{vehicle.getUnit().toString()}"/>
+                app:unit="@{vehicle.getUnit().toString()}"
+                app:value="@{data!= null ? String.valueOf(data.totalDrivenDistance) : @string/na}" />
+            />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/fill_ups_number_total"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/listPreferredItemHeight"
-                app:name="@string/statistics_fill_ups_number_total" />
+                app:name="@string/statistics_fill_ups_number_total"
+                app:value="@{data!= null ? String.valueOf(data.totalNumberFillUps) : @string/na}" />
+            />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/expenses_number_total"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/listPreferredItemHeight"
-                app:name="@string/statistics_expenses_number_total" />
+                app:name="@string/statistics_expenses_number_total"
+                app:value="@{data!= null ? String.valueOf(data.totalNumberExpenses) : @string/na}" />
+            />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/price_total"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/listPreferredItemHeight"
                 app:name="@string/statistics_price_total"
-                app:unit="@{currency}" />
+                app:unit="@{currency}"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.totalPrice) : @string/na}" />
+            />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/price_total_fuel"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/listPreferredItemHeight"
                 app:name="@string/statistics_price_total_fuel"
-                app:unit="@{currency}" />
+                app:unit="@{currency}"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.totalPriceFillUps) : @string/na}" />
+            />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/price_total_expense"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/listPreferredItemHeight"
                 app:name="@string/statistics_price_total_expense"
-                app:unit="@{currency}" />
+                app:unit="@{currency}"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.totalPriceExpenses) : @string/na}" />
+            />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/price_per_distance_total"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/listPreferredItemHeight"
                 app:name="@{@string/statistics_price_per_distance(vehicle.getUnit().toString())}"
-                app:unit="@{currency}" />
+                app:unit="@{currency}"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.totalPricePerDistance) : @string/na}" />
+            />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/price_per_distance_fill_up"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/listPreferredItemHeight"
                 app:name="@{@string/statistics_price_per_distance_fill_up(vehicle.getUnit().toString())}"
-                app:unit="@{currency}" />
+                app:unit="@{currency}"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.fillUpPricePerDistance) : @string/na}" />
+            />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/price_per_distance_expense"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/listPreferredItemHeight"
                 app:name="@{@string/statistics_price_per_distance_expense(vehicle.getUnit().toString())}"
-                app:unit="@{currency}" />
+                app:unit="@{currency}"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.expensePricePerDistance) : @string/na}" />
+            />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </layout>
