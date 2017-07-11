@@ -14,6 +14,7 @@ import java.text.ParseException;
 import sk.piskula.fuelup.data.DatabaseProvider;
 import sk.piskula.fuelup.entity.Expense;
 import sk.piskula.fuelup.entity.FillUp;
+import sk.piskula.fuelup.entity.dto.StatisticsDTO;
 
 /**
  * Created by Martin Styk on 23.06.2017.
@@ -31,6 +32,24 @@ public class StatisticsService {
         this.fillUpDao = DatabaseProvider.get(context).getFillUpDao();
         this.expenseDao = DatabaseProvider.get(context).getExpenseDao();
     }
+
+
+    public StatisticsDTO getAll(long vehicleId){
+        StatisticsDTO dto = new StatisticsDTO();
+
+        dto.setAvgConsumption(getAverageConsumptionOfVehicle(vehicleId));
+
+        //total price
+        dto.setTotalPriceFillUps(getTotalPriceFillUps(vehicleId));
+        dto.setTotalPriceExpenses(getTotalPriceExpenses(vehicleId));
+        dto.setTotalPrice(dto.getTotalPriceFillUps().add(dto.getTotalPriceExpenses()));
+        
+        //TODO
+        dto.setTotalPricePerDistance(new BigDecimal(10.5));
+        return dto;
+    }
+
+
 
     public BigDecimal getAverageConsumptionOfVehicle(long vehicleId) {
         try {

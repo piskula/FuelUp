@@ -2,8 +2,6 @@ package sk.piskula.fuelup.loaders;
 
 import android.content.Context;
 
-import java.math.BigDecimal;
-
 import sk.piskula.fuelup.business.StatisticsService;
 import sk.piskula.fuelup.entity.dto.StatisticsDTO;
 
@@ -26,22 +24,9 @@ public class StatisticsLoader extends FuelUpAbstractAsyncLoader<StatisticsDTO> {
         this.statisticsService = statisticsService;
     }
 
-    /**
-     * This is where the bulk of our work is done.  This function is
-     * called in a background thread and should generate a new set of
-     * data to be published by the loader.
-     */
     @Override
     public StatisticsDTO loadInBackground() {
-        StatisticsDTO dto = new StatisticsDTO();
-
-        dto.setAvgConsumption(statisticsService.getAverageConsumptionOfVehicle(vehicleId));
-        dto.setTotalPriceFillUps(statisticsService.getTotalPriceFillUps(vehicleId));
-        dto.setTotalPriceExpenses(statisticsService.getTotalPriceExpenses(vehicleId));
-        dto.setTotalPrice(dto.getTotalPriceFillUps().add(dto.getTotalPriceExpenses()));
-
-        dto.setTotalPricePerDistance(new BigDecimal("0.12"));
-        return dto;
+        return statisticsService.getAll(vehicleId);
     }
 }
 
