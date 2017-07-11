@@ -6,6 +6,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,17 +24,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.List;
+
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.adapters.ListVehiclesAdapter;
 import sk.piskula.fuelup.business.ServiceResult;
 import sk.piskula.fuelup.business.VehicleService;
 import sk.piskula.fuelup.entity.Vehicle;
+import sk.piskula.fuelup.loaders.VehicleLoader;
 import sk.piskula.fuelup.screens.dialog.CreateVehicleDialog;
 import sk.piskula.fuelup.screens.edit.AddVehicleActivity;
 
-public class VehicleListActivity extends AppCompatActivity
-        implements OnNavigationItemSelectedListener, ListVehiclesAdapter.Callback,
-        View.OnClickListener, CreateVehicleDialog.Callback {
+public class VehicleListActivity extends AppCompatActivity implements OnNavigationItemSelectedListener, ListVehiclesAdapter.Callback,
+        View.OnClickListener, CreateVehicleDialog.Callback, LoaderManager.LoaderCallbacks<List<Vehicle>> {
 
     private static final String TAG = "VehicleListActivity";
     public static final int VEHICLE_ACTION_REQUEST_CODE = 33;
@@ -81,6 +85,8 @@ public class VehicleListActivity extends AppCompatActivity
 
         addCarBtn = (FloatingActionButton) findViewById(R.id.fab_add_vehicle);
         addCarBtn.setOnClickListener(this);
+
+        getSupportLoaderManager().initLoader(VehicleLoader.ID, savedInstanceState, this);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -183,4 +189,18 @@ public class VehicleListActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public Loader<List<Vehicle>> onCreateLoader(int id, Bundle args) {
+        return new VehicleLoader(getApplicationContext(), new VehicleService(this));
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<Vehicle>> loader, List<Vehicle> data) {
+        adapter.dataChange(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<Vehicle>> loader) {
+        return;
+    }
 }
