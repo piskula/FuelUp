@@ -13,16 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.text.DecimalFormat;
-import java.util.List;
 
 import sk.piskula.fuelup.R;
-import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.business.StatisticsService;
 import sk.piskula.fuelup.databinding.FragmentStatisticsBinding;
-import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.dto.StatisticsDTO;
-import sk.piskula.fuelup.loaders.FillUpLoader;
 import sk.piskula.fuelup.loaders.StatisticsLoader;
 import sk.piskula.fuelup.screens.VehicleStatisticsActivity;
 import sk.piskula.fuelup.screens.VehicleTabbedDetailActivity;
@@ -36,7 +32,6 @@ import static sk.piskula.fuelup.screens.VehicleTabbedDetailActivity.VEHICLE_TO_F
  */
 public class StatisticsFragment extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<StatisticsDTO> {
 
-    private Bundle args;
     private Vehicle vehicle;
 
     private FragmentStatisticsBinding binding;
@@ -44,18 +39,15 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
     private CollapsingToolbarLayout appBarLayout;
     private FloatingActionButton floatingActionButton;
 
-    private FillUpService fillUpService;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = FragmentStatisticsBinding.inflate(inflater);
 
-        args = getArguments();
+        Bundle args = getArguments();
         if (args != null) {
             vehicle = args.getParcelable(VehicleTabbedDetailActivity.VEHICLE_TO_FRAGMENT);
         }
-        fillUpService = new FillUpService(getActivity());
 
         appBarLayout = getActivity().findViewById(R.id.toolbar_layout);
         appBarLayout.setTitle(getResources().getString(R.string.title_statistics));
