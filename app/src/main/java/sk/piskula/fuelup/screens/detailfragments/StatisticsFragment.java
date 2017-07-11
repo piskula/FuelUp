@@ -97,7 +97,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
     public Loader<StatisticsDTO> onCreateLoader(int id, Bundle args) {
         Vehicle vehicle = args.getParcelable(VEHICLE_TO_FRAGMENT);
         long vehicleId = vehicle.getId();
-        return new StatisticsLoader(getActivity(), vehicleId, new StatisticsService(getContext()));
+        return new StatisticsLoader(getActivity(), new StatisticsService(getContext(), vehicleId));
     }
 
     @Override
@@ -105,6 +105,12 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         DecimalFormat formatter = BigDecimalFormatter.getCommonFormat();
 
         binding.fuelConsumption.setValue(formatter.format(data.getAvgConsumption()));
+
+        binding.distanceDrivenTotal.setValue(String.valueOf(data.getTotalDrivenDistance()));
+
+        binding.fillUpsNumberTotal.setValue(String.valueOf(data.getTotalNumberFillUps()));
+        binding.expensesNumberTotal.setValue(String.valueOf(data.getTotalNumberExpenses()));
+
         binding.priceTotal.setValue(formatter.format(data.getTotalPrice()));
         binding.priceTotalFuel.setValue(formatter.format(data.getTotalPriceFillUps()));
         binding.priceTotalExpense.setValue(formatter.format(data.getTotalPriceExpenses()));

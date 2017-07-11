@@ -16,17 +16,15 @@ public class StatisticsLoader extends FuelUpAbstractAsyncLoader<StatisticsDTO> {
     public static final int ID = 3;
 
     private StatisticsService statisticsService;
-    private long vehicleId;
 
-    public StatisticsLoader(Context context, long vehicleId, StatisticsService statisticsService) {
+    public StatisticsLoader(Context context, StatisticsService statisticsService) {
         super(context);
-        this.vehicleId = vehicleId;
         this.statisticsService = statisticsService;
     }
 
     @Override
     public StatisticsDTO loadInBackground() {
-        return statisticsService.getAll(vehicleId);
+        return statisticsService.getAll();
     }
 }
 

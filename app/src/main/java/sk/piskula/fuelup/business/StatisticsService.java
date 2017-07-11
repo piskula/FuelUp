@@ -27,31 +27,40 @@ public class StatisticsService {
     private Dao<FillUp, Long> fillUpDao;
     private Dao<Expense, Long> expenseDao;
 
+    private long vehicleId;
 
-    public StatisticsService(Context context) {
+    public StatisticsService(Context context, long vehicleId) {
+        this.vehicleId = vehicleId;
         this.fillUpDao = DatabaseProvider.get(context).getFillUpDao();
         this.expenseDao = DatabaseProvider.get(context).getExpenseDao();
     }
 
 
-    public StatisticsDTO getAll(long vehicleId){
+    public StatisticsDTO getAll() {
         StatisticsDTO dto = new StatisticsDTO();
 
-        dto.setAvgConsumption(getAverageConsumptionOfVehicle(vehicleId));
+        //consumption
+        dto.setAvgConsumption(getAverageConsumptionOfVehicle());
+
+        //distance
+        dto.setTotalDrivenDistance(getTotalDrivenDistance());
+
+        //total numbers
+        dto.setTotalNumberFillUps(getTotalNumberFillUps());
+        dto.setTotalNumberExpenses(getTotalNumberExpenses());
 
         //total price
-        dto.setTotalPriceFillUps(getTotalPriceFillUps(vehicleId));
-        dto.setTotalPriceExpenses(getTotalPriceExpenses(vehicleId));
+        dto.setTotalPriceFillUps(getTotalPriceFillUps());
+        dto.setTotalPriceExpenses(getTotalPriceExpenses());
         dto.setTotalPrice(dto.getTotalPriceFillUps().add(dto.getTotalPriceExpenses()));
-        
+
         //TODO
         dto.setTotalPricePerDistance(new BigDecimal(10.5));
         return dto;
     }
 
 
-
-    public BigDecimal getAverageConsumptionOfVehicle(long vehicleId) {
+    public BigDecimal getAverageConsumptionOfVehicle() {
         try {
             GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT SUM(distance_from_last_fill_up * consumption) / SUM(distance_from_last_fill_up) FROM fill_ups WHERE consumption is not null and vehicle_id = " + vehicleId);
             return getBigDecimal(results);
@@ -63,7 +72,7 @@ public class StatisticsService {
         return BigDecimal.ZERO;
     }
 
-    public BigDecimal getTotalPriceFillUps(long vehicleId) {
+    public BigDecimal getTotalPriceFillUps() {
         try {
             GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT SUM(fuel_price_total) FROM fill_ups WHERE vehicle_id = " + vehicleId);
             return getBigDecimal(results);
@@ -75,7 +84,7 @@ public class StatisticsService {
         return BigDecimal.ZERO;
     }
 
-    public BigDecimal getTotalPriceExpenses(long vehicleId) {
+    public BigDecimal getTotalPriceExpenses() {
         try {
             GenericRawResults<String[]> results = expenseDao.queryRaw("SELECT SUM(price) FROM expenses WHERE vehicle_id = " + vehicleId);
             return getBigDecimal(results);
@@ -87,6 +96,34 @@ public class StatisticsService {
         return BigDecimal.ZERO;
     }
 
+    public int getTotalNumberFillUps() {
+        try {
+            return (int) fillUpDao.queryBuilder().where().eq("vehicle_id", vehicleId).countOf();
+        } catch (SQLException e) {
+            Log.e(TAG, e.toString(), e);
+        }
+        return 0;
+    }
+
+    public int getTotalNumberExpenses() {
+        try {
+            return (int) expenseDao.queryBuilder().where().eq("vehicle_id", vehicleId).countOf();
+        } catch (SQLException e) {
+            Log.e(TAG, e.toString(), e);
+        }
+        return 0;
+    }
+
+    public long getTotalDrivenDistance() {
+        try {
+            return fillUpDao.queryRawValue("SELECT SUM(distance_from_last_fill_up) FROM fill_ups WHERE vehicle_id = " + vehicleId);
+        } catch (SQLException e) {
+            Log.e(TAG, e.toString(), e);
+        }
+        return 0;
+    }
+
+
     private BigDecimal getBigDecimal(GenericRawResults<String[]> results) throws SQLException, ParseException {
         DecimalFormat f = new DecimalFormat();
         f.setParseBigDecimal(true);
@@ -97,5 +134,6 @@ public class StatisticsService {
             return BigDecimal.ZERO;
         }
     }
+
 }
 

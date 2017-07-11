@@ -18,6 +18,12 @@ public class StatisticsDTO {
 
     private BigDecimal totalPricePerDistance;
 
+    private long totalDrivenDistance;
+
+    private int totalNumberExpenses;
+
+    private int totalNumberFillUps;
+
     public BigDecimal getAvgConsumption() {
         return avgConsumption;
     }
@@ -56,5 +62,29 @@ public class StatisticsDTO {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public long getTotalDrivenDistance() {
+        return totalDrivenDistance;
+    }
+
+    public void setTotalDrivenDistance(long totalDrivenDistance) {
+        this.totalDrivenDistance = totalDrivenDistance;
+    }
+
+    public int getTotalNumberExpenses() {
+        return totalNumberExpenses;
+    }
+
+    public void setTotalNumberExpenses(int totalNumberExpenses) {
+        this.totalNumberExpenses = totalNumberExpenses;
+    }
+
+    public int getTotalNumberFillUps() {
+        return totalNumberFillUps;
+    }
+
+    public void setTotalNumberFillUps(int totalNumberFillUps) {
+        this.totalNumberFillUps = totalNumberFillUps;
     }
 }

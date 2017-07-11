@@ -31,6 +31,25 @@
                 app:name="@string/statistics_avg_consumption" />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/distance_driven_total"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_distance_driven_total"
+                app:unit="@{vehicle.getUnit().toString()}"/>
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/fill_ups_number_total"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_fill_ups_number_total" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/expenses_number_total"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_expenses_number_total" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/price_total"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/listPreferredItemHeight"
