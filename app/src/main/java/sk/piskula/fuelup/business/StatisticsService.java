@@ -55,9 +55,12 @@ public class StatisticsService {
         BigDecimal totalPrice = totalPriceExpenses.add(totalPriceFillUps);
 
         //total price per distance
-        BigDecimal totalPricePerDistance = totalPrice.divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP);
-        BigDecimal fillUpPricePerDistance = totalPriceFillUps.divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP);
-        BigDecimal expensePricePerDistance = totalPriceExpenses.divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal totalPricePerDistance = totalDrivenDistance > 0 ?
+                totalPrice.divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
+        BigDecimal fillUpPricePerDistance = totalDrivenDistance > 0 ?
+                totalPriceFillUps.divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
+        BigDecimal expensePricePerDistance = totalDrivenDistance > 0 ?
+                totalPriceExpenses.divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
 
         dto.setAvgConsumption(avgConsumption);
 
