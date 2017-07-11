@@ -16,7 +16,12 @@ public class StatisticsDTO {
 
     private BigDecimal totalPrice;
 
+    private BigDecimal fillUpPricePerDistance;
+
+    private BigDecimal expensePricePerDistance;
+
     private BigDecimal totalPricePerDistance;
+
 
     private long totalDrivenDistance;
 
@@ -86,5 +91,21 @@ public class StatisticsDTO {
 
     public void setTotalNumberFillUps(int totalNumberFillUps) {
         this.totalNumberFillUps = totalNumberFillUps;
+    }
+
+    public BigDecimal getFillUpPricePerDistance() {
+        return fillUpPricePerDistance;
+    }
+
+    public void setFillUpPricePerDistance(BigDecimal fillUpPricePerDistance) {
+        this.fillUpPricePerDistance = fillUpPricePerDistance;
+    }
+
+    public BigDecimal getExpensePricePerDistance() {
+        return expensePricePerDistance;
+    }
+
+    public void setExpensePricePerDistance(BigDecimal expensePricePerDistance) {
+        this.expensePricePerDistance = expensePricePerDistance;
     }
 }

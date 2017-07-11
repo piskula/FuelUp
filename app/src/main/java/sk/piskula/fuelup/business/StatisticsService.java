@@ -40,22 +40,40 @@ public class StatisticsService {
         StatisticsDTO dto = new StatisticsDTO();
 
         //consumption
-        dto.setAvgConsumption(getAverageConsumptionOfVehicle());
+        BigDecimal avgConsumption = getAverageConsumptionOfVehicle();
 
         //distance
-        dto.setTotalDrivenDistance(getTotalDrivenDistance());
+        long totalDrivenDistance = getTotalDrivenDistance();
 
         //total numbers
-        dto.setTotalNumberFillUps(getTotalNumberFillUps());
-        dto.setTotalNumberExpenses(getTotalNumberExpenses());
+        int totalNumberFillUps = getTotalNumberFillUps();
+        int totalNumberExpenses = getTotalNumberExpenses();
 
         //total price
-        dto.setTotalPriceFillUps(getTotalPriceFillUps());
-        dto.setTotalPriceExpenses(getTotalPriceExpenses());
+        BigDecimal totalPriceFillUps = getTotalPriceFillUps();
+        BigDecimal totalPriceExpenses = getTotalPriceExpenses();
+        BigDecimal totalPrice = totalPriceExpenses.add(totalPriceFillUps);
+
+        //total price per distance
+        BigDecimal totalPricePerDistance = totalPrice.divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal fillUpPricePerDistance = totalPriceFillUps.divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal expensePricePerDistance = totalPriceExpenses.divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP);
+
+        dto.setAvgConsumption(avgConsumption);
+
+        dto.setTotalDrivenDistance(totalDrivenDistance);
+
+        dto.setTotalNumberFillUps(totalNumberFillUps);
+        dto.setTotalNumberExpenses(totalNumberExpenses);
+
+        dto.setTotalPriceFillUps(totalPriceFillUps);
+        dto.setTotalPriceExpenses(totalPriceExpenses);
         dto.setTotalPrice(dto.getTotalPriceFillUps().add(dto.getTotalPriceExpenses()));
 
-        //TODO
-        dto.setTotalPricePerDistance(new BigDecimal(10.5));
+        dto.setTotalPricePerDistance(totalPricePerDistance);
+        dto.setExpensePricePerDistance(expensePricePerDistance);
+        dto.setFillUpPricePerDistance(fillUpPricePerDistance);
+
         return dto;
     }
 
@@ -121,6 +139,18 @@ public class StatisticsService {
             Log.e(TAG, e.toString(), e);
         }
         return 0;
+    }
+
+    public BigDecimal getTotalPricePerDistance() {
+        try {
+            GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT SUM(fuel_price_total) FROM fill_ups WHERE vehicle_id = " + vehicleId);
+            return getBigDecimal(results);
+        } catch (SQLException e1) {
+            Log.e(TAG, "Unexpected error during computing total price of all fill ups", e1);
+        } catch (ParseException e2) {
+            Log.e(TAG, "SQL return not parsable number.", e2);
+        }
+        return BigDecimal.ZERO;
     }
 
 

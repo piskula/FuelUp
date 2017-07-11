@@ -71,10 +71,24 @@
                 app:unit="@{currency}" />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
-                android:id="@+id/price_per_distance"
+                android:id="@+id/price_per_distance_total"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/listPreferredItemHeight"
                 app:name="@{@string/statistics_price_per_distance(vehicle.getUnit().toString())}"
+                app:unit="@{currency}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/price_per_distance_fill_up"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@{@string/statistics_price_per_distance_fill_up(vehicle.getUnit().toString())}"
+                app:unit="@{currency}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/price_per_distance_expense"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@{@string/statistics_price_per_distance_expense(vehicle.getUnit().toString())}"
                 app:unit="@{currency}" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

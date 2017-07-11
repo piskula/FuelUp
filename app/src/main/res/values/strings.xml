@@ -138,7 +138,9 @@
     <string name="statistics_price_total">Total price</string>
     <string name="statistics_price_total_fuel">Total price fuel</string>
     <string name="statistics_price_total_expense">Total price expense</string>
-    <string name="statistics_price_per_distance">Price per %s</string>
+    <string name="statistics_price_per_distance">Total price per %s</string>
+    <string name="statistics_price_per_distance_fill_up">Fill up price per %s</string>
+    <string name="statistics_price_per_distance_expense">Expense price per %s</string>
     <string name="statistics_distance_driven_total">Total tracked distance</string>
     <string name="statistics_fill_ups_number_total">Total fill ups</string>
     <string name="statistics_expenses_number_total">Total expenses</string>

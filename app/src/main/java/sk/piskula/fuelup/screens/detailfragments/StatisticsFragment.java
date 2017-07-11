@@ -107,7 +107,9 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         binding.priceTotalFuel.setValue(formatter.format(data.getTotalPriceFillUps()));
         binding.priceTotalExpense.setValue(formatter.format(data.getTotalPriceExpenses()));
 
-        binding.pricePerDistance.setValue(formatter.format(data.getTotalPricePerDistance()));
+        binding.pricePerDistanceTotal.setValue(formatter.format(data.getTotalPricePerDistance()));
+        binding.pricePerDistanceFillUp.setValue(formatter.format(data.getFillUpPricePerDistance()));
+        binding.pricePerDistanceExpense.setValue(formatter.format(data.getExpensePricePerDistance()));
     }
 
     @Override
