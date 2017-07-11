@@ -14,6 +14,7 @@ import java.util.List;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.Expense;
+import sk.piskula.fuelup.entity.util.CurrencyUtil;
 import sk.piskula.fuelup.entity.util.DateUtil;
 
 /**
@@ -49,11 +50,9 @@ public class ListExpensesAdapter extends RecyclerView.Adapter<ListExpensesAdapte
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         Expense currentItem = items.get(position);
         if (currentItem != null) {
-            DecimalFormat bddf = new DecimalFormat();
-
-            holder.txtPriceSymbol.setText(currentItem.getVehicle().getCurrencySymbol(this.context));
+            holder.txtPriceSymbol.setText("");  //TODO remove
             holder.txtInfo.setText(currentItem.getInfo());
-            holder.txtPrice.setText(bddf.format(currentItem.getPrice()));
+            holder.txtPrice.setText(CurrencyUtil.getPrice(currentItem.getVehicle().getCurrency(), currentItem.getPrice(), context));
             holder.txtDate.setText(DateUtil.getDateLocalized(currentItem.getDate()));
         }
 

@@ -10,11 +10,13 @@ import android.widget.TextView;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.FillUp;
+import sk.piskula.fuelup.entity.util.CurrencyUtil;
 import sk.piskula.fuelup.entity.util.DateUtil;
 
 /**
@@ -54,33 +56,27 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
             holder.txtDate.setText(DateUtil.getDateLocalized(currentItem.getDate()));
             holder.imgFullnessFillUpSymbol.setImageResource(context.getResources().getIdentifier(
                     currentItem.isFullFillUp() ? "ic_gasolinedrop_full" : "ic_gasolinedrop_empty", "drawable", context.getPackageName()));
-
-            String currency = " " + currentItem.getVehicle().getCurrencySymbol(this.context);
-            holder.txtPriceTotalSymbol.setText(" " + currency);
-            currency += "/" + context.getString(R.string.litre);
-            holder.txtPricePerLitreSymbol.setText(currency);
+            holder.txtPriceTotal.setText(CurrencyUtil.getPrice(
+                    currentItem.getVehicle().getCurrency(), currentItem.getFuelPriceTotal(), context));
+            holder.txtPricePerLitre.setText(CurrencyUtil.getPricePerLitre(
+                    currentItem.getVehicle().getCurrency(), currentItem.getFuelPricePerLitre(), context));
+            holder.txtPricePerLitreSymbol.setText("/" + context.getString(R.string.litre));
+            holder.txtPriceTotalSymbol.setText(""); //TODO remove
 
             DecimalFormat bddf = new DecimalFormat();
+            bddf.setGroupingUsed(false);
             bddf.setMaximumFractionDigits(2);
             bddf.setMinimumFractionDigits(0);
-            bddf.setGroupingUsed(false);
 
             holder.txtFuelVolume.setText(bddf.format(currentItem.getFuelVolume()));
 
-            bddf.setMinimumFractionDigits(2);
-            String priceTotal = bddf.format(currentItem.getFuelPriceTotal().setScale(2, BigDecimal.ROUND_DOWN));
-            holder.txtPriceTotal.setText(priceTotal);
-
-            bddf.setMaximumFractionDigits(3);
-            bddf.setMinimumFractionDigits(3);
-            holder.txtPricePerLitre.setText(bddf.format(currentItem.getFuelPricePerLitre()));
             if (currentItem.getFuelConsumption() != null) {
                 BigDecimal consumption = currentItem.getFuelConsumption();
                 bddf.setMinimumFractionDigits(2);
                 bddf.setMaximumFractionDigits(2);
                 holder.txtConsumption.setText(bddf.format(consumption));
             } else {
-                holder.txtConsumption.setText("N/A");
+                holder.txtConsumption.setText("-");
             }
         }
 
