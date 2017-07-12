@@ -9,12 +9,7 @@ import android.os.Parcelable;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Currency;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import sk.piskula.fuelup.entity.enums.DistanceUnit;
 import sk.piskula.fuelup.entity.util.CurrencyUtil;

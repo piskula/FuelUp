@@ -12,8 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.text.DecimalFormat;
-
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.business.StatisticsService;
 import sk.piskula.fuelup.databinding.FragmentStatisticsBinding;
@@ -22,7 +20,6 @@ import sk.piskula.fuelup.entity.dto.StatisticsDTO;
 import sk.piskula.fuelup.loaders.StatisticsLoader;
 import sk.piskula.fuelup.screens.VehicleStatisticsActivity;
 import sk.piskula.fuelup.screens.VehicleTabbedDetailActivity;
-import sk.piskula.fuelup.util.BigDecimalFormatter;
 
 import static sk.piskula.fuelup.screens.VehicleTabbedDetailActivity.VEHICLE_TO_FRAGMENT;
 

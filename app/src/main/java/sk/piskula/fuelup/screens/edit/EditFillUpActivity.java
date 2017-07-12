@@ -22,7 +22,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;

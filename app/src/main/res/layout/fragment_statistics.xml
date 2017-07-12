@@ -63,6 +63,16 @@
             />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/volume_total_fuel"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_volume_total_fuel"
+                app:value="@{data!= null ? String.valueOf(data.totalFuelVolume) : @string/na}"
+                app:unit="@string/litre"/>
+            />
+
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/price_total"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/listPreferredItemHeight"

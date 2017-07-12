@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 

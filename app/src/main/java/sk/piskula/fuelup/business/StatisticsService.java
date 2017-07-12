@@ -49,6 +49,8 @@ public class StatisticsService {
         int totalNumberFillUps = getTotalNumberFillUps();
         int totalNumberExpenses = getTotalNumberExpenses();
 
+        BigDecimal totalFuelVolume = getTotalFuelVolume();
+
         //total price
         BigDecimal totalPriceFillUps = getTotalPriceFillUps();
         BigDecimal totalPriceExpenses = getTotalPriceExpenses();
@@ -68,6 +70,8 @@ public class StatisticsService {
 
         dto.setTotalNumberFillUps(totalNumberFillUps);
         dto.setTotalNumberExpenses(totalNumberExpenses);
+
+        dto.setTotalFuelVolume(totalFuelVolume);
 
         dto.setTotalPriceFillUps(totalPriceFillUps);
         dto.setTotalPriceExpenses(totalPriceExpenses);
@@ -144,9 +148,9 @@ public class StatisticsService {
         return 0;
     }
 
-    public BigDecimal getTotalPricePerDistance() {
+    public BigDecimal getTotalFuelVolume() {
         try {
-            GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT SUM(fuel_price_total) FROM fill_ups WHERE vehicle_id = " + vehicleId);
+            GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT SUM(fuel_volume) FROM fill_ups WHERE vehicle_id = " + vehicleId);
             return getBigDecimal(results);
         } catch (SQLException e1) {
             Log.e(TAG, "Unexpected error during computing total price of all fill ups", e1);

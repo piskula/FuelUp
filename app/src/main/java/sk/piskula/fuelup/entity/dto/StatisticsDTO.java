@@ -16,6 +16,8 @@ public class StatisticsDTO {
 
     private BigDecimal totalPrice;
 
+    private BigDecimal totalFuelVolume;
+
     private BigDecimal fillUpPricePerDistance;
 
     private BigDecimal expensePricePerDistance;
@@ -51,6 +53,14 @@ public class StatisticsDTO {
 
     public void setTotalPriceFillUps(BigDecimal totalPriceFillUps) {
         this.totalPriceFillUps = totalPriceFillUps;
+    }
+
+    public BigDecimal getTotalFuelVolume() {
+        return totalFuelVolume;
+    }
+
+    public void setTotalFuelVolume(BigDecimal totalFuelVolume) {
+        this.totalFuelVolume = totalFuelVolume;
     }
 
     public BigDecimal getTotalPriceExpenses() {

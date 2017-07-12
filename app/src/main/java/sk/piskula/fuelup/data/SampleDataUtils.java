@@ -3,7 +3,6 @@ package sk.piskula.fuelup.data;
 import com.j256.ormlite.dao.Dao;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
