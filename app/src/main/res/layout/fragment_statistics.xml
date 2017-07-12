@@ -68,7 +68,7 @@
                 android:layout_height="?android:attr/listPreferredItemHeight"
                 app:name="@string/statistics_volume_total_fuel"
                 app:unit="@string/litre"
-                app:value="@{data!= null ? String.valueOf(data.totalFuelVolume) : @string/na}" />
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.totalFuelVolume) : @string/na}" />
             />
 
 
