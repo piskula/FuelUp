@@ -45,6 +45,7 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
 
     private EditText mTxtDistance;
     private EditText mTxtFuelVolume;
+    private TextView mTxtFuelVolumeUnit;
     private EditText mTxtPrice;
     private EditText mTxtInfo;
     private TextView mTxtDate;
@@ -84,6 +85,7 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         super.onStart();
 
         mTxtDistance.setText(mSelectedFillUp.getDistanceFromLastFillUp().toString());
+        mTxtFuelVolumeUnit.setText(getString(R.string.litre));
         mTxtFuelVolume.setText(NumberFormat.getNumberInstance().format(mSelectedFillUp.getFuelVolume()));
         if (priceMode == SwitchPrice.perLitre) {
             mTxtPrice.setText(mSelectedFillUp.getFuelPricePerLitre().setScale(2, BigDecimal.ROUND_HALF_UP).toString());
@@ -112,6 +114,7 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         mTxtDistanceUnit = (TextView) findViewById(R.id.txt_addfillup_distance_unit);
         mTxtInputDistance = (TextInputLayout) findViewById(R.id.txt_input_addfillup_distance_from_last_fillup_adding);
         mTxtFuelVolume = (EditText) findViewById(R.id.txt_addfillup_fuel_volume);
+        mTxtFuelVolumeUnit = (TextView) findViewById(R.id.txt_addfillup_volumeUnit);
         mTxtPrice = (EditText) findViewById(R.id.txt_addfillup_price);
         mTxtCurrencySymbol = (TextView) findViewById(R.id.txt_addfillup_currency);
         mTxtInputPrice = (TextInputLayout) findViewById(R.id.txt_input_addfillup_price);

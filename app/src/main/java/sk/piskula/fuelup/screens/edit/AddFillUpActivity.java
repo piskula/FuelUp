@@ -39,6 +39,7 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
 
     private EditText mTxtDistance;
     private EditText mTxtFuelVolume;
+    private TextView mTxtFuelVolumeUnit;
     private EditText mTxtPrice;
     private EditText mTxtInfo;
     private TextView mTxtDate;
@@ -77,6 +78,7 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
         setFillUpDate(Calendar.getInstance());
         mTxtCurrencySymbol.setText(mSelectedCar.getCurrencySymbol(this));
         mTxtDistanceUnit.setText(mSelectedCar.getUnit().toString());
+        mTxtFuelVolumeUnit.setText(getString(R.string.litre));
     }
 
     private void initViews() {
@@ -85,6 +87,7 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
         mTxtDistanceUnit = (TextView) findViewById(R.id.txt_addfillup_distance_unit);
         mTxtInputDistance = (TextInputLayout) findViewById(R.id.txt_input_addfillup_distance_from_last_fillup_adding);
         mTxtFuelVolume = (EditText) findViewById(R.id.txt_addfillup_fuel_volume);
+        mTxtFuelVolumeUnit = (TextView) findViewById(R.id.txt_addfillup_volumeUnit);
         mTxtPrice = (EditText) findViewById(R.id.txt_addfillup_price);
         mTxtCurrencySymbol = (TextView) findViewById(R.id.txt_addfillup_currency);
         mTxtInputPrice = (TextInputLayout) findViewById(R.id.txt_input_addfillup_price);

@@ -48,9 +48,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingTop="10dp"
+                android:paddingTop="@dimen/edit_fillup_expense_unit_paddingTop"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="@dimen/edit_fillup_expense_unit_fontSize" />
 
         </LinearLayout>
 
