@@ -153,6 +153,15 @@
                 app:value="@{data!= null ? String.valueOf(data.avgFuelVolumePerFillUp) : @string/na}" />
             />
 
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/tracking_period"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_tracking_period"
+                app:unit="@string/day"
+                app:value="@{data!= null ? String.valueOf(data.trackingDays) : @string/na}" />
+            />
+
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </layout>

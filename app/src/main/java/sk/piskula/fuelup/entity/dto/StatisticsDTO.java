@@ -37,6 +37,8 @@ public class StatisticsDTO {
 
     private BigDecimal avgFuelPricePerFillUp;
 
+    private long trackingDays;
+
 
     public BigDecimal getAvgConsumption() {
         return avgConsumption;
@@ -148,5 +150,13 @@ public class StatisticsDTO {
 
     public void setAvgFuelPricePerFillUp(BigDecimal avgFuelPricePerFillUp) {
         this.avgFuelPricePerFillUp = avgFuelPricePerFillUp;
+    }
+
+    public long getTrackingDays() {
+        return trackingDays;
+    }
+
+    public void setTrackingDays(long trackingDays) {
+        this.trackingDays = trackingDays;
     }
 }

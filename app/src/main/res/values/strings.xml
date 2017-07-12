@@ -122,6 +122,7 @@
     <string name="listFillUps_isNotFull">not full</string>
     <string name="listFillups_isFull">full</string>
     <string name="na">N/A</string>
+    <string name="day">days</string> <!--TODO check singular plural support -->
 
     <string name="units_kilometres">km</string>
     <string name="units_miles">mi</string>
@@ -149,6 +150,7 @@
     <string name="statistics_avg_fuel_price_per_litre">Average fuel price per litre</string>
     <string name="statistics_avg_fuel_volume_per_fill_up">Average fuel volume per fill up</string>
     <string name="statistics_avg_fuel_price_per_fill_up">Average fuel cost per fill up</string>
+    <string name="statistics_tracking_period">Tracking period</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

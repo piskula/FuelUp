@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import sk.piskula.fuelup.data.DatabaseProvider;
 import sk.piskula.fuelup.entity.Expense;
@@ -73,6 +75,9 @@ public class StatisticsService {
         BigDecimal avgFuelPricePerFillUp = totalNumberFillUps > 0 ?
                 totalPriceFillUps.divide(BigDecimal.valueOf(totalNumberFillUps), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
 
+        // average per time
+        long trackingDays = getTrackingDays();
+
         dto.setAvgConsumption(avgConsumption);
 
         dto.setTotalDrivenDistance(totalDrivenDistance);
@@ -94,9 +99,10 @@ public class StatisticsService {
         dto.setAvgFuelVolumePerFillUp(avgFuelVolumePerFillUp);
         dto.setAvgFuelPricePerFillUp(avgFuelPricePerFillUp);
 
+        dto.setTrackingDays(trackingDays);
+
         return dto;
     }
-
 
     public BigDecimal getAverageConsumptionOfVehicle() {
         try {
@@ -173,7 +179,33 @@ public class StatisticsService {
         return BigDecimal.ZERO;
     }
 
+    public long getTrackingDays() {
 
+        try {
+            //TODO check possibility to use min(date)
+            GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT id FROM fill_ups WHERE vehicle_id = " + vehicleId + " ORDER BY date LIMIT 1");
+            long firstEntryId;
+            String[] firstResult = results.getFirstResult();
+            if ( firstResult != null) {
+                if (firstResult.length > 0 && firstResult[0] != null) {
+                    firstEntryId = Long.valueOf(firstResult[0]);
+                    FillUp fillUp = fillUpDao.queryBuilder().where().eq("id", firstEntryId).queryForFirst();
+
+                    long durationMillis = new Date().getTime() - fillUp.getDate().getTime();
+
+                    return TimeUnit.MILLISECONDS.toDays(durationMillis);
+                } else {
+                    return 0;
+                }
+            } else {
+                return 0;
+            }
+        } catch (SQLException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+            return 0;
+        }
+    }
+    
     private BigDecimal getBigDecimal(GenericRawResults<String[]> results) throws SQLException, ParseException {
         DecimalFormat f = new DecimalFormat();
         f.setParseBigDecimal(true);
