@@ -46,7 +46,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:minWidth="120dp"
+                android:minWidth="@dimen/edit_fillup_switchButton_min_width"
                 android:textOff="@string/add_fillup_distanceFromLast_short"
                 android:textOn="@string/add_fillup_distanceTotal_short" />
 
@@ -90,7 +90,7 @@
                 android:layout_weight="4"
                 android:textOff="@string/add_fillup_pricePerLitre_short"
                 android:textOn="@string/add_fillup_priceTotal_short"
-                android:minWidth="120dp"/>
+                android:minWidth="@dimen/edit_fillup_switchButton_min_width"/>
         </LinearLayout>
 
         <LinearLayout
@@ -127,7 +127,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:minWidth="120dp"
+                android:minWidth="@dimen/edit_fillup_switchButton_min_width"
                 android:checked="true"
                 android:text="@string/add_fillup_full_fillup" />
         </LinearLayout>

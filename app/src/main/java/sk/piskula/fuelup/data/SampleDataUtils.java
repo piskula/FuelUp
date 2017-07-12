@@ -7,11 +7,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import sk.piskula.fuelup.business.ExpenseService;
 import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.entity.Expense;
 import sk.piskula.fuelup.entity.FillUp;
@@ -46,10 +49,12 @@ public class SampleDataUtils {
     public static List<Vehicle> addVehicles(Dao<Vehicle, Long> vehicleDao, List<VehicleType> types) throws SQLException {
         List<Vehicle> vehicles = new ArrayList<>();
 
-        vehicleDao.create(vehicle("Sprinterik", "Mercedes", DistanceUnit.mi, types.get(3), 227880L, Currency.getInstance("CZK")));
-        vehicles.add(vehicleDao.queryBuilder().where().eq("name", "Sprinterik").query().get(0));
-        vehicleDao.create(vehicle("Civic", "Honda", DistanceUnit.km, types.get(1), 227880L, Currency.getInstance("EUR")));
-        vehicles.add(vehicleDao.queryBuilder().where().eq("name", "Civic").query().get(0));
+        vehicleDao.create(vehicle("Amateur vehicle", "British sports car", DistanceUnit.mi, types.get(7), 227880L, Currency.getInstance("GBP")));
+        vehicles.add(vehicleDao.queryBuilder().where().eq("name", "Amateur vehicle").query().get(0));
+        vehicleDao.create(vehicle("LongWay driver Pro", "Very massive asphalt destroyer (CZ)", DistanceUnit.km, types.get(1), 16000L, Currency.getInstance("CZK")));
+        vehicles.add(vehicleDao.queryBuilder().where().eq("name", "LongWay driver Pro").query().get(0));
+        vehicleDao.create(vehicle("Empty", "Initial Car", DistanceUnit.km, types.get(0), 0L, Currency.getInstance("HUF")));
+        vehicles.add(vehicleDao.queryBuilder().where().eq("name", "Empty").query().get(0));
 
         return vehicles;
     }
@@ -70,20 +75,33 @@ public class SampleDataUtils {
 
     public static void addFillUps(FillUpService fillUpService, List<Vehicle> vehicles) throws SQLException {
 
-        final int COUNT = 40;
+        final int COUNT = 308;
         Random random = new Random();
+
+        List<FillUp> fillUps = new ArrayList<>(COUNT);
 
         for (int i = 0; i < COUNT; i++) {
             Calendar cal = Calendar.getInstance();
-            cal.set(2017, random.nextInt(11), random.nextInt(27) + 1);
-            int dist = random.nextInt(5) + 6;
+            cal.set(random.nextInt(4) + 2014, random.nextInt(12), random.nextInt(27) + 1);
+            int dist = random.nextInt(8) + 4;
 
-            fillUpService.saveWithConsumptionCalculation(fillUp(vehicles.get(random.nextInt(vehicles.size())),
-                    BigDecimal.valueOf((random.nextDouble() + 1) * 5.2),
+            int whichVehicle = random.nextInt() % 100 == 0 ? 0 : 1;
+            double currencyFactor = whichVehicle == 0 ? 0.16d : 4d;
+            fillUps.add(fillUp(vehicles.get(whichVehicle),
+                    BigDecimal.valueOf((random.nextDouble() + 2) * 3.1 * currencyFactor),
                     cal.getTime(),
                     Long.valueOf(dist * 40) ,
-                    (dist + 3 * random.nextDouble())* 4 * 0.8 ,
+                    (dist + 3 * random.nextDouble())* 4 * 0.7 ,
                     random.nextBoolean()));
+        }
+        Collections.sort(fillUps, new Comparator<FillUp>() {
+            @Override
+            public int compare(FillUp f1, FillUp f2) {
+                return f1.getDate().compareTo(f2.getDate());
+            }
+        });
+        for (FillUp fillUp : fillUps) {
+            fillUpService.saveWithConsumptionCalculation(fillUp);
         }
 
     }
@@ -104,21 +122,26 @@ public class SampleDataUtils {
         return fillUp;
     }
 
-    public static void addExpenses(Dao<Expense, Long> expenseDao, List<Vehicle> vehicles) throws SQLException {
-        List<String> issues = Arrays.asList("winter wheels", "new clutch", "exhaust tuning",
-                "summer wheels", "air condition service", "oil change", "fuel filter change",
-                "front bumber", "rear window", "steering wheel", "new stereo", "Brembo breaks",
-                "NOS nitro tuning", "Yearly insurance", "tyres interchange", "air freshener");
-        List<Double> prices = Arrays.asList(7d, 50d, 20000d, 3.6d, 220d, 315d, 450d, 11700d, 7400d, 3200d, 42000d, 12d, 15d, 18d, 45d, 52d, 110d, 95d);
-        final int COUNT = 30;
+    public static void addExpenses(ExpenseService expenseService, List<Vehicle> vehicles) throws SQLException {
+        List<String> issues = Arrays.asList("Wheels - winter", "Clutch - new", "Exhaust tuning",
+                "Wheels - summer", "Air condition - service", "Oil - change", "Fuel filter - change",
+                "Front bumper", "Rear window - repair", "Steering wheel", "Stereo - new", "Brembo breaks",
+                "NOS - nitro tuning", "Yearly insurance", "Tires interchange", "Air freshener",
+                "Rear window - new", "Kid Seat", "STK & ETK", "Additional insurance", "Radiator - new",
+                "Registration fee", "Spark plugs - replace", "Castrol Magnatec lubricate");
+        List<Double> prices = Arrays.asList(7d, 50d, 18000d, 3.6d, 220d, 315d, 450d, 11700d, 7400d, 3200d, 12000d, 14d, 15d, 18d, 45d, 52d, 110d, 95d, 130d, 8400d, 8500d, 7600d, 350d);
+        final int COUNT = 308;
         Random random = new Random();
 
         for (int i = 0; i < COUNT; i++) {
             Calendar cal = Calendar.getInstance();
-            cal.set(2017, random.nextInt(11), random.nextInt(27) + 1);
-            expenseDao.create(expense(vehicles.get(random.nextInt(vehicles.size())),
+            cal.set(random.nextInt(4) + 2014, random.nextInt(11), random.nextInt(27) + 1);
+
+            int whichVehicle = random.nextInt() % 100 == 0 ? 0 : 1;
+            int currencyFactor = whichVehicle == 0 ? 1 : 4;
+            expenseService.save(expense(vehicles.get(whichVehicle),
                     issues.get(random.nextInt(issues.size())),
-                    BigDecimal.valueOf(prices.get(random.nextInt(prices.size()))),
+                    BigDecimal.valueOf(prices.get(random.nextInt(prices.size())) * currencyFactor),
                     cal.getTime()));
         }
     }

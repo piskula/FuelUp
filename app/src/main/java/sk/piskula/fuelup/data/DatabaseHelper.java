@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import sk.piskula.fuelup.R;
+import sk.piskula.fuelup.business.ExpenseService;
 import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.entity.Expense;
 import sk.piskula.fuelup.entity.FillUp;
@@ -133,6 +134,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         List<VehicleType> types = SampleDataUtils.addVehicleTypes(getVehicleTypeDao());
         List<Vehicle> vehicles = SampleDataUtils.addVehicles(getVehicleDao(), types);
         SampleDataUtils.addFillUps(new FillUpService(context), vehicles);
-        SampleDataUtils.addExpenses(getExpenseDao(), vehicles);
+        SampleDataUtils.addExpenses(new ExpenseService(context), vehicles);
     }
 }

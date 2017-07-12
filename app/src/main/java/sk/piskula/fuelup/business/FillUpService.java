@@ -59,7 +59,7 @@ public class FillUpService {
     public ServiceResult update(FillUp fillUp) {
         try {
             fillUpDao.update(fillUp);
-            Log.i(TAG, "Successfully updated Expense: " + fillUp);
+            Log.i(TAG, "Successfully updated FillUp: " + fillUp);
             return ServiceResult.SUCCESS;
         } catch (SQLException e) {
             Log.e(TAG, "Unexpected error. See logs for details.", e);
@@ -144,7 +144,7 @@ public class FillUpService {
         List<FillUp> fillUps = new ArrayList<>();
         try {
             fillUps = fillUpDao.queryBuilder().orderBy("date", false).orderBy("id", false).where().eq("vehicle_id", vehicleId).query();
-            Log.i(TAG, "Successfully found expenses of vehicle id " + vehicleId);
+            Log.i(TAG, "Successfully found fillups of vehicle id " + vehicleId);
         } catch (SQLException e) {
             Log.e(TAG, "Unexpected error. See logs for details.", e);
         }

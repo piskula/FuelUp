@@ -66,6 +66,14 @@ public class VehicleType implements Parcelable {
         this.name = in.readString();
     }
 
+    @Override
+    public String toString() {
+        return "VehicleType{"
+                + "id=" + id
+                + ", name=" + name
+                + "}";
+    }
+
     public static final Parcelable.Creator<VehicleType> CREATOR = new Parcelable.Creator<VehicleType>() {
         @Override
         public VehicleType createFromParcel(Parcel source) {

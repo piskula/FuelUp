@@ -76,11 +76,12 @@ public class Expense implements Parcelable, Comparable<Expense> {
 
     @Override
     public String toString() {
+        String vehicleId = vehicle != null ? ""+vehicle.getId() : "NULL";
         return "Expense{"
                 + "id=" + id
                 + ", date=" + date
                 + ", info=" + info
-                + ", vehicle=" + vehicle
+                + ", vehicleId=" + vehicleId
                 + ", price=" + price
                 + "}";
     }
