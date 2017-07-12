@@ -31,6 +31,13 @@ public class StatisticsDTO {
 
     private int totalNumberFillUps;
 
+    private BigDecimal avgFuelPricePerLitre;
+
+    private BigDecimal avgFuelVolumePerFillUp;
+
+    private BigDecimal avgFuelPricePerFillUp;
+
+
     public BigDecimal getAvgConsumption() {
         return avgConsumption;
     }
@@ -117,5 +124,29 @@ public class StatisticsDTO {
 
     public void setExpensePricePerDistance(BigDecimal expensePricePerDistance) {
         this.expensePricePerDistance = expensePricePerDistance;
+    }
+
+    public BigDecimal getAvgFuelPricePerLitre() {
+        return avgFuelPricePerLitre;
+    }
+
+    public void setAvgFuelPricePerLitre(BigDecimal avgFuelPricePerLitre) {
+        this.avgFuelPricePerLitre = avgFuelPricePerLitre;
+    }
+
+    public BigDecimal getAvgFuelVolumePerFillUp() {
+        return avgFuelVolumePerFillUp;
+    }
+
+    public void setAvgFuelVolumePerFillUp(BigDecimal avgFuelVolumePerFillUp) {
+        this.avgFuelVolumePerFillUp = avgFuelVolumePerFillUp;
+    }
+
+    public BigDecimal getAvgFuelPricePerFillUp() {
+        return avgFuelPricePerFillUp;
+    }
+
+    public void setAvgFuelPricePerFillUp(BigDecimal avgFuelPricePerFillUp) {
+        this.avgFuelPricePerFillUp = avgFuelPricePerFillUp;
     }
 }

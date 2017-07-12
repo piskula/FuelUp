@@ -146,7 +146,9 @@
     <string name="statistics_fill_ups_number_total">Total fill ups</string>
     <string name="statistics_expenses_number_total">Total expenses</string>
     <string name="statistics_volume_total_fuel">Total fuel volume</string>
-
+    <string name="statistics_avg_fuel_price_per_litre">Average fuel price per litre</string>
+    <string name="statistics_avg_fuel_volume_per_fill_up">Average fuel volume per fill up</string>
+    <string name="statistics_avg_fuel_price_per_fill_up">Average fuel cost per fill up</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

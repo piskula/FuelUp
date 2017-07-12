@@ -67,8 +67,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/listPreferredItemHeight"
                 app:name="@string/statistics_volume_total_fuel"
-                app:value="@{data!= null ? String.valueOf(data.totalFuelVolume) : @string/na}"
-                app:unit="@string/litre"/>
+                app:unit="@string/litre"
+                app:value="@{data!= null ? String.valueOf(data.totalFuelVolume) : @string/na}" />
             />
 
 
@@ -125,6 +125,34 @@
                 app:unit="@{currency}"
                 app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.expensePricePerDistance) : @string/na}" />
             />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/avg_fuel_price_per_litre"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_avg_fuel_price_per_litre"
+                app:unit="@{currency}"
+                app:value="@{data!= null ? String.valueOf(data.avgFuelPricePerLitre) : @string/na}" />
+            />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/avg_fuel_price_per_fill_up"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_avg_fuel_price_per_fill_up"
+                app:unit="@{currency}"
+                app:value="@{data!= null ? String.valueOf(data.avgFuelPricePerFillUp) : @string/na}" />
+            />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/avg_fuel_volume_per_fill_up"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_avg_fuel_volume_per_fill_up"
+                app:unit="@string/litre"
+                app:value="@{data!= null ? String.valueOf(data.avgFuelVolumePerFillUp) : @string/na}" />
+            />
+
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </layout>

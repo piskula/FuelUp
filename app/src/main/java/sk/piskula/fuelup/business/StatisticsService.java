@@ -64,6 +64,15 @@ public class StatisticsService {
         BigDecimal expensePricePerDistance = totalDrivenDistance > 0 ?
                 totalPriceExpenses.divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
 
+
+        // average fuel
+        BigDecimal avgFuelPricePerLitre = totalFuelVolume.intValue() > 0 ?
+                totalPriceFillUps.divide(totalFuelVolume, 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
+        BigDecimal avgFuelVolumePerFillUp = totalNumberFillUps > 0 ?
+                totalFuelVolume.divide(BigDecimal.valueOf(totalNumberFillUps), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
+        BigDecimal avgFuelPricePerFillUp = totalNumberFillUps > 0 ?
+                totalPriceFillUps.divide(BigDecimal.valueOf(totalNumberFillUps), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
+
         dto.setAvgConsumption(avgConsumption);
 
         dto.setTotalDrivenDistance(totalDrivenDistance);
@@ -80,6 +89,10 @@ public class StatisticsService {
         dto.setTotalPricePerDistance(totalPricePerDistance);
         dto.setExpensePricePerDistance(expensePricePerDistance);
         dto.setFillUpPricePerDistance(fillUpPricePerDistance);
+
+        dto.setAvgFuelPricePerLitre(avgFuelPricePerLitre);
+        dto.setAvgFuelVolumePerFillUp(avgFuelVolumePerFillUp);
+        dto.setAvgFuelPricePerFillUp(avgFuelPricePerFillUp);
 
         return dto;
     }
