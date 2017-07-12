@@ -44,7 +44,6 @@
                 app:name="@string/statistics_distance_driven_total"
                 app:unit="@{vehicle.getUnit().toString()}"
                 app:value="@{data!= null ? String.valueOf(data.totalDrivenDistance) : @string/na}" />
-            />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/fill_ups_number_total"
@@ -52,7 +51,6 @@
                 android:layout_height="?android:attr/listPreferredItemHeight"
                 app:name="@string/statistics_fill_ups_number_total"
                 app:value="@{data!= null ? String.valueOf(data.totalNumberFillUps) : @string/na}" />
-            />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/expenses_number_total"
@@ -60,7 +58,6 @@
                 android:layout_height="?android:attr/listPreferredItemHeight"
                 app:name="@string/statistics_expenses_number_total"
                 app:value="@{data!= null ? String.valueOf(data.totalNumberExpenses) : @string/na}" />
-            />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/volume_total_fuel"
@@ -69,8 +66,6 @@
                 app:name="@string/statistics_volume_total_fuel"
                 app:unit="@string/litre"
                 app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.totalFuelVolume) : @string/na}" />
-            />
-
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/price_total"
@@ -79,7 +74,6 @@
                 app:name="@string/statistics_price_total"
                 app:unit="@{currency}"
                 app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.totalPrice) : @string/na}" />
-            />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/price_total_fuel"
@@ -88,7 +82,6 @@
                 app:name="@string/statistics_price_total_fuel"
                 app:unit="@{currency}"
                 app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.totalPriceFillUps) : @string/na}" />
-            />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/price_total_expense"
@@ -97,7 +90,6 @@
                 app:name="@string/statistics_price_total_expense"
                 app:unit="@{currency}"
                 app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.totalPriceExpenses) : @string/na}" />
-            />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/price_per_distance_total"
@@ -106,7 +98,6 @@
                 app:name="@{@string/statistics_price_per_distance(vehicle.getUnit().toString())}"
                 app:unit="@{currency}"
                 app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.totalPricePerDistance) : @string/na}" />
-            />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/price_per_distance_fill_up"
@@ -115,7 +106,6 @@
                 app:name="@{@string/statistics_price_per_distance_fill_up(vehicle.getUnit().toString())}"
                 app:unit="@{currency}"
                 app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.fillUpPricePerDistance) : @string/na}" />
-            />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/price_per_distance_expense"
@@ -124,7 +114,6 @@
                 app:name="@{@string/statistics_price_per_distance_expense(vehicle.getUnit().toString())}"
                 app:unit="@{currency}"
                 app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.expensePricePerDistance) : @string/na}" />
-            />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/avg_fuel_price_per_litre"
@@ -133,7 +122,6 @@
                 app:name="@string/statistics_avg_fuel_price_per_litre"
                 app:unit="@{currency}"
                 app:value="@{data!= null ? String.valueOf(data.avgFuelPricePerLitre) : @string/na}" />
-            />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/avg_fuel_price_per_fill_up"
@@ -142,7 +130,6 @@
                 app:name="@string/statistics_avg_fuel_price_per_fill_up"
                 app:unit="@{currency}"
                 app:value="@{data!= null ? String.valueOf(data.avgFuelPricePerFillUp) : @string/na}" />
-            />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/avg_fuel_volume_per_fill_up"
@@ -151,7 +138,6 @@
                 app:name="@string/statistics_avg_fuel_volume_per_fill_up"
                 app:unit="@string/litre"
                 app:value="@{data!= null ? String.valueOf(data.avgFuelVolumePerFillUp) : @string/na}" />
-            />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/tracking_period"
@@ -160,7 +146,145 @@
                 app:name="@string/statistics_tracking_period"
                 app:unit="@string/day"
                 app:value="@{data!= null ? String.valueOf(data.trackingDays) : @string/na}" />
-            />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/average_total_cost_per_week"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_average_total_cost_per_week"
+                app:unit="@{currency}"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageTotalCostPerWeek) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/average_total_cost_per_month"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_average_total_cost_per_month"
+                app:unit="@{currency}"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageTotalCostPerMonth) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/average_total_cost_per_year"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_average_total_cost_per_year"
+                app:unit="@{currency}"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageTotalCostPerYear) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/average_fuel_cost_per_week"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_average_fuel_cost_per_week"
+                app:unit="@{currency}"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageFuelCostPerWeek) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/average_fuel_cost_per_month"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_average_fuel_cost_per_month"
+                app:unit="@{currency}"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageFuelCostPerMonth) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/average_fuel_cost_per_year"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_average_fuel_cost_per_year"
+                app:unit="@{currency}"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageFuelCostPerYear) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/average_expense_cost_per_week"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_average_expense_cost_per_week"
+                app:unit="@{currency}"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageExpenseCostPerWeek) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/average_expense_cost_per_month"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_average_expense_cost_per_month"
+                app:unit="@{currency}"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageExpenseCostPerMonth) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/average_expense_cost_per_year"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_average_expense_cost_per_year"
+                app:unit="@{currency}"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageExpenseCostPerYear) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/average_distance_per_week"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_average_distance_per_week"
+                app:unit="@{vehicle.unit.toString()}"
+                app:value="@{data!= null ? String.valueOf(data.averageDistancePerWeek) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/average_distance_per_month"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_average_distance_per_month"
+                app:unit="@{vehicle.unit.toString()}"
+                app:value="@{data!= null ? String.valueOf(data.averageDistancePerMonth) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/average_distance_per_year"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_average_distance_per_year"
+                app:unit="@{vehicle.unit.toString()}"
+                app:value="@{data!= null ? String.valueOf(data.averageDistancePerYear) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/average_number_of_fill_ups_per_week"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_average_number_of_fill_ups_per_week"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageNumberOfFillUpsPerWeek) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/average_number_of_fill_ups_per_month"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_average_number_of_fill_ups_per_month"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageNumberOfFillUpsPerMonth) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/average_number_of_fill_ups_per_year"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_average_number_of_fill_ups_per_year"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageNumberOfFillUpsPerYear) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/average_number_of_expenses_per_week"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_average_number_of_expenses_per_week"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageNumberOfExpensesPerWeek) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/average_number_of_expenses_per_month"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_average_number_of_expenses_per_month"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageNumberOfExpensesPerMonth) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/average_number_of_expenses_per_year"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_average_number_of_expenses_per_year"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageNumberOfExpensesPerYear) : @string/na}" />
+
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

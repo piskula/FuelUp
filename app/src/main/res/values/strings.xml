@@ -136,7 +136,7 @@
     <string name="miles">miles</string>
     <string name="kilometres">kilometres</string>
 
-    <string name="statistics_avg_consumption">Average Fuel Consumption</string>
+    <string name="statistics_avg_consumption">Average fuel consumption</string>
     <string name="statistics_price_total">Total price</string>
     <string name="statistics_price_total_fuel">Total price fuel</string>
     <string name="statistics_price_total_expense">Total price expense</string>
@@ -151,6 +151,24 @@
     <string name="statistics_avg_fuel_volume_per_fill_up">Average fuel volume per fill up</string>
     <string name="statistics_avg_fuel_price_per_fill_up">Average fuel cost per fill up</string>
     <string name="statistics_tracking_period">Tracking period</string>
+    <string name="statistics_average_total_cost_per_week">Average costs per week</string>
+    <string name="statistics_average_total_cost_per_month">Average costs per month</string>
+    <string name="statistics_average_total_cost_per_year">Average costs per year</string>
+    <string name="statistics_average_fuel_cost_per_week">Average fuel costs per week</string>
+    <string name="statistics_average_fuel_cost_per_month">Average fuel costs per month</string>
+    <string name="statistics_average_fuel_cost_per_year">Average fuel costs per year</string>
+    <string name="statistics_average_expense_cost_per_week">Average expense costs per week</string>
+    <string name="statistics_average_expense_cost_per_month">Average expense costs per month</string>
+    <string name="statistics_average_expense_cost_per_year">Average expense costs per year</string>
+    <string name="statistics_average_distance_per_week">Average driven distance per week</string>
+    <string name="statistics_average_distance_per_month">Average driven distance per month</string>
+    <string name="statistics_average_distance_per_year">Average driven distance per year</string>
+    <string name="statistics_average_number_of_fill_ups_per_week">Average fill ups per week</string>
+    <string name="statistics_average_number_of_fill_ups_per_month">Average fill ups per month</string>
+    <string name="statistics_average_number_of_fill_ups_per_year">Average fill ups per year</string>
+    <string name="statistics_average_number_of_expenses_per_week">Average expenses per week</string>
+    <string name="statistics_average_number_of_expenses_per_month">Average expenses per month</string>
+    <string name="statistics_average_number_of_expenses_per_year">Average expenses per year</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

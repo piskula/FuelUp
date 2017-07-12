@@ -39,6 +39,27 @@ public class StatisticsDTO {
 
     private long trackingDays;
 
+    private BigDecimal averageTotalCostPerWeek;
+    private BigDecimal averageFuelCostPerWeek;
+    private BigDecimal averageExpenseCostPerWeek;
+    private BigDecimal averageTotalCostPerMonth;
+    private BigDecimal averageFuelCostPerMonth;
+    private BigDecimal averageExpenseCostPerMonth;
+    private BigDecimal averageTotalCostPerYear;
+    private BigDecimal averageFuelCostPerYear;
+    private BigDecimal averageExpenseCostPerYear;
+
+    private long averageDistancePerWeek;
+    private long averageDistancePerMonth;
+    private long averageDistancePerYear;
+
+    private BigDecimal averageNumberOfFillUpsPerWeek;
+    private BigDecimal averageNumberOfFillUpsPerMonth;
+    private BigDecimal averageNumberOfFillUpsPerYear;
+
+    private BigDecimal averageNumberOfExpensesPerWeek;
+    private BigDecimal averageNumberOfExpensesPerMonth;
+    private BigDecimal averageNumberOfExpensesPerYear;
 
     public BigDecimal getAvgConsumption() {
         return avgConsumption;
@@ -158,5 +179,149 @@ public class StatisticsDTO {
 
     public void setTrackingDays(long trackingDays) {
         this.trackingDays = trackingDays;
+    }
+
+    public BigDecimal getAverageTotalCostPerWeek() {
+        return averageTotalCostPerWeek;
+    }
+
+    public void setAverageTotalCostPerWeek(BigDecimal averageTotalCostPerWeek) {
+        this.averageTotalCostPerWeek = averageTotalCostPerWeek;
+    }
+
+    public BigDecimal getAverageFuelCostPerWeek() {
+        return averageFuelCostPerWeek;
+    }
+
+    public void setAverageFuelCostPerWeek(BigDecimal averageFuelCostPerWeek) {
+        this.averageFuelCostPerWeek = averageFuelCostPerWeek;
+    }
+
+    public BigDecimal getAverageExpenseCostPerWeek() {
+        return averageExpenseCostPerWeek;
+    }
+
+    public void setAverageExpenseCostPerWeek(BigDecimal averageExpenseCostPerWeek) {
+        this.averageExpenseCostPerWeek = averageExpenseCostPerWeek;
+    }
+
+    public BigDecimal getAverageTotalCostPerMonth() {
+        return averageTotalCostPerMonth;
+    }
+
+    public void setAverageTotalCostPerMonth(BigDecimal averageTotalCostPerMonth) {
+        this.averageTotalCostPerMonth = averageTotalCostPerMonth;
+    }
+
+    public BigDecimal getAverageFuelCostPerMonth() {
+        return averageFuelCostPerMonth;
+    }
+
+    public void setAverageFuelCostPerMonth(BigDecimal averageFuelCostPerMonth) {
+        this.averageFuelCostPerMonth = averageFuelCostPerMonth;
+    }
+
+    public BigDecimal getAverageExpenseCostPerMonth() {
+        return averageExpenseCostPerMonth;
+    }
+
+    public void setAverageExpenseCostPerMonth(BigDecimal averageExpenseCostPerMonth) {
+        this.averageExpenseCostPerMonth = averageExpenseCostPerMonth;
+    }
+
+    public BigDecimal getAverageTotalCostPerYear() {
+        return averageTotalCostPerYear;
+    }
+
+    public void setAverageTotalCostPerYear(BigDecimal averageTotalCostPerYear) {
+        this.averageTotalCostPerYear = averageTotalCostPerYear;
+    }
+
+    public BigDecimal getAverageFuelCostPerYear() {
+        return averageFuelCostPerYear;
+    }
+
+    public void setAverageFuelCostPerYear(BigDecimal averageFuelCostPerYear) {
+        this.averageFuelCostPerYear = averageFuelCostPerYear;
+    }
+
+    public BigDecimal getAverageExpenseCostPerYear() {
+        return averageExpenseCostPerYear;
+    }
+
+    public void setAverageExpenseCostPerYear(BigDecimal averageExpenseCostPerYear) {
+        this.averageExpenseCostPerYear = averageExpenseCostPerYear;
+    }
+
+    public long getAverageDistancePerWeek() {
+        return averageDistancePerWeek;
+    }
+
+    public void setAverageDistancePerWeek(long averageDistancePerWeek) {
+        this.averageDistancePerWeek = averageDistancePerWeek;
+    }
+
+    public long getAverageDistancePerMonth() {
+        return averageDistancePerMonth;
+    }
+
+    public void setAverageDistancePerMonth(long averageDistancePerMonth) {
+        this.averageDistancePerMonth = averageDistancePerMonth;
+    }
+
+    public long getAverageDistancePerYear() {
+        return averageDistancePerYear;
+    }
+
+    public void setAverageDistancePerYear(long averageDistancePerYear) {
+        this.averageDistancePerYear = averageDistancePerYear;
+    }
+
+    public BigDecimal getAverageNumberOfFillUpsPerWeek() {
+        return averageNumberOfFillUpsPerWeek;
+    }
+
+    public void setAverageNumberOfFillUpsPerWeek(BigDecimal averageNumberOfFillUpsPerWeek) {
+        this.averageNumberOfFillUpsPerWeek = averageNumberOfFillUpsPerWeek;
+    }
+
+    public BigDecimal getAverageNumberOfFillUpsPerMonth() {
+        return averageNumberOfFillUpsPerMonth;
+    }
+
+    public void setAverageNumberOfFillUpsPerMonth(BigDecimal averageNumberOfFillUpsPerMonth) {
+        this.averageNumberOfFillUpsPerMonth = averageNumberOfFillUpsPerMonth;
+    }
+
+    public BigDecimal getAverageNumberOfFillUpsPerYear() {
+        return averageNumberOfFillUpsPerYear;
+    }
+
+    public void setAverageNumberOfFillUpsPerYear(BigDecimal averageNumberOfFillUpsPerYear) {
+        this.averageNumberOfFillUpsPerYear = averageNumberOfFillUpsPerYear;
+    }
+
+    public BigDecimal getAverageNumberOfExpensesPerWeek() {
+        return averageNumberOfExpensesPerWeek;
+    }
+
+    public void setAverageNumberOfExpensesPerWeek(BigDecimal averageNumberOfExpensesPerWeek) {
+        this.averageNumberOfExpensesPerWeek = averageNumberOfExpensesPerWeek;
+    }
+
+    public BigDecimal getAverageNumberOfExpensesPerMonth() {
+        return averageNumberOfExpensesPerMonth;
+    }
+
+    public void setAverageNumberOfExpensesPerMonth(BigDecimal averageNumberOfExpensesPerMonth) {
+        this.averageNumberOfExpensesPerMonth = averageNumberOfExpensesPerMonth;
+    }
+
+    public BigDecimal getAverageNumberOfExpensesPerYear() {
+        return averageNumberOfExpensesPerYear;
+    }
+
+    public void setAverageNumberOfExpensesPerYear(BigDecimal averageNumberOfexpensesPerYear) {
+        this.averageNumberOfExpensesPerYear = averageNumberOfexpensesPerYear;
     }
 }

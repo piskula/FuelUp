@@ -7,6 +7,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.GenericRawResults;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -28,6 +29,7 @@ public class StatisticsService {
 
     private Dao<FillUp, Long> fillUpDao;
     private Dao<Expense, Long> expenseDao;
+
 
     private long vehicleId;
 
@@ -66,7 +68,6 @@ public class StatisticsService {
         BigDecimal expensePricePerDistance = totalDrivenDistance > 0 ?
                 totalPriceExpenses.divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
 
-
         // average fuel
         BigDecimal avgFuelPricePerLitre = totalFuelVolume.intValue() > 0 ?
                 totalPriceFillUps.divide(totalFuelVolume, 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
@@ -100,6 +101,29 @@ public class StatisticsService {
         dto.setAvgFuelPricePerFillUp(avgFuelPricePerFillUp);
 
         dto.setTrackingDays(trackingDays);
+
+        dto.setAverageTotalCostPerWeek(getAveragePerTime(totalPrice, trackingDays, TimePeriod.WEEK));
+        dto.setAverageTotalCostPerMonth(getAveragePerTime(totalPrice, trackingDays, TimePeriod.MONTH));
+        dto.setAverageTotalCostPerYear(getAveragePerTime(totalPrice, trackingDays, TimePeriod.YEAR));
+        dto.setAverageFuelCostPerWeek(getAveragePerTime(totalPriceFillUps, trackingDays, TimePeriod.WEEK));
+        dto.setAverageFuelCostPerMonth(getAveragePerTime(totalPriceFillUps, trackingDays, TimePeriod.MONTH));
+        dto.setAverageFuelCostPerYear(getAveragePerTime(totalPriceFillUps, trackingDays, TimePeriod.YEAR));
+        dto.setAverageExpenseCostPerWeek(getAveragePerTime(totalPriceExpenses, trackingDays, TimePeriod.WEEK));
+        dto.setAverageExpenseCostPerMonth(getAveragePerTime(totalPriceExpenses, trackingDays, TimePeriod.MONTH));
+        dto.setAverageExpenseCostPerYear(getAveragePerTime(totalPriceExpenses, trackingDays, TimePeriod.YEAR));
+
+        dto.setAverageDistancePerWeek(getAveragePerTime(BigDecimal.valueOf(totalDrivenDistance), trackingDays, TimePeriod.WEEK).longValue());
+        dto.setAverageDistancePerMonth(getAveragePerTime(BigDecimal.valueOf(totalDrivenDistance), trackingDays, TimePeriod.MONTH).longValue());
+        dto.setAverageDistancePerYear(getAveragePerTime(BigDecimal.valueOf(totalDrivenDistance), trackingDays, TimePeriod.YEAR).longValue());
+
+        dto.setAverageNumberOfFillUpsPerWeek(getAveragePerTime(BigDecimal.valueOf(totalNumberFillUps), trackingDays, TimePeriod.WEEK));
+        dto.setAverageNumberOfFillUpsPerMonth(getAveragePerTime(BigDecimal.valueOf(totalNumberFillUps), trackingDays, TimePeriod.MONTH));
+        dto.setAverageNumberOfFillUpsPerYear(getAveragePerTime(BigDecimal.valueOf(totalNumberFillUps), trackingDays, TimePeriod.YEAR));
+
+        dto.setAverageNumberOfExpensesPerWeek(getAveragePerTime(BigDecimal.valueOf(totalNumberExpenses), trackingDays, TimePeriod.WEEK));
+        dto.setAverageNumberOfExpensesPerMonth(getAveragePerTime(BigDecimal.valueOf(totalNumberExpenses), trackingDays, TimePeriod.MONTH));
+        dto.setAverageNumberOfExpensesPerYear(getAveragePerTime(BigDecimal.valueOf(totalNumberExpenses), trackingDays, TimePeriod.YEAR));
+
 
         return dto;
     }
@@ -180,13 +204,12 @@ public class StatisticsService {
     }
 
     public long getTrackingDays() {
-
         try {
             //TODO check possibility to use min(date)
             GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT id FROM fill_ups WHERE vehicle_id = " + vehicleId + " ORDER BY date LIMIT 1");
             long firstEntryId;
             String[] firstResult = results.getFirstResult();
-            if ( firstResult != null) {
+            if (firstResult != null) {
                 if (firstResult.length > 0 && firstResult[0] != null) {
                     firstEntryId = Long.valueOf(firstResult[0]);
                     FillUp fillUp = fillUpDao.queryBuilder().where().eq("id", firstEntryId).queryForFirst();
@@ -205,7 +228,14 @@ public class StatisticsService {
             return 0;
         }
     }
-    
+
+    private BigDecimal getAveragePerTime(BigDecimal totalCostAllTime, long trackingPeriod, TimePeriod timePeriod) {
+        if (trackingPeriod == 0) return BigDecimal.ZERO;
+
+        double trackingIntervals = trackingPeriod / (double) timePeriod.getDays();
+        return totalCostAllTime.divide(BigDecimal.valueOf(trackingIntervals), 2, RoundingMode.HALF_UP);
+    }
+
     private BigDecimal getBigDecimal(GenericRawResults<String[]> results) throws SQLException, ParseException {
         DecimalFormat f = new DecimalFormat();
         f.setParseBigDecimal(true);
@@ -214,6 +244,22 @@ public class StatisticsService {
             return (BigDecimal) f.parseObject(parsedResult[0]);
         } else {
             return BigDecimal.ZERO;
+        }
+    }
+
+    private enum TimePeriod {
+        WEEK(7),
+        MONTH(30),
+        YEAR(365);
+
+        private int days;
+
+        TimePeriod(int days) {
+            this.days = days;
+        }
+
+        public int getDays() {
+            return days;
         }
     }
 
