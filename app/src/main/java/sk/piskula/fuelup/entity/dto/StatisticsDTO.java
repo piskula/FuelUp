@@ -63,6 +63,13 @@ public class StatisticsDTO {
     private BigDecimal averageNumberOfExpensesPerMonth;
     private BigDecimal averageNumberOfExpensesPerYear;
 
+    private BigDecimal fuelConsumptionBest;
+    private BigDecimal fuelConsumptionWorst;
+    private BigDecimal pricePerLitreLowest;
+    private BigDecimal pricePerLitreHighest;
+    private int distanceBetweenFillUpsLowest;
+    private int distanceBetweenFillUpsHighest;
+
     public BigDecimal getAvgConsumption() {
         return avgConsumption;
     }
@@ -341,5 +348,53 @@ public class StatisticsDTO {
 
     public void setAverageNumberOfExpensesPerYear(BigDecimal averageNumberOfexpensesPerYear) {
         this.averageNumberOfExpensesPerYear = averageNumberOfexpensesPerYear;
+    }
+
+    public BigDecimal getFuelConsumptionBest() {
+        return fuelConsumptionBest;
+    }
+
+    public void setFuelConsumptionBest(BigDecimal fuelConsumptionBest) {
+        this.fuelConsumptionBest = fuelConsumptionBest;
+    }
+
+    public BigDecimal getFuelConsumptionWorst() {
+        return fuelConsumptionWorst;
+    }
+
+    public void setFuelConsumptionWorst(BigDecimal fuelConsumptionWorst) {
+        this.fuelConsumptionWorst = fuelConsumptionWorst;
+    }
+
+    public BigDecimal getPricePerLitreLowest() {
+        return pricePerLitreLowest;
+    }
+
+    public void setPricePerLitreLowest(BigDecimal pricePerLitreLowest) {
+        this.pricePerLitreLowest = pricePerLitreLowest;
+    }
+
+    public BigDecimal getPricePerLitreHighest() {
+        return pricePerLitreHighest;
+    }
+
+    public void setPricePerLitreHighest(BigDecimal pricePerLitreHighest) {
+        this.pricePerLitreHighest = pricePerLitreHighest;
+    }
+
+    public int getDistanceBetweenFillUpsLowest() {
+        return distanceBetweenFillUpsLowest;
+    }
+
+    public void setDistanceBetweenFillUpsLowest(int distanceBetweenFillUpsLowest) {
+        this.distanceBetweenFillUpsLowest = distanceBetweenFillUpsLowest;
+    }
+
+    public int getDistanceBetweenFillUpsHighest() {
+        return distanceBetweenFillUpsHighest;
+    }
+
+    public void setDistanceBetweenFillUpsHighest(int distanceBetweenFillUpsHighest) {
+        this.distanceBetweenFillUpsHighest = distanceBetweenFillUpsHighest;
     }
 }

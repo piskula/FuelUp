@@ -171,7 +171,12 @@
     <string name="statistics_average_number_of_expenses_per_week">Average expenses per week</string>
     <string name="statistics_average_number_of_expenses_per_month">Average expenses per month</string>
     <string name="statistics_average_number_of_expenses_per_year">Average expenses per year</string>
-
+    <string name="statistics_fuel_consumption_best">Best fuel consumption</string>
+    <string name="statistics_fuel_consumption_worst">Worst fuel consumption</string>
+    <string name="statistics_price_per_litre_best">Lowest fuel price</string>
+    <string name="statistics_price_per_litre_worst">Highest fuel price</string>
+    <string name="statistics_distance_between_fill_ups_lowest">Min distance between fill ups</string>
+    <string name="statistics_distance_between_fill_ups_highest">Max distance between fill ups</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

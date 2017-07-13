@@ -128,6 +128,12 @@ public class StatisticsService {
         dto.setAverageNumberOfExpensesPerMonth(getAveragePerTime(BigDecimal.valueOf(totalNumberExpenses), trackingDays, TimePeriod.MONTH));
         dto.setAverageNumberOfExpensesPerYear(getAveragePerTime(BigDecimal.valueOf(totalNumberExpenses), trackingDays, TimePeriod.YEAR));
 
+        dto.setFuelConsumptionBest(getFuelConsumptionBest());
+        dto.setFuelConsumptionWorst(getFuelConsumptionWorst());
+        dto.setPricePerLitreHighest(getPricePerLitreWorst());
+        dto.setPricePerLitreLowest(getPricePerLitreBest());
+        dto.setDistanceBetweenFillUpsHighest(getDistanceBetweenFillUpsHighest());
+        dto.setDistanceBetweenFillUpsLowest(getDistanceBetweenFillUpsLowest());
 
         return dto;
     }
@@ -252,6 +258,79 @@ public class StatisticsService {
         return totalCostAllTime.divide(BigDecimal.valueOf(trackingIntervals), 2, RoundingMode.HALF_UP);
     }
 
+    public BigDecimal getFuelConsumptionWorst() {
+        try {
+            GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT MAX(consumption) FROM fill_ups WHERE consumption IS NOT NULL AND vehicle_id = " + vehicleId);
+            return getBigDecimal(results);
+        } catch (SQLException e1) {
+            Log.e(TAG, e1.toString(), e1);
+        } catch (ParseException e2) {
+            Log.e(TAG, "SQL return not parsable number.", e2);
+        }
+        return BigDecimal.ZERO;
+    }
+
+    public BigDecimal getFuelConsumptionBest() {
+        try {
+            GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT MIN(consumption) FROM fill_ups WHERE consumption IS NOT NULL AND vehicle_id = " + vehicleId);
+            return getBigDecimal(results);
+        } catch (SQLException e1) {
+            Log.e(TAG, e1.toString(), e1);
+        } catch (ParseException e2) {
+            Log.e(TAG, "SQL return not parsable number.", e2);
+        }
+        return BigDecimal.ZERO;
+    }
+
+    public BigDecimal getPricePerLitreWorst() {
+        try {
+            GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT MAX(fuel_price_per_litre) FROM fill_ups WHERE vehicle_id = " + vehicleId);
+            return getBigDecimal(results);
+        } catch (SQLException e1) {
+            Log.e(TAG, e1.toString(), e1);
+        } catch (ParseException e2) {
+            Log.e(TAG, "SQL return not parsable number.", e2);
+        }
+        return BigDecimal.ZERO;
+    }
+
+    public BigDecimal getPricePerLitreBest() {
+        try {
+            GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT MIN(fuel_price_per_litre) FROM fill_ups WHERE vehicle_id = " + vehicleId);
+            return getBigDecimal(results);
+        } catch (SQLException e1) {
+            Log.e(TAG, e1.toString(), e1);
+        } catch (ParseException e2) {
+            Log.e(TAG, "SQL return not parsable number.", e2);
+        }
+        return BigDecimal.ZERO;
+    }
+
+    public int getDistanceBetweenFillUpsHighest() {
+        try {
+            GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT MAX(distance_from_last_fill_up) FROM fill_ups WHERE vehicle_id = " + vehicleId);
+            return (int) getLong(results);
+        } catch (SQLException e1) {
+            Log.e(TAG, e1.toString(), e1);
+        } catch (ParseException e2) {
+            Log.e(TAG, "SQL return not parsable number.", e2);
+        }
+        return 0;
+    }
+
+    public int getDistanceBetweenFillUpsLowest() {
+        try {
+            GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT MIN(distance_from_last_fill_up) FROM fill_ups WHERE vehicle_id = " + vehicleId);
+            return (int) getLong(results);
+        } catch (SQLException e1) {
+            Log.e(TAG, e1.toString(), e1);
+        } catch (ParseException e2) {
+            Log.e(TAG, "SQL return not parsable number.", e2);
+        }
+        return 0;
+    }
+
+    //TODO handle better
     private BigDecimal getBigDecimal(GenericRawResults<String[]> results) throws SQLException, ParseException {
         DecimalFormat f = new DecimalFormat();
         f.setParseBigDecimal(true);
@@ -262,6 +341,16 @@ public class StatisticsService {
             return BigDecimal.ZERO;
         }
     }
+
+    private long getLong(GenericRawResults<String[]> results) throws SQLException, ParseException {
+        String[] firstResult = results.getFirstResult();
+        if (firstResult != null && firstResult.length > 0 && firstResult[0] != null) {
+            return Long.valueOf(firstResult[0]);
+        } else {
+            return 0l;
+        }
+    }
+
 
     private enum TimePeriod {
         DAY(1),

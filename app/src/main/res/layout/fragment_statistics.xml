@@ -302,6 +302,53 @@
                 app:name="@string/statistics_average_number_of_expenses_per_year"
                 app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageNumberOfExpensesPerYear) : @string/na}" />
 
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/fuel_consumption_best"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_fuel_consumption_best"
+                app:unit="@{@string/units_litreper100_distance_units(vehicle.unit.toString())}"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.fuelConsumptionBest) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/fuel_consumption_worst"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_fuel_consumption_worst"
+                app:unit="@{@string/units_litreper100_distance_units(vehicle.unit.toString())}"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.fuelConsumptionWorst) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/price_per_litre_best"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_price_per_litre_best"
+                app:unit="@{currency}"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.pricePerLitreLowest) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/price_per_litre_worst"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_price_per_litre_worst"
+                app:unit="@{currency}"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.pricePerLitreHighest) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/distance_between_fill_ups_lowest"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_distance_between_fill_ups_lowest"
+                app:unit="@{vehicle.unit.toString()}"
+                app:value="@{data!= null ? Integer.toString(data.distanceBetweenFillUpsLowest) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/distance_between_fill_ups_highest"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_distance_between_fill_ups_highest"
+                app:unit="@{vehicle.unit.toString()}"
+                app:value="@{data!= null ? Integer.toString(data.distanceBetweenFillUpsHighest) : @string/na}" />
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
