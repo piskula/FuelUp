@@ -51,7 +51,7 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
             //set views
             holder.txtDistanceFromLastFillUp.setText(currentItem.getDistanceFromLastFillUp().toString());
             holder.txtDriven.setText(currentItem.getVehicle().getUnit().toString());
-            holder.txtConsumptionSymbol.setText(context.getString(R.string.units_litreper100) + currentItem.getVehicle().getUnit().toString());
+            holder.txtConsumptionSymbol.setText(context.getString(R.string.units_litreper100_distance_units, currentItem.getVehicle().getUnit().toString()));
             holder.txtDate.setText(DateUtil.getDateLocalized(currentItem.getDate()));
             holder.imgFullnessFillUpSymbol.setImageResource(context.getResources().getIdentifier(
                     currentItem.isFullFillUp() ? "ic_gasolinedrop_full" : "ic_gasolinedrop_empty", "drawable", context.getPackageName()));

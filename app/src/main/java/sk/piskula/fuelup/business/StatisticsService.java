@@ -44,7 +44,8 @@ public class StatisticsService {
         StatisticsDTO dto = new StatisticsDTO();
 
         //consumption
-        BigDecimal avgConsumption = getAverageConsumptionOfVehicle();
+        BigDecimal avgConsumption = getAverageConsumption();
+        BigDecimal avgConsumptionReversed = getAverageConsumptionReversed();
 
         //distance
         long totalDrivenDistance = getTotalDrivenDistance();
@@ -80,6 +81,7 @@ public class StatisticsService {
         long trackingDays = getTrackingDays();
 
         dto.setAvgConsumption(avgConsumption);
+        dto.setAvgConsumptionReversed(avgConsumptionReversed);
 
         dto.setTotalDrivenDistance(totalDrivenDistance);
 
@@ -129,9 +131,21 @@ public class StatisticsService {
         return dto;
     }
 
-    public BigDecimal getAverageConsumptionOfVehicle() {
+    public BigDecimal getAverageConsumption() {
         try {
             GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT SUM(distance_from_last_fill_up * consumption) / SUM(distance_from_last_fill_up) FROM fill_ups WHERE consumption is not null and vehicle_id = " + vehicleId);
+            return getBigDecimal(results);
+        } catch (SQLException e1) {
+            Log.e(TAG, "Unexpected error during computing average fuel consumption.", e1);
+        } catch (ParseException e2) {
+            Log.e(TAG, "SQL return not parsable number.", e2);
+        }
+        return BigDecimal.ZERO;
+    }
+
+    public BigDecimal getAverageConsumptionReversed() {
+        try {
+            GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT SUM(distance_from_last_fill_up) / SUM(distance_from_last_fill_up * consumption / 100) FROM fill_ups WHERE consumption is not null and vehicle_id = " + vehicleId);
             return getBigDecimal(results);
         } catch (SQLException e1) {
             Log.e(TAG, "Unexpected error during computing average fuel consumption.", e1);

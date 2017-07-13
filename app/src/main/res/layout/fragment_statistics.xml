@@ -35,7 +35,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/listPreferredItemHeight"
                 app:name="@string/statistics_avg_consumption"
+                app:unit="@{@string/units_litreper100_distance_units(vehicle.unit.toString())}"
                 app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.avgConsumption) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/fuel_consumption_reversed"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_avg_consumption"
+                app:unit="@{@string/units_distance_units_per_litre(vehicle.unit.toString())}"
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.avgConsumptionReversed) : @string/na}" />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/distance_driven_total"

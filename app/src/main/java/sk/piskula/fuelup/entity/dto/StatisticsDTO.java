@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 public class StatisticsDTO {
 
     private BigDecimal avgConsumption;
+    private BigDecimal avgConsumptionReversed;
 
     private BigDecimal totalPriceFillUps;
 
@@ -68,6 +69,14 @@ public class StatisticsDTO {
 
     public void setAvgConsumption(BigDecimal avgConsumption) {
         this.avgConsumption = avgConsumption;
+    }
+
+    public BigDecimal getAvgConsumptionReversed() {
+        return avgConsumptionReversed;
+    }
+
+    public void setAvgConsumptionReversed(BigDecimal avgConsumptionReversed) {
+        this.avgConsumptionReversed = avgConsumptionReversed;
     }
 
     public BigDecimal getTotalPricePerDistance() {

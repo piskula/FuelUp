@@ -126,7 +126,8 @@
 
     <string name="units_kilometres">km</string>
     <string name="units_miles">mi</string>
-    <string name="units_litreper100">\u2113/100</string>
+    <string name="units_litreper100_distance_units">\u2113/100 %s</string>
+    <string name="units_distance_units_per_litre">%s/\u2113</string>
     <string name="currency">Currency</string>
     <string name="vehicle_type">Vehicle type</string>
     <string name="distance_units">Distance units</string>
