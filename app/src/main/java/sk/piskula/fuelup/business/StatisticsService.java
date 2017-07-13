@@ -26,6 +26,7 @@ import sk.piskula.fuelup.entity.dto.StatisticsDTO;
 public class StatisticsService {
 
     private static final String TAG = StatisticsService.class.getSimpleName();
+    private static final BigDecimal HUNDRED = BigDecimal.valueOf(100);
 
     private Dao<FillUp, Long> fillUpDao;
     private Dao<Expense, Long> expenseDao;
@@ -63,11 +64,11 @@ public class StatisticsService {
 
         //total price per distance
         BigDecimal totalPricePerDistance = totalDrivenDistance > 0 ?
-                totalPrice.divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
+                totalPrice.multiply(HUNDRED).divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
         BigDecimal fillUpPricePerDistance = totalDrivenDistance > 0 ?
-                totalPriceFillUps.divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
+                totalPriceFillUps.multiply(HUNDRED).divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
         BigDecimal expensePricePerDistance = totalDrivenDistance > 0 ?
-                totalPriceExpenses.divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
+                totalPriceExpenses.multiply(HUNDRED).divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
 
         // average fuel
         BigDecimal avgFuelPricePerLitre = totalFuelVolume.intValue() > 0 ?
