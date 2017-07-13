@@ -21,6 +21,7 @@ import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.VehicleType;
 import sk.piskula.fuelup.entity.enums.DistanceUnit;
+import sk.piskula.fuelup.entity.enums.VolumeUnit;
 
 /**
  * @author Ondrej Oravcok
@@ -49,23 +50,24 @@ public class SampleDataUtils {
     public static List<Vehicle> addVehicles(Dao<Vehicle, Long> vehicleDao, List<VehicleType> types) throws SQLException {
         List<Vehicle> vehicles = new ArrayList<>();
 
-        vehicleDao.create(vehicle("Amateur vehicle", "British sports car", DistanceUnit.mi, types.get(7), 227880L, Currency.getInstance("GBP")));
-        vehicles.add(vehicleDao.queryBuilder().where().eq("name", "Amateur vehicle").query().get(0));
-        vehicleDao.create(vehicle("LongWay driver Pro", "Very massive asphalt destroyer (CZ)", DistanceUnit.km, types.get(1), 16000L, Currency.getInstance("CZK")));
+        vehicleDao.create(vehicle("LongWay driver Pro", "Very massive asphalt destroyer (CZ)", DistanceUnit.km, VolumeUnit.LITRE, types.get(1), 16000L, Currency.getInstance("CZK")));
         vehicles.add(vehicleDao.queryBuilder().where().eq("name", "LongWay driver Pro").query().get(0));
-        vehicleDao.create(vehicle("Empty", "Initial Car", DistanceUnit.km, types.get(0), 0L, Currency.getInstance("HUF")));
+        vehicleDao.create(vehicle("Amateur vehicle", "British sports car", DistanceUnit.mi, VolumeUnit.GALLON_UK, types.get(7), 227880L, Currency.getInstance("GBP")));
+        vehicles.add(vehicleDao.queryBuilder().where().eq("name", "Amateur vehicle").query().get(0));
+        vehicleDao.create(vehicle("Empty", "Initial Car", DistanceUnit.km, VolumeUnit.LITRE, types.get(0), 0L, Currency.getInstance("HUF")));
         vehicles.add(vehicleDao.queryBuilder().where().eq("name", "Empty").query().get(0));
 
         return vehicles;
     }
 
-    private static Vehicle vehicle(String name, String maker, DistanceUnit unit,
+    private static Vehicle vehicle(String name, String maker, DistanceUnit unit, VolumeUnit volumeUnit,
                                    VehicleType type, Long mileage, Currency currency) {
         Vehicle vehicle = new Vehicle();
 
         vehicle.setName(name);
         vehicle.setVehicleMaker(maker);
         vehicle.setUnit(unit);
+        vehicle.setVolumeUnit(volumeUnit);
         vehicle.setType(type);
         vehicle.setStartMileage(mileage);
         vehicle.setCurrency(currency);

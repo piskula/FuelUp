@@ -29,6 +29,9 @@ import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.business.ServiceResult;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
+import sk.piskula.fuelup.entity.enums.VolumeUnit;
+import sk.piskula.fuelup.entity.util.CurrencyUtil;
+import sk.piskula.fuelup.entity.util.VolumeUtil;
 
 
 public class AddFillUpActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
@@ -56,7 +59,7 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
 
     private Vehicle mSelectedCar;
     private SwitchDistance distanceMode = SwitchDistance.fromLast;
-    private SwitchPrice priceMode = SwitchPrice.perLitre;
+    private SwitchPrice priceMode = SwitchPrice.perVolume;
 
     private Calendar fillUpDate;
 
@@ -64,11 +67,11 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fillup_edit);
-        initViews();
 
         Intent intent = getIntent();
-
         mSelectedCar = intent.getParcelableExtra(EXTRA_CAR);
+
+        initViews();
     }
 
     @Override
@@ -78,7 +81,8 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
         setFillUpDate(Calendar.getInstance());
         mTxtCurrencySymbol.setText(mSelectedCar.getCurrencySymbol(this));
         mTxtDistanceUnit.setText(mSelectedCar.getUnit().toString());
-        mTxtFuelVolumeUnit.setText(getString(R.string.litre));
+        mTxtFuelVolumeUnit.setText(mSelectedCar.getVolumeUnit().toString());
+        this.onCheckedChanged(mBtnSwitchPrice, false);
     }
 
     private void initViews() {
@@ -97,6 +101,8 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
         mBtnSwitchDistance = (ToggleButton) findViewById(R.id.btn_switch_distance);
         mBtnSwitchPrice = (ToggleButton) findViewById(R.id.btn_switch_price);
 
+        mBtnSwitchPrice.setTextOff(VolumeUtil.getPricePerVolumeShortString(mSelectedCar.getVolumeUnit(), this));
+        mBtnSwitchPrice.setTextOn(getString(R.string.add_fillup_priceTotal_short));
         mBtnSwitchPrice.setOnCheckedChangeListener(this);
         mBtnSwitchDistance.setOnCheckedChangeListener(this);
 
@@ -146,7 +152,7 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
         }
 
         newFillUp.setFuelVolume(createdFuelVol);
-        if (priceMode == SwitchPrice.perLitre) {
+        if (priceMode == SwitchPrice.perVolume) {
             newFillUp.setFuelPricePerLitre(createdPrice);
             newFillUp.setFuelPriceTotal(createdFuelVol.multiply(createdPrice));
         } else {
@@ -202,17 +208,18 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
         if (compoundButton.getId() == mBtnSwitchPrice.getId()) {
             if (isChecked) {
                 priceMode = SwitchPrice.total;
-                mTxtInputPrice.setHint(getString(R.string.add_fillup_priceTotal));
+                mTxtCurrencySymbol.setText(mSelectedCar.getCurrencySymbol(this));
             } else {
-                priceMode = SwitchPrice.perLitre;
-                mTxtInputPrice.setHint(getString(R.string.add_fillup_pricePerLitre));
+                priceMode = SwitchPrice.perVolume;
+                mTxtCurrencySymbol.setText(
+                        mSelectedCar.getCurrencySymbol(this) + "/" + mSelectedCar.getVolumeUnit());
             }
         }
     }
 
     enum SwitchPrice {
         total,
-        perLitre
+        perVolume
     }
 
     public enum SwitchDistance {

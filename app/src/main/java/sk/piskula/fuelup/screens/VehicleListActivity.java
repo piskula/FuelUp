@@ -19,6 +19,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -106,6 +107,7 @@ public class VehicleListActivity extends AppCompatActivity implements OnNavigati
     public void onItemClick(View v, Vehicle vehicle, int position) {
         Intent i = new Intent(this, VehicleTabbedDetailActivity.class);
         i.putExtra(EXTRA_ADDED_CAR, vehicle);
+        Log.i(TAG, "Clicked vehicle " + vehicle);
         startActivityForResult(i, VEHICLE_ACTION_REQUEST_CODE);
     }
 

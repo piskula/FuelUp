@@ -21,7 +21,7 @@
                 android:id="@+id/txt_input_addfillup_distance_from_last_fillup_adding"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight = "6">
+                android:layout_weight = "@integer/edit_fillup_weight_text">
 
                 <EditText
                     android:id="@+id/txt_addfillup_distance_from_last_fillup_adding"
@@ -36,7 +36,7 @@
                 android:id="@+id/txt_addfillup_distance_unit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="@integer/edit_fillup_weight_unit"
                 android:paddingTop="@dimen/edit_fillup_expense_unit_paddingTop"
                 android:textAlignment="textStart"
                 android:textSize="@dimen/edit_fillup_expense_unit_fontSize"/>
@@ -45,7 +45,7 @@
                 android:id="@+id/btn_switch_distance"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_weight="@integer/edit_fillup_weight_switchButtons"
                 android:minWidth="@dimen/edit_fillup_switchButton_min_width"
                 android:textOff="@string/add_fillup_distanceFromLast_short"
                 android:textOn="@string/add_fillup_distanceTotal_short" />
@@ -63,14 +63,14 @@
                 android:id="@+id/txt_input_addfillup_price"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight = "6">
+                android:layout_weight = "@integer/edit_fillup_weight_text">
 
                 <EditText
                     android:id="@+id/txt_addfillup_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:hint="@string/add_fillup_pricePerLitre"
+                    android:hint="@string/price"
                     android:inputType="numberDecimal" />
             </android.support.design.widget.TextInputLayout>
 
@@ -78,7 +78,7 @@
                 android:id="@+id/txt_addfillup_currency"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="@integer/edit_fillup_weight_unit"
                 android:paddingTop="@dimen/edit_fillup_expense_unit_paddingTop"
                 android:textAlignment="textStart"
                 android:textSize="@dimen/edit_fillup_expense_unit_fontSize" />
@@ -87,9 +87,7 @@
                 android:id="@+id/btn_switch_price"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:textOff="@string/add_fillup_pricePerLitre_short"
-                android:textOn="@string/add_fillup_priceTotal_short"
+                android:layout_weight="@integer/edit_fillup_weight_switchButtons"
                 android:minWidth="@dimen/edit_fillup_switchButton_min_width"/>
         </LinearLayout>
 
@@ -102,7 +100,7 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight = "6">
+                android:layout_weight = "@integer/edit_fillup_weight_text">
 
                 <EditText
                     android:id="@+id/txt_addfillup_fuel_volume"
@@ -117,7 +115,7 @@
                 android:id="@+id/txt_addfillup_volumeUnit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="@integer/edit_fillup_weight_unit"
                 android:paddingTop="@dimen/edit_fillup_expense_unit_paddingTop"
                 android:textAlignment="textStart"
                 android:textSize="@dimen/edit_fillup_expense_unit_fontSize" />
@@ -126,7 +124,7 @@
                 android:id="@+id/checkBox_fullFillUp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_weight="@integer/edit_fillup_weight_switchButtons"
                 android:minWidth="@dimen/edit_fillup_switchButton_min_width"
                 android:checked="true"
                 android:text="@string/add_fillup_full_fillup" />

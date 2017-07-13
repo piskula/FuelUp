@@ -23,5 +23,8 @@
     <dimen name="edit_fillup_expense_unit_paddingTop">10dp</dimen>
     <dimen name="edit_fillup_expense_unit_fontSize">20sp</dimen>
     <dimen name="edit_fillup_switchButton_min_width">120dp</dimen>
+    <integer name="edit_fillup_weight_text">5</integer>
+    <integer name="edit_fillup_weight_unit">2</integer>
+    <integer name="edit_fillup_weight_switchButtons">4</integer>
 
 </resources>

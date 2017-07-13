@@ -12,6 +12,7 @@ import com.j256.ormlite.table.DatabaseTable;
 import java.util.Currency;
 
 import sk.piskula.fuelup.entity.enums.DistanceUnit;
+import sk.piskula.fuelup.entity.enums.VolumeUnit;
 import sk.piskula.fuelup.entity.util.CurrencyUtil;
 
 /**
@@ -30,8 +31,11 @@ public class Vehicle implements Parcelable {
     @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
     private VehicleType type;
 
-    @DatabaseField(unknownEnumName = "km")
+    @DatabaseField(unknownEnumName = "km", canBeNull = false)
     private DistanceUnit unit;
+
+    @DatabaseField(unknownEnumName = "LITRE", canBeNull = false)
+    private VolumeUnit volumeUnit;
 
     @DatabaseField(columnName = "vehicle_maker")
     private String vehicleMaker;
@@ -77,6 +81,14 @@ public class Vehicle implements Parcelable {
 
     public void setUnit(DistanceUnit unit) {
         this.unit = unit;
+    }
+
+    public VolumeUnit getVolumeUnit() {
+        return volumeUnit;
+    }
+
+    public void setVolumeUnit(VolumeUnit volumeUnit) {
+        this.volumeUnit = volumeUnit;
     }
 
     public String getVehicleMaker() {
@@ -129,7 +141,8 @@ public class Vehicle implements Parcelable {
                 + "id=" + id
                 + ", name=" + name
                 + ", type=" + type
-                + ", unit=" + unit
+                + ", unit=" + unit.name()
+                + ", volumeUnit=" + volumeUnit.name()
                 + ", vehicleMaker=" + vehicleMaker
                 + ", startMileage=" + startMileage
                 + ", currency=" + currency
@@ -171,6 +184,7 @@ public class Vehicle implements Parcelable {
         dest.writeString(this.name);
         dest.writeParcelable(this.type, flags);
         dest.writeInt(this.unit == null ? -1 : this.unit.ordinal());
+        dest.writeInt(this.volumeUnit == null ? -1 : this.volumeUnit.ordinal());
         dest.writeString(this.vehicleMaker);
         dest.writeValue(this.startMileage);
         dest.writeString(this.currency);
@@ -183,6 +197,8 @@ public class Vehicle implements Parcelable {
         this.type = in.readParcelable(VehicleType.class.getClassLoader());
         int tmpUnit = in.readInt();
         this.unit = tmpUnit == -1 ? null : DistanceUnit.values()[tmpUnit];
+        int tmpVolumeUnit = in.readInt();
+        this.volumeUnit = tmpVolumeUnit == -1 ? null : VolumeUnit.values()[tmpVolumeUnit];
         this.vehicleMaker = in.readString();
         this.startMileage = (Long) in.readValue(Long.class.getClassLoader());
         this.currency = in.readString();

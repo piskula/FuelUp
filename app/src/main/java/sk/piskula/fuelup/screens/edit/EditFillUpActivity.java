@@ -33,6 +33,7 @@ import sk.piskula.fuelup.business.ServiceResult;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.util.DateUtil;
+import sk.piskula.fuelup.entity.util.VolumeUtil;
 import sk.piskula.fuelup.screens.dialog.DeleteDialog;
 
 
@@ -63,7 +64,7 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
     private Vehicle mSelectedCar;
     private FillUp mSelectedFillUp;
     private SwitchDistance distanceMode = SwitchDistance.fromLast;
-    private SwitchPrice priceMode = SwitchPrice.perLitre;
+    private SwitchPrice priceMode = SwitchPrice.perVolume;
 
     private Calendar fillUpDate;
 
@@ -71,12 +72,13 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fillup_edit);
-        initViews();
 
         Intent intent = getIntent();
 
         mSelectedFillUp = intent.getParcelableExtra(EXTRA_FILLUP);
         mSelectedCar = mSelectedFillUp.getVehicle();
+
+        initViews();
     }
 
     @Override
@@ -84,9 +86,10 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         super.onStart();
 
         mTxtDistance.setText(mSelectedFillUp.getDistanceFromLastFillUp().toString());
-        mTxtFuelVolumeUnit.setText(getString(R.string.litre));
+        mTxtFuelVolumeUnit.setText(mSelectedCar.getVolumeUnit().toString());
         mTxtFuelVolume.setText(NumberFormat.getNumberInstance().format(mSelectedFillUp.getFuelVolume()));
-        if (priceMode == SwitchPrice.perLitre) {
+        this.onCheckedChanged(mBtnSwitchPrice, false);
+        if (priceMode == SwitchPrice.perVolume) {
             mTxtPrice.setText(mSelectedFillUp.getFuelPricePerLitre().setScale(2, BigDecimal.ROUND_HALF_UP).toString());
         } else {
             mTxtPrice.setText(mSelectedFillUp.getFuelPriceTotal().setScale(2, BigDecimal.ROUND_HALF_UP).toString());
@@ -124,6 +127,8 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         mBtnSwitchDistance = (ToggleButton) findViewById(R.id.btn_switch_distance);
         mBtnSwitchPrice = (ToggleButton) findViewById(R.id.btn_switch_price);
 
+        mBtnSwitchPrice.setTextOff(VolumeUtil.getPricePerVolumeShortString(mSelectedCar.getVolumeUnit(), this));
+        mBtnSwitchPrice.setTextOn(getString(R.string.add_fillup_priceTotal_short));
         mBtnSwitchPrice.setOnCheckedChangeListener(this);
         mBtnSwitchDistance.setOnCheckedChangeListener(this);
 
@@ -169,7 +174,7 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         mSelectedFillUp.setDistanceFromLastFillUp(createdDistance);
 
         mSelectedFillUp.setFuelVolume(createdFuelVol);
-        if (priceMode == SwitchPrice.perLitre) {
+        if (priceMode == SwitchPrice.perVolume) {
             mSelectedFillUp.setFuelPricePerLitre(createdPrice);
             mSelectedFillUp.setFuelPriceTotal(createdFuelVol.multiply(createdPrice));
         } else {
@@ -224,10 +229,11 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         if (compoundButton.getId() == mBtnSwitchPrice.getId()) {
             if (isChecked) {
                 priceMode = SwitchPrice.total;
-                mTxtInputPrice.setHint(getString(R.string.add_fillup_priceTotal));
+                mTxtCurrencySymbol.setText(mSelectedCar.getCurrencySymbol(this));
             } else {
-                priceMode = SwitchPrice.perLitre;
-                mTxtInputPrice.setHint(getString(R.string.add_fillup_pricePerLitre));
+                priceMode = SwitchPrice.perVolume;
+                mTxtCurrencySymbol.setText(
+                        mSelectedCar.getCurrencySymbol(this) + "/" + mSelectedCar.getVolumeUnit());
             }
         }
     }
@@ -275,7 +281,7 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
 
     enum SwitchPrice {
         total,
-        perLitre
+        perVolume
     }
 
     public enum SwitchDistance {
