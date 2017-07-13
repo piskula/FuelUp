@@ -29,6 +29,15 @@ import sk.piskula.fuelup.entity.enums.VolumeUnit;
  */
 public class SampleDataUtils {
 
+    private static final int LAST_YEAR = 2017;
+    private static final int NUMBER_OF_PREVIOUS_YEARS = 3;
+
+    private static final int MAX_FILLUPS = 310; //from there
+    private static final int LOW_VEHICLE_FILLUPS = 10;
+
+    private static final int MAX_EXPENSES = 310; //from there
+    private static final int LOW_VEHICLE_EXPENSES = 10;
+
     public static List<VehicleType> addVehicleTypes(Dao<VehicleType, Long> vehicleTypeDao) throws SQLException {
         List<String> types = Arrays.asList("Sedan", "Hatchback", "Combi", "Van", "Motocycle", "Pickup", "Quad", "Sport", "SUV", "Coupe");
         List<VehicleType> result = new ArrayList<>();
@@ -77,18 +86,18 @@ public class SampleDataUtils {
 
     public static void addFillUps(FillUpService fillUpService, List<Vehicle> vehicles) throws SQLException {
 
-        final int COUNT = 308;
         Random random = new Random();
 
-        List<FillUp> fillUps = new ArrayList<>(COUNT);
+        List<FillUp> fillUps = new ArrayList<>(MAX_FILLUPS);
 
-        for (int i = 0; i < COUNT; i++) {
+        int whichVehicle = 1;
+        for (int i = 0; i < MAX_FILLUPS; i++) {
             Calendar cal = Calendar.getInstance();
-            cal.set(random.nextInt(4) + 2014, random.nextInt(12), random.nextInt(27) + 1);
+            cal.set(random.nextInt(NUMBER_OF_PREVIOUS_YEARS + 1) + LAST_YEAR - NUMBER_OF_PREVIOUS_YEARS, random.nextInt(12), random.nextInt(27) + 1);
             int dist = random.nextInt(8) + 4;
 
-            int whichVehicle = random.nextInt() % 100 == 0 ? 0 : 1;
-            double currencyFactor = whichVehicle == 0 ? 0.16d : 4d;
+            if (i > LOW_VEHICLE_FILLUPS) whichVehicle = 0;
+            double currencyFactor = whichVehicle == 1 ? 0.16d : 4d;
             fillUps.add(fillUp(vehicles.get(whichVehicle),
                     BigDecimal.valueOf((random.nextDouble() + 2) * 3.1 * currencyFactor),
                     cal.getTime(),
@@ -131,16 +140,16 @@ public class SampleDataUtils {
                 "NOS - nitro tuning", "Yearly insurance", "Tires interchange", "Air freshener",
                 "Rear window - new", "Kid Seat", "STK & ETK", "Additional insurance", "Radiator - new",
                 "Registration fee", "Spark plugs - replace", "Castrol Magnatec lubricate");
-        List<Double> prices = Arrays.asList(7d, 50d, 18000d, 3.6d, 220d, 315d, 450d, 11700d, 7400d, 3200d, 12000d, 14d, 15d, 18d, 45d, 52d, 110d, 95d, 130d, 8400d, 8500d, 7600d, 350d);
-        final int COUNT = 308;
+        List<Double> prices = Arrays.asList(7d, 50d, 3.6d, 220d, 315d, 450d, 11700d, 7400d, 3200d, 14d, 15d, 18d, 45d, 52d, 110d, 95d, 130d, 8400d, 8500d, 7600d, 350d, 420d, 710d, 700d, 1200d, 115d);
         Random random = new Random();
 
-        for (int i = 0; i < COUNT; i++) {
+        int whichVehicle = 1;
+        for (int i = 0; i < MAX_EXPENSES; i++) {
             Calendar cal = Calendar.getInstance();
-            cal.set(random.nextInt(4) + 2014, random.nextInt(11), random.nextInt(27) + 1);
+            cal.set(random.nextInt(NUMBER_OF_PREVIOUS_YEARS + 1) + LAST_YEAR - NUMBER_OF_PREVIOUS_YEARS, random.nextInt(11), random.nextInt(27) + 1);
 
-            int whichVehicle = random.nextInt() % 100 == 0 ? 0 : 1;
-            int currencyFactor = whichVehicle == 0 ? 1 : 4;
+            if (i > LOW_VEHICLE_EXPENSES) whichVehicle = 0;
+            int currencyFactor = whichVehicle == 1 ? 1 : 4;
             expenseService.save(expense(vehicles.get(whichVehicle),
                     issues.get(random.nextInt(issues.size())),
                     BigDecimal.valueOf(prices.get(random.nextInt(prices.size())) * currencyFactor),
