@@ -220,6 +220,14 @@
                 app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageExpenseCostPerYear) : @string/na}" />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/average_distance_per_day"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_average_distance_per_day"
+                app:unit="@{vehicle.unit.toString()}"
+                app:value="@{data!= null ? String.valueOf(data.averageDistancePerDay) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/average_distance_per_week"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/listPreferredItemHeight"

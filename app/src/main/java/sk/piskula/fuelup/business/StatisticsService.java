@@ -112,6 +112,7 @@ public class StatisticsService {
         dto.setAverageExpenseCostPerMonth(getAveragePerTime(totalPriceExpenses, trackingDays, TimePeriod.MONTH));
         dto.setAverageExpenseCostPerYear(getAveragePerTime(totalPriceExpenses, trackingDays, TimePeriod.YEAR));
 
+        dto.setAverageDistancePerDay(getAveragePerTime(BigDecimal.valueOf(totalDrivenDistance), trackingDays, TimePeriod.DAY).longValue());
         dto.setAverageDistancePerWeek(getAveragePerTime(BigDecimal.valueOf(totalDrivenDistance), trackingDays, TimePeriod.WEEK).longValue());
         dto.setAverageDistancePerMonth(getAveragePerTime(BigDecimal.valueOf(totalDrivenDistance), trackingDays, TimePeriod.MONTH).longValue());
         dto.setAverageDistancePerYear(getAveragePerTime(BigDecimal.valueOf(totalDrivenDistance), trackingDays, TimePeriod.YEAR).longValue());
@@ -248,6 +249,7 @@ public class StatisticsService {
     }
 
     private enum TimePeriod {
+        DAY(1),
         WEEK(7),
         MONTH(30),
         YEAR(365);

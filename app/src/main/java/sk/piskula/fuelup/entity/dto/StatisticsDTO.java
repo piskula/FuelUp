@@ -49,6 +49,7 @@ public class StatisticsDTO {
     private BigDecimal averageFuelCostPerYear;
     private BigDecimal averageExpenseCostPerYear;
 
+    private long averageDistancePerDay;
     private long averageDistancePerWeek;
     private long averageDistancePerMonth;
     private long averageDistancePerYear;
@@ -251,6 +252,14 @@ public class StatisticsDTO {
 
     public void setAverageExpenseCostPerYear(BigDecimal averageExpenseCostPerYear) {
         this.averageExpenseCostPerYear = averageExpenseCostPerYear;
+    }
+
+    public long getAverageDistancePerDay() {
+        return averageDistancePerDay;
+    }
+
+    public void setAverageDistancePerDay(long averageDistancePerDay) {
+        this.averageDistancePerDay = averageDistancePerDay;
     }
 
     public long getAverageDistancePerWeek() {

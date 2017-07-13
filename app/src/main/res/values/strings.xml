@@ -160,6 +160,7 @@
     <string name="statistics_average_expense_cost_per_week">Average expense costs per week</string>
     <string name="statistics_average_expense_cost_per_month">Average expense costs per month</string>
     <string name="statistics_average_expense_cost_per_year">Average expense costs per year</string>
+    <string name="statistics_average_distance_per_day">Average driven distance per day</string>
     <string name="statistics_average_distance_per_week">Average driven distance per week</string>
     <string name="statistics_average_distance_per_month">Average driven distance per month</string>
     <string name="statistics_average_distance_per_year">Average driven distance per year</string>
