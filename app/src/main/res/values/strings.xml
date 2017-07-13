@@ -81,6 +81,15 @@
     <string name="add_fillup_title_create">Create fill up</string>
     <string name="add_fillup_title_update">Update fill up</string>
 
+    <string name="add_fillup_distance_overall">Overall distance</string>
+    <string name="add_fillup_distanceFromLast">Distance from last fill up</string>
+    <string name="add_fillup_distanceFromLast_short">From last</string>
+    <string name="add_fillup_distanceTotal_short">Total</string>
+    <string name="add_fillup_fail">Fill up create failed</string>
+    <string name="add_fillup_fail_update">Fill up update failed</string>
+    <string name="add_fillup_fuel_volume">Fuel volume</string>
+    <string name="add_fillup_full_fillup">Full fill up</string>
+    <string name="add_fillup_info">Note</string>
     <string name="add_fillup_price">Price</string>
     <string name="add_fillup_pricePerGallon">Price per gallon</string>
     <string name="add_fillup_pricePerGallon_short">Per gallon</string>
@@ -88,18 +97,8 @@
     <string name="add_fillup_pricePerLitre_short">Per litre</string>
     <string name="add_fillup_priceTotal">Total price</string>
     <string name="add_fillup_priceTotal_short">Total</string>
-    <string name="add_fillup_distance">Distance</string>
-    <string name="add_fillup_distance_overall">Overall distance</string>
-    <string name="add_fillup_distanceFromLast">Distance from last fill up</string>
-    <string name="add_fillup_distanceFromLast_short">From last</string>
-    <string name="add_fillup_distanceTotal_short">Total</string>
     <string name="add_fillup_success">Fill up created</string>
-    <string name="add_fillup_fail">Fill up create failed</string>
     <string name="add_fillup_success_update">Fill up updated</string>
-    <string name="add_fillup_fail_update">Fill up update failed</string>
-    <string name="add_fillup_fuel_volume">Fuel volume</string>
-    <string name="add_fillup_full_fillup">Full fill up</string>
-    <string name="add_fillup_info">Note</string>
 
     <string name="add_fillup_distance_mode_update_rejected">It is not possible to switch distance modes on edit</string>
 
@@ -114,17 +113,13 @@
     <string name="no">No</string>
 
     <string name="desc_expensePic">service icon</string>
-    <string name="list_item_fillup_is_full">full</string>
-    <string name="list_item_fillup_txt_avg_symbol">ø</string>
-    <string name="l_100km">\u2113/100km</string>
-    <string name="litre">\u2113</string>
-    <string name="per_litre_symbol">€/l</string>
     <string name="desc_fillupPic">pump icon</string>
-    <string name="euro">€</string>
+
+    <string name="litre">\u2113</string>
     <string name="listFillUps_isNotFull">not full</string>
     <string name="listFillups_isFull">full</string>
     <string name="na">N/A</string>
-    <string name="day">days</string> <!--TODO check singular plural support -->
+    <string name="day">deň</string> <!--TODO check singular plural support -->
 
     <string name="units_kilometres">km</string>
     <string name="units_miles">mi</string>

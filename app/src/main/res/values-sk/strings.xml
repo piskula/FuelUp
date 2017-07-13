@@ -72,55 +72,66 @@
 
 
 
-
-
-
-
-
+    <string name="updateCarActivity_wrong_number_format">Nesprávny formát čisla</string>
+    <string name="updateCarActivity_Toast_carUpdatedSuccesfully01">Auto</string>
+    <string name="updateCarActivity_Toast_carUpdatedSuccesfully02">Aktualizácia úspešná</string>
+    <string name="updateCarActivity_Toast_carNoUpdate">Bez zmeny</string>
+    <string name="updateCarActivity_emptyFields">Niektoré položky sú nevyplnené</string>
 
     <string name="add_fillup_title_create">Vytvoriť tankovanie</string>
     <string name="add_fillup_title_update">Upraviť tankovanie</string>
-    <string name="add_fillup_distance">Vzdialenosť</string>
+
+    <string name="add_fillup_distance_overall">Celková vzdialenosť</string>
     <string name="add_fillup_distanceFromLast">Vzdialenosť od posledného tankovania</string>
     <string name="add_fillup_distanceFromLast_short">Od posledného tankovania</string>
     <string name="add_fillup_distanceTotal_short">Celková</string>
-    <string name="add_fillup_distance_mode_update_rejected">Zmena módu vzdialenosti nie je možná</string>
-    <string name="add_fillup_distance_overall"></string>
     <string name="add_fillup_fail">Vytvorenie tankovania zlyhalo</string>
     <string name="add_fillup_fail_update">Aktualizácia tankovania zlyhala</string>
     <string name="add_fillup_fuel_volume">Objem paliva</string>
     <string name="add_fillup_full_fillup">Plná nádrž</string>
     <string name="add_fillup_info">Poznámka</string>
     <string name="add_fillup_price">Cena</string>
+    <string name="add_fillup_pricePerGallon">Cena za galón</string>
+    <string name="add_fillup_pricePerGallon_short">Za galón</string>
     <string name="add_fillup_pricePerLitre">Cena za liter</string>
     <string name="add_fillup_pricePerLitre_short">Za liter</string>
     <string name="add_fillup_priceTotal">Celková cena</string>
     <string name="add_fillup_priceTotal_short">Celkovo</string>
     <string name="add_fillup_success">Tankovanie vytvorené</string>
     <string name="add_fillup_success_update">Tankovanie aktializované</string>
-    <string name="app_name">Fuel Up</string>
-    <string name="currency">Mena</string>
-    <string name="desc_expensePic">servisná ikona</string>
-    <string name="desc_fillupPic">ikona čerpacej stanice</string>
-    <string name="distance_units">Jednotka vzdialenosti</string>
-    <string name="kilometres">kilometre</string>
-    <string name="yes">Áno</string>
-    <string name="vehicle_type">Typ vozidla</string>
-    <string name="updateCarActivity_wrong_number_format">Nesprávny formát čisla</string>
-    <string name="updateCarActivity_emptyFields">Niektoré položky sú nevyplnené</string>
-    <string name="updateCarActivity_Toast_carUpdatedSuccesfully02">Aktualizácia úspešná</string>
-    <string name="updateCarActivity_Toast_carUpdatedSuccesfully01">Auto</string>
-    <string name="updateCarActivity_Toast_carNoUpdate">Bez zmeny</string>
+
+    <string name="add_fillup_distance_mode_update_rejected">Zmena módu vzdialenosti nie je možná</string>
+
     <string name="remove_fillup_dialog_message">Chcete odstániť toto tankovanie?</string>
     <string name="remove_fillup_dialog_title">Odstrániť tankovanie</string>
     <string name="remove_fillup_fail">Odstránenie tankovania zlyhalo</string>
     <string name="remove_fillup_success">Tankovanie odstránené</string>
+
     <string name="statistics_title">Detailné štatistiky</string>
+
+    <string name="yes">Áno</string>
+    <string name="no">No</string>
+
+
+
+
+    <string name="litre">\u2113</string>
+    <string name="listFillUps_isNotFull">čiastočne</string>
+    <string name="listFillups_isFull">plná</string>
+
+    <string name="day">days</string> <!--TODO check singular plural support -->
+
+
+
+
+
+    <string name="currency">Mena</string>
+    <string name="vehicle_type">Typ vozidla</string>
+    <string name="distance_units">Jednotka vzdialenosti</string>
     <string name="no_expense_created_yet">Žiadne výdavky</string>
     <string name="no_fillup_created_yet">Žiadne tankovania</string>
     <string name="no_vehicle_created_yet">Žiadne vozidlá</string>
-    <string name="listFillUps_isNotFull">čiastočne</string>
-    <string name="listFillups_isFull">plná</string>
-    <string name="list_item_fillup_is_full">plná</string>
+    <string name="miles">míle</string>
+    <string name="kilometres">kilometre</string>
 
 </resources>

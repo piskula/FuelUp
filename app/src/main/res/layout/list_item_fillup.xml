@@ -7,15 +7,16 @@
 
     <TextView
         android:id="@+id/txt_itemfillup_date"
+        android:text="13.7.2017"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/list_item_fillup_is_full"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:textColor="@android:color/darker_gray" />
 
     <TextView
         android:id="@+id/txt_itemfillup_price_total"
+        android:text="1200 Kč"
         android:layout_marginTop="3dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,9 +26,10 @@
 
     <TextView
         android:id="@+id/txt_itemfillup_fuel_volume"
+        android:text="45,56"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/img_itemfillup_pump"
+        android:layout_toEndOf="@+id/img_itemfillup_pump"
         android:layout_alignParentBottom="true"
         android:ellipsize="end"
         android:maxLines="2"
@@ -36,42 +38,43 @@
 
     <TextView
         android:id="@+id/txt_itemfillup_consumption"
+        android:text="6,28"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/txt_itemfillup_consumption_symbol"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/txt_itemfillup_consumption_symbol"
         android:maxLines="1"
         android:textColor="@android:color/holo_orange_dark"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/txt_itemfillup_consumption_symbol"
-        android:layout_margin="2dp"
+        android:text="\u2113/100km"
+        android:layout_marginLeft="2dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/l_100km" />
+        android:layout_alignBottom="@+id/txt_itemfillup_consumption"
+        android:layout_alignParentEnd="true" />
 
 
     <TextView
         android:id="@+id/txt_itemfillup_avg_symbol"
+        android:text="ø"
         android:layout_margin="2dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/txt_itemfillup_consumption"
-        android:text="@string/list_item_fillup_txt_avg_symbol" />
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/txt_itemfillup_consumption" />
 
     <TextView
         android:id="@+id/txt_itemfillup_price_per_litre"
+        android:text="32,45 Kč"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:linksClickable="false"
-        android:text="@string/per_litre_symbol"
         android:textColor="@android:color/holo_green_dark"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -80,55 +83,48 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/txt_itemfillup_price_per_litre"
-        android:text="@string/per_litre_symbol"
+        android:layout_toEndOf="@+id/txt_itemfillup_price_per_litre"
+        android:text="/\u2113"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
         android:id="@+id/txt_itemfillup_distance"
+        android:text="100"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/txt_itemfillup_fuel_volume"
+        android:layout_alignStart="@+id/txt_itemfillup_fuel_volume"
         android:layout_alignParentTop="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/txt_itemfillup_driven"
-        android:layout_margin="2dp"
+        android:text="km"
+        android:layout_marginStart="2dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/txt_itemfillup_distance" />
+        android:layout_alignBottom="@+id/txt_itemfillup_distance"
+        android:layout_toEndOf="@+id/txt_itemfillup_distance" />
 
 
     <ImageView
         android:id="@+id/img_itemfillup_pump"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:contentDescription="@string/desc_fillupPic"
         android:clickable="false"
         />
 
     <TextView
-        android:id="@+id/txt_itemfillup_price_total_symbol"
-        android:layout_marginTop="3dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/txt_itemfillup_price_total"
-        android:text="@string/euro"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <TextView
         android:id="@+id/txt_itemfillup_fuel_volume_symbol"
+        android:text="\u2113"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/txt_itemfillup_fuel_volume"
-        android:text="@string/litre"
+        android:layout_toEndOf="@+id/txt_itemfillup_fuel_volume"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 

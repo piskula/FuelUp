@@ -2,6 +2,8 @@ package sk.piskula.fuelup.entity.util;
 
 import android.content.Context;
 
+import java.math.BigDecimal;
+
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.enums.VolumeUnit;
 
@@ -11,6 +13,9 @@ import sk.piskula.fuelup.entity.enums.VolumeUnit;
  */
 
 public class VolumeUtil {
+
+    public static final BigDecimal ONE_LITRE_IS_US_GALLONS = BigDecimal.valueOf(0.26417205235815d);
+    public static final BigDecimal ONE_LITRE_IS_UK_GALLONS = BigDecimal.valueOf(0.21996923465436d);
 
     private static final String TAG = "VolumeUtil";
 
@@ -28,5 +33,21 @@ public class VolumeUtil {
             return context.getString(R.string.add_fillup_pricePerLitre);
         else
             return context.getString(R.string.add_fillup_pricePerGallon);
+    }
+
+    public static BigDecimal getUsGallonsFromLitre(BigDecimal value) {
+        return ONE_LITRE_IS_US_GALLONS.multiply(value);
+    }
+
+    public static BigDecimal getLitresFromUsGallon(BigDecimal value) {
+        return value.divide(ONE_LITRE_IS_US_GALLONS);
+    }
+
+    public static BigDecimal getUkGallonsFromLitre(BigDecimal value) {
+        return ONE_LITRE_IS_UK_GALLONS.multiply(value);
+    }
+
+    public static BigDecimal getLitresFromUkGallon(BigDecimal value) {
+        return value.divide(ONE_LITRE_IS_UK_GALLONS);
     }
 }
