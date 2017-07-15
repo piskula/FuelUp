@@ -5,41 +5,54 @@ import java.math.BigDecimal;
 /**
  * Created by Martin Styk on 10.07.2017.
  */
-
 public class StatisticsDTO {
 
+    // Consumption
     private BigDecimal avgConsumption;
     private BigDecimal avgConsumptionReversed;
+    private BigDecimal fuelConsumptionBest;
+    private BigDecimal fuelConsumptionWorst;
 
-    private BigDecimal totalPriceFillUps;
-
-    private BigDecimal totalPriceExpenses;
-
-    private BigDecimal totalPrice;
-
-    private BigDecimal totalFuelVolume;
-
-    private BigDecimal fillUpPricePerDistance;
-
-    private BigDecimal expensePricePerDistance;
-
-    private BigDecimal totalPricePerDistance;
-
-
-    private long totalDrivenDistance;
-
-    private int totalNumberExpenses;
-
-    private int totalNumberFillUps;
-
-    private BigDecimal avgFuelPricePerLitre;
-
-    private BigDecimal avgFuelVolumePerFillUp;
-
-    private BigDecimal avgFuelPricePerFillUp;
-
+    // FuelUp usage
     private long trackingDays;
 
+    // Total costs
+    private BigDecimal totalPrice;
+    private BigDecimal totalPriceFillUps;
+    private BigDecimal totalPriceExpenses;
+
+    //
+    private long totalDrivenDistance;
+    private int totalNumberExpenses;
+    private int totalNumberFillUps;
+    private BigDecimal totalFuelVolume;
+
+    // Costs per distance
+    private BigDecimal fuelPricePerDistance;
+    private BigDecimal expensePricePerDistance;
+    private BigDecimal totalPricePerDistance;
+
+    // Fuel price/litre
+    private BigDecimal avgFuelPricePerLitre;
+    private BigDecimal pricePerLitreLowest;
+    private BigDecimal pricePerLitreHighest;
+
+    // Fill up data
+    private BigDecimal avgFuelVolumePerFillUp;
+    private BigDecimal avgFuelPricePerFillUp;
+    private BigDecimal averageNumberOfFillUpsPerWeek;
+    private BigDecimal averageNumberOfFillUpsPerMonth;
+    private BigDecimal averageNumberOfFillUpsPerYear;
+    private int distanceBetweenFillUpsAverage;
+    private int distanceBetweenFillUpsLowest;
+    private int distanceBetweenFillUpsHighest;
+
+    // Expense data
+    private BigDecimal averageNumberOfExpensesPerWeek;
+    private BigDecimal averageNumberOfExpensesPerMonth;
+    private BigDecimal averageNumberOfExpensesPerYear;
+
+    // Costs per time
     private BigDecimal averageTotalCostPerWeek;
     private BigDecimal averageFuelCostPerWeek;
     private BigDecimal averageExpenseCostPerWeek;
@@ -50,25 +63,20 @@ public class StatisticsDTO {
     private BigDecimal averageFuelCostPerYear;
     private BigDecimal averageExpenseCostPerYear;
 
+
+    // Distance per time
     private long averageDistancePerDay;
     private long averageDistancePerWeek;
     private long averageDistancePerMonth;
     private long averageDistancePerYear;
 
-    private BigDecimal averageNumberOfFillUpsPerWeek;
-    private BigDecimal averageNumberOfFillUpsPerMonth;
-    private BigDecimal averageNumberOfFillUpsPerYear;
+    public int getDistanceBetweenFillUpsAverage() {
+        return distanceBetweenFillUpsAverage;
+    }
 
-    private BigDecimal averageNumberOfExpensesPerWeek;
-    private BigDecimal averageNumberOfExpensesPerMonth;
-    private BigDecimal averageNumberOfExpensesPerYear;
-
-    private BigDecimal fuelConsumptionBest;
-    private BigDecimal fuelConsumptionWorst;
-    private BigDecimal pricePerLitreLowest;
-    private BigDecimal pricePerLitreHighest;
-    private int distanceBetweenFillUpsLowest;
-    private int distanceBetweenFillUpsHighest;
+    public void setDistanceBetweenFillUpsAverage(int distanceBetweenFillUpsAverage) {
+        this.distanceBetweenFillUpsAverage = distanceBetweenFillUpsAverage;
+    }
 
     public BigDecimal getAvgConsumption() {
         return avgConsumption;
@@ -150,12 +158,12 @@ public class StatisticsDTO {
         this.totalNumberFillUps = totalNumberFillUps;
     }
 
-    public BigDecimal getFillUpPricePerDistance() {
-        return fillUpPricePerDistance;
+    public BigDecimal getFuelPricePerDistance() {
+        return fuelPricePerDistance;
     }
 
-    public void setFillUpPricePerDistance(BigDecimal fillUpPricePerDistance) {
-        this.fillUpPricePerDistance = fillUpPricePerDistance;
+    public void setFuelPricePerDistance(BigDecimal fuelPricePerDistance) {
+        this.fuelPricePerDistance = fuelPricePerDistance;
     }
 
     public BigDecimal getExpensePricePerDistance() {

@@ -78,6 +78,9 @@ public class StatisticsService {
         BigDecimal avgFuelPricePerFillUp = totalNumberFillUps > 0 ?
                 totalPriceFillUps.divide(BigDecimal.valueOf(totalNumberFillUps), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
 
+        int averageDistanceBetweenFillUps = totalNumberFillUps > 0 ?
+                BigDecimal.valueOf(totalDrivenDistance).divide(BigDecimal.valueOf(totalNumberFillUps), 2, BigDecimal.ROUND_HALF_UP).intValue() : 0;
+
         // average per time
         long trackingDays = getTrackingDays();
 
@@ -97,7 +100,7 @@ public class StatisticsService {
 
         dto.setTotalPricePerDistance(totalPricePerDistance);
         dto.setExpensePricePerDistance(expensePricePerDistance);
-        dto.setFillUpPricePerDistance(fillUpPricePerDistance);
+        dto.setFuelPricePerDistance(fillUpPricePerDistance);
 
         dto.setAvgFuelPricePerLitre(avgFuelPricePerLitre);
         dto.setAvgFuelVolumePerFillUp(avgFuelVolumePerFillUp);
@@ -134,6 +137,7 @@ public class StatisticsService {
         dto.setPricePerLitreLowest(getPricePerLitreBest());
         dto.setDistanceBetweenFillUpsHighest(getDistanceBetweenFillUpsHighest());
         dto.setDistanceBetweenFillUpsLowest(getDistanceBetweenFillUpsLowest());
+        dto.setDistanceBetweenFillUpsAverage(averageDistanceBetweenFillUps);
 
         return dto;
     }

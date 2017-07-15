@@ -114,7 +114,7 @@
                 android:layout_height="?android:attr/listPreferredItemHeight"
                 app:name="@{@string/statistics_price_per_distance_fill_up(vehicle.getUnit().toString())}"
                 app:unit="@{currency}"
-                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.fillUpPricePerDistance) : @string/na}" />
+                app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.fuelPricePerDistance) : @string/na}" />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:id="@+id/price_per_distance_expense"
@@ -349,6 +349,14 @@
                 app:name="@string/statistics_distance_between_fill_ups_highest"
                 app:unit="@{vehicle.unit.toString()}"
                 app:value="@{data!= null ? Integer.toString(data.distanceBetweenFillUpsHighest) : @string/na}" />
+
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:id="@+id/distance_between_fill_ups_average"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                app:name="@string/statistics_distance_between_fill_ups_average"
+                app:unit="@{vehicle.unit.toString()}"
+                app:value="@{data!= null ? Integer.toString(data.distanceBetweenFillUpsAverage) : @string/na}" />
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

@@ -57,7 +57,7 @@ public class AddVehicleActivity extends AppCompatActivity implements ImageChoose
     private String vehiclePicturePath;
 
     private boolean showImageChooseDialog = false;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
