@@ -56,6 +56,8 @@ public class AddVehicleActivity extends AppCompatActivity implements ImageChoose
 
     private String vehiclePicturePath;
 
+    private boolean showImageChooseDialog = false;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +71,25 @@ public class AddVehicleActivity extends AppCompatActivity implements ImageChoose
             txtName.setText(nameFromDialog);
             txtName.setSelection(nameFromDialog.length());
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // This is workaround to display image chooser dialog when selecting photo
+        // see https://stackoverflow.com/questions/33264031/calling-dialogfragments-show-from-within-onrequestpermissionsresult-causes
+        if (showImageChooseDialog) {
+            if (vehiclePicturePath != null) {
+                deletePhoto();
+            } else {
+                getSupportFragmentManager();
+                ImageChooserDialog d = new ImageChooserDialog();
+                d.show(getSupportFragmentManager(), ImageChooserDialog.class.getSimpleName());
+            }
+            showImageChooseDialog = false;
+        }
+
     }
 
     @Override
@@ -173,6 +194,19 @@ public class AddVehicleActivity extends AppCompatActivity implements ImageChoose
             }
             if (vehiclePicturePath != null)
                 Snackbar.make(findViewById(android.R.id.content), R.string.addVehicle_picture_added, Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case STORAGE_PERMISSIONS_REQUEST: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    showImageChooseDialog = true;
+                }
+            }
         }
     }
 
