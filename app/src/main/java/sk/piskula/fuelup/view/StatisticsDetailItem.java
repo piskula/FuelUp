@@ -24,7 +24,7 @@ public class StatisticsDetailItem extends LinearLayout {
     private String unit;
 
     public StatisticsDetailItem(Context context, AttributeSet attrs) {
-        super(context, attrs, R.attr.statisticsDetailItemViewStyle);
+        super(context, attrs, R.attr.statisticsItemDetail);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.StatisticsDetailItem, 0, 0);
         name = a.getString(R.styleable.StatisticsDetailItem_name);

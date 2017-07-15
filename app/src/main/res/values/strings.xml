@@ -176,6 +176,19 @@
     <string name="statistics_distance_between_fill_ups_highest">Max distance between fill ups</string>
     <string name="statistics_distance_between_fill_ups_average">Average distance between fill ups</string>
 
+    <string name="statistics_fuel_consumption">Fuel consumption</string>
+    <string name="statistics_totals">Totals</string>
+    <string name="statistics_costs_per_distance">Costs &amp; distance</string>
+    <string name="statistics_fuel_unit_price">Fuel unit price</string>
+    <string name="statistics_refueling">Refueling</string>
+    <string name="statistics_expenses">Expenses</string>
+    <string name="statistics_costs_per_time">Costs &amp; time</string>
+    <string name="statistics_distance_in_time">Distance &amp; time</string>
+    <string name="statistics_app_usage">FuelUp usage</string>
+
+
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

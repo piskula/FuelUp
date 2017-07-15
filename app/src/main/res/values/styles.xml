@@ -6,12 +6,13 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="statisticsDetailItemViewStyle">@style/StatisticsItemDetail</item>
+        <item name="statisticsItemDetail">@style/statisticsItemDetail</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="statisticsItemDetail">@style/statisticsItemDetail</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -35,16 +36,36 @@
         <item name="android:background">@drawable/selector_btn_confirm</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
+
     <style name="WarningButton" parent="android:Widget.Button">
         <item name="android:background">@drawable/selector_btn_warning</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
-    <style name="StatisticsItemDetailLayout"  parent="Widget.AppCompat.ListView">
+
+    <style name="StatisticsItemDetailLayout" parent="Widget.AppCompat.ListView">
         <item name="android:divider">?android:attr/listDivider</item>
         <item name="android:orientation">vertical</item>
         <item name="android:showDividers">middle</item>
     </style>
-    <style name="StatisticsItemDetail"  parent="Theme.AppCompat.Light.DarkActionBar">
+
+    <style name="statisticsItemDetail" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:padding">@dimen/activity_horizontal_margin</item>
     </style>
+
+    <style name="StatisticsDetailCardStyle" parent="CardView">
+        <item name="android:layout_margin">@dimen/cardview_margin</item>
+        <item name="android:elevation">@dimen/cardview_elevation</item>
+        <item name="cardCornerRadius">@dimen/cardview_radius</item>
+        <item name="cardUseCompatPadding">true</item>
+    </style>
+
+    <style name="StatisticsDetailCardHeader">
+        <item name="android:padding">10dp</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceListItem</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textStyle">bold</item>
+        <item name="textAllCaps">true</item>
+    </style>
+
 </resources>

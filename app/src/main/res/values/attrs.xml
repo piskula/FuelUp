@@ -5,7 +5,7 @@
         <attr name="value" format="string" localization="suggested" />
         <attr name="unit" format="string" localization="suggested" />
     </declare-styleable>
-    <declare-styleable name="StatisticsDetailItemViewStyle">
-        <attr name="statisticsDetailItemViewStyle" format="reference"/>
+    <declare-styleable name="statisticsItemDetail">
+        <attr name="statisticsItemDetail" format="reference"/>
     </declare-styleable>
 </resources>
