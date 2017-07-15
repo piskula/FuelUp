@@ -94,15 +94,15 @@ public class StatisticsService {
 
         dto.setTotalFuelVolume(totalFuelVolume);
 
-        dto.setTotalPriceFillUps(totalPriceFillUps);
-        dto.setTotalPriceExpenses(totalPriceExpenses);
-        dto.setTotalPrice(dto.getTotalPriceFillUps().add(dto.getTotalPriceExpenses()));
+        dto.setTotalCostsFuel(totalPriceFillUps);
+        dto.setTotalCostsExpenses(totalPriceExpenses);
+        dto.setTotalCosts(dto.getTotalCostsFuel().add(dto.getTotalCostsExpenses()));
 
-        dto.setTotalPricePerDistance(totalPricePerDistance);
-        dto.setExpensePricePerDistance(expensePricePerDistance);
-        dto.setFuelPricePerDistance(fillUpPricePerDistance);
+        dto.setTotalCostsPerDistance(totalPricePerDistance);
+        dto.setExpenseCostsPerDistance(expensePricePerDistance);
+        dto.setFuelCostsPerDistance(fillUpPricePerDistance);
 
-        dto.setAvgFuelPricePerLitre(avgFuelPricePerLitre);
+        dto.setFuelUnitPriceAverage(avgFuelPricePerLitre);
         dto.setAvgFuelVolumePerFillUp(avgFuelVolumePerFillUp);
         dto.setAvgFuelPricePerFillUp(avgFuelPricePerFillUp);
 
@@ -133,8 +133,8 @@ public class StatisticsService {
 
         dto.setFuelConsumptionBest(getFuelConsumptionBest());
         dto.setFuelConsumptionWorst(getFuelConsumptionWorst());
-        dto.setPricePerLitreHighest(getPricePerLitreWorst());
-        dto.setPricePerLitreLowest(getPricePerLitreBest());
+        dto.setFuelUnitPriceHighest(getPricePerLitreWorst());
+        dto.setFuelUnitPriceLowest(getPricePerLitreBest());
         dto.setDistanceBetweenFillUpsHighest(getDistanceBetweenFillUpsHighest());
         dto.setDistanceBetweenFillUpsLowest(getDistanceBetweenFillUpsLowest());
         dto.setDistanceBetweenFillUpsAverage(averageDistanceBetweenFillUps);

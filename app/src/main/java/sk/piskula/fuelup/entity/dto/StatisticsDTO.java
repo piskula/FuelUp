@@ -14,18 +14,18 @@ public class StatisticsDTO {
     private BigDecimal fuelConsumptionWorst;
 
     // Totals
-    private BigDecimal totalPrice;
-    private BigDecimal totalPriceFillUps;
-    private BigDecimal totalPriceExpenses;
+    private BigDecimal totalCosts;
+    private BigDecimal totalCostsFuel;
+    private BigDecimal totalCostsExpenses;
     private int totalNumberFillUps;
     private int totalNumberExpenses;
     private BigDecimal totalFuelVolume;
     private long totalDrivenDistance;
 
     // Costs per distance
-    private BigDecimal fuelPricePerDistance;
-    private BigDecimal expensePricePerDistance;
-    private BigDecimal totalPricePerDistance;
+    private BigDecimal totalCostsPerDistance;
+    private BigDecimal fuelCostsPerDistance;
+    private BigDecimal expenseCostsPerDistance;
 
     // Costs per time
     private BigDecimal averageTotalCostPerWeek;
@@ -49,9 +49,9 @@ public class StatisticsDTO {
     private int distanceBetweenFillUpsHighest;
 
     // Fuel unit price
-    private BigDecimal avgFuelPricePerLitre;
-    private BigDecimal pricePerLitreLowest;
-    private BigDecimal pricePerLitreHighest;
+    private BigDecimal fuelUnitPriceAverage;
+    private BigDecimal fuelUnitPriceLowest;
+    private BigDecimal fuelUnitPriceHighest;
 
     // Distance per time
     private long averageDistancePerDay;
@@ -99,28 +99,28 @@ public class StatisticsDTO {
         this.fuelConsumptionWorst = fuelConsumptionWorst;
     }
 
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
+    public BigDecimal getTotalCosts() {
+        return totalCosts;
     }
 
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setTotalCosts(BigDecimal totalCosts) {
+        this.totalCosts = totalCosts;
     }
 
-    public BigDecimal getTotalPriceFillUps() {
-        return totalPriceFillUps;
+    public BigDecimal getTotalCostsFuel() {
+        return totalCostsFuel;
     }
 
-    public void setTotalPriceFillUps(BigDecimal totalPriceFillUps) {
-        this.totalPriceFillUps = totalPriceFillUps;
+    public void setTotalCostsFuel(BigDecimal totalCostsFuel) {
+        this.totalCostsFuel = totalCostsFuel;
     }
 
-    public BigDecimal getTotalPriceExpenses() {
-        return totalPriceExpenses;
+    public BigDecimal getTotalCostsExpenses() {
+        return totalCostsExpenses;
     }
 
-    public void setTotalPriceExpenses(BigDecimal totalPriceExpenses) {
-        this.totalPriceExpenses = totalPriceExpenses;
+    public void setTotalCostsExpenses(BigDecimal totalCostsExpenses) {
+        this.totalCostsExpenses = totalCostsExpenses;
     }
 
     public int getTotalNumberFillUps() {
@@ -155,28 +155,28 @@ public class StatisticsDTO {
         this.totalDrivenDistance = totalDrivenDistance;
     }
 
-    public BigDecimal getFuelPricePerDistance() {
-        return fuelPricePerDistance;
+    public BigDecimal getFuelCostsPerDistance() {
+        return fuelCostsPerDistance;
     }
 
-    public void setFuelPricePerDistance(BigDecimal fuelPricePerDistance) {
-        this.fuelPricePerDistance = fuelPricePerDistance;
+    public void setFuelCostsPerDistance(BigDecimal fuelCostsPerDistance) {
+        this.fuelCostsPerDistance = fuelCostsPerDistance;
     }
 
-    public BigDecimal getExpensePricePerDistance() {
-        return expensePricePerDistance;
+    public BigDecimal getExpenseCostsPerDistance() {
+        return expenseCostsPerDistance;
     }
 
-    public void setExpensePricePerDistance(BigDecimal expensePricePerDistance) {
-        this.expensePricePerDistance = expensePricePerDistance;
+    public void setExpenseCostsPerDistance(BigDecimal expenseCostsPerDistance) {
+        this.expenseCostsPerDistance = expenseCostsPerDistance;
     }
 
-    public BigDecimal getTotalPricePerDistance() {
-        return totalPricePerDistance;
+    public BigDecimal getTotalCostsPerDistance() {
+        return totalCostsPerDistance;
     }
 
-    public void setTotalPricePerDistance(BigDecimal totalPricePerDistance) {
-        this.totalPricePerDistance = totalPricePerDistance;
+    public void setTotalCostsPerDistance(BigDecimal totalCostsPerDistance) {
+        this.totalCostsPerDistance = totalCostsPerDistance;
     }
 
     public BigDecimal getAverageTotalCostPerWeek() {
@@ -315,28 +315,28 @@ public class StatisticsDTO {
         this.distanceBetweenFillUpsHighest = distanceBetweenFillUpsHighest;
     }
 
-    public BigDecimal getAvgFuelPricePerLitre() {
-        return avgFuelPricePerLitre;
+    public BigDecimal getFuelUnitPriceAverage() {
+        return fuelUnitPriceAverage;
     }
 
-    public void setAvgFuelPricePerLitre(BigDecimal avgFuelPricePerLitre) {
-        this.avgFuelPricePerLitre = avgFuelPricePerLitre;
+    public void setFuelUnitPriceAverage(BigDecimal fuelUnitPriceAverage) {
+        this.fuelUnitPriceAverage = fuelUnitPriceAverage;
     }
 
-    public BigDecimal getPricePerLitreLowest() {
-        return pricePerLitreLowest;
+    public BigDecimal getFuelUnitPriceLowest() {
+        return fuelUnitPriceLowest;
     }
 
-    public void setPricePerLitreLowest(BigDecimal pricePerLitreLowest) {
-        this.pricePerLitreLowest = pricePerLitreLowest;
+    public void setFuelUnitPriceLowest(BigDecimal fuelUnitPriceLowest) {
+        this.fuelUnitPriceLowest = fuelUnitPriceLowest;
     }
 
-    public BigDecimal getPricePerLitreHighest() {
-        return pricePerLitreHighest;
+    public BigDecimal getFuelUnitPriceHighest() {
+        return fuelUnitPriceHighest;
     }
 
-    public void setPricePerLitreHighest(BigDecimal pricePerLitreHighest) {
-        this.pricePerLitreHighest = pricePerLitreHighest;
+    public void setFuelUnitPriceHighest(BigDecimal fuelUnitPriceHighest) {
+        this.fuelUnitPriceHighest = fuelUnitPriceHighest;
     }
 
     public long getAverageDistancePerDay() {
@@ -429,19 +429,19 @@ public class StatisticsDTO {
             return false;
         if (fuelConsumptionWorst != null ? !fuelConsumptionWorst.equals(dto.fuelConsumptionWorst) : dto.fuelConsumptionWorst != null)
             return false;
-        if (totalPrice != null ? !totalPrice.equals(dto.totalPrice) : dto.totalPrice != null)
+        if (totalCosts != null ? !totalCosts.equals(dto.totalCosts) : dto.totalCosts != null)
             return false;
-        if (totalPriceFillUps != null ? !totalPriceFillUps.equals(dto.totalPriceFillUps) : dto.totalPriceFillUps != null)
+        if (totalCostsFuel != null ? !totalCostsFuel.equals(dto.totalCostsFuel) : dto.totalCostsFuel != null)
             return false;
-        if (totalPriceExpenses != null ? !totalPriceExpenses.equals(dto.totalPriceExpenses) : dto.totalPriceExpenses != null)
+        if (totalCostsExpenses != null ? !totalCostsExpenses.equals(dto.totalCostsExpenses) : dto.totalCostsExpenses != null)
             return false;
         if (totalFuelVolume != null ? !totalFuelVolume.equals(dto.totalFuelVolume) : dto.totalFuelVolume != null)
             return false;
-        if (fuelPricePerDistance != null ? !fuelPricePerDistance.equals(dto.fuelPricePerDistance) : dto.fuelPricePerDistance != null)
+        if (fuelCostsPerDistance != null ? !fuelCostsPerDistance.equals(dto.fuelCostsPerDistance) : dto.fuelCostsPerDistance != null)
             return false;
-        if (expensePricePerDistance != null ? !expensePricePerDistance.equals(dto.expensePricePerDistance) : dto.expensePricePerDistance != null)
+        if (expenseCostsPerDistance != null ? !expenseCostsPerDistance.equals(dto.expenseCostsPerDistance) : dto.expenseCostsPerDistance != null)
             return false;
-        if (totalPricePerDistance != null ? !totalPricePerDistance.equals(dto.totalPricePerDistance) : dto.totalPricePerDistance != null)
+        if (totalCostsPerDistance != null ? !totalCostsPerDistance.equals(dto.totalCostsPerDistance) : dto.totalCostsPerDistance != null)
             return false;
         if (averageTotalCostPerWeek != null ? !averageTotalCostPerWeek.equals(dto.averageTotalCostPerWeek) : dto.averageTotalCostPerWeek != null)
             return false;
@@ -471,11 +471,11 @@ public class StatisticsDTO {
             return false;
         if (averageNumberOfFillUpsPerYear != null ? !averageNumberOfFillUpsPerYear.equals(dto.averageNumberOfFillUpsPerYear) : dto.averageNumberOfFillUpsPerYear != null)
             return false;
-        if (avgFuelPricePerLitre != null ? !avgFuelPricePerLitre.equals(dto.avgFuelPricePerLitre) : dto.avgFuelPricePerLitre != null)
+        if (fuelUnitPriceAverage != null ? !fuelUnitPriceAverage.equals(dto.fuelUnitPriceAverage) : dto.fuelUnitPriceAverage != null)
             return false;
-        if (pricePerLitreLowest != null ? !pricePerLitreLowest.equals(dto.pricePerLitreLowest) : dto.pricePerLitreLowest != null)
+        if (fuelUnitPriceLowest != null ? !fuelUnitPriceLowest.equals(dto.fuelUnitPriceLowest) : dto.fuelUnitPriceLowest != null)
             return false;
-        if (pricePerLitreHighest != null ? !pricePerLitreHighest.equals(dto.pricePerLitreHighest) : dto.pricePerLitreHighest != null)
+        if (fuelUnitPriceHighest != null ? !fuelUnitPriceHighest.equals(dto.fuelUnitPriceHighest) : dto.fuelUnitPriceHighest != null)
             return false;
         if (averageNumberOfExpensesPerWeek != null ? !averageNumberOfExpensesPerWeek.equals(dto.averageNumberOfExpensesPerWeek) : dto.averageNumberOfExpensesPerWeek != null)
             return false;
@@ -491,16 +491,16 @@ public class StatisticsDTO {
         result = 31 * result + (avgConsumptionReversed != null ? avgConsumptionReversed.hashCode() : 0);
         result = 31 * result + (fuelConsumptionBest != null ? fuelConsumptionBest.hashCode() : 0);
         result = 31 * result + (fuelConsumptionWorst != null ? fuelConsumptionWorst.hashCode() : 0);
-        result = 31 * result + (totalPrice != null ? totalPrice.hashCode() : 0);
-        result = 31 * result + (totalPriceFillUps != null ? totalPriceFillUps.hashCode() : 0);
-        result = 31 * result + (totalPriceExpenses != null ? totalPriceExpenses.hashCode() : 0);
+        result = 31 * result + (totalCosts != null ? totalCosts.hashCode() : 0);
+        result = 31 * result + (totalCostsFuel != null ? totalCostsFuel.hashCode() : 0);
+        result = 31 * result + (totalCostsExpenses != null ? totalCostsExpenses.hashCode() : 0);
         result = 31 * result + totalNumberFillUps;
         result = 31 * result + totalNumberExpenses;
         result = 31 * result + (totalFuelVolume != null ? totalFuelVolume.hashCode() : 0);
         result = 31 * result + (int) (totalDrivenDistance ^ (totalDrivenDistance >>> 32));
-        result = 31 * result + (fuelPricePerDistance != null ? fuelPricePerDistance.hashCode() : 0);
-        result = 31 * result + (expensePricePerDistance != null ? expensePricePerDistance.hashCode() : 0);
-        result = 31 * result + (totalPricePerDistance != null ? totalPricePerDistance.hashCode() : 0);
+        result = 31 * result + (fuelCostsPerDistance != null ? fuelCostsPerDistance.hashCode() : 0);
+        result = 31 * result + (expenseCostsPerDistance != null ? expenseCostsPerDistance.hashCode() : 0);
+        result = 31 * result + (totalCostsPerDistance != null ? totalCostsPerDistance.hashCode() : 0);
         result = 31 * result + (averageTotalCostPerWeek != null ? averageTotalCostPerWeek.hashCode() : 0);
         result = 31 * result + (averageFuelCostPerWeek != null ? averageFuelCostPerWeek.hashCode() : 0);
         result = 31 * result + (averageExpenseCostPerWeek != null ? averageExpenseCostPerWeek.hashCode() : 0);
@@ -518,9 +518,9 @@ public class StatisticsDTO {
         result = 31 * result + distanceBetweenFillUpsAverage;
         result = 31 * result + distanceBetweenFillUpsLowest;
         result = 31 * result + distanceBetweenFillUpsHighest;
-        result = 31 * result + (avgFuelPricePerLitre != null ? avgFuelPricePerLitre.hashCode() : 0);
-        result = 31 * result + (pricePerLitreLowest != null ? pricePerLitreLowest.hashCode() : 0);
-        result = 31 * result + (pricePerLitreHighest != null ? pricePerLitreHighest.hashCode() : 0);
+        result = 31 * result + (fuelUnitPriceAverage != null ? fuelUnitPriceAverage.hashCode() : 0);
+        result = 31 * result + (fuelUnitPriceLowest != null ? fuelUnitPriceLowest.hashCode() : 0);
+        result = 31 * result + (fuelUnitPriceHighest != null ? fuelUnitPriceHighest.hashCode() : 0);
         result = 31 * result + (int) (averageDistancePerDay ^ (averageDistancePerDay >>> 32));
         result = 31 * result + (int) (averageDistancePerWeek ^ (averageDistancePerWeek >>> 32));
         result = 31 * result + (int) (averageDistancePerMonth ^ (averageDistancePerMonth >>> 32));
@@ -539,16 +539,16 @@ public class StatisticsDTO {
                 ", avgConsumptionReversed=" + avgConsumptionReversed +
                 ", fuelConsumptionBest=" + fuelConsumptionBest +
                 ", fuelConsumptionWorst=" + fuelConsumptionWorst +
-                ", totalPrice=" + totalPrice +
-                ", totalPriceFillUps=" + totalPriceFillUps +
-                ", totalPriceExpenses=" + totalPriceExpenses +
+                ", totalCosts=" + totalCosts +
+                ", totalCostsFuel=" + totalCostsFuel +
+                ", totalCostsExpenses=" + totalCostsExpenses +
                 ", totalNumberFillUps=" + totalNumberFillUps +
                 ", totalNumberExpenses=" + totalNumberExpenses +
                 ", totalFuelVolume=" + totalFuelVolume +
                 ", totalDrivenDistance=" + totalDrivenDistance +
-                ", fuelPricePerDistance=" + fuelPricePerDistance +
-                ", expensePricePerDistance=" + expensePricePerDistance +
-                ", totalPricePerDistance=" + totalPricePerDistance +
+                ", fuelCostsPerDistance=" + fuelCostsPerDistance +
+                ", expenseCostsPerDistance=" + expenseCostsPerDistance +
+                ", totalCostsPerDistance=" + totalCostsPerDistance +
                 ", averageTotalCostPerWeek=" + averageTotalCostPerWeek +
                 ", averageFuelCostPerWeek=" + averageFuelCostPerWeek +
                 ", averageExpenseCostPerWeek=" + averageExpenseCostPerWeek +
@@ -566,9 +566,9 @@ public class StatisticsDTO {
                 ", distanceBetweenFillUpsAverage=" + distanceBetweenFillUpsAverage +
                 ", distanceBetweenFillUpsLowest=" + distanceBetweenFillUpsLowest +
                 ", distanceBetweenFillUpsHighest=" + distanceBetweenFillUpsHighest +
-                ", avgFuelPricePerLitre=" + avgFuelPricePerLitre +
-                ", pricePerLitreLowest=" + pricePerLitreLowest +
-                ", pricePerLitreHighest=" + pricePerLitreHighest +
+                ", fuelUnitPriceAverage=" + fuelUnitPriceAverage +
+                ", fuelUnitPriceLowest=" + fuelUnitPriceLowest +
+                ", fuelUnitPriceHighest=" + fuelUnitPriceHighest +
                 ", averageDistancePerDay=" + averageDistancePerDay +
                 ", averageDistancePerWeek=" + averageDistancePerWeek +
                 ", averageDistancePerMonth=" + averageDistancePerMonth +
