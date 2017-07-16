@@ -314,7 +314,7 @@
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_avg_fuel_price_per_fill_up"
                         app:unit="@{currency}"
-                        app:value="@{data!= null ? String.valueOf(data.avgFuelPricePerFillUp) : @string/na}" />
+                        app:value="@{data!= null ? String.valueOf(data.averageFuelPricePerFillUp) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
                         android:id="@+id/avg_fuel_volume_per_fill_up"
@@ -322,7 +322,7 @@
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_avg_fuel_volume_per_fill_up"
                         app:unit="@string/litre"
-                        app:value="@{data!= null ? String.valueOf(data.avgFuelVolumePerFillUp) : @string/na}" />
+                        app:value="@{data!= null ? String.valueOf(data.averageFuelVolumePerFillUp) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_number_of_fill_ups_per_week"

@@ -22,7 +22,6 @@ import sk.piskula.fuelup.entity.dto.StatisticsDTO;
 /**
  * Created by Martin Styk on 23.06.2017.
  */
-
 public class StatisticsService {
 
     private static final String TAG = StatisticsService.class.getSimpleName();
@@ -44,100 +43,96 @@ public class StatisticsService {
     public StatisticsDTO getAll() {
         StatisticsDTO dto = new StatisticsDTO();
 
-        //consumption
-        BigDecimal avgConsumption = getAverageConsumption();
-        BigDecimal avgConsumptionReversed = getAverageConsumptionReversed();
-
-        //distance
-        long totalDrivenDistance = getTotalDrivenDistance();
-
-        //total numbers
+        // Totals
+        BigDecimal totalCostsFuel = getTotalPriceFillUps();
+        BigDecimal totalCostsExpenses = getTotalPriceExpenses();
+        BigDecimal totalPrice = totalCostsExpenses.add(totalCostsFuel);
         int totalNumberFillUps = getTotalNumberFillUps();
         int totalNumberExpenses = getTotalNumberExpenses();
-
         BigDecimal totalFuelVolume = getTotalFuelVolume();
+        long totalDrivenDistance = getTotalDrivenDistance();
 
-        //total price
-        BigDecimal totalPriceFillUps = getTotalPriceFillUps();
-        BigDecimal totalPriceExpenses = getTotalPriceExpenses();
-        BigDecimal totalPrice = totalPriceExpenses.add(totalPriceFillUps);
-
-        //total price per distance
-        BigDecimal totalPricePerDistance = totalDrivenDistance > 0 ?
+        // Costs per distance
+        BigDecimal totalCostsPerDistance = totalDrivenDistance > 0 ?
                 totalPrice.multiply(HUNDRED).divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
-        BigDecimal fillUpPricePerDistance = totalDrivenDistance > 0 ?
-                totalPriceFillUps.multiply(HUNDRED).divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
-        BigDecimal expensePricePerDistance = totalDrivenDistance > 0 ?
-                totalPriceExpenses.multiply(HUNDRED).divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
+        BigDecimal fuelCostsPerDistance = totalDrivenDistance > 0 ?
+                totalCostsFuel.multiply(HUNDRED).divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
+        BigDecimal expenseCostsPerDistance = totalDrivenDistance > 0 ?
+                totalCostsExpenses.multiply(HUNDRED).divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
 
-        // average fuel
-        BigDecimal avgFuelPricePerLitre = totalFuelVolume.intValue() > 0 ?
-                totalPriceFillUps.divide(totalFuelVolume, 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
-        BigDecimal avgFuelVolumePerFillUp = totalNumberFillUps > 0 ?
+        // Fuel unit price
+        BigDecimal fuelUnitPriceAverage = totalFuelVolume.intValue() > 0 ?
+                totalCostsFuel.divide(totalFuelVolume, 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
+        BigDecimal averageFuelVolumePerFillUp = totalNumberFillUps > 0 ?
                 totalFuelVolume.divide(BigDecimal.valueOf(totalNumberFillUps), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
-        BigDecimal avgFuelPricePerFillUp = totalNumberFillUps > 0 ?
-                totalPriceFillUps.divide(BigDecimal.valueOf(totalNumberFillUps), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
+        BigDecimal averageFuelPricePerFillUp = totalNumberFillUps > 0 ?
+                totalCostsFuel.divide(BigDecimal.valueOf(totalNumberFillUps), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
 
         int averageDistanceBetweenFillUps = totalNumberFillUps > 0 ?
                 BigDecimal.valueOf(totalDrivenDistance).divide(BigDecimal.valueOf(totalNumberFillUps), 2, BigDecimal.ROUND_HALF_UP).intValue() : 0;
 
-        // average per time
+        // FuelUp usage
         long trackingDays = getTrackingDays();
 
-        dto.setAvgConsumption(avgConsumption);
-        dto.setAvgConsumptionReversed(avgConsumptionReversed);
+        // Consumption
+        dto.setAvgConsumption(getAverageConsumption());
+        dto.setAvgConsumptionReversed(getAverageConsumptionReversed());
+        dto.setFuelConsumptionBest(getFuelConsumptionBest());
+        dto.setFuelConsumptionWorst(getFuelConsumptionWorst());
 
-        dto.setTotalDrivenDistance(totalDrivenDistance);
-
+        // Totals
+        dto.setTotalCosts(totalCostsFuel.add(totalCostsExpenses));
+        dto.setTotalCostsFuel(totalCostsFuel);
+        dto.setTotalCostsExpenses(totalCostsExpenses);
         dto.setTotalNumberFillUps(totalNumberFillUps);
         dto.setTotalNumberExpenses(totalNumberExpenses);
-
         dto.setTotalFuelVolume(totalFuelVolume);
+        dto.setTotalDrivenDistance(totalDrivenDistance);
 
-        dto.setTotalCostsFuel(totalPriceFillUps);
-        dto.setTotalCostsExpenses(totalPriceExpenses);
-        dto.setTotalCosts(dto.getTotalCostsFuel().add(dto.getTotalCostsExpenses()));
+        // Costs per distance
+        dto.setTotalCostsPerDistance(totalCostsPerDistance);
+        dto.setExpenseCostsPerDistance(expenseCostsPerDistance);
+        dto.setFuelCostsPerDistance(fuelCostsPerDistance);
 
-        dto.setTotalCostsPerDistance(totalPricePerDistance);
-        dto.setExpenseCostsPerDistance(expensePricePerDistance);
-        dto.setFuelCostsPerDistance(fillUpPricePerDistance);
-
-        dto.setFuelUnitPriceAverage(avgFuelPricePerLitre);
-        dto.setAvgFuelVolumePerFillUp(avgFuelVolumePerFillUp);
-        dto.setAvgFuelPricePerFillUp(avgFuelPricePerFillUp);
-
-        dto.setTrackingDays(trackingDays);
-
+        // Costs per time
         dto.setAverageTotalCostPerWeek(getAveragePerTime(totalPrice, trackingDays, TimePeriod.WEEK));
         dto.setAverageTotalCostPerMonth(getAveragePerTime(totalPrice, trackingDays, TimePeriod.MONTH));
         dto.setAverageTotalCostPerYear(getAveragePerTime(totalPrice, trackingDays, TimePeriod.YEAR));
-        dto.setAverageFuelCostPerWeek(getAveragePerTime(totalPriceFillUps, trackingDays, TimePeriod.WEEK));
-        dto.setAverageFuelCostPerMonth(getAveragePerTime(totalPriceFillUps, trackingDays, TimePeriod.MONTH));
-        dto.setAverageFuelCostPerYear(getAveragePerTime(totalPriceFillUps, trackingDays, TimePeriod.YEAR));
-        dto.setAverageExpenseCostPerWeek(getAveragePerTime(totalPriceExpenses, trackingDays, TimePeriod.WEEK));
-        dto.setAverageExpenseCostPerMonth(getAveragePerTime(totalPriceExpenses, trackingDays, TimePeriod.MONTH));
-        dto.setAverageExpenseCostPerYear(getAveragePerTime(totalPriceExpenses, trackingDays, TimePeriod.YEAR));
+        dto.setAverageFuelCostPerWeek(getAveragePerTime(totalCostsFuel, trackingDays, TimePeriod.WEEK));
+        dto.setAverageFuelCostPerMonth(getAveragePerTime(totalCostsFuel, trackingDays, TimePeriod.MONTH));
+        dto.setAverageFuelCostPerYear(getAveragePerTime(totalCostsFuel, trackingDays, TimePeriod.YEAR));
+        dto.setAverageExpenseCostPerWeek(getAveragePerTime(totalCostsExpenses, trackingDays, TimePeriod.WEEK));
+        dto.setAverageExpenseCostPerMonth(getAveragePerTime(totalCostsExpenses, trackingDays, TimePeriod.MONTH));
+        dto.setAverageExpenseCostPerYear(getAveragePerTime(totalCostsExpenses, trackingDays, TimePeriod.YEAR));
 
+        // Refuelling statistics
+        dto.setAverageFuelVolumePerFillUp(averageFuelVolumePerFillUp);
+        dto.setAverageFuelPricePerFillUp(averageFuelPricePerFillUp);
+        dto.setAverageNumberOfFillUpsPerWeek(getAveragePerTime(BigDecimal.valueOf(totalNumberFillUps), trackingDays, TimePeriod.WEEK));
+        dto.setAverageNumberOfFillUpsPerMonth(getAveragePerTime(BigDecimal.valueOf(totalNumberFillUps), trackingDays, TimePeriod.MONTH));
+        dto.setAverageNumberOfFillUpsPerYear(getAveragePerTime(BigDecimal.valueOf(totalNumberFillUps), trackingDays, TimePeriod.YEAR));
+        dto.setDistanceBetweenFillUpsHighest(getDistanceBetweenFillUpsHighest());
+        dto.setDistanceBetweenFillUpsLowest(getDistanceBetweenFillUpsLowest());
+        dto.setDistanceBetweenFillUpsAverage(averageDistanceBetweenFillUps);
+
+        // Fuel unit price
+        dto.setFuelUnitPriceAverage(fuelUnitPriceAverage);
+        dto.setFuelUnitPriceHighest(getFuelUnitPriceHighest());
+        dto.setFuelUnitPriceLowest(getFuelUnitPriceLowest());
+
+        // Distance per time
         dto.setAverageDistancePerDay(getAveragePerTime(BigDecimal.valueOf(totalDrivenDistance), trackingDays, TimePeriod.DAY).longValue());
         dto.setAverageDistancePerWeek(getAveragePerTime(BigDecimal.valueOf(totalDrivenDistance), trackingDays, TimePeriod.WEEK).longValue());
         dto.setAverageDistancePerMonth(getAveragePerTime(BigDecimal.valueOf(totalDrivenDistance), trackingDays, TimePeriod.MONTH).longValue());
         dto.setAverageDistancePerYear(getAveragePerTime(BigDecimal.valueOf(totalDrivenDistance), trackingDays, TimePeriod.YEAR).longValue());
 
-        dto.setAverageNumberOfFillUpsPerWeek(getAveragePerTime(BigDecimal.valueOf(totalNumberFillUps), trackingDays, TimePeriod.WEEK));
-        dto.setAverageNumberOfFillUpsPerMonth(getAveragePerTime(BigDecimal.valueOf(totalNumberFillUps), trackingDays, TimePeriod.MONTH));
-        dto.setAverageNumberOfFillUpsPerYear(getAveragePerTime(BigDecimal.valueOf(totalNumberFillUps), trackingDays, TimePeriod.YEAR));
-
+        // Expense statistics
         dto.setAverageNumberOfExpensesPerWeek(getAveragePerTime(BigDecimal.valueOf(totalNumberExpenses), trackingDays, TimePeriod.WEEK));
         dto.setAverageNumberOfExpensesPerMonth(getAveragePerTime(BigDecimal.valueOf(totalNumberExpenses), trackingDays, TimePeriod.MONTH));
         dto.setAverageNumberOfExpensesPerYear(getAveragePerTime(BigDecimal.valueOf(totalNumberExpenses), trackingDays, TimePeriod.YEAR));
 
-        dto.setFuelConsumptionBest(getFuelConsumptionBest());
-        dto.setFuelConsumptionWorst(getFuelConsumptionWorst());
-        dto.setFuelUnitPriceHighest(getPricePerLitreWorst());
-        dto.setFuelUnitPriceLowest(getPricePerLitreBest());
-        dto.setDistanceBetweenFillUpsHighest(getDistanceBetweenFillUpsHighest());
-        dto.setDistanceBetweenFillUpsLowest(getDistanceBetweenFillUpsLowest());
-        dto.setDistanceBetweenFillUpsAverage(averageDistanceBetweenFillUps);
+        // FuelUp usage
+        dto.setTrackingDays(trackingDays);
 
         return dto;
     }
@@ -286,7 +281,7 @@ public class StatisticsService {
         return BigDecimal.ZERO;
     }
 
-    public BigDecimal getPricePerLitreWorst() {
+    public BigDecimal getFuelUnitPriceHighest() {
         try {
             GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT MAX(fuel_price_per_litre) FROM fill_ups WHERE vehicle_id = " + vehicleId);
             return getBigDecimal(results);
@@ -298,7 +293,7 @@ public class StatisticsService {
         return BigDecimal.ZERO;
     }
 
-    public BigDecimal getPricePerLitreBest() {
+    public BigDecimal getFuelUnitPriceLowest() {
         try {
             GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT MIN(fuel_price_per_litre) FROM fill_ups WHERE vehicle_id = " + vehicleId);
             return getBigDecimal(results);

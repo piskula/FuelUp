@@ -39,8 +39,8 @@ public class StatisticsDTO {
     private BigDecimal averageExpenseCostPerYear;
 
     // Refuelling statistics
-    private BigDecimal avgFuelVolumePerFillUp;
-    private BigDecimal avgFuelPricePerFillUp;
+    private BigDecimal averageFuelVolumePerFillUp;
+    private BigDecimal averageFuelPricePerFillUp;
     private BigDecimal averageNumberOfFillUpsPerWeek;
     private BigDecimal averageNumberOfFillUpsPerMonth;
     private BigDecimal averageNumberOfFillUpsPerYear;
@@ -251,20 +251,20 @@ public class StatisticsDTO {
         this.averageExpenseCostPerYear = averageExpenseCostPerYear;
     }
 
-    public BigDecimal getAvgFuelVolumePerFillUp() {
-        return avgFuelVolumePerFillUp;
+    public BigDecimal getAverageFuelVolumePerFillUp() {
+        return averageFuelVolumePerFillUp;
     }
 
-    public void setAvgFuelVolumePerFillUp(BigDecimal avgFuelVolumePerFillUp) {
-        this.avgFuelVolumePerFillUp = avgFuelVolumePerFillUp;
+    public void setAverageFuelVolumePerFillUp(BigDecimal averageFuelVolumePerFillUp) {
+        this.averageFuelVolumePerFillUp = averageFuelVolumePerFillUp;
     }
 
-    public BigDecimal getAvgFuelPricePerFillUp() {
-        return avgFuelPricePerFillUp;
+    public BigDecimal getAverageFuelPricePerFillUp() {
+        return averageFuelPricePerFillUp;
     }
 
-    public void setAvgFuelPricePerFillUp(BigDecimal avgFuelPricePerFillUp) {
-        this.avgFuelPricePerFillUp = avgFuelPricePerFillUp;
+    public void setAverageFuelPricePerFillUp(BigDecimal averageFuelPricePerFillUp) {
+        this.averageFuelPricePerFillUp = averageFuelPricePerFillUp;
     }
 
     public BigDecimal getAverageNumberOfFillUpsPerWeek() {
@@ -461,9 +461,9 @@ public class StatisticsDTO {
             return false;
         if (averageExpenseCostPerYear != null ? !averageExpenseCostPerYear.equals(dto.averageExpenseCostPerYear) : dto.averageExpenseCostPerYear != null)
             return false;
-        if (avgFuelVolumePerFillUp != null ? !avgFuelVolumePerFillUp.equals(dto.avgFuelVolumePerFillUp) : dto.avgFuelVolumePerFillUp != null)
+        if (averageFuelVolumePerFillUp != null ? !averageFuelVolumePerFillUp.equals(dto.averageFuelVolumePerFillUp) : dto.averageFuelVolumePerFillUp != null)
             return false;
-        if (avgFuelPricePerFillUp != null ? !avgFuelPricePerFillUp.equals(dto.avgFuelPricePerFillUp) : dto.avgFuelPricePerFillUp != null)
+        if (averageFuelPricePerFillUp != null ? !averageFuelPricePerFillUp.equals(dto.averageFuelPricePerFillUp) : dto.averageFuelPricePerFillUp != null)
             return false;
         if (averageNumberOfFillUpsPerWeek != null ? !averageNumberOfFillUpsPerWeek.equals(dto.averageNumberOfFillUpsPerWeek) : dto.averageNumberOfFillUpsPerWeek != null)
             return false;
@@ -510,8 +510,8 @@ public class StatisticsDTO {
         result = 31 * result + (averageTotalCostPerYear != null ? averageTotalCostPerYear.hashCode() : 0);
         result = 31 * result + (averageFuelCostPerYear != null ? averageFuelCostPerYear.hashCode() : 0);
         result = 31 * result + (averageExpenseCostPerYear != null ? averageExpenseCostPerYear.hashCode() : 0);
-        result = 31 * result + (avgFuelVolumePerFillUp != null ? avgFuelVolumePerFillUp.hashCode() : 0);
-        result = 31 * result + (avgFuelPricePerFillUp != null ? avgFuelPricePerFillUp.hashCode() : 0);
+        result = 31 * result + (averageFuelVolumePerFillUp != null ? averageFuelVolumePerFillUp.hashCode() : 0);
+        result = 31 * result + (averageFuelPricePerFillUp != null ? averageFuelPricePerFillUp.hashCode() : 0);
         result = 31 * result + (averageNumberOfFillUpsPerWeek != null ? averageNumberOfFillUpsPerWeek.hashCode() : 0);
         result = 31 * result + (averageNumberOfFillUpsPerMonth != null ? averageNumberOfFillUpsPerMonth.hashCode() : 0);
         result = 31 * result + (averageNumberOfFillUpsPerYear != null ? averageNumberOfFillUpsPerYear.hashCode() : 0);
@@ -558,8 +558,8 @@ public class StatisticsDTO {
                 ", averageTotalCostPerYear=" + averageTotalCostPerYear +
                 ", averageFuelCostPerYear=" + averageFuelCostPerYear +
                 ", averageExpenseCostPerYear=" + averageExpenseCostPerYear +
-                ", avgFuelVolumePerFillUp=" + avgFuelVolumePerFillUp +
-                ", avgFuelPricePerFillUp=" + avgFuelPricePerFillUp +
+                ", averageFuelVolumePerFillUp=" + averageFuelVolumePerFillUp +
+                ", averageFuelPricePerFillUp=" + averageFuelPricePerFillUp +
                 ", averageNumberOfFillUpsPerWeek=" + averageNumberOfFillUpsPerWeek +
                 ", averageNumberOfFillUpsPerMonth=" + averageNumberOfFillUpsPerMonth +
                 ", averageNumberOfFillUpsPerYear=" + averageNumberOfFillUpsPerYear +
