@@ -186,11 +186,6 @@
     <string name="statistics_distance_in_time">Distance &amp; time</string>
     <string name="statistics_app_usage">FuelUp usage</string>
 
-
-
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="no_data_to_show">No data to show.</string>
 
 </resources>

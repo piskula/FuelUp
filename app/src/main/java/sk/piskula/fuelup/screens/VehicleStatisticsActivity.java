@@ -12,7 +12,7 @@ import java.util.Arrays;
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.adapters.PagerStatisticsAdapter;
 import sk.piskula.fuelup.entity.Vehicle;
-import sk.piskula.fuelup.screens.statisticfragments.StatisticsBasicFragment;
+import sk.piskula.fuelup.screens.statisticfragments.StatisticsAverageConsumptionFragment;
 
 /**
  * @author Martin Styk
@@ -39,13 +39,7 @@ public class VehicleStatisticsActivity extends AppCompatActivity {
         Intent incomingIntent = getIntent();
         Vehicle vehicle = incomingIntent.getParcelableExtra(VEHICLE_TO_ADVANCED_STATISTICS);
 
-        adapter = new PagerStatisticsAdapter(getSupportFragmentManager(), Arrays.asList(
-                StatisticsBasicFragment.newInstance(vehicle),
-                StatisticsBasicFragment.newInstance(vehicle),
-                StatisticsBasicFragment.newInstance(vehicle),
-                StatisticsBasicFragment.newInstance(vehicle)
-        ));
-
+        adapter = new PagerStatisticsAdapter(getSupportFragmentManager(), vehicle, this);
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(adapter);
