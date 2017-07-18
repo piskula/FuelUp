@@ -7,7 +7,6 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -16,16 +15,19 @@ import java.util.List;
 
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
 import lecho.lib.hellocharts.gesture.ZoomType;
+import lecho.lib.hellocharts.listener.ViewportChangeListener;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.LineChartView;
+import lecho.lib.hellocharts.view.PreviewLineChartView;
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.business.FillUpService;
-import sk.piskula.fuelup.databinding.FragmentStatisticsBasicBinding;
+import sk.piskula.fuelup.databinding.FragmentStatisticsChartConsumptionPreviewBinding;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.util.DateUtil;
@@ -34,16 +36,17 @@ import sk.piskula.fuelup.loaders.FillUpLoader;
 /**
  * @author Martin Styk
  */
-public class StatisticsAverageConsumptionFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<FillUp>> {
+public class StatisticsChartConsumptionPreviewFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<FillUp>> {
 
     private static final String ARG_VEHICLE = "vehicleArg";
 
-    private FragmentStatisticsBasicBinding binding;
+    private FragmentStatisticsChartConsumptionPreviewBinding binding;
 
-    private LineChartView lineChartView;
+    private LineChartView chart;
+    private PreviewLineChartView previewChart;
 
-    public static StatisticsAverageConsumptionFragment newInstance(Vehicle param) {
-        StatisticsAverageConsumptionFragment fragment = new StatisticsAverageConsumptionFragment();
+    public static StatisticsChartConsumptionPreviewFragment newInstance(Vehicle param) {
+        StatisticsChartConsumptionPreviewFragment fragment = new StatisticsChartConsumptionPreviewFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_VEHICLE, param);
         fragment.setArguments(args);
@@ -58,17 +61,16 @@ public class StatisticsAverageConsumptionFragment extends Fragment implements Lo
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentStatisticsBasicBinding.inflate(inflater);
-        FrameLayout layout = (FrameLayout) binding.getRoot();
+        binding = FragmentStatisticsChartConsumptionPreviewBinding.inflate(inflater);
 
-        lineChartView = new LineChartView(getActivity());
-        lineChartView.setZoomType(ZoomType.HORIZONTAL);
-        lineChartView.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
-        lineChartView.setVisibility(View.GONE);
+        chart = binding.chart;
+        previewChart = binding.chartPreview;
+        chart.setZoomEnabled(false);
+        chart.setScrollEnabled(false);
+        previewChart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
+        previewChart.setViewportChangeListener(new ViewportListener());
 
-        layout.addView(lineChartView);
-
-        return layout;
+        return binding.getRoot();
     }
 
     @Override
@@ -79,14 +81,32 @@ public class StatisticsAverageConsumptionFragment extends Fragment implements Lo
     }
 
     @Override
-    public void onLoadFinished(Loader<List<FillUp>> loader, List<FillUp> data) {
-        boolean hasDataToShow = hasSomethingToDisplay(data);
+    public void onLoadFinished(Loader<List<FillUp>> loader, List<FillUp> fillUps) {
+        boolean hasDataToShow = hasSomethingToDisplay(fillUps);
         binding.setHasData(hasDataToShow);
 
         if (hasDataToShow) {
-            lineChartView.setVisibility(View.VISIBLE);
-            lineChartView.setLineChartData(generateLineChartData(data));
+            LineChartData data = generateLineChartData(fillUps);
+            LineChartData previewData = new LineChartData(data);
+            previewData.getLines().get(0).setColor(ChartUtils.DEFAULT_DARKEN_COLOR);
+
+            chart.setVisibility(View.VISIBLE);
+            chart.setLineChartData(data);
+
+            previewChart.setVisibility(View.VISIBLE);
+            previewChart.setLineChartData(previewData);
+
+            chart.setZoomEnabled(false);
+            chart.setScrollEnabled(false);
+
+            previewX(false);
         }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<FillUp>> loader) {
+        chart.setLineChartData(new LineChartData());
+        previewChart.setLineChartData(new LineChartData());
     }
 
     private boolean hasSomethingToDisplay(List<FillUp> data) {
@@ -96,11 +116,6 @@ public class StatisticsAverageConsumptionFragment extends Fragment implements Lo
             }
         }
         return false;
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<FillUp>> loader) {
-        lineChartView.setLineChartData(new LineChartData());
     }
 
     private LineChartData generateLineChartData(List<FillUp> fillUps) {
@@ -127,13 +142,37 @@ public class StatisticsAverageConsumptionFragment extends Fragment implements Lo
 
         LineChartData data = new LineChartData(lines);
         data.setAxisXBottom(new Axis(axisValues)
-                .setHasTiltedLabels(true)
                 .setMaxLabelChars(10));
         data.setAxisYLeft(new Axis()
                 .setName(getString(R.string.statistics_fuel_consumption))
                 .setHasLines(true));
 
         return data;
+    }
+
+    private void previewX(boolean animate) {
+        Viewport tempViewport = new Viewport(chart.getMaximumViewport());
+        float dx = tempViewport.width() / 4;
+        tempViewport.inset(dx, 0);
+        if (animate) {
+            previewChart.setCurrentViewportWithAnimation(tempViewport);
+        } else {
+            previewChart.setCurrentViewport(tempViewport);
+        }
+        previewChart.setZoomType(ZoomType.HORIZONTAL);
+    }
+
+    /**
+     * Viewport listener for preview chart(lower one). in {@link #onViewportChanged(Viewport)} method change
+     * viewport of upper chart.
+     */
+    private class ViewportListener implements ViewportChangeListener {
+
+        @Override
+        public void onViewportChanged(Viewport newViewport) {
+            chart.setCurrentViewport(newViewport);
+        }
+
     }
 
 }

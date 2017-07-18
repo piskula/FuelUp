@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v4.view.ViewPager
+    <lecho.lib.hellocharts.view.hack.HackyViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -18,7 +18,7 @@
             app:tabGravity="fill"
             app:tabMode="scrollable" />
 
-    </android.support.v4.view.ViewPager>
+    </lecho.lib.hellocharts.view.hack.HackyViewPager>
 
 
 </LinearLayout>

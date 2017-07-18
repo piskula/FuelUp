@@ -7,12 +7,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
-import java.util.Arrays;
-
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.adapters.PagerStatisticsAdapter;
 import sk.piskula.fuelup.entity.Vehicle;
-import sk.piskula.fuelup.screens.statisticfragments.StatisticsAverageConsumptionFragment;
 
 /**
  * @author Martin Styk
