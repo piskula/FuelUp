@@ -1,5 +1,7 @@
 package sk.piskula.fuelup.screens.statisticfragments;
 
+import android.graphics.CornerPathEffect;
+import android.graphics.PathDashPathEffect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -135,7 +137,7 @@ public class StatisticsChartConsumptionPreviewFragment extends Fragment implemen
         }
 
         Line line = new Line(values);
-        line.setColor(ChartUtils.COLOR_ORANGE);
+        line.setColor(getResources().getColor(R.color.colorAccent));
 
         List<Line> lines = new ArrayList<Line>();
         lines.add(line);
