@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -26,19 +27,19 @@ public class FillUp implements Parcelable, Comparable<FillUp> {
     @DatabaseField(columnName = "distance_from_last_fill_up")
     private Long distanceFromLastFillUp;
 
-    @DatabaseField(canBeNull = false, columnName = "fuel_volume")
+    @DatabaseField(canBeNull = false, columnName = "fuel_volume", dataType = DataType.BIG_DECIMAL_NUMERIC)
     private BigDecimal fuelVolume;
 
-    @DatabaseField(columnName = "fuel_price_per_litre")
+    @DatabaseField(columnName = "fuel_price_per_litre", dataType = DataType.BIG_DECIMAL_NUMERIC)
     private BigDecimal fuelPricePerLitre;
 
-    @DatabaseField(columnName = "fuel_price_total")
+    @DatabaseField(columnName = "fuel_price_total", dataType = DataType.BIG_DECIMAL_NUMERIC)
     private BigDecimal fuelPriceTotal;
 
     @DatabaseField(columnName = "is_full")
     private boolean isFullFillUp;
 
-    @DatabaseField(columnName = "consumption")
+    @DatabaseField(columnName = "consumption", dataType = DataType.BIG_DECIMAL_NUMERIC)
     private BigDecimal fuelConsumption;
 
     @DatabaseField(canBeNull = false)
