@@ -3,6 +3,7 @@ package sk.piskula.fuelup.entity.util;
 import android.content.Context;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.enums.VolumeUnit;
@@ -35,12 +36,44 @@ public class VolumeUtil {
             return context.getString(R.string.add_fillup_pricePerGallon);
     }
 
+    public static BigDecimal getTotalPriceFromPerLitre(BigDecimal volume, BigDecimal price, VolumeUnit volumeUnit){
+        BigDecimal total = null;
+        switch (volumeUnit) {
+            case LITRE:
+                total = volume.multiply(price);
+                break;
+            case GALLON_UK:
+                total = getLitresFromUkGallon(volume).multiply(price);
+                break;
+            case GALLON_US:
+                total = getLitresFromUsGallon(volume).multiply(price);
+                break;
+        }
+        return total;
+    }
+
+    public static BigDecimal getPerLitrePriceFromTotal(BigDecimal volume, BigDecimal price, VolumeUnit volumeUnit){
+        BigDecimal total = null;
+        switch (volumeUnit) {
+            case LITRE:
+                total = price.divide(volume, 3, RoundingMode.HALF_UP);
+                break;
+            case GALLON_UK:
+                total = price.divide(getLitresFromUkGallon(volume), 3, RoundingMode.HALF_UP);
+                break;
+            case GALLON_US:
+                total = price.divide(getLitresFromUsGallon(volume), 3, RoundingMode.HALF_UP);
+                break;
+        }
+        return total;
+    }
+
     public static BigDecimal getUsGallonsFromLitre(BigDecimal value) {
         return ONE_LITRE_IS_US_GALLONS.multiply(value);
     }
 
     public static BigDecimal getLitresFromUsGallon(BigDecimal value) {
-        return value.divide(ONE_LITRE_IS_US_GALLONS);
+        return value.divide(ONE_LITRE_IS_US_GALLONS, BigDecimal.ROUND_HALF_UP);
     }
 
     public static BigDecimal getUkGallonsFromLitre(BigDecimal value) {
@@ -48,6 +81,6 @@ public class VolumeUtil {
     }
 
     public static BigDecimal getLitresFromUkGallon(BigDecimal value) {
-        return value.divide(ONE_LITRE_IS_UK_GALLONS);
+        return value.divide(ONE_LITRE_IS_UK_GALLONS, BigDecimal.ROUND_HALF_UP);
     }
 }

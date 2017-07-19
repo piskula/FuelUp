@@ -15,6 +15,7 @@ import java.util.List;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.FillUp;
+import sk.piskula.fuelup.entity.enums.DistanceUnit;
 import sk.piskula.fuelup.entity.util.CurrencyUtil;
 import sk.piskula.fuelup.entity.util.DateUtil;
 
@@ -51,7 +52,7 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
             //set views
             holder.txtDistanceFromLastFillUp.setText(currentItem.getDistanceFromLastFillUp().toString());
             holder.txtDriven.setText(currentItem.getVehicle().getUnit().toString());
-            holder.txtConsumptionSymbol.setText(context.getString(R.string.units_litreper100_distance_units, currentItem.getVehicle().getUnit().toString()));
+            holder.txtConsumptionSymbol.setText(currentItem.getVehicle().getConsumptionUnit(context));
             holder.txtDate.setText(DateUtil.getDateLocalized(currentItem.getDate()));
             holder.imgFullnessFillUpSymbol.setImageResource(context.getResources().getIdentifier(
                     currentItem.isFullFillUp() ? "ic_gasolinedrop_full" : "ic_gasolinedrop_empty", "drawable", context.getPackageName()));
@@ -59,7 +60,7 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
                     currentItem.getVehicle().getCurrency(), currentItem.getFuelPriceTotal(), context));
             holder.txtPricePerLitre.setText(CurrencyUtil.getPricePerLitre(
                     currentItem.getVehicle().getCurrency(), currentItem.getFuelPricePerLitre(), context));
-            holder.txtPricePerLitreSymbol.setText("/" + currentItem.getVehicle().getVolumeUnit());
+            holder.txtPricePerLitreSymbol.setText("/" + context.getString(R.string.litre));
 
             DecimalFormat bddf = new DecimalFormat();
             bddf.setGroupingUsed(false);
@@ -69,11 +70,11 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
             holder.txtFuelVolume.setText(bddf.format(currentItem.getFuelVolume()));
             holder.txtFuelVolumeSymbol.setText(currentItem.getVehicle().getVolumeUnit().toString());
 
+            int fractionDigits = currentItem.getVehicle().getUnit() == DistanceUnit.mi ? 1 : 2;
             if (currentItem.getFuelConsumption() != null) {
-                BigDecimal consumption = currentItem.getFuelConsumption();
-                bddf.setMinimumFractionDigits(2);
-                bddf.setMaximumFractionDigits(2);
-                holder.txtConsumption.setText(bddf.format(consumption));
+                bddf.setMinimumFractionDigits(fractionDigits);
+                bddf.setMaximumFractionDigits(fractionDigits);
+                holder.txtConsumption.setText(bddf.format(currentItem.getFuelConsumption()));
             } else {
                 holder.txtConsumption.setText("-");
             }

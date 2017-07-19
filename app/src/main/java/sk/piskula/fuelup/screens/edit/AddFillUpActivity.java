@@ -19,6 +19,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -29,6 +30,7 @@ import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.business.ServiceResult;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
+import sk.piskula.fuelup.entity.enums.DistanceUnit;
 import sk.piskula.fuelup.entity.enums.VolumeUnit;
 import sk.piskula.fuelup.entity.util.CurrencyUtil;
 import sk.piskula.fuelup.entity.util.VolumeUtil;
@@ -154,10 +156,12 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
         newFillUp.setFuelVolume(createdFuelVol);
         if (priceMode == SwitchPrice.perVolume) {
             newFillUp.setFuelPricePerLitre(createdPrice);
-            newFillUp.setFuelPriceTotal(createdFuelVol.multiply(createdPrice));
+            newFillUp.setFuelPriceTotal(VolumeUtil.getTotalPriceFromPerLitre(
+                    createdFuelVol, createdPrice, mSelectedCar.getVolumeUnit()));
         } else {
             newFillUp.setFuelPriceTotal(createdPrice);
-            newFillUp.setFuelPricePerLitre(createdPrice.divide(createdFuelVol));
+            newFillUp.setFuelPricePerLitre(VolumeUtil.getPerLitrePriceFromTotal(
+                    createdFuelVol, createdPrice, mSelectedCar.getVolumeUnit()));
         }
         newFillUp.setDate(createdDate.getTime());
         newFillUp.setInfo(info.toString());

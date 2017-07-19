@@ -22,6 +22,8 @@ import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.VehicleType;
 import sk.piskula.fuelup.entity.enums.DistanceUnit;
 import sk.piskula.fuelup.entity.enums.VolumeUnit;
+import sk.piskula.fuelup.entity.util.VolumeUtil;
+import sk.piskula.fuelup.screens.edit.AddFillUpActivity;
 
 /**
  * @author Ondrej Oravcok
@@ -31,6 +33,8 @@ public class SampleDataUtils {
 
     private static final int LAST_YEAR = 2017;
     private static final int NUMBER_OF_PREVIOUS_YEARS = 3;
+    private static final double MI_TO_KM = 1.5d; //original value 1 mile = 1.609344 km
+    private static final double LITRE_TO_GALLON = 0.264172d;
 
     private static final int MAX_FILLUPS = 310; //from there
     private static final int LOW_VEHICLE_FILLUPS = 10;
@@ -98,11 +102,12 @@ public class SampleDataUtils {
 
             if (i > LOW_VEHICLE_FILLUPS) whichVehicle = 0;
             double currencyFactor = whichVehicle == 1 ? 0.16d : 4d;
+            double gallonFactor = whichVehicle == 1 ? LITRE_TO_GALLON : 1d;
             fillUps.add(fillUp(vehicles.get(whichVehicle),
                     BigDecimal.valueOf((random.nextDouble() + 2) * 3.1 * currencyFactor),
                     cal.getTime(),
                     Long.valueOf(dist * 40) ,
-                    (dist + 3 * random.nextDouble())* 4 * 0.7 ,
+                    (dist + 3 * random.nextDouble())* 4 * 0.7 * gallonFactor,
                     random.nextBoolean()));
         }
         Collections.sort(fillUps, new Comparator<FillUp>() {
@@ -128,7 +133,7 @@ public class SampleDataUtils {
         fillUp.setFuelVolume(BigDecimal.valueOf(amount));
         fillUp.setInfo("");
 
-        fillUp.setFuelPriceTotal(fillUp.getFuelPricePerLitre().multiply(fillUp.getFuelVolume()));
+        fillUp.setFuelPriceTotal(VolumeUtil.getTotalPriceFromPerLitre(BigDecimal.valueOf(amount), perLitre, vehicle.getVolumeUnit()));
 
         return fillUp;
     }

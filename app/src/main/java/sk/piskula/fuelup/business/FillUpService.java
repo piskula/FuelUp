@@ -17,7 +17,7 @@ import java.util.List;
 
 import sk.piskula.fuelup.data.DatabaseProvider;
 import sk.piskula.fuelup.entity.FillUp;
-import sk.piskula.fuelup.util.BigDecimalFormatter;
+import sk.piskula.fuelup.entity.enums.DistanceUnit;
 
 /**
  * Created by Martin Styk on 23.06.2017.
@@ -166,6 +166,14 @@ public class FillUpService {
         return BigDecimal.ZERO;
     }
 
+    private BigDecimal getConsumptionFromVolumeDistance(BigDecimal volume, Long distance, ConsumtpionUnit unit) {
+        if (unit == ConsumtpionUnit.litresPer100km) {
+            return volume.multiply(new BigDecimal(100)).divide(new BigDecimal(distance), 2, RoundingMode.HALF_UP);
+        } else {
+            return BigDecimal.valueOf(distance).divide(volume, 1, RoundingMode.HALF_UP);
+        }
+    }
+
     private void recomputeConsumption(FillUp fillUp) {
         List<FillUp> allFillUps = findFillUpsOfVehicle(fillUp.getVehicle().getId());
         int indexOfNewFillUp = allFillUps.indexOf(fillUp);
@@ -190,7 +198,8 @@ public class FillUpService {
                 olderFillUpsToUpdate.add(lookingAtFillUp);
             }
 
-            BigDecimal avgConsumption = existsOlderFullFillUp ? fuelVol.multiply(new BigDecimal(100)).divide(new BigDecimal(distance), 2, RoundingMode.HALF_UP) : null;
+            ConsumtpionUnit unit = fillUp.getVehicle().getUnit() == DistanceUnit.mi ? ConsumtpionUnit.milesPerGallon : ConsumtpionUnit.litresPer100km;
+            BigDecimal avgConsumption = existsOlderFullFillUp ? getConsumptionFromVolumeDistance(fuelVol, distance, unit) : null;
 
             for (FillUp fUp : olderFillUpsToUpdate) {
                 fUp.setFuelConsumption(avgConsumption);
@@ -262,6 +271,10 @@ public class FillUpService {
                 update(fUp);
             }
         }
+    }
+
+    enum ConsumtpionUnit {
+        milesPerGallon, litresPer100km
     }
 }
 

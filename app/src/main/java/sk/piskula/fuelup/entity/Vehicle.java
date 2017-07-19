@@ -11,6 +11,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Currency;
 
+import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.enums.DistanceUnit;
 import sk.piskula.fuelup.entity.enums.VolumeUnit;
 import sk.piskula.fuelup.entity.util.CurrencyUtil;
@@ -216,4 +217,12 @@ public class Vehicle implements Parcelable {
             return new Vehicle[size];
         }
     };
+
+    public String getConsumptionUnit(Context context) {
+        if (this.getUnit() == DistanceUnit.mi) {
+            return context.getString(R.string.units_mpg);
+        } else {
+            return context.getString(R.string.units_litreper100km);
+        }
+    }
 }
