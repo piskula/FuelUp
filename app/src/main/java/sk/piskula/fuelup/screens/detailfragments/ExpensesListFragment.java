@@ -78,6 +78,7 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
         emptyList = view.findViewById(R.id.expense_list_empty);
 
         addButton = getActivity().findViewById(R.id.fab_add);
+        addButton.setVisibility(View.VISIBLE);
         addButton.setOnClickListener(this);
 
         recyclerView = view.findViewById(R.id.expense_list);
@@ -92,6 +93,12 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
         getLoaderManager().initLoader(ExpenseLoader.ID, args, this);
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        addButton.setVisibility(View.GONE);
     }
 
     @Override

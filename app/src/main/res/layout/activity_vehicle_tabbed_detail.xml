@@ -50,8 +50,8 @@
         android:id="@+id/vehicle_detail_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_marginBottom="60dp"/>
+        android:layout_marginBottom="60dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/vehicle_detail_navigation"
@@ -59,9 +59,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="?android:attr/windowBackground"
-        app:menu="@menu/vehicle_detail_tabs"
         app:itemIconTint="@drawable/selector_bottom_navigation"
-        app:itemTextColor="@drawable/selector_bottom_navigation"/>
+        app:itemTextColor="@drawable/selector_bottom_navigation"
+        app:menu="@menu/vehicle_detail_tabs" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add"
@@ -69,10 +69,20 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top"
         android:tint="@android:color/white"
-        app:layout_anchorGravity="top|end"
         app:layout_anchor="@+id/vehicle_detail_navigation"
+        app:layout_anchorGravity="top|end"
         app:srcCompat="@android:drawable/ic_input_add"
-        app:useCompatPadding="true"
-        />
+        app:useCompatPadding="true" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_charts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tint="@android:color/white"
+        android:visibility="gone"
+        app:layout_anchor="@+id/vehicle_detail_frame"
+        app:layout_anchorGravity="top|end"
+        app:srcCompat="@android:drawable/ic_input_get"
+        app:useCompatPadding="true" />
 
 </android.support.design.widget.CoordinatorLayout>

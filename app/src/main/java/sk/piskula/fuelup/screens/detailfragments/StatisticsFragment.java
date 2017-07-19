@@ -49,8 +49,8 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         appBarLayout = getActivity().findViewById(R.id.toolbar_layout);
         appBarLayout.setTitle(getResources().getString(R.string.title_statistics));
 
-        floatingActionButton = getActivity().findViewById(R.id.fab_add);
-        floatingActionButton.setImageResource(android.R.drawable.ic_input_get);
+        floatingActionButton = getActivity().findViewById(R.id.fab_charts);
+        floatingActionButton.setVisibility(View.VISIBLE);
         floatingActionButton.setOnClickListener(this);
 
 
@@ -70,7 +70,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        floatingActionButton.setImageResource(android.R.drawable.ic_input_add);
+        floatingActionButton.setVisibility(View.GONE);
     }
 
     @Override

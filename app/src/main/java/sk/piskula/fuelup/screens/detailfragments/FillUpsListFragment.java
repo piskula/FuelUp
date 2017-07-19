@@ -77,6 +77,7 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
         emptyList = view.findViewById(R.id.fill_ups_list_empty);
 
         addButton = getActivity().findViewById(R.id.fab_add);
+        addButton.setVisibility(View.VISIBLE);
         addButton.setOnClickListener(this);
 
         recyclerView = view.findViewById(R.id.fill_ups_list);
@@ -91,6 +92,12 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
         getLoaderManager().initLoader(FillUpLoader.ID, args, this);
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        addButton.setVisibility(View.GONE);
     }
 
     @Override
