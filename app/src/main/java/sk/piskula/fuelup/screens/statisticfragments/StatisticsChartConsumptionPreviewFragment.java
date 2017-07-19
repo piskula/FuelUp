@@ -29,6 +29,7 @@ import lecho.lib.hellocharts.view.LineChartView;
 import lecho.lib.hellocharts.view.PreviewLineChartView;
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.business.FillUpService;
+import sk.piskula.fuelup.business.StatisticsService;
 import sk.piskula.fuelup.databinding.FragmentStatisticsChartConsumptionPreviewBinding;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
@@ -90,7 +91,8 @@ public class StatisticsChartConsumptionPreviewFragment extends Fragment implemen
         if (hasDataToShow) {
             LineChartData data = generateLineChartData(fillUps);
             LineChartData previewData = new LineChartData(data);
-            previewData.getLines().get(0).setColor(ChartUtils.DEFAULT_DARKEN_COLOR);
+            previewData.getLines().get(0).setColor(ChartUtils.DEFAULT_DARKEN_COLOR).setHasPoints(false);
+            previewData.getLines().remove(1);
 
             chart.setVisibility(View.VISIBLE);
             chart.setLineChartData(data);
@@ -136,11 +138,26 @@ public class StatisticsChartConsumptionPreviewFragment extends Fragment implemen
             axisValues.add(axisValue);
         }
 
-        Line line = new Line(values);
-        line.setColor(getResources().getColor(R.color.colorAccent));
+        Line line = new Line(values)
+                .setColor(getResources().getColor(R.color.colorLightGrey))
+                .setPointColor(getResources().getColor(R.color.colorPrimary));
 
-        List<Line> lines = new ArrayList<Line>();
+        List<Line> lines = new ArrayList<>(2);
         lines.add(line);
+
+        Vehicle vehicle = getArguments().getParcelable(ARG_VEHICLE);
+        BigDecimal averageConsumption = new StatisticsService(getContext(), vehicle.getId()).getAverageConsumption();
+        if (averageConsumption != null) {
+            List<PointValue> averageLineValues = new ArrayList<>(2);
+            averageLineValues.add(new PointValue(0, averageConsumption.floatValue()));
+            averageLineValues.add(new PointValue(fillUps.size() - 1, averageConsumption.floatValue()));
+            Line averageLine = new Line(averageLineValues);
+            averageLine.setColor(getResources().getColor(R.color.colorAccent));
+            averageLine.setHasPoints(false).setHasLabels(true);
+
+            lines.add(averageLine);
+        }
+
 
         LineChartData data = new LineChartData(lines);
         data.setAxisXBottom(new Axis(axisValues)
