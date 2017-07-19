@@ -49,6 +49,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         appBarLayout = getActivity().findViewById(R.id.toolbar_layout);
         appBarLayout.setTitle(getResources().getString(R.string.title_statistics));
 
+        getActivity().findViewById(R.id.fab_add).setVisibility(View.GONE);
         floatingActionButton = getActivity().findViewById(R.id.fab_charts);
         floatingActionButton.setVisibility(View.VISIBLE);
         floatingActionButton.setOnClickListener(this);
