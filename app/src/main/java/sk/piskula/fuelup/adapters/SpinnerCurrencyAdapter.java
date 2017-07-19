@@ -30,7 +30,7 @@ public class SpinnerCurrencyAdapter extends BaseAdapter implements SpinnerAdapte
 
     public SpinnerCurrencyAdapter(Activity activity) {
         this.activity = activity;
-        this.currencies = CurrencyUtil.getSupportedCurrencies();
+        this.currencies = CurrencyUtil.getSupportedCurrencies(activity);
     }
 
     @Override
