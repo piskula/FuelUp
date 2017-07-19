@@ -17,6 +17,7 @@ import java.util.List;
 
 import sk.piskula.fuelup.data.DatabaseProvider;
 import sk.piskula.fuelup.entity.FillUp;
+import sk.piskula.fuelup.util.BigDecimalFormatter;
 
 /**
  * Created by Martin Styk on 23.06.2017.
