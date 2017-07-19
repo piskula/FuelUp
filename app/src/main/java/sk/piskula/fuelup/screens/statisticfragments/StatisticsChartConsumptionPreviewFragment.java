@@ -1,7 +1,5 @@
 package sk.piskula.fuelup.screens.statisticfragments;
 
-import android.graphics.CornerPathEffect;
-import android.graphics.PathDashPathEffect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -12,7 +10,6 @@ import android.view.ViewGroup;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
@@ -68,10 +65,13 @@ public class StatisticsChartConsumptionPreviewFragment extends Fragment implemen
 
         chart = binding.chart;
         previewChart = binding.chartPreview;
-        chart.setZoomEnabled(false);
-        chart.setScrollEnabled(false);
-        previewChart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
-        previewChart.setViewportChangeListener(new ViewportListener());
+        chart.setZoomEnabled(true);
+        chart.setScrollEnabled(true);
+        chart.setZoomType(ZoomType.HORIZONTAL);
+        chart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
+        chart.setViewportChangeListener(new ViewportListener());
+        previewChart.setScrollEnabled(false);
+        previewChart.setZoomEnabled(false);
 
         return binding.getRoot();
     }
@@ -99,8 +99,6 @@ public class StatisticsChartConsumptionPreviewFragment extends Fragment implemen
 
             previewChart.setVisibility(View.VISIBLE);
             previewChart.setLineChartData(previewData);
-
-            previewX(false);
         }
     }
 
@@ -175,18 +173,6 @@ public class StatisticsChartConsumptionPreviewFragment extends Fragment implemen
         return data;
     }
 
-    private void previewX(boolean animate) {
-        Viewport tempViewport = new Viewport(chart.getMaximumViewport());
-        float dx = tempViewport.width() / 4;
-        tempViewport.inset(dx, 0);
-        if (animate) {
-            previewChart.setCurrentViewportWithAnimation(tempViewport);
-        } else {
-            previewChart.setCurrentViewport(tempViewport);
-        }
-        previewChart.setZoomType(ZoomType.HORIZONTAL);
-    }
-
     /**
      * Viewport listener for preview chart(lower one). in {@link #onViewportChanged(Viewport)} method change
      * viewport of upper chart.
@@ -195,9 +181,8 @@ public class StatisticsChartConsumptionPreviewFragment extends Fragment implemen
 
         @Override
         public void onViewportChanged(Viewport newViewport) {
-            chart.setCurrentViewport(newViewport);
+            previewChart.setCurrentViewport(newViewport);
         }
-
     }
 
 }
