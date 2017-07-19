@@ -100,9 +100,6 @@ public class StatisticsChartConsumptionPreviewFragment extends Fragment implemen
             previewChart.setVisibility(View.VISIBLE);
             previewChart.setLineChartData(previewData);
 
-            chart.setZoomEnabled(false);
-            chart.setScrollEnabled(false);
-
             previewX(false);
         }
     }
@@ -125,17 +122,26 @@ public class StatisticsChartConsumptionPreviewFragment extends Fragment implemen
     private LineChartData generateLineChartData(List<FillUp> fillUps) {
         List<PointValue> values = new ArrayList<>();
         List<AxisValue> axisValues = new ArrayList<>();
+
+        long oldestFillUpTime = 0;
+        long latestFillUpTime = 0;
+
         for (int x = 0; x < fillUps.size(); ++x) {
             FillUp dataItem = fillUps.get(x);
-            Date recordedAt = dataItem.getDate();
-            String formattedRecordedAt = DateUtil.getDateLocalized(recordedAt);
             BigDecimal consumption = dataItem.getFuelConsumption();
+
             if (consumption != null) {
-                values.add(new PointValue(x, consumption.floatValue()));
+                latestFillUpTime = dataItem.getDate().getTime();
+                String formattedRecordedAt = DateUtil.getDateLocalized(dataItem.getDate());
+                if (oldestFillUpTime == 0) {
+                    oldestFillUpTime = latestFillUpTime;
+                }
+
+                values.add(new PointValue(latestFillUpTime - oldestFillUpTime, consumption.floatValue()));
+                AxisValue axisValue = new AxisValue(latestFillUpTime - oldestFillUpTime);
+                axisValue.setLabel(formattedRecordedAt);
+                axisValues.add(axisValue);
             }
-            AxisValue axisValue = new AxisValue(x);
-            axisValue.setLabel(formattedRecordedAt);
-            axisValues.add(axisValue);
         }
 
         Line line = new Line(values)
@@ -150,7 +156,7 @@ public class StatisticsChartConsumptionPreviewFragment extends Fragment implemen
         if (averageConsumption != null) {
             List<PointValue> averageLineValues = new ArrayList<>(2);
             averageLineValues.add(new PointValue(0, averageConsumption.floatValue()));
-            averageLineValues.add(new PointValue(fillUps.size() - 1, averageConsumption.floatValue()));
+            averageLineValues.add(new PointValue(latestFillUpTime - oldestFillUpTime, averageConsumption.floatValue()));
             Line averageLine = new Line(averageLineValues);
             averageLine.setColor(getResources().getColor(R.color.colorAccent));
             averageLine.setHasPoints(false).setHasLabels(true);
