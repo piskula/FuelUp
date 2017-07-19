@@ -19,7 +19,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -30,9 +29,6 @@ import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.business.ServiceResult;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
-import sk.piskula.fuelup.entity.enums.DistanceUnit;
-import sk.piskula.fuelup.entity.enums.VolumeUnit;
-import sk.piskula.fuelup.entity.util.CurrencyUtil;
 import sk.piskula.fuelup.entity.util.VolumeUtil;
 
 
@@ -82,7 +78,7 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
 
         setFillUpDate(Calendar.getInstance());
         mTxtCurrencySymbol.setText(mSelectedCar.getCurrencySymbol(this));
-        mTxtDistanceUnit.setText(mSelectedCar.getUnit().toString());
+        mTxtDistanceUnit.setText(mSelectedCar.getDistanceUnit().toString());
         mTxtFuelVolumeUnit.setText(mSelectedCar.getVolumeUnit().toString());
         this.onCheckedChanged(mBtnSwitchPrice, false);
     }

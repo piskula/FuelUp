@@ -198,7 +198,7 @@ public class FillUpService {
                 olderFillUpsToUpdate.add(lookingAtFillUp);
             }
 
-            ConsumtpionUnit unit = fillUp.getVehicle().getUnit() == DistanceUnit.mi ? ConsumtpionUnit.milesPerGallon : ConsumtpionUnit.litresPer100km;
+            ConsumtpionUnit unit = fillUp.getVehicle().getDistanceUnit() == DistanceUnit.mi ? ConsumtpionUnit.milesPerGallon : ConsumtpionUnit.litresPer100km;
             BigDecimal avgConsumption = existsOlderFullFillUp ? getConsumptionFromVolumeDistance(fuelVol, distance, unit) : null;
 
             for (FillUp fUp : olderFillUpsToUpdate) {

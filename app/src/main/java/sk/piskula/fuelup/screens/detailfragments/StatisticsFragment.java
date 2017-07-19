@@ -64,7 +64,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
     }
 
     private void setFuelConsumption(FragmentStatisticsBinding binding) {
-        binding.fuelConsumption.setUnit("\u2113/" + vehicle.getUnit().toString());
+        binding.fuelConsumption.setUnit("\u2113/" + vehicle.getDistanceUnit().toString());
     }
 
     @Override

@@ -165,7 +165,7 @@ public class AddVehicleActivity extends AppCompatActivity implements ImageChoose
         createdVehicle.setCurrency((Currency) spinnerCurrency.getSelectedItem());
         createdVehicle.setType((VehicleType) spinnerType.getSelectedItem());
         createdVehicle.setPathToPicture(vehiclePicturePath);
-        createdVehicle.setUnit(radioGroupDistanceUnit.getCheckedRadioButtonId() == R.id.radio_km ? DistanceUnit.km : DistanceUnit.mi);
+        createdVehicle.setDistanceUnit(radioGroupDistanceUnit.getCheckedRadioButtonId() == R.id.radio_km ? DistanceUnit.km : DistanceUnit.mi);
         createdVehicle.setStartMileage(Long.parseLong(actualMileage));
 
         VehicleService vehicleService = new VehicleService(this);

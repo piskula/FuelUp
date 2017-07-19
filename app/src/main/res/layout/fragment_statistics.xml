@@ -51,7 +51,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_fuel_consumption_average"
-                        app:unit="@{@string/units_litreper100_distance_units(vehicle.unit.toString())}"
+                        app:unit="@{@string/units_litreper100_distance_units(vehicle.distanceUnit.toString())}"
                         app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.avgConsumption) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
@@ -59,7 +59,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_fuel_consumption_average"
-                        app:unit="@{@string/units_distance_units_per_litre(vehicle.unit.toString())}"
+                        app:unit="@{@string/units_distance_units_per_litre(vehicle.distanceUnit.toString())}"
                         app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.avgConsumptionReversed) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
@@ -67,7 +67,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_fuel_consumption_best"
-                        app:unit="@{@string/units_litreper100_distance_units(vehicle.unit.toString())}"
+                        app:unit="@{@string/units_litreper100_distance_units(vehicle.distanceUnit.toString())}"
                         app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.fuelConsumptionBest) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
@@ -75,7 +75,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_fuel_consumption_worst"
-                        app:unit="@{@string/units_litreper100_distance_units(vehicle.unit.toString())}"
+                        app:unit="@{@string/units_litreper100_distance_units(vehicle.distanceUnit.toString())}"
                         app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.fuelConsumptionWorst) : @string/na}" />
 
                 </LinearLayout>
@@ -149,7 +149,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_distance_driven_total"
-                        app:unit="@{vehicle.getUnit().toString()}"
+                        app:unit="@{vehicle.getDistanceUnit().toString()}"
                         app:value="@{data!= null ? String.valueOf(data.totalDrivenDistance) : @string/na}" />
 
                 </LinearLayout>
@@ -176,7 +176,7 @@
                         android:id="@+id/price_per_distance_total"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
-                        app:name="@{@string/statistics_costs_per_distance(vehicle.getUnit().toString())}"
+                        app:name="@{@string/statistics_costs_per_distance(vehicle.getDistanceUnit().toString())}"
                         app:unit="@{currency}"
                         app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.totalCostsPerDistance) : @string/na}" />
 
@@ -184,7 +184,7 @@
                         android:id="@+id/price_per_distance_fill_up"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
-                        app:name="@{@string/statistics_costs_per_distance_fuel(vehicle.getUnit().toString())}"
+                        app:name="@{@string/statistics_costs_per_distance_fuel(vehicle.getDistanceUnit().toString())}"
                         app:unit="@{currency}"
                         app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.fuelCostsPerDistance) : @string/na}" />
 
@@ -192,7 +192,7 @@
                         android:id="@+id/price_per_distance_expense"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
-                        app:name="@{@string/statistics_costs_per_distance_expense(vehicle.getUnit().toString())}"
+                        app:name="@{@string/statistics_costs_per_distance_expense(vehicle.getDistanceUnit().toString())}"
                         app:unit="@{currency}"
                         app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.expenseCostsPerDistance) : @string/na}" />
                 </LinearLayout>
@@ -350,7 +350,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_distance_between_fill_ups_average"
-                        app:unit="@{vehicle.unit.toString()}"
+                        app:unit="@{vehicle.distanceUnit.toString()}"
                         app:value="@{data!= null ? Integer.toString(data.distanceBetweenFillUpsAverage) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
@@ -358,7 +358,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_distance_between_fill_ups_lowest"
-                        app:unit="@{vehicle.unit.toString()}"
+                        app:unit="@{vehicle.distanceUnit.toString()}"
                         app:value="@{data!= null ? Integer.toString(data.distanceBetweenFillUpsLowest) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
@@ -366,7 +366,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_distance_between_fill_ups_highest"
-                        app:unit="@{vehicle.unit.toString()}"
+                        app:unit="@{vehicle.distanceUnit.toString()}"
                         app:value="@{data!= null ? Integer.toString(data.distanceBetweenFillUpsHighest) : @string/na}" />
 
                 </LinearLayout>
@@ -439,7 +439,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_average_distance_per_day"
-                        app:unit="@{vehicle.unit.toString()}"
+                        app:unit="@{vehicle.distanceUnit.toString()}"
                         app:value="@{data!= null ? String.valueOf(data.averageDistancePerDay) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
@@ -447,7 +447,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_average_distance_per_week"
-                        app:unit="@{vehicle.unit.toString()}"
+                        app:unit="@{vehicle.distanceUnit.toString()}"
                         app:value="@{data!= null ? String.valueOf(data.averageDistancePerWeek) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
@@ -455,7 +455,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_average_distance_per_month"
-                        app:unit="@{vehicle.unit.toString()}"
+                        app:unit="@{vehicle.distanceUnit.toString()}"
                         app:value="@{data!= null ? String.valueOf(data.averageDistancePerMonth) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
@@ -463,7 +463,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_average_distance_per_year"
-                        app:unit="@{vehicle.unit.toString()}"
+                        app:unit="@{vehicle.distanceUnit.toString()}"
                         app:value="@{data!= null ? String.valueOf(data.averageDistancePerYear) : @string/na}" />
 
                 </LinearLayout>

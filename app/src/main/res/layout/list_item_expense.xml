@@ -10,7 +10,7 @@
         android:id="@+id/img_itemexpense_pic"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:contentDescription="@string/desc_expensePic"
         android:src="@drawable/car_service" />
@@ -20,26 +20,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/img_itemexpense_pic"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/img_itemexpense_pic"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/txt_itemexpense_price_currency"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/txt_itemexpense_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/txt_itemexpense_price_currency"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
         android:maxLines="1"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/holo_orange_dark" />
@@ -49,9 +41,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/img_itemexpense_pic"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/img_itemexpense_pic"
         android:maxLines="1"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
-</RelativeLayout>
+    </RelativeLayout>

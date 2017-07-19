@@ -42,13 +42,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/txt_itemfillup_consumption_symbol"
+        android:layout_toStartOf="@+id/txt_itemfillup_consumptionUnit"
         android:maxLines="1"
         android:textColor="@android:color/holo_orange_dark"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/txt_itemfillup_consumption_symbol"
+        android:id="@+id/txt_itemfillup_consumptionUnit"
         android:text="\u2113/100km"
         android:layout_marginLeft="2dp"
         android:layout_width="wrap_content"
@@ -98,7 +98,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/txt_itemfillup_driven"
+        android:id="@+id/txt_itemfillup_distanceUnit"
         android:text="km"
         android:layout_marginStart="2dp"
         android:layout_width="wrap_content"

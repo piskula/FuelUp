@@ -40,7 +40,7 @@ public class VehicleService {
     public ServiceResult save(String name) {
         Vehicle vehicle = new Vehicle();
         vehicle.setName(name);
-        vehicle.setUnit(DistanceUnit.km);
+        vehicle.setDistanceUnit(DistanceUnit.km);
         vehicle.setCurrency(Currency.getInstance("EUR"));
         vehicle.setType(vehicleTypeService.getFirst());
 

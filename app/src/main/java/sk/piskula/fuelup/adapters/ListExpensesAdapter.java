@@ -50,7 +50,6 @@ public class ListExpensesAdapter extends RecyclerView.Adapter<ListExpensesAdapte
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         Expense currentItem = items.get(position);
         if (currentItem != null) {
-            holder.txtPriceSymbol.setText("");  //TODO remove
             holder.txtInfo.setText(currentItem.getInfo());
             holder.txtPrice.setText(CurrencyUtil.getPrice(currentItem.getVehicle().getCurrency(), currentItem.getPrice(), context));
             holder.txtDate.setText(DateUtil.getDateLocalized(currentItem.getDate()));
@@ -80,13 +79,11 @@ public class ListExpensesAdapter extends RecyclerView.Adapter<ListExpensesAdapte
 
         TextView txtInfo;
         TextView txtPrice;
-        TextView txtPriceSymbol;
         TextView txtDate;
 
         ViewHolder(View v) {
             super(v);
             mView = v;
-            txtPriceSymbol = v.findViewById(R.id.txt_itemexpense_price_currency);
             txtInfo = v.findViewById(R.id.txt_itemexpense_title);
             txtPrice = v.findViewById(R.id.txt_itemexpense_price);
             txtDate = v.findViewById(R.id.txt_itemexpense_date);

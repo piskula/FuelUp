@@ -23,7 +23,6 @@ import sk.piskula.fuelup.entity.VehicleType;
 import sk.piskula.fuelup.entity.enums.DistanceUnit;
 import sk.piskula.fuelup.entity.enums.VolumeUnit;
 import sk.piskula.fuelup.entity.util.VolumeUtil;
-import sk.piskula.fuelup.screens.edit.AddFillUpActivity;
 
 /**
  * @author Ondrej Oravcok
@@ -79,7 +78,7 @@ public class SampleDataUtils {
 
         vehicle.setName(name);
         vehicle.setVehicleMaker(maker);
-        vehicle.setUnit(unit);
+        vehicle.setDistanceUnit(unit);
         vehicle.setVolumeUnit(volumeUnit);
         vehicle.setType(type);
         vehicle.setStartMileage(mileage);
