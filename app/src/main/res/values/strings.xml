@@ -187,5 +187,7 @@
     <string name="statistics_app_usage">FuelUp usage</string>
 
     <string name="no_data_to_show">No data to show.</string>
+    <string name="fill_up_detail">Fill up detail</string>
+
 
 </resources>

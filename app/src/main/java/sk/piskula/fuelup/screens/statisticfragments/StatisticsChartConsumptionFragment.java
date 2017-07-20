@@ -9,37 +9,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
 import lecho.lib.hellocharts.gesture.ZoomType;
-import lecho.lib.hellocharts.model.Axis;
-import lecho.lib.hellocharts.model.AxisValue;
-import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.view.LineChartView;
-import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.business.FillUpService;
-import sk.piskula.fuelup.business.StatisticsService;
 import sk.piskula.fuelup.databinding.FragmentStatisticsChartConsumptionBinding;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
-import sk.piskula.fuelup.entity.util.DateUtil;
-import sk.piskula.fuelup.loaders.FillUpLoader;
+import sk.piskula.fuelup.loaders.ConsumptionChartDataLoader;
+import sk.piskula.fuelup.screens.dialog.FillUpInfoDialog;
 
 /**
  * @author Martin Styk
  */
-public class StatisticsChartConsumptionFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<FillUp>> {
+public class StatisticsChartConsumptionFragment extends Fragment implements LoaderManager.LoaderCallbacks<Map<String, Object>> {
 
     private static final String ARG_VEHICLE = "vehicleArg";
 
     private FragmentStatisticsChartConsumptionBinding binding;
 
     private LineChartView lineChartView;
+
+    private List<FillUp> displayedValues = new ArrayList<>(0);
+
 
     public static StatisticsChartConsumptionFragment newInstance(Vehicle param) {
         StatisticsChartConsumptionFragment fragment = new StatisticsChartConsumptionFragment();
@@ -52,7 +51,7 @@ public class StatisticsChartConsumptionFragment extends Fragment implements Load
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getLoaderManager().initLoader(FillUpLoader.ID, getArguments(), this);
+        getLoaderManager().initLoader(ConsumptionChartDataLoader.ID, getArguments(), this);
     }
 
     @Override
@@ -63,6 +62,7 @@ public class StatisticsChartConsumptionFragment extends Fragment implements Load
         lineChartView = new LineChartView(getActivity());
         lineChartView.setZoomType(ZoomType.HORIZONTAL);
         lineChartView.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
+        lineChartView.setOnValueTouchListener(new ValueTouchListener());
         lineChartView.setVisibility(View.GONE);
 
         layout.addView(lineChartView);
@@ -71,25 +71,25 @@ public class StatisticsChartConsumptionFragment extends Fragment implements Load
     }
 
     @Override
-    public Loader<List<FillUp>> onCreateLoader(int id, Bundle args) {
+    public Loader<Map<String, Object>> onCreateLoader(int id, Bundle args) {
         Vehicle vehicle = args.getParcelable(ARG_VEHICLE);
         long vehicleId = vehicle.getId();
-        return new FillUpLoader(getActivity(), vehicleId, new FillUpService(getActivity()));
+        return new ConsumptionChartDataLoader(getActivity(), vehicleId, new FillUpService(getActivity()));
     }
 
     @Override
-    public void onLoadFinished(Loader<List<FillUp>> loader, List<FillUp> data) {
-        boolean hasDataToShow = hasSomethingToDisplay(data);
-        binding.setHasData(hasDataToShow);
-
-        if (hasDataToShow) {
+    public void onLoadFinished(Loader<Map<String, Object>> loader, Map<String, Object> data) {
+        binding.setHasData(data != null);
+        if (data != null) {
+            lineChartView.setLineChartData((LineChartData) data.get(ConsumptionChartDataLoader.CHART_DATA));
             lineChartView.setVisibility(View.VISIBLE);
-            lineChartView.setLineChartData(generateLineChartData(data));
+
+            displayedValues = (List<FillUp>) data.get(ConsumptionChartDataLoader.FILL_UPS);
         }
     }
 
     @Override
-    public void onLoaderReset(Loader<List<FillUp>> loader) {
+    public void onLoaderReset(Loader<Map<String, Object>> loader) {
         lineChartView.setLineChartData(new LineChartData());
     }
 
@@ -102,61 +102,18 @@ public class StatisticsChartConsumptionFragment extends Fragment implements Load
         return false;
     }
 
-    private LineChartData generateLineChartData(List<FillUp> fillUps) {
-        List<PointValue> values = new ArrayList<>();
-        List<AxisValue> axisValues = new ArrayList<>();
+    private class ValueTouchListener implements LineChartOnValueSelectListener {
 
-        long oldestFillUpTime = 0;
-        long latestFillUpTime = 0;
-
-        for (int x = 0; x < fillUps.size(); ++x) {
-            FillUp dataItem = fillUps.get(x);
-            BigDecimal consumption = dataItem.getFuelConsumption();
-
-            if (consumption != null) {
-                latestFillUpTime = dataItem.getDate().getTime();
-                String formattedRecordedAt = DateUtil.getDateLocalized(dataItem.getDate());
-                if (oldestFillUpTime == 0) {
-                    oldestFillUpTime = latestFillUpTime;
-                }
-
-                values.add(new PointValue(latestFillUpTime - oldestFillUpTime, consumption.floatValue()));
-                AxisValue axisValue = new AxisValue(latestFillUpTime - oldestFillUpTime);
-                axisValue.setLabel(formattedRecordedAt);
-                axisValues.add(axisValue);
-            }
+        @Override
+        public void onValueSelected(int lineIndex, int pointIndex, PointValue value) {
+            FillUpInfoDialog.newInstance(displayedValues.get(pointIndex))
+                    .show(getActivity().getSupportFragmentManager(), FillUpInfoDialog.class.getSimpleName());
         }
 
-        Line line = new Line(values)
-                .setColor(getResources().getColor(R.color.colorLightGrey))
-                .setPointColor(getResources().getColor(R.color.colorPrimary));
-
-        List<Line> lines = new ArrayList<>(2);
-        lines.add(line);
-
-        Vehicle vehicle = getArguments().getParcelable(ARG_VEHICLE);
-        BigDecimal averageConsumption = new StatisticsService(getContext(), vehicle.getId()).getAverageConsumption();
-        if (averageConsumption != null) {
-            List<PointValue> averageLineValues = new ArrayList<>(2);
-            averageLineValues.add(new PointValue(0, averageConsumption.floatValue()));
-            averageLineValues.add(new PointValue(latestFillUpTime - oldestFillUpTime, averageConsumption.floatValue()));
-            Line averageLine = new Line(averageLineValues);
-            averageLine.setColor(getResources().getColor(R.color.colorAccent));
-            averageLine.setHasPoints(false).setHasLabels(true);
-
-            lines.add(averageLine);
+        @Override
+        public void onValueDeselected() {
         }
 
-
-        LineChartData data = new LineChartData(lines);
-        data.setAxisXBottom(new Axis(axisValues)
-                .setHasTiltedLabels(true)
-                .setMaxLabelChars(12));
-        data.setAxisYLeft(new Axis()
-                .setName(getString(R.string.statistics_fuel_consumption))
-                .setHasLines(true));
-
-        return data;
     }
 
 }

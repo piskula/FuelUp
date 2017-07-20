@@ -14,8 +14,10 @@ import java.util.Map;
 
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
 import lecho.lib.hellocharts.gesture.ZoomType;
+import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener;
 import lecho.lib.hellocharts.listener.ViewportChangeListener;
 import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.LineChartView;
 import lecho.lib.hellocharts.view.PreviewLineChartView;
@@ -24,7 +26,7 @@ import sk.piskula.fuelup.databinding.FragmentStatisticsChartConsumptionPreviewBi
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.loaders.ConsumptionChartDataLoader;
-import sk.piskula.fuelup.loaders.FillUpLoader;
+import sk.piskula.fuelup.screens.dialog.FillUpInfoDialog;
 
 /**
  * @author Martin Styk
@@ -51,7 +53,7 @@ public class StatisticsChartConsumptionPreviewFragment extends Fragment implemen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getLoaderManager().initLoader(FillUpLoader.ID, getArguments(), this);
+        getLoaderManager().initLoader(ConsumptionChartDataLoader.ID, getArguments(), this);
     }
 
     @Override
@@ -65,6 +67,7 @@ public class StatisticsChartConsumptionPreviewFragment extends Fragment implemen
         chart.setZoomType(ZoomType.HORIZONTAL);
         chart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
         chart.setViewportChangeListener(new ViewportListener());
+        chart.setOnValueTouchListener(new ValueTouchListener());
         previewChart.setScrollEnabled(false);
         previewChart.setZoomEnabled(false);
 
@@ -108,6 +111,20 @@ public class StatisticsChartConsumptionPreviewFragment extends Fragment implemen
         public void onViewportChanged(Viewport newViewport) {
             previewChart.setCurrentViewport(newViewport);
         }
+    }
+
+    private class ValueTouchListener implements LineChartOnValueSelectListener {
+
+        @Override
+        public void onValueSelected(int lineIndex, int pointIndex, PointValue value) {
+            FillUpInfoDialog.newInstance(displayedValues.get(pointIndex))
+                    .show(getActivity().getSupportFragmentManager(), FillUpInfoDialog.class.getSimpleName());
+        }
+
+        @Override
+        public void onValueDeselected() {
+        }
+
     }
 
 }
