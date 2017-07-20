@@ -30,7 +30,7 @@ public class SpinnerCurrencyAdapter extends BaseAdapter implements SpinnerAdapte
 
     public SpinnerCurrencyAdapter(Activity activity) {
         this.activity = activity;
-        this.currencies = CurrencyUtil.getSupportedCurrencies(activity);
+        this.currencies = CurrencyUtil.getSupportedCurrencies();
     }
 
     @Override
@@ -62,7 +62,7 @@ public class SpinnerCurrencyAdapter extends BaseAdapter implements SpinnerAdapte
 
         //TODO getDisplayName() API level 19
         currencyName.setText(currencies.get(position).getCurrencyCode());
-        currencySymbol.setText(CurrencyUtil.getCurrencySymbol(currencies.get(position), activity.getApplicationContext()));
+        currencySymbol.setText(CurrencyUtil.getCurrencySymbol(currencies.get(position)));
 
         return spinView;
     }

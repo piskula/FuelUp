@@ -24,7 +24,6 @@ public class ListExpensesAdapter extends RecyclerView.Adapter<ListExpensesAdapte
 
     private static final String TAG = "ListExpensesAdapter";
 
-    private Context context;
     private List<Expense> items;
     private Callback callback;
 
@@ -41,8 +40,7 @@ public class ListExpensesAdapter extends RecyclerView.Adapter<ListExpensesAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        this.context = parent.getContext();
-        View view = LayoutInflater.from(this.context).inflate(R.layout.list_item_expense, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_expense, parent, false);
         return new ViewHolder(view);
     }
 
@@ -51,7 +49,7 @@ public class ListExpensesAdapter extends RecyclerView.Adapter<ListExpensesAdapte
         Expense currentItem = items.get(position);
         if (currentItem != null) {
             holder.txtInfo.setText(currentItem.getInfo());
-            holder.txtPrice.setText(CurrencyUtil.getPrice(currentItem.getVehicle().getCurrency(), currentItem.getPrice(), context));
+            holder.txtPrice.setText(CurrencyUtil.getPrice(currentItem.getVehicle().getCurrency(), currentItem.getPrice()));
             holder.txtDate.setText(DateUtil.getDateLocalized(currentItem.getDate()));
         }
 

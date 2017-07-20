@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="sk.piskula.fuelup.screens.VehicleListActivity"
+    tools:context="sk.piskula.fuelup.screens.MainActivity"
     tools:showIn="@layout/app_bar_vehicle_list">
 
     <android.support.v7.widget.RecyclerView

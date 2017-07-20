@@ -25,7 +25,7 @@ import sk.piskula.fuelup.business.ServiceResult;
 import sk.piskula.fuelup.business.VehicleService;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.VehicleType;
-import sk.piskula.fuelup.screens.VehicleListActivity;
+import sk.piskula.fuelup.screens.MainActivity;
 import sk.piskula.fuelup.screens.VehicleTabbedDetailActivity;
 import sk.piskula.fuelup.screens.dialog.DeleteDialog;
 import sk.piskula.fuelup.screens.dialog.ImageChooserDialog;
@@ -254,7 +254,7 @@ public class EditVehicleActivity extends AppCompatActivity implements ImageChoos
             Toast.makeText(getApplicationContext(), R.string.delete_vehicle_fail, Toast.LENGTH_LONG).show();
         }
 
-        Intent intent = new Intent(this, VehicleListActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }

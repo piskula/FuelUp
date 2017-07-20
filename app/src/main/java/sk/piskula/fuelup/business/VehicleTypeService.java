@@ -17,11 +17,9 @@ public class VehicleTypeService {
 
     private static final String TAG = VehicleTypeService.class.getSimpleName();
 
-    private Context context;
     private Dao<VehicleType, Long> vehicleTypeDao;
 
     public VehicleTypeService(Context context) {
-        this.context = context;
         this.vehicleTypeDao = DatabaseProvider.get(context).getVehicleTypeDao();
     }
 

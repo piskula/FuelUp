@@ -73,7 +73,7 @@ public class EditExpenseActivity extends AppCompatActivity implements DeleteDial
             expense.setVehicle(vehicle);
         }
 
-        mTxtPriceUnit.setText(vehicle.getCurrencySymbol(this));
+        mTxtPriceUnit.setText(vehicle.getCurrencySymbol());
     }
 
     private void initViews() {

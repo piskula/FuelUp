@@ -15,6 +15,7 @@ import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.enums.DistanceUnit;
 import sk.piskula.fuelup.entity.enums.VolumeUnit;
 import sk.piskula.fuelup.entity.util.CurrencyUtil;
+import sk.piskula.fuelup.screens.MainActivity;
 
 /**
  * @author Ondrej Oravcok
@@ -167,8 +168,8 @@ public class Vehicle implements Parcelable {
         this.pathToPicture = pathToPicture;
     }
 
-    public String getCurrencySymbol(Context context) {
-        return CurrencyUtil.getCurrencySymbol(this.getCurrency(), context);
+    public String getCurrencySymbol() {
+        return CurrencyUtil.getCurrencySymbol(this.getCurrency());
     }
 
     public Vehicle() {
@@ -218,11 +219,11 @@ public class Vehicle implements Parcelable {
         }
     };
 
-    public String getConsumptionUnit(Context context) {
+    public String getConsumptionUnit() {
         if (this.getDistanceUnit() == DistanceUnit.mi) {
-            return context.getString(R.string.units_mpg);
+            return MainActivity.getInstance().getString(R.string.units_mpg);
         } else {
-            return context.getString(R.string.units_litreper100km);
+            return MainActivity.getInstance().getString(R.string.units_litreper100km);
         }
     }
 }

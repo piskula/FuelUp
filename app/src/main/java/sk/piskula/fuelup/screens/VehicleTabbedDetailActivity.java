@@ -13,16 +13,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import sk.piskula.fuelup.R;
-import sk.piskula.fuelup.business.ServiceResult;
 import sk.piskula.fuelup.business.VehicleService;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.screens.detailfragments.ExpensesListFragment;
 import sk.piskula.fuelup.screens.detailfragments.FillUpsListFragment;
 import sk.piskula.fuelup.screens.detailfragments.StatisticsFragment;
-import sk.piskula.fuelup.screens.dialog.DeleteDialog;
 import sk.piskula.fuelup.screens.edit.EditVehicleActivity;
 
 /**
@@ -56,7 +53,7 @@ public class VehicleTabbedDetailActivity extends AppCompatActivity implements Bo
 
         if (savedInstanceState == null) {
             Intent intent = getIntent();
-            vehicle = intent.getParcelableExtra(VehicleListActivity.EXTRA_ADDED_CAR);
+            vehicle = intent.getParcelableExtra(MainActivity.EXTRA_ADDED_CAR);
 
             fragment = new FillUpsListFragment();
             Bundle bundle = new Bundle();

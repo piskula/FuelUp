@@ -14,6 +14,8 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Properties;
 
+import sk.piskula.fuelup.screens.MainActivity;
+
 /**
  * @author Ondrej Oravcok
  * @version 28.6.2017
@@ -35,22 +37,22 @@ public class CurrencyUtil {
 
     private static Properties properties = new Properties();;
 
-    public static String getCurrencySymbol(Currency currency, Context context) {
-        checkPropertiesAreLoaded(context);
-        return getCurrencySymbol(currency);
+    public static String getCurrencySymbol(Currency currency) {
+        checkPropertiesAreLoaded();
+        return getCurrencySymbolFromProperties(currency);
     }
 
-    private static void checkPropertiesAreLoaded(Context context) {
+    private static void checkPropertiesAreLoaded() {
         if (properties.isEmpty()) {
             try {
-                properties.load(context.getAssets().open(PROPERTY_FILE));
+                properties.load(MainActivity.getInstance().getAssets().open(PROPERTY_FILE));
             } catch (IOException e) {
                 Log.e(TAG, "Cannot load currencies from " + PROPERTY_FILE, e);
             }
         }
     }
 
-    private static String getCurrencySymbol(Currency currency) {
+    private static String getCurrencySymbolFromProperties(Currency currency) {
         if (properties.containsKey(currency.getCurrencyCode())) {
             return properties.getProperty(currency.getCurrencyCode()).split(DELIMETER)[CODE];
         } else {
@@ -58,8 +60,8 @@ public class CurrencyUtil {
         }
     }
 
-    public static List<Currency> getSupportedCurrencies(Context context) {
-        checkPropertiesAreLoaded(context);
+    public static List<Currency> getSupportedCurrencies() {
+        checkPropertiesAreLoaded();
 
         List<Currency> currencies = new ArrayList<>();
         for (String currencyString : properties.stringPropertyNames())
@@ -81,8 +83,8 @@ public class CurrencyUtil {
         }
     }
 
-    public static String getPrice(Currency currency, double value, Context context) {
-        checkPropertiesAreLoaded(context);
+    public static String getPrice(Currency currency, double value) {
+        checkPropertiesAreLoaded();
         if (properties.containsKey(currency.getCurrencyCode())) {
             String[] currencyStrings = properties.getProperty(currency.getCurrencyCode()).split(DELIMETER);
 
@@ -96,8 +98,8 @@ public class CurrencyUtil {
         }
     }
 
-    public static String getPricePerLitre(Currency currency, double value, Context context) {
-        checkPropertiesAreLoaded(context);
+    public static String getPricePerLitre(Currency currency, double value) {
+        checkPropertiesAreLoaded();
         if (properties.containsKey(currency.getCurrencyCode())) {
             String[] currencyStrings = properties.getProperty(currency.getCurrencyCode()).split(DELIMETER);
 
@@ -112,12 +114,12 @@ public class CurrencyUtil {
         }
     }
 
-    public static String getPrice(Currency currency, BigDecimal value, Context context) {
-        return getPrice(currency, value.doubleValue(), context);
+    public static String getPrice(Currency currency, BigDecimal value) {
+        return getPrice(currency, value.doubleValue());
     }
 
-    public static String getPricePerLitre(Currency currency, BigDecimal value, Context context) {
-        return getPricePerLitre(currency, value.doubleValue(), context);
+    public static String getPricePerLitre(Currency currency, BigDecimal value) {
+        return getPricePerLitre(currency, value.doubleValue());
     }
 
 }

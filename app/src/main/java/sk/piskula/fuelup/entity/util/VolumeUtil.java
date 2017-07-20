@@ -1,12 +1,11 @@
 package sk.piskula.fuelup.entity.util;
 
-import android.content.Context;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.enums.VolumeUnit;
+import sk.piskula.fuelup.screens.MainActivity;
 
 /**
  * @author Ondrej Oravcok
@@ -20,20 +19,20 @@ public class VolumeUtil {
 
     private static final String TAG = "VolumeUtil";
 
-    public static String getPricePerVolumeShortString(VolumeUnit volumeUnit, Context context) {
+    public static String getPricePerVolumeShortString(VolumeUnit volumeUnit) {
         String textOff;
         if (volumeUnit == VolumeUnit.LITRE)
-            textOff = context.getString(R.string.add_fillup_pricePerLitre_short);
+            textOff = MainActivity.getInstance().getString(R.string.add_fillup_pricePerLitre_short);
         else
-            textOff = context.getString(R.string.add_fillup_pricePerGallon_short);
+            textOff = MainActivity.getInstance().getString(R.string.add_fillup_pricePerGallon_short);
         return textOff;
     }
 
-    public static String getPricePerVolumeLongString(VolumeUnit volumeUnit, Context context) {
+    public static String getPricePerVolumeLongString(VolumeUnit volumeUnit) {
         if (volumeUnit == VolumeUnit.LITRE)
-            return context.getString(R.string.add_fillup_pricePerLitre);
+            return MainActivity.getInstance().getString(R.string.add_fillup_pricePerLitre);
         else
-            return context.getString(R.string.add_fillup_pricePerGallon);
+            return MainActivity.getInstance().getString(R.string.add_fillup_pricePerGallon);
     }
 
     public static BigDecimal getTotalPriceFromPerLitre(BigDecimal volume, BigDecimal price, VolumeUnit volumeUnit){

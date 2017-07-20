@@ -13,6 +13,8 @@ import java.util.List;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.Vehicle;
+import sk.piskula.fuelup.entity.VehicleType;
+import sk.piskula.fuelup.screens.MainActivity;
 
 /**
  * @author Ondrej Oravcok
@@ -23,7 +25,6 @@ public class ListVehiclesAdapter extends RecyclerView.Adapter<ListVehiclesAdapte
     private static final String TAG = ListVehiclesAdapter.class.getSimpleName();
 
     private List<Vehicle> mItems;
-    private Context context;
     private Callback callback;
 
     public ListVehiclesAdapter(Callback callback) {
@@ -42,8 +43,7 @@ public class ListVehiclesAdapter extends RecyclerView.Adapter<ListVehiclesAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        this.context = parent.getContext();
-        View itemView = LayoutInflater.from(this.context).inflate(R.layout.list_item_vehicle, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_vehicle, parent, false);
         return new ViewHolder(itemView);
     }
 
@@ -54,9 +54,7 @@ public class ListVehiclesAdapter extends RecyclerView.Adapter<ListVehiclesAdapte
         holder.title.setText(vehicle.getName());
         holder.count.setText(vehicle.getVehicleMaker());
         holder.thumbnail.setImageBitmap(vehicle.getPicture());
-        holder.overflow.setImageResource(context.getResources()
-                .getIdentifier("ic_type_" + vehicle.getType().getName().toLowerCase(),
-                        "drawable", context.getPackageName()));
+        holder.overflow.setImageResource(getImageResourceId(vehicle.getType()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +62,12 @@ public class ListVehiclesAdapter extends RecyclerView.Adapter<ListVehiclesAdapte
                 callback.onItemClick(v, mItems.get(position), position);
             }
         });
+    }
+
+    private int getImageResourceId(VehicleType type) {
+        Context cxt = MainActivity.getInstance();
+        return cxt.getResources().getIdentifier(
+                "ic_type_" + type.getName().toLowerCase(), "drawable", cxt.getPackageName());
     }
 
     @Override

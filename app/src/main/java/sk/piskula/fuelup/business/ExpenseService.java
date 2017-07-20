@@ -20,11 +20,9 @@ public class ExpenseService {
 
     private static final String TAG = ExpenseService.class.getSimpleName();
 
-    private Context context;
     private Dao<Expense, Long> expensesDao;
 
     public ExpenseService(Context context) {
-        this.context = context;
         this.expensesDao = DatabaseProvider.get(context).getExpenseDao();
     }
 

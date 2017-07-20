@@ -36,12 +36,14 @@ import sk.piskula.fuelup.loaders.VehicleLoader;
 import sk.piskula.fuelup.screens.dialog.CreateVehicleDialog;
 import sk.piskula.fuelup.screens.edit.AddVehicleActivity;
 
-public class VehicleListActivity extends AppCompatActivity implements OnNavigationItemSelectedListener, ListVehiclesAdapter.Callback,
+public class MainActivity extends AppCompatActivity implements OnNavigationItemSelectedListener, ListVehiclesAdapter.Callback,
         View.OnClickListener, CreateVehicleDialog.Callback, LoaderManager.LoaderCallbacks<List<Vehicle>> {
 
-    private static final String TAG = "VehicleListActivity";
-    public static final int VEHICLE_ACTION_REQUEST_CODE = 33;
+    private static MainActivity singleton;
 
+    private static final String TAG = "MainActivity";
+
+    public static final int VEHICLE_ACTION_REQUEST_CODE = 33;
     public static final String EXTRA_ADDED_CAR = "extra_key_added_car";
 
     private FloatingActionButton addCarBtn;
@@ -91,6 +93,8 @@ public class VehicleListActivity extends AppCompatActivity implements OnNavigati
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        singleton = this;
     }
 
     @Override
@@ -204,5 +208,9 @@ public class VehicleListActivity extends AppCompatActivity implements OnNavigati
     @Override
     public void onLoaderReset(Loader<List<Vehicle>> loader) {
         return;
+    }
+
+    public static MainActivity getInstance() {
+        return singleton;
     }
 }

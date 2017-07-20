@@ -107,7 +107,7 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         mBtnAdd.setText(R.string.update);
         mBtnSwitchDistance.setEnabled(false);
 
-        mTxtCurrencySymbol.setText(mSelectedCar.getCurrencySymbol(this));
+        mTxtCurrencySymbol.setText(mSelectedCar.getCurrencySymbol());
         mTxtDistanceUnit.setText(mSelectedCar.getDistanceUnit().toString());
     }
 
@@ -127,7 +127,7 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         mBtnSwitchDistance = (ToggleButton) findViewById(R.id.btn_switch_distance);
         mBtnSwitchPrice = (ToggleButton) findViewById(R.id.btn_switch_price);
 
-        mBtnSwitchPrice.setTextOff(VolumeUtil.getPricePerVolumeShortString(mSelectedCar.getVolumeUnit(), this));
+        mBtnSwitchPrice.setTextOff(VolumeUtil.getPricePerVolumeShortString(mSelectedCar.getVolumeUnit()));
         mBtnSwitchPrice.setTextOn(getString(R.string.add_fillup_priceTotal_short));
         mBtnSwitchPrice.setOnCheckedChangeListener(this);
         mBtnSwitchDistance.setOnCheckedChangeListener(this);
@@ -229,11 +229,11 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         if (compoundButton.getId() == mBtnSwitchPrice.getId()) {
             if (isChecked) {
                 priceMode = SwitchPrice.total;
-                mTxtCurrencySymbol.setText(mSelectedCar.getCurrencySymbol(this));
+                mTxtCurrencySymbol.setText(mSelectedCar.getCurrencySymbol());
             } else {
                 priceMode = SwitchPrice.perVolume;
                 mTxtCurrencySymbol.setText(
-                        mSelectedCar.getCurrencySymbol(this) + "/" + mSelectedCar.getVolumeUnit());
+                        mSelectedCar.getCurrencySymbol() + "/" + mSelectedCar.getVolumeUnit());
             }
         }
     }

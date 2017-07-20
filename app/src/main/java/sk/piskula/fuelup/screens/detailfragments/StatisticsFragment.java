@@ -56,7 +56,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
 
 
         binding.setVehicle(vehicle);
-        binding.setCurrency(vehicle.getCurrencySymbol(getActivity()));
+        binding.setCurrency(vehicle.getCurrencySymbol());
 
         setFuelConsumption(binding);
         getLoaderManager().initLoader(StatisticsLoader.ID, args, this);

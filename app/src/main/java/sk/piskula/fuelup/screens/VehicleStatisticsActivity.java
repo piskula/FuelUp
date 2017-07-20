@@ -36,15 +36,13 @@ public class VehicleStatisticsActivity extends AppCompatActivity {
         Intent incomingIntent = getIntent();
         Vehicle vehicle = incomingIntent.getParcelableExtra(VEHICLE_TO_ADVANCED_STATISTICS);
 
-        adapter = new PagerStatisticsAdapter(getSupportFragmentManager(), vehicle, this);
+        adapter = new PagerStatisticsAdapter(getSupportFragmentManager(), vehicle);
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(adapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-
     }
-
 
 }

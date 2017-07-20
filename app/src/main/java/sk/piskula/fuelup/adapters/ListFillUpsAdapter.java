@@ -17,6 +17,7 @@ import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.enums.DistanceUnit;
 import sk.piskula.fuelup.entity.util.CurrencyUtil;
 import sk.piskula.fuelup.entity.util.DateUtil;
+import sk.piskula.fuelup.screens.MainActivity;
 
 /**
  * Created by Martin Styk on 19.06.2017.
@@ -25,7 +26,6 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
 
     private List<FillUp> items;
     private Callback callback;
-    private Context context;
 
     public ListFillUpsAdapter(Callback callback) {
         super();
@@ -39,8 +39,7 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        this.context = parent.getContext();
-        View view = LayoutInflater.from(this.context).inflate(R.layout.list_item_fillup, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_fillup, parent, false);
         return new ViewHolder(view);
     }
 
@@ -51,15 +50,14 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
             //set views
             holder.txtDistanceFromLastFillUp.setText(currentItem.getDistanceFromLastFillUp().toString());
             holder.txtDistanceUnit.setText(currentItem.getVehicle().getDistanceUnit().toString());
-            holder.txtConsumptionUnit.setText(currentItem.getVehicle().getConsumptionUnit(context));
+            holder.txtConsumptionUnit.setText(currentItem.getVehicle().getConsumptionUnit());
             holder.txtDate.setText(DateUtil.getDateLocalized(currentItem.getDate()));
-            holder.imgFullnessFillUpSymbol.setImageResource(context.getResources().getIdentifier(
-                    currentItem.isFullFillUp() ? "ic_gasolinedrop_full" : "ic_gasolinedrop_empty", "drawable", context.getPackageName()));
+            holder.imgFullnessFillUpSymbol.setImageResource(getImageResourceId(currentItem.isFullFillUp()));
             holder.txtPriceTotal.setText(CurrencyUtil.getPrice(
-                    currentItem.getVehicle().getCurrency(), currentItem.getFuelPriceTotal(), context));
+                    currentItem.getVehicle().getCurrency(), currentItem.getFuelPriceTotal()));
             holder.txtPricePerLitre.setText(CurrencyUtil.getPricePerLitre(
-                    currentItem.getVehicle().getCurrency(), currentItem.getFuelPricePerLitre(), context));
-            holder.txtPricePerLitreSymbol.setText("/" + context.getString(R.string.litre));
+                    currentItem.getVehicle().getCurrency(), currentItem.getFuelPricePerLitre()));
+            holder.txtPricePerLitreSymbol.setText("/" + MainActivity.getInstance().getString(R.string.litre));
 
             DecimalFormat bddf = new DecimalFormat();
             bddf.setGroupingUsed(false);
@@ -85,6 +83,12 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
                 callback.onItemClick(v, items.get(position), position);
             }
         });
+    }
+
+    private int getImageResourceId(boolean isFullFillup) {
+        String fileName = isFullFillup ? "ic_gasolinedrop_full" : "ic_gasolinedrop_empty";
+        return MainActivity.getInstance().getResources()
+                .getIdentifier(fileName, "drawable", MainActivity.getInstance().getPackageName());
     }
 
     @Override

@@ -21,12 +21,10 @@ public class VehicleService {
 
     private static final String TAG = VehicleService.class.getSimpleName();
 
-    private Context context;
     private Dao<Vehicle, Long> vehicleDao;
     private VehicleTypeService vehicleTypeService;
 
     public VehicleService(Context context) {
-        this.context = context;
         this.vehicleDao = DatabaseProvider.get(context).getVehicleDao();
         vehicleTypeService = new VehicleTypeService(context);
     }

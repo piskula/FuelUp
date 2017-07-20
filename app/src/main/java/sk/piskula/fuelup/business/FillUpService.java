@@ -27,11 +27,9 @@ public class FillUpService {
 
     private static final String TAG = FillUpService.class.getSimpleName();
 
-    private Context context;
     private Dao<FillUp, Long> fillUpDao;
 
     public FillUpService(Context context) {
-        this.context = context;
         this.fillUpDao = DatabaseProvider.get(context).getFillUpDao();
     }
 
