@@ -2,6 +2,7 @@ package sk.piskula.fuelup.screens.dialog;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
@@ -27,12 +28,12 @@ public class FillUpInfoDialog extends DialogFragment {
     }
 
     @Override
+    @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         DialogFillupDetailBinding binding = DialogFillupDetailBinding.inflate(getActivity().getLayoutInflater());
 
         FillUp fillUp = getArguments().getParcelable(FILL_UP);
         binding.setFillUp(fillUp);
-        binding.setContext(getContext());
 
         return new AlertDialog.Builder(getActivity())
                 .setView(binding.getRoot())

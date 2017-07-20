@@ -13,9 +13,6 @@
             name="fillUp"
             type="sk.piskula.fuelup.entity.FillUp" />
 
-        <variable
-            name="context"
-            type="android.content.Context" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -33,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:name="@string/statistics_fuel_consumption"
-            app:unit="@{fillUp.vehicle.getConsumptionUnit(context)}"
+            app:unit="@{fillUp.vehicle.getConsumptionUnit()}"
             app:value="@{BigDecimalFormatter.getCommonFormat().format(fillUp.fuelConsumption)}" />
 
         <sk.piskula.fuelup.view.StatisticsDetailItem
@@ -54,14 +51,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:name="@string/statistics_fuel_unit_price"
-            app:unit="@{fillUp.vehicle.getCurrencySymbol(context)}"
+            app:unit="@{fillUp.vehicle.getCurrencySymbol()}"
             app:value="@{BigDecimalFormatter.getCommonFormat().format(fillUp.fuelPricePerLitre)}" />
 
         <sk.piskula.fuelup.view.StatisticsDetailItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:name="@string/add_fillup_priceTotal"
-            app:unit="@{fillUp.vehicle.getCurrencySymbol(context)}"
+            app:unit="@{fillUp.vehicle.getCurrencySymbol()}"
             app:value="@{BigDecimalFormatter.getCommonFormat().format(fillUp.fuelPriceTotal)}" />
 
         <sk.piskula.fuelup.view.StatisticsDetailItem
