@@ -152,6 +152,17 @@ public class FillUpService {
         return fillUps;
     }
 
+    public List<FillUp> findFillUpsOfVehicleWithComputedConsumption(long vehicleId) {
+        List<FillUp> fillUps = new ArrayList<>();
+        try {
+            fillUps = fillUpDao.queryBuilder().orderBy("date", false).orderBy("id", false).where().eq("vehicle_id", vehicleId).and().isNotNull("consumption").query();
+            Log.i(TAG, "Successfully found fillups of vehicle id " + vehicleId);
+        } catch (SQLException e) {
+            Log.e(TAG, "Unexpected error. See logs for details.", e);
+        }
+        return fillUps;
+    }
+
     public BigDecimal getAverageConsumptionOfVehicle(long vehicleId) {
         try {
             GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT SUM(distance_from_last_fill_up * consumption) / SUM(distance_from_last_fill_up) FROM fill_ups WHERE consumption is not null and vehicle_id = " + vehicleId);
