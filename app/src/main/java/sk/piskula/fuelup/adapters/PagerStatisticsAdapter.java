@@ -1,6 +1,5 @@
 package sk.piskula.fuelup.adapters;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -10,6 +9,7 @@ import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.screens.MainActivity;
 import sk.piskula.fuelup.screens.statisticfragments.StatisticsChartConsumptionFragment;
 import sk.piskula.fuelup.screens.statisticfragments.StatisticsChartConsumptionPreviewFragment;
+import sk.piskula.fuelup.screens.statisticfragments.StatisticsChartFuelPricePreviewFragment;
 
 /**
  * @author Martin Styk
@@ -30,6 +30,8 @@ public class PagerStatisticsAdapter extends FragmentStatePagerAdapter {
                 return StatisticsChartConsumptionFragment.newInstance(vehicle);
             case 1:
                 return StatisticsChartConsumptionPreviewFragment.newInstance(vehicle);
+            case 2:
+                return StatisticsChartFuelPricePreviewFragment.newInstance(vehicle);
             default:
                 return StatisticsChartConsumptionFragment.newInstance(vehicle);
         }
@@ -47,6 +49,8 @@ public class PagerStatisticsAdapter extends FragmentStatePagerAdapter {
                 return MainActivity.getInstance().getString(R.string.statistics_fuel_consumption);
             case 1:
                 return MainActivity.getInstance().getString(R.string.statistics_fuel_consumption);
+            case 2:
+                return MainActivity.getInstance().getString(R.string.statistics_fuel_price);
             default:
                 return "Fragment" + position;
         }

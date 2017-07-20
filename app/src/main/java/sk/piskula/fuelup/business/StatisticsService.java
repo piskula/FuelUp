@@ -61,8 +61,7 @@ public class StatisticsService {
                 totalCostsExpenses.multiply(HUNDRED).divide(new BigDecimal(totalDrivenDistance), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
 
         // Fuel unit price
-        BigDecimal fuelUnitPriceAverage = totalFuelVolume.intValue() > 0 ?
-                totalCostsFuel.divide(totalFuelVolume, 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
+        // TODO
         BigDecimal averageFuelVolumePerFillUp = totalNumberFillUps > 0 ?
                 totalFuelVolume.divide(BigDecimal.valueOf(totalNumberFillUps), 2, BigDecimal.ROUND_HALF_UP) : BigDecimal.ZERO;
         BigDecimal averageFuelPricePerFillUp = totalNumberFillUps > 0 ?
@@ -116,7 +115,7 @@ public class StatisticsService {
         dto.setDistanceBetweenFillUpsAverage(averageDistanceBetweenFillUps);
 
         // Fuel unit price
-        dto.setFuelUnitPriceAverage(fuelUnitPriceAverage);
+        dto.setFuelUnitPriceAverage(getFuelUnitPriceAverage());
         dto.setFuelUnitPriceHighest(getFuelUnitPriceHighest());
         dto.setFuelUnitPriceLowest(getFuelUnitPriceLowest());
 
@@ -284,6 +283,18 @@ public class StatisticsService {
     public BigDecimal getFuelUnitPriceHighest() {
         try {
             GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT MAX(fuel_price_per_litre) FROM fill_ups WHERE vehicle_id = " + vehicleId);
+            return getBigDecimal(results);
+        } catch (SQLException e1) {
+            Log.e(TAG, e1.toString(), e1);
+        } catch (ParseException e2) {
+            Log.e(TAG, "SQL return not parsable number.", e2);
+        }
+        return BigDecimal.ZERO;
+    }
+
+    public BigDecimal getFuelUnitPriceAverage() {
+        try {
+            GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT SUM(fuel_price_per_litre)/ COUNT(*) FROM fill_ups WHERE vehicle_id = " + vehicleId);
             return getBigDecimal(results);
         } catch (SQLException e1) {
             Log.e(TAG, e1.toString(), e1);

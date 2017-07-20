@@ -180,6 +180,7 @@
     <string name="statistics_totals">Totals</string>
     <string name="statistics_costs_per_distance_header">Costs &amp; distance</string>
     <string name="statistics_fuel_unit_price">Fuel unit price</string>
+    <string name="statistics_fuel_price">Fuel price</string>
     <string name="statistics_refueling">Refueling</string>
     <string name="statistics_expenses">Expenses</string>
     <string name="statistics_costs_per_time">Costs &amp; time</string>

@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             app:name="@string/statistics_fuel_consumption"
             app:unit="@{fillUp.vehicle.getConsumptionUnit()}"
-            app:value="@{BigDecimalFormatter.getCommonFormat().format(fillUp.fuelConsumption)}" />
+            app:value="@{fillUp.fuelConsumption != null ? BigDecimalFormatter.getCommonFormat().format(fillUp.fuelConsumption) : @string/na}" />
 
         <sk.piskula.fuelup.view.StatisticsDetailItem
             android:layout_width="match_parent"
