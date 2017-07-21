@@ -12,6 +12,7 @@ import java.util.List;
 import sk.piskula.fuelup.data.DatabaseProvider;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.enums.DistanceUnit;
+import sk.piskula.fuelup.entity.enums.VolumeUnit;
 
 /**
  * Created by Martin Styk on 23.06.2017.
@@ -39,6 +40,7 @@ public class VehicleService {
         Vehicle vehicle = new Vehicle();
         vehicle.setName(name);
         vehicle.setDistanceUnit(DistanceUnit.km);
+        vehicle.setVolumeUnit(VolumeUnit.LITRE);
         vehicle.setCurrency(Currency.getInstance("EUR"));
         vehicle.setType(vehicleTypeService.getFirst());
 

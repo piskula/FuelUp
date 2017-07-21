@@ -28,6 +28,7 @@ import sk.piskula.fuelup.business.VehicleService;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.VehicleType;
 import sk.piskula.fuelup.entity.enums.DistanceUnit;
+import sk.piskula.fuelup.entity.enums.VolumeUnit;
 import sk.piskula.fuelup.screens.dialog.ImageChooserDialog;
 import sk.piskula.fuelup.util.ImageUtils;
 
@@ -166,6 +167,7 @@ public class AddVehicleActivity extends AppCompatActivity implements ImageChoose
         createdVehicle.setType((VehicleType) spinnerType.getSelectedItem());
         createdVehicle.setPathToPicture(vehiclePicturePath);
         createdVehicle.setDistanceUnit(radioGroupDistanceUnit.getCheckedRadioButtonId() == R.id.radio_km ? DistanceUnit.km : DistanceUnit.mi);
+        createdVehicle.setVolumeUnit(createdVehicle.getDistanceUnit() == DistanceUnit.km ? VolumeUnit.LITRE : VolumeUnit.GALLON_US);
         createdVehicle.setStartMileage(Long.parseLong(actualMileage));
 
         VehicleService vehicleService = new VehicleService(this);
