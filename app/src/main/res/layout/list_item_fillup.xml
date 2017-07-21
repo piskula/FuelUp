@@ -84,7 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_toEndOf="@+id/txt_itemfillup_price_per_litre"
-        android:text="/\u2113"
+        android:text='@string/units_distance_units_per_litre_only'
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView

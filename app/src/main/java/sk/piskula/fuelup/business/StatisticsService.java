@@ -17,7 +17,10 @@ import java.util.concurrent.TimeUnit;
 import sk.piskula.fuelup.data.DatabaseProvider;
 import sk.piskula.fuelup.entity.Expense;
 import sk.piskula.fuelup.entity.FillUp;
+import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.dto.StatisticsDTO;
+import sk.piskula.fuelup.entity.enums.VolumeUnit;
+import sk.piskula.fuelup.entity.util.VolumeUtil;
 
 /**
  * Created by Martin Styk on 23.06.2017.
@@ -29,7 +32,7 @@ public class StatisticsService {
 
     private Dao<FillUp, Long> fillUpDao;
     private Dao<Expense, Long> expenseDao;
-
+    private Vehicle vehicle;
 
     private long vehicleId;
 
@@ -37,6 +40,12 @@ public class StatisticsService {
         this.vehicleId = vehicleId;
         this.fillUpDao = DatabaseProvider.get(context).getFillUpDao();
         this.expenseDao = DatabaseProvider.get(context).getExpenseDao();
+
+        try {
+            this.vehicle = DatabaseProvider.get(context).getVehicleDao().queryForId(vehicleId);
+        } catch (SQLException e) {
+            Log.e(TAG, "SQL cannot find vehicle with id " + vehicleId, e);
+        }
     }
 
 
@@ -76,6 +85,7 @@ public class StatisticsService {
         // Consumption
         dto.setAvgConsumption(getAverageConsumption());
         dto.setAvgConsumptionReversed(getAverageConsumptionReversed());
+        dto.setConsumptionReversedUnitMpg(vehicle.getConsumptionUnit().equals("mpg"));
         dto.setFuelConsumptionBest(getFuelConsumptionBest());
         dto.setFuelConsumptionWorst(getFuelConsumptionWorst());
 
@@ -149,15 +159,28 @@ public class StatisticsService {
     }
 
     public BigDecimal getAverageConsumptionReversed() {
-        try {
-            GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT SUM(distance_from_last_fill_up) / SUM(distance_from_last_fill_up * consumption / 100) FROM fill_ups WHERE consumption is not null and vehicle_id = " + vehicleId);
-            return getBigDecimal(results);
-        } catch (SQLException e1) {
-            Log.e(TAG, "Unexpected error during computing average fuel consumption.", e1);
-        } catch (ParseException e2) {
-            Log.e(TAG, "SQL return not parsable number.", e2);
+        if (vehicle.getVolumeUnit() == VolumeUnit.LITRE) {
+            // if default (NOT REVERSED) consumption unit is l/100km
+            try {
+                GenericRawResults<String[]> results = fillUpDao.queryRaw("SELECT SUM(distance_from_last_fill_up) / SUM(distance_from_last_fill_up * consumption / 100) FROM fill_ups WHERE consumption is not null and vehicle_id = " + vehicleId);
+                return getBigDecimal(results);
+            } catch (SQLException e1) {
+                Log.e(TAG, "Unexpected error during computing average fuel consumption.", e1);
+            } catch (ParseException e2) {
+                Log.e(TAG, "SQL return not parsable number.", e2);
+            }
+            return BigDecimal.ZERO;
+
+        } else {
+            // if default consumption unit is miles per gallon
+            BigDecimal milesPerOneLitre = getAverageConsumption().divide(
+                    vehicle.getVolumeUnit() == VolumeUnit.GALLON_UK ?
+                            VolumeUtil.ONE_UK_GALLON_IS_LITRES :
+                            VolumeUtil.ONE_US_GALLON_IS_LITRES,
+                    14, RoundingMode.HALF_UP);
+            BigDecimal litrePerOneMile = BigDecimal.ONE.divide(milesPerOneLitre, 14, RoundingMode.HALF_UP);
+            return litrePerOneMile.multiply(HUNDRED);
         }
-        return BigDecimal.ZERO;
     }
 
     public BigDecimal getTotalPriceFillUps() {

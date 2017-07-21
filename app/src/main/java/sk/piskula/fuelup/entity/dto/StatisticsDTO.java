@@ -10,6 +10,7 @@ public class StatisticsDTO {
     // Consumption
     private BigDecimal avgConsumption;
     private BigDecimal avgConsumptionReversed;
+    private boolean isConsumptionReversedUnitMpg;
     private BigDecimal fuelConsumptionBest;
     private BigDecimal fuelConsumptionWorst;
 
@@ -81,6 +82,14 @@ public class StatisticsDTO {
 
     public void setAvgConsumptionReversed(BigDecimal avgConsumptionReversed) {
         this.avgConsumptionReversed = avgConsumptionReversed;
+    }
+
+    public boolean getConsumptionReversedUnitMpg() {
+        return isConsumptionReversedUnitMpg;
+    }
+
+    public void setConsumptionReversedUnitMpg(boolean consumptionReversedUnitMpg) {
+        this.isConsumptionReversedUnitMpg = consumptionReversedUnitMpg;
     }
 
     public BigDecimal getFuelConsumptionBest() {
@@ -537,6 +546,7 @@ public class StatisticsDTO {
         return "StatisticsDTO{" +
                 "avgConsumption=" + avgConsumption +
                 ", avgConsumptionReversed=" + avgConsumptionReversed +
+                ", isConsumptionReversedUnitMpg=" + isConsumptionReversedUnitMpg +
                 ", fuelConsumptionBest=" + fuelConsumptionBest +
                 ", fuelConsumptionWorst=" + fuelConsumptionWorst +
                 ", totalCosts=" + totalCosts +

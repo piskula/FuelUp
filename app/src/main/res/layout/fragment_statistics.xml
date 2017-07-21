@@ -5,6 +5,7 @@
     <data>
 
         <import type="sk.piskula.fuelup.util.BigDecimalFormatter" />
+        <import type="sk.piskula.fuelup.entity.util.CurrencyUtil" />
 
         <variable
             name="vehicle"
@@ -51,7 +52,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_fuel_consumption_average"
-                        app:unit="@{@string/units_litreper100_distance_units(vehicle.distanceUnit.toString())}"
+                        app:unit="@{vehicle.consumptionUnit}"
                         app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.avgConsumption) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
@@ -59,7 +60,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_fuel_consumption_average"
-                        app:unit="@{@string/units_distance_units_per_litre(vehicle.distanceUnit.toString())}"
+                        app:unit='@{data.consumptionReversedUnitMpg ? @string/units_litreper100_distance_units(vehicle.distanceUnit.toString()) : @string/units_distance_units_per_litre(vehicle.distanceUnit.toString())}'
                         app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.avgConsumptionReversed) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
@@ -67,7 +68,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_fuel_consumption_best"
-                        app:unit="@{@string/units_litreper100_distance_units(vehicle.distanceUnit.toString())}"
+                        app:unit="@{vehicle.consumptionUnit}"
                         app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.fuelConsumptionBest) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
@@ -75,7 +76,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_fuel_consumption_worst"
-                        app:unit="@{@string/units_litreper100_distance_units(vehicle.distanceUnit.toString())}"
+                        app:unit="@{vehicle.consumptionUnit}"
                         app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.fuelConsumptionWorst) : @string/na}" />
 
                 </LinearLayout>
@@ -103,24 +104,24 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_price_total"
-                        app:unit="@{currency}"
-                        app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.totalCosts) : @string/na}" />
+                        app:unit=""
+                        app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.totalCosts) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
                         android:id="@+id/price_total_fuel"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_price_total_fuel"
-                        app:unit="@{currency}"
-                        app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.totalCostsFuel) : @string/na}" />
+                        app:unit=""
+                        app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.totalCostsFuel) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
                         android:id="@+id/price_total_expense"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_price_total_expense"
-                        app:unit="@{currency}"
-                        app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.totalCostsExpenses) : @string/na}" />
+                        app:unit=""
+                        app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.totalCostsExpenses) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
                         android:id="@+id/fill_ups_number_total"
@@ -141,7 +142,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_volume_total_fuel"
-                        app:unit="@string/litre"
+                        app:unit="@{vehicle.getVolumeUnit().toString()}"
                         app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.totalFuelVolume) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
@@ -177,24 +178,24 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@{@string/statistics_costs_per_distance(vehicle.getDistanceUnit().toString())}"
-                        app:unit="@{currency}"
-                        app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.totalCostsPerDistance) : @string/na}" />
+                        app:unit=""
+                        app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.totalCostsPerDistance) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
                         android:id="@+id/price_per_distance_fill_up"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@{@string/statistics_costs_per_distance_fuel(vehicle.getDistanceUnit().toString())}"
-                        app:unit="@{currency}"
-                        app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.fuelCostsPerDistance) : @string/na}" />
+                        app:unit=""
+                        app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.fuelCostsPerDistance) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
                         android:id="@+id/price_per_distance_expense"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@{@string/statistics_costs_per_distance_expense(vehicle.getDistanceUnit().toString())}"
-                        app:unit="@{currency}"
-                        app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.expenseCostsPerDistance) : @string/na}" />
+                        app:unit=""
+                        app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.expenseCostsPerDistance) : @string/na}" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -220,72 +221,72 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_average_total_cost_per_week"
-                        app:unit="@{currency}"
-                        app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageTotalCostPerWeek) : @string/na}" />
+                        app:unit=""
+                        app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.averageTotalCostPerWeek) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_total_cost_per_month"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_average_total_cost_per_month"
-                        app:unit="@{currency}"
-                        app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageTotalCostPerMonth) : @string/na}" />
+                        app:unit=""
+                        app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.averageTotalCostPerMonth) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_total_cost_per_year"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_average_total_cost_per_year"
-                        app:unit="@{currency}"
-                        app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageTotalCostPerYear) : @string/na}" />
+                        app:unit=""
+                        app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.averageTotalCostPerYear) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_fuel_cost_per_week"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_average_fuel_cost_per_week"
-                        app:unit="@{currency}"
-                        app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageFuelCostPerWeek) : @string/na}" />
+                        app:unit=""
+                        app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.averageFuelCostPerWeek) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_fuel_cost_per_month"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_average_fuel_cost_per_month"
-                        app:unit="@{currency}"
-                        app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageFuelCostPerMonth) : @string/na}" />
+                        app:unit=""
+                        app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.averageFuelCostPerMonth) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_fuel_cost_per_year"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_average_fuel_cost_per_year"
-                        app:unit="@{currency}"
-                        app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageFuelCostPerYear) : @string/na}" />
+                        app:unit=""
+                        app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.averageFuelCostPerYear) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_expense_cost_per_week"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_average_expense_cost_per_week"
-                        app:unit="@{currency}"
-                        app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageExpenseCostPerWeek) : @string/na}" />
+                        app:unit=""
+                        app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.averageExpenseCostPerWeek) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_expense_cost_per_month"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_average_expense_cost_per_month"
-                        app:unit="@{currency}"
-                        app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageExpenseCostPerMonth) : @string/na}" />
+                        app:unit=""
+                        app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.averageExpenseCostPerMonth) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_expense_cost_per_year"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_average_expense_cost_per_year"
-                        app:unit="@{currency}"
-                        app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageExpenseCostPerYear) : @string/na}" />
+                        app:unit=""
+                        app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.averageExpenseCostPerYear) : @string/na}" />
 
 
                 </LinearLayout>
@@ -313,15 +314,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_avg_fuel_price_per_fill_up"
-                        app:unit="@{currency}"
-                        app:value="@{data!= null ? String.valueOf(data.averageFuelPricePerFillUp) : @string/na}" />
+                        app:unit=""
+                        app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.averageFuelPricePerFillUp) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
                         android:id="@+id/avg_fuel_volume_per_fill_up"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_avg_fuel_volume_per_fill_up"
-                        app:unit="@string/litre"
+                        app:unit="@{vehicle.getVolumeUnit().toString()}"
                         app:value="@{data!= null ? String.valueOf(data.averageFuelVolumePerFillUp) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
@@ -394,24 +395,24 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_fuel_unit_price_average"
-                        app:unit="@{currency}"
-                        app:value="@{data!= null ? String.valueOf(data.fuelUnitPriceAverage) : @string/na}" />
+                        app:unit=""
+                        app:value="@{data!= null ? @string/units_distance_units_per_litre(CurrencyUtil.getPricePerLitre(vehicle.getCurrency(), data.fuelUnitPriceAverage)) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
                         android:id="@+id/price_per_litre_best"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_fuel_unit_price_best"
-                        app:unit="@{currency}"
-                        app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.fuelUnitPriceLowest) : @string/na}" />
+                        app:unit=""
+                        app:value="@{data!= null ? @string/units_distance_units_per_litre(CurrencyUtil.getPricePerLitre(vehicle.getCurrency(), data.fuelUnitPriceLowest)) : @string/na}" />
 
                     <sk.piskula.fuelup.view.StatisticsDetailItem
                         android:id="@+id/price_per_litre_worst"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_fuel_unit_price_worst"
-                        app:unit="@{currency}"
-                        app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.fuelUnitPriceHighest) : @string/na}" />
+                        app:unit=""
+                        app:value="@{data!= null ? @string/units_distance_units_per_litre(CurrencyUtil.getPricePerLitre(vehicle.getCurrency(), data.fuelUnitPriceHighest)) : @string/na}" />
 
 
                 </LinearLayout>

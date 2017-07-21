@@ -16,6 +16,8 @@ public class VolumeUtil {
 
     public static final BigDecimal ONE_LITRE_IS_US_GALLONS = BigDecimal.valueOf(0.26417205235815d);
     public static final BigDecimal ONE_LITRE_IS_UK_GALLONS = BigDecimal.valueOf(0.21996923465436d);
+    public static final BigDecimal ONE_UK_GALLON_IS_LITRES = BigDecimal.ONE.divide(ONE_LITRE_IS_UK_GALLONS, 14, RoundingMode.HALF_UP);
+    public static final BigDecimal ONE_US_GALLON_IS_LITRES = BigDecimal.ONE.divide(ONE_LITRE_IS_US_GALLONS, 14, RoundingMode.HALF_UP);
 
     private static final String TAG = "VolumeUtil";
 

@@ -58,14 +58,9 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
         binding.setVehicle(vehicle);
         binding.setCurrency(vehicle.getCurrencySymbol());
 
-        setFuelConsumption(binding);
         getLoaderManager().initLoader(StatisticsLoader.ID, args, this);
 
         return binding.getRoot();
-    }
-
-    private void setFuelConsumption(FragmentStatisticsBinding binding) {
-        binding.fuelConsumption.setUnit("\u2113/" + vehicle.getDistanceUnit().toString());
     }
 
     @Override
