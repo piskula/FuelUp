@@ -1,6 +1,7 @@
 package sk.piskula.fuelup.screens.dialog;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -38,6 +39,12 @@ public class FillUpInfoDialog extends DialogFragment {
         return new AlertDialog.Builder(getActivity())
                 .setView(binding.getRoot())
                 .setTitle(R.string.fill_up_detail)
+                .setNegativeButton(R.string.dismiss, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dismiss();
+                    }
+                })
                 .create();
     }
 }

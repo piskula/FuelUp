@@ -15,6 +15,7 @@
     <string name="remove">Remove</string>
     <string name="update">Update</string>
     <string name="vehicleName">Vehicle name</string>
+    <string name="dismiss">Dismiss</string>
 
     <string name="toast_emptyFields">There are some empty fields above.</string>
     <string name="title_expenses">Expenses</string>
@@ -119,7 +120,7 @@
     <string name="listFillUps_isNotFull">not full</string>
     <string name="listFillups_isFull">full</string>
     <string name="na">N/A</string>
-    <string name="day">deň</string> <!--TODO check singular plural support -->
+    <string name="day">day</string> <!--TODO check singular plural support -->
 
     <string name="units_litreper100km">\u2113/100km</string>
     <string name="units_mpg">mpg</string>
