@@ -8,6 +8,7 @@ import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.screens.MainActivity;
 import sk.piskula.fuelup.screens.statisticfragments.StatisticsChartConsumptionFragment;
+import sk.piskula.fuelup.screens.statisticfragments.StatisticsChartConsumptionPerTimeFragment;
 import sk.piskula.fuelup.screens.statisticfragments.StatisticsChartConsumptionPreviewFragment;
 import sk.piskula.fuelup.screens.statisticfragments.StatisticsChartFuelPricePreviewFragment;
 
@@ -32,6 +33,8 @@ public class PagerStatisticsAdapter extends FragmentStatePagerAdapter {
                 return StatisticsChartConsumptionPreviewFragment.newInstance(vehicle);
             case 2:
                 return StatisticsChartFuelPricePreviewFragment.newInstance(vehicle);
+            case 3:
+                return StatisticsChartConsumptionPerTimeFragment.newInstance(vehicle);
             default:
                 return StatisticsChartConsumptionFragment.newInstance(vehicle);
         }
@@ -51,6 +54,8 @@ public class PagerStatisticsAdapter extends FragmentStatePagerAdapter {
                 return MainActivity.getInstance().getString(R.string.statistics_fuel_consumption);
             case 2:
                 return MainActivity.getInstance().getString(R.string.statistics_fuel_price);
+            case 3:
+                return MainActivity.getInstance().getString(R.string.statistics_fuel_consumption_per_month);
             default:
                 return "Fragment" + position;
         }

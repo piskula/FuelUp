@@ -179,6 +179,7 @@
     <string name="statistics_tracking_period">Tracking period</string>
 
     <string name="statistics_fuel_consumption">Fuel consumption</string>
+    <string name="statistics_fuel_consumption_per_month">Monthly consumption</string>
     <string name="statistics_totals">Totals</string>
     <string name="statistics_costs_per_distance_header">Costs &amp; distance</string>
     <string name="statistics_fuel_unit_price">Fuel unit price</string>
