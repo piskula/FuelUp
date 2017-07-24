@@ -7,18 +7,21 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
 import lecho.lib.hellocharts.gesture.ZoomType;
+import lecho.lib.hellocharts.listener.ColumnChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.ColumnChartData;
+import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.view.ColumnChartView;
+import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.business.ExpenseService;
 import sk.piskula.fuelup.business.FillUpService;
-import sk.piskula.fuelup.databinding.FragmentStatisticsChartConsumptionPerTimeBinding;
 import sk.piskula.fuelup.databinding.FragmentStatisticsChartCostsPerTimeBinding;
 import sk.piskula.fuelup.entity.Vehicle;
-import sk.piskula.fuelup.loaders.ConsumptionPerMonthChartDataLoader;
 import sk.piskula.fuelup.loaders.CostsPerMonthChartDataLoader;
+import sk.piskula.fuelup.util.BigDecimalFormatter;
 
 /**
  * @author Martin Styk
@@ -26,6 +29,8 @@ import sk.piskula.fuelup.loaders.CostsPerMonthChartDataLoader;
 public class StatisticsChartCostsPerTimeFragment extends Fragment implements LoaderManager.LoaderCallbacks<ColumnChartData> {
 
     private static final String ARG_VEHICLE = "vehicleArg";
+
+    private Vehicle vehicle;
 
     private FragmentStatisticsChartCostsPerTimeBinding binding;
 
@@ -49,11 +54,14 @@ public class StatisticsChartCostsPerTimeFragment extends Fragment implements Loa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentStatisticsChartCostsPerTimeBinding.inflate(inflater);
 
+        vehicle = getArguments().getParcelable(ARG_VEHICLE);
+
         chart = binding.chart;
         chart.setZoomEnabled(true);
         chart.setScrollEnabled(true);
         chart.setZoomType(ZoomType.HORIZONTAL);
         chart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
+        chart.setOnValueTouchListener(new ValueTouchListener());
 
         return binding.getRoot();
     }
@@ -76,5 +84,37 @@ public class StatisticsChartCostsPerTimeFragment extends Fragment implements Loa
     @Override
     public void onLoaderReset(Loader<ColumnChartData> loader) {
         chart.setColumnChartData(new ColumnChartData());
+    }
+
+    private class ValueTouchListener implements ColumnChartOnValueSelectListener {
+
+        /**
+         * @param columnIndex    starts from the oldest
+         * @param subcolumnIndex 0 -> fuel, 1-> expense
+         * @param value
+         */
+        @Override
+        public void onValueSelected(int columnIndex, int subcolumnIndex, SubcolumnValue value) {
+            switch (subcolumnIndex) {
+                case 0:
+                    Toast.makeText(getActivity(), getString(R.string.statistics_expense_price_alert,
+                            BigDecimalFormatter.getCommonFormat().format(value.getValue()) + " " +
+                                    vehicle.getCurrencySymbol()), Toast.LENGTH_SHORT).show();
+                    return;
+                case 1:
+                    Toast.makeText(getActivity(), getString(R.string.statistics_fuel_price_alert,
+                            BigDecimalFormatter.getCommonFormat().format(value.getValue()) + " " +
+                                    vehicle.getCurrencySymbol()), Toast.LENGTH_SHORT).show();
+                    return;
+                default:
+                    throw new RuntimeException("Unknown value selected");
+
+            }
+        }
+
+        @Override
+        public void onValueDeselected() {
+
+        }
     }
 }

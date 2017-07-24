@@ -197,5 +197,9 @@
     <string name="no_data_to_show">No data to show.</string>
     <string name="fill_up_detail">Fill up detail</string>
 
+    <string name="statistics_expense_price_alert">Expense price: %s </string>
+    <string name="statistics_fuel_price_alert">Fuel price: %s </string>
+
+
 
 </resources>
