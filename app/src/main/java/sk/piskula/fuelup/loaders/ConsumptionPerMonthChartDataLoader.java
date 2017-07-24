@@ -18,6 +18,7 @@ import lecho.lib.hellocharts.model.SubcolumnValue;
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.entity.FillUp;
+import sk.piskula.fuelup.entity.util.TimePair;
 import sk.piskula.fuelup.util.BigDecimalFormatter;
 
 
@@ -54,7 +55,7 @@ public class ConsumptionPerMonthChartDataLoader extends FuelUpAbstractAsyncLoade
 
         for (int i = 0; i < fillUps.size(); i++) {
             FillUp item = fillUps.get(i);
-            TimePair time = getTime(item.getDate());
+            TimePair time = TimePair.from(item.getDate());
             ConsumptionPair consumptionPair = map.get(time);
             consumptionPair.numerator += item.getDistanceFromLastFillUp() * item.getFuelConsumption().floatValue();
             consumptionPair.denumerator += item.getDistanceFromLastFillUp();
@@ -95,8 +96,8 @@ public class ConsumptionPerMonthChartDataLoader extends FuelUpAbstractAsyncLoade
      */
     private Map<TimePair, ConsumptionPair> initMap(List<FillUp> fillUps) {
         Map<TimePair, ConsumptionPair> map = new LinkedHashMap<>();
-        TimePair oldest = getTime(fillUps.get(fillUps.size() - 1).getDate());
-        TimePair newest = getTime(fillUps.get(0).getDate());
+        TimePair oldest = TimePair.from(fillUps.get(fillUps.size() - 1).getDate());
+        TimePair newest = TimePair.from(fillUps.get(0).getDate());
         int startMonth = oldest.month;
         for (int year = oldest.year; year <= newest.year; year++) {
             int endMonth = year == newest.year ? newest.month : 12;
@@ -108,44 +109,6 @@ public class ConsumptionPerMonthChartDataLoader extends FuelUpAbstractAsyncLoade
         return map;
     }
 
-    private TimePair getTime(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int year = calendar.get(Calendar.YEAR);
-        //Add one to month {0 - 11}
-        int month = calendar.get(Calendar.MONTH) + 1;
-        return new TimePair(year, month);
-    }
-
-}
-
-class TimePair {
-    int year;
-    int month;
-
-    public TimePair(int year, int month) {
-        this.year = year;
-        this.month = month;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        TimePair pair = (TimePair) o;
-
-        if (year != pair.year) return false;
-        return month == pair.month;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = year;
-        result = 31 * result + (int) month;
-        return result;
-    }
 }
 
 class ConsumptionPair {

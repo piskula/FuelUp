@@ -16,6 +16,8 @@
     <string name="update">Update</string>
     <string name="vehicleName">Vehicle name</string>
     <string name="dismiss">Dismiss</string>
+    <string name="fuel">Fuel</string>
+
 
     <string name="toast_emptyFields">There are some empty fields above.</string>
     <string name="title_expenses">Expenses</string>
@@ -181,12 +183,14 @@
     <string name="statistics_fuel_consumption">Fuel consumption</string>
     <string name="statistics_fuel_consumption_per_month">Monthly consumption</string>
     <string name="statistics_totals">Totals</string>
+    <string name="statistics_costs">Costs</string>
     <string name="statistics_costs_per_distance_header">Costs &amp; distance</string>
     <string name="statistics_fuel_unit_price">Fuel unit price</string>
     <string name="statistics_fuel_price">Fuel price</string>
     <string name="statistics_refueling">Refueling</string>
     <string name="statistics_expenses">Expenses</string>
     <string name="statistics_costs_per_time">Costs &amp; time</string>
+    <string name="statistics_costs_per_month">Monthly costs</string>
     <string name="statistics_distance_in_time">Distance &amp; time</string>
     <string name="statistics_app_usage">FuelUp usage</string>
 
