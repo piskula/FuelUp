@@ -45,7 +45,7 @@
     <style name="StatisticsItemDetailLayout" parent="Widget.AppCompat.ListView">
         <item name="android:divider">?android:attr/listDivider</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:showDividers">middle</item>
+        <item name="android:showDividers">middle|end</item>
     </style>
 
     <style name="statisticsItemDetail" parent="Theme.AppCompat.Light.DarkActionBar">

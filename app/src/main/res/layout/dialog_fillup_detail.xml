@@ -15,57 +15,70 @@
 
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
 
-        <sk.piskula.fuelup.view.StatisticsDetailItem
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:name="@string/Date"
-            app:value="@{DateUtil.getDateLocalized(fillUp.date)}" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            style="@style/StatisticsItemDetailLayout">
 
-        <sk.piskula.fuelup.view.StatisticsDetailItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:name="@string/statistics_fuel_consumption"
-            app:unit="@{fillUp.vehicle.getConsumptionUnit()}"
-            app:value="@{fillUp.fuelConsumption != null ? BigDecimalFormatter.getCommonFormat().format(fillUp.fuelConsumption) : @string/na}" />
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/default_padding"
+                app:name="@string/Date"
+                app:value="@{DateUtil.getDateLocalized(fillUp.date)}" />
 
-        <sk.piskula.fuelup.view.StatisticsDetailItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:name="@string/add_fillup_distanceFromLast"
-            app:unit="@{fillUp.vehicle.distanceUnit.toString()}"
-            app:value="@{String.valueOf(fillUp.distanceFromLastFillUp)}" />
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/default_padding"
+                app:name="@string/statistics_fuel_consumption"
+                app:unit="@{fillUp.vehicle.getConsumptionUnit()}"
+                app:value="@{fillUp.fuelConsumption != null ? BigDecimalFormatter.getCommonFormat().format(fillUp.fuelConsumption) : @string/na}" />
 
-        <sk.piskula.fuelup.view.StatisticsDetailItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:name="@string/add_fillup_fuel_volume"
-            app:unit="@{fillUp.vehicle.volumeUnit.toString()}"
-            app:value="@{BigDecimalFormatter.getCommonFormat().format(fillUp.fuelVolume)}" />
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/default_padding"
+                app:name="@string/add_fillup_distanceFromLast"
+                app:unit="@{fillUp.vehicle.distanceUnit.toString()}"
+                app:value="@{String.valueOf(fillUp.distanceFromLastFillUp)}" />
 
-        <sk.piskula.fuelup.view.StatisticsDetailItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:name="@string/statistics_fuel_unit_price"
-            app:unit="@{fillUp.vehicle.getCurrencySymbol()}"
-            app:value="@{BigDecimalFormatter.getCommonFormat().format(fillUp.fuelPricePerLitre)}" />
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/default_padding"
+                app:name="@string/add_fillup_fuel_volume"
+                app:unit="@{fillUp.vehicle.volumeUnit.toString()}"
+                app:value="@{BigDecimalFormatter.getCommonFormat().format(fillUp.fuelVolume)}" />
 
-        <sk.piskula.fuelup.view.StatisticsDetailItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:name="@string/add_fillup_priceTotal"
-            app:unit="@{fillUp.vehicle.getCurrencySymbol()}"
-            app:value="@{BigDecimalFormatter.getCommonFormat().format(fillUp.fuelPriceTotal)}" />
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/default_padding"
+                app:name="@string/statistics_fuel_unit_price"
+                app:unit="@{fillUp.vehicle.getCurrencySymbol()}"
+                app:value="@{BigDecimalFormatter.getCommonFormat().format(fillUp.fuelPricePerLitre)}" />
 
-        <sk.piskula.fuelup.view.StatisticsDetailItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:name="@string/add_fillup_full_fillup"
-            app:value="@{fillUp.fullFillUp ? @string/yes : @string/no }" />
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/default_padding"
+                app:name="@string/add_fillup_priceTotal"
+                app:unit="@{fillUp.vehicle.getCurrencySymbol()}"
+                app:value="@{BigDecimalFormatter.getCommonFormat().format(fillUp.fuelPriceTotal)}" />
 
-    </LinearLayout>
+            <sk.piskula.fuelup.view.StatisticsDetailItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/default_padding"
+                app:name="@string/add_fillup_full_fillup"
+                app:value="@{fillUp.fullFillUp ? @string/yes : @string/no }" />
+
+        </LinearLayout>
+    </ScrollView>
 </layout>
