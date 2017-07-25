@@ -89,9 +89,6 @@ public class StatisticsChartFuelPricePreviewFragment extends Fragment implements
             chart.setLineChartData((LineChartData) data.get(ConsumptionChartDataLoader.CHART_DATA));
             previewChart.setLineChartData((LineChartData) data.get(ConsumptionChartDataLoader.PREVIEW_DATA));
 
-            chart.setVisibility(View.VISIBLE);
-            previewChart.setVisibility(View.VISIBLE);
-
             displayedValues = (List<FillUp>) data.get(ConsumptionChartDataLoader.FILL_UPS);
         }
     }
