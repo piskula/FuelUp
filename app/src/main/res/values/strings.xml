@@ -98,6 +98,8 @@
     <string name="add_fillup_pricePerGallon_short">Per gallon</string>
     <string name="add_fillup_pricePerLitre">Price per litre</string>
     <string name="add_fillup_pricePerLitre_short">Per litre</string>
+    <string name="add_fillup_pricePerLitre_unit">%s/\u2113</string>
+
     <string name="add_fillup_priceTotal">Total price</string>
     <string name="add_fillup_priceTotal_short">Total</string>
     <string name="add_fillup_success">Fill up created</string>

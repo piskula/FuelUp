@@ -88,7 +88,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="@integer/edit_fillup_weight_switchButtons"
-                android:minWidth="@dimen/edit_fillup_switchButton_min_width"/>
+                android:minWidth="@dimen/edit_fillup_switchButton_min_width"
+                android:textOn="@string/add_fillup_priceTotal_short"
+                android:textOff="@string/add_fillup_pricePerLitre_short"/>
         </LinearLayout>
 
         <LinearLayout

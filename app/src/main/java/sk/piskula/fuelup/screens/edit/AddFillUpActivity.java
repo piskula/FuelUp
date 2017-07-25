@@ -99,8 +99,6 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
         mBtnSwitchDistance = (ToggleButton) findViewById(R.id.btn_switch_distance);
         mBtnSwitchPrice = (ToggleButton) findViewById(R.id.btn_switch_price);
 
-        mBtnSwitchPrice.setTextOff(VolumeUtil.getPricePerVolumeShortString(mSelectedCar.getVolumeUnit()));
-        mBtnSwitchPrice.setTextOn(getString(R.string.add_fillup_priceTotal_short));
         mBtnSwitchPrice.setOnCheckedChangeListener(this);
         mBtnSwitchDistance.setOnCheckedChangeListener(this);
 
@@ -208,11 +206,12 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
         if (compoundButton.getId() == mBtnSwitchPrice.getId()) {
             if (isChecked) {
                 priceMode = SwitchPrice.total;
+                mTxtInputPrice.setHint(getString(R.string.add_fillup_priceTotal));
                 mTxtCurrencySymbol.setText(mSelectedCar.getCurrencySymbol());
             } else {
                 priceMode = SwitchPrice.perVolume;
-                mTxtCurrencySymbol.setText(
-                        mSelectedCar.getCurrencySymbol() + "/" + mSelectedCar.getVolumeUnit());
+                mTxtInputPrice.setHint(getString(R.string.add_fillup_pricePerLitre));
+                mTxtCurrencySymbol.setText(getString(R.string.add_fillup_pricePerLitre_unit, mSelectedCar.getCurrencySymbol()));
             }
         }
     }
