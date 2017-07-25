@@ -4,8 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +16,7 @@ import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.SubcolumnValue;
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.business.FillUpService;
+import sk.piskula.fuelup.business.StatisticsService;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.util.TimePair;
 import sk.piskula.fuelup.util.BigDecimalFormatter;
@@ -27,25 +27,37 @@ import sk.piskula.fuelup.util.BigDecimalFormatter;
  * <p>
  * Created by Martin Styk on 15.06.2017.
  */
-public class ConsumptionPerMonthChartDataLoader extends FuelUpAbstractAsyncLoader<ColumnChartData> {
+public class ConsumptionPerMonthChartDataLoader extends FuelUpAbstractAsyncLoader<Map<String, Object>> {
 
     private static final String TAG = ConsumptionPerMonthChartDataLoader.class.getSimpleName();
     public static final int ID = 8;
 
+    public static final String CHART_DATA = "chartData";
+    public static final String MIN_CONSUMPTION = "minConsumption";
+
     private FillUpService fillUpService;
+    private StatisticsService statisticsService;
+
     private long vehicleId;
 
-    public ConsumptionPerMonthChartDataLoader(Context context, long vehicleId, FillUpService fillUpService) {
+    public ConsumptionPerMonthChartDataLoader(Context context, long vehicleId, FillUpService fillUpService, StatisticsService statisticsService) {
         super(context);
         this.vehicleId = vehicleId;
         this.fillUpService = fillUpService;
+        this.statisticsService = statisticsService;
     }
 
     @Override
-    public ColumnChartData loadInBackground() {
+    public Map<String, Object> loadInBackground() {
         List<FillUp> fillUps = fillUpService.findFillUpsOfVehicleWithComputedConsumption(vehicleId);
 
-        return fillUps.isEmpty() ? null : generateColumnChartData(fillUps);
+        if (fillUps.isEmpty()) return null;
+
+        Map<String,Object> map = new HashMap<>(2);
+        map.put(CHART_DATA, generateColumnChartData(fillUps));
+        map.put(MIN_CONSUMPTION, statisticsService.getFuelConsumptionBest());
+
+        return map;
     }
 
     private ColumnChartData generateColumnChartData(@NonNull List<FillUp> fillUps) {
