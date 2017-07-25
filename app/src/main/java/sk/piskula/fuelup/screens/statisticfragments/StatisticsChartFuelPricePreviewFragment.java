@@ -90,7 +90,18 @@ public class StatisticsChartFuelPricePreviewFragment extends Fragment implements
             previewChart.setLineChartData((LineChartData) data.get(ConsumptionChartDataLoader.PREVIEW_DATA));
 
             displayedValues = (List<FillUp>) data.get(ConsumptionChartDataLoader.FILL_UPS);
+
+            setViewport();
         }
+    }
+
+    private void setViewport() {
+        final Viewport maxViewPort = chart.getMaximumViewport();
+        final Viewport v = new Viewport(maxViewPort);
+        v.bottom = maxViewPort.bottom - 0.03f * maxViewPort.bottom;
+        v.top = 1.03f * maxViewPort.top;
+        chart.setMaximumViewport(v);
+        chart.setCurrentViewport(v);
     }
 
     @Override

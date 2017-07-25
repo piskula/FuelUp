@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
 import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.model.ColumnChartData;
+import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.databinding.FragmentStatisticsChartConsumptionPerTimeBinding;
@@ -67,7 +68,16 @@ public class StatisticsChartConsumptionPerTimeFragment extends Fragment implemen
         binding.setHasData(data != null);
         if (data != null) {
             chart.setColumnChartData(data);
+            setViewport();
         }
+    }
+
+    private void setViewport() {
+        final Viewport maxViewPort = chart.getMaximumViewport();
+        final Viewport v = new Viewport(maxViewPort);
+        v.top = 1.05f * maxViewPort.top;
+        chart.setMaximumViewport(v);
+        chart.setCurrentViewport(v);
     }
 
     @Override

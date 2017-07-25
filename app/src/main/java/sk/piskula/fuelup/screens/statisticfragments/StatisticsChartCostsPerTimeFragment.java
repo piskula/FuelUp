@@ -14,6 +14,7 @@ import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.listener.ColumnChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.SubcolumnValue;
+import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.business.ExpenseService;
@@ -78,7 +79,16 @@ public class StatisticsChartCostsPerTimeFragment extends Fragment implements Loa
         binding.setHasData(data != null);
         if (data != null) {
             chart.setColumnChartData(data);
+            setViewport();
         }
+    }
+
+    private void setViewport() {
+        final Viewport maxViewPort = chart.getMaximumViewport();
+        final Viewport v = new Viewport(maxViewPort);
+        v.top = 1.05f * maxViewPort.top;
+        chart.setMaximumViewport(v);
+        chart.setCurrentViewport(v);
     }
 
     @Override
