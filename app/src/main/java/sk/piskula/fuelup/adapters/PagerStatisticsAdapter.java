@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.screens.MainActivity;
-import sk.piskula.fuelup.screens.statisticfragments.StatisticsChartConsumptionFragment;
 import sk.piskula.fuelup.screens.statisticfragments.StatisticsChartConsumptionPerTimeFragment;
 import sk.piskula.fuelup.screens.statisticfragments.StatisticsChartConsumptionPreviewFragment;
 import sk.piskula.fuelup.screens.statisticfragments.StatisticsChartCostsPerTimeFragment;
@@ -29,23 +28,21 @@ public class PagerStatisticsAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return StatisticsChartConsumptionFragment.newInstance(vehicle);
-            case 1:
                 return StatisticsChartConsumptionPreviewFragment.newInstance(vehicle);
-            case 2:
+            case 1:
                 return StatisticsChartFuelPricePreviewFragment.newInstance(vehicle);
-            case 3:
+            case 2:
                 return StatisticsChartConsumptionPerTimeFragment.newInstance(vehicle);
-            case 4:
+            case 3:
                 return StatisticsChartCostsPerTimeFragment.newInstance(vehicle);
             default:
-                return StatisticsChartConsumptionFragment.newInstance(vehicle);
+                throw new RuntimeException("Wrong position");
         }
     }
 
     @Override
     public int getCount() {
-        return 5;
+        return 4;
     }
 
     @Override
@@ -54,15 +51,13 @@ public class PagerStatisticsAdapter extends FragmentStatePagerAdapter {
             case 0:
                 return MainActivity.getInstance().getString(R.string.statistics_fuel_consumption);
             case 1:
-                return MainActivity.getInstance().getString(R.string.statistics_fuel_consumption);
-            case 2:
                 return MainActivity.getInstance().getString(R.string.statistics_fuel_price);
-            case 3:
+            case 2:
                 return MainActivity.getInstance().getString(R.string.statistics_fuel_consumption_per_month);
-            case 4:
+            case 3:
                 return MainActivity.getInstance().getString(R.string.statistics_costs_per_month);
             default:
-                return "Fragment" + position;
+                throw new RuntimeException("Wrong position");
         }
     }
 }
