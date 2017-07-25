@@ -122,7 +122,7 @@
     <string name="listFillUps_isNotFull">not full</string>
     <string name="listFillups_isFull">full</string>
     <string name="na">N/A</string>
-    <string name="day">day</string> <!--TODO check singular plural support -->
+    <string name="days">days</string> <!--TODO check singular plural support -->
 
     <string name="units_litreper100km">\u2113/100km</string>
     <string name="units_mpg">mpg</string>
@@ -132,11 +132,12 @@
     <string name="currency">Currency</string>
     <string name="vehicle_type">Vehicle type</string>
     <string name="distance_units">Distance units</string>
-    <string name="no_vehicle_created_yet">No vehicle created yet.</string>
-    <string name="no_fillup_created_yet">No fill up created yet.</string>
     <string name="no_expense_created_yet">No expense created yet.</string>
-    <string name="miles">miles</string>
-    <string name="kilometres">kilometres</string>
+    <string name="no_fillup_created_yet">No fill up created yet.</string>
+    <string name="no_vehicle_created_yet">No vehicle created yet.</string>
+    <string name="volumeUnit_gallons_us">US Gallons</string>
+    <string name="volumeUnit_gallons_uk">UK Gallons</string>
+    <string name="volumeUnit_litres">Litres</string>
 
     <string name="statistics_fuel_consumption_average">Average fuel consumption</string>
     <string name="statistics_fuel_consumption_best">Best fuel consumption</string>

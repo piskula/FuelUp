@@ -533,7 +533,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_tracking_period"
-                        app:unit="@string/day"
+                        app:unit="@string/days"
                         app:value="@{data!= null ? String.valueOf(data.trackingDays) : @string/na}" />
 
                 </LinearLayout>

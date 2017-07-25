@@ -51,7 +51,7 @@ public class AddVehicleActivity extends AppCompatActivity implements ImageChoose
     private TextView txtActualMileageDistanceUnit;
     private Spinner spinnerType;
     private Spinner spinnerCurrency;
-    private RadioGroup radioGroupDistanceUnit;
+    private RadioGroup radioGroupVolumeUnit;
     private Button buttonAdd;
     private ImageView imgCarPhotoStatus;
 
@@ -117,21 +117,21 @@ public class AddVehicleActivity extends AppCompatActivity implements ImageChoose
         this.buttonAdd = (Button) findViewById(R.id.btn_addVehicle_add);
         this.spinnerType = (Spinner) findViewById(R.id.spinner_addVehicle_types);
         this.spinnerCurrency = (Spinner) findViewById(R.id.spinner_currency);
-        this.radioGroupDistanceUnit = (RadioGroup) findViewById(R.id.radio_distance_unit);
+        this.radioGroupVolumeUnit = (RadioGroup) findViewById(R.id.radio_volume_unit);
         this.imgCarPhotoStatus = (ImageView) findViewById(R.id.img_addVehicle_photo);
 
         spinnerCurrency.setAdapter(new SpinnerCurrencyAdapter(this));
         spinnerType.setAdapter(new SpinnerVehicleTypesAdapter(this));
 
-        radioGroupDistanceUnit.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        radioGroupVolumeUnit.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-                if (radioGroup.getCheckedRadioButtonId() == R.id.radio_km)
+                if (radioGroup.getCheckedRadioButtonId() == R.id.radio_litres)
                     txtActualMileageDistanceUnit.setText(DistanceUnit.km.toString());
                 else txtActualMileageDistanceUnit.setText(DistanceUnit.mi.toString());
             }
         });
-        this.radioGroupDistanceUnit.check(R.id.radio_km);
+        this.radioGroupVolumeUnit.check(R.id.radio_litres);
     }
 
     public void onClickAdd(View w) {
@@ -150,6 +150,18 @@ public class AddVehicleActivity extends AppCompatActivity implements ImageChoose
         }
     }
 
+    private VolumeUnit getVolumeUnitFromRadio() {
+        switch (radioGroupVolumeUnit.getCheckedRadioButtonId()) {
+            case R.id.radio_litres:
+                return VolumeUnit.LITRE;
+            case R.id.radio_us_gallons:
+                return VolumeUnit.GALLON_US;
+            case R.id.radio_uk_gallons:
+                return VolumeUnit.GALLON_UK;
+        }
+        return null;
+    }
+
     private void saveVehicle() {
         String name = txtName.getText().toString();
         String manufacturer = txtManufacturer.getText().toString();
@@ -166,8 +178,7 @@ public class AddVehicleActivity extends AppCompatActivity implements ImageChoose
         createdVehicle.setCurrency((Currency) spinnerCurrency.getSelectedItem());
         createdVehicle.setType((VehicleType) spinnerType.getSelectedItem());
         createdVehicle.setPathToPicture(vehiclePicturePath);
-        createdVehicle.setDistanceUnit(radioGroupDistanceUnit.getCheckedRadioButtonId() == R.id.radio_km ? DistanceUnit.km : DistanceUnit.mi);
-        createdVehicle.setVolumeUnit(createdVehicle.getDistanceUnit() == DistanceUnit.km ? VolumeUnit.LITRE : VolumeUnit.GALLON_US);
+        createdVehicle.setVolumeUnit(getVolumeUnitFromRadio());
         createdVehicle.setStartMileage(Long.parseLong(actualMileage));
 
         VehicleService vehicleService = new VehicleService(this);

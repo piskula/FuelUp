@@ -62,23 +62,22 @@ public class SampleDataUtils {
     public static List<Vehicle> addVehicles(Dao<Vehicle, Long> vehicleDao, List<VehicleType> types) throws SQLException {
         List<Vehicle> vehicles = new ArrayList<>();
 
-        vehicleDao.create(vehicle("LongWay driver Pro", "Very massive asphalt destroyer (CZ)", DistanceUnit.km, VolumeUnit.LITRE, types.get(1), 16000L, Currency.getInstance("CZK")));
+        vehicleDao.create(vehicle("LongWay driver Pro", "Very massive asphalt destroyer (CZ)", VolumeUnit.LITRE, types.get(1), 16000L, Currency.getInstance("CZK")));
         vehicles.add(vehicleDao.queryBuilder().where().eq("name", "LongWay driver Pro").query().get(0));
-        vehicleDao.create(vehicle("Amateur vehicle", "British sports car", DistanceUnit.mi, VolumeUnit.GALLON_UK, types.get(7), 227880L, Currency.getInstance("GBP")));
+        vehicleDao.create(vehicle("Amateur vehicle", "British sports car", VolumeUnit.GALLON_UK, types.get(7), 227880L, Currency.getInstance("GBP")));
         vehicles.add(vehicleDao.queryBuilder().where().eq("name", "Amateur vehicle").query().get(0));
-        vehicleDao.create(vehicle("Empty", "Initial Car", DistanceUnit.km, VolumeUnit.LITRE, types.get(0), 0L, Currency.getInstance("HUF")));
+        vehicleDao.create(vehicle("Empty", "Initial Car", VolumeUnit.LITRE, types.get(0), 0L, Currency.getInstance("HUF")));
         vehicles.add(vehicleDao.queryBuilder().where().eq("name", "Empty").query().get(0));
 
         return vehicles;
     }
 
-    private static Vehicle vehicle(String name, String maker, DistanceUnit unit, VolumeUnit volumeUnit,
+    private static Vehicle vehicle(String name, String maker, VolumeUnit volumeUnit,
                                    VehicleType type, Long mileage, Currency currency) {
         Vehicle vehicle = new Vehicle();
 
         vehicle.setName(name);
         vehicle.setVehicleMaker(maker);
-        vehicle.setDistanceUnit(unit);
         vehicle.setVolumeUnit(volumeUnit);
         vehicle.setType(type);
         vehicle.setStartMileage(mileage);

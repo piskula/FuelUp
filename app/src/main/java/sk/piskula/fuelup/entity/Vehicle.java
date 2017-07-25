@@ -33,9 +33,6 @@ public class Vehicle implements Parcelable {
     @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
     private VehicleType type;
 
-    @DatabaseField(columnName = "distance_unit", unknownEnumName = "km", canBeNull = false)
-    private DistanceUnit distanceUnit;
-
     @DatabaseField(columnName = "volume_unit", unknownEnumName = "LITRE", canBeNull = false)
     private VolumeUnit volumeUnit;
 
@@ -75,14 +72,6 @@ public class Vehicle implements Parcelable {
 
     public void setType(VehicleType type) {
         this.type = type;
-    }
-
-    public DistanceUnit getDistanceUnit() {
-        return distanceUnit;
-    }
-
-    public void setDistanceUnit(DistanceUnit distanceUnit) {
-        this.distanceUnit = distanceUnit;
     }
 
     public VolumeUnit getVolumeUnit() {
@@ -143,7 +132,6 @@ public class Vehicle implements Parcelable {
                 + "id=" + id
                 + ", name=" + name
                 + ", type=" + type
-                + ", distanceUnit=" + distanceUnit.name()
                 + ", volumeUnit=" + volumeUnit.name()
                 + ", vehicleMaker=" + vehicleMaker
                 + ", startMileage=" + startMileage
@@ -185,7 +173,6 @@ public class Vehicle implements Parcelable {
         dest.writeValue(this.id);
         dest.writeString(this.name);
         dest.writeParcelable(this.type, flags);
-        dest.writeInt(this.distanceUnit == null ? -1 : this.distanceUnit.ordinal());
         dest.writeInt(this.volumeUnit == null ? -1 : this.volumeUnit.ordinal());
         dest.writeString(this.vehicleMaker);
         dest.writeValue(this.startMileage);
@@ -197,8 +184,6 @@ public class Vehicle implements Parcelable {
         this.id = (Long) in.readValue(Long.class.getClassLoader());
         this.name = in.readString();
         this.type = in.readParcelable(VehicleType.class.getClassLoader());
-        int tmpUnit = in.readInt();
-        this.distanceUnit = tmpUnit == -1 ? null : DistanceUnit.values()[tmpUnit];
         int tmpVolumeUnit = in.readInt();
         this.volumeUnit = tmpVolumeUnit == -1 ? null : VolumeUnit.values()[tmpVolumeUnit];
         this.vehicleMaker = in.readString();
@@ -218,6 +203,10 @@ public class Vehicle implements Parcelable {
             return new Vehicle[size];
         }
     };
+
+    public DistanceUnit getDistanceUnit() {
+        return this.getVolumeUnit() == VolumeUnit.LITRE ? DistanceUnit.km : DistanceUnit.mi;
+    }
 
     public String getConsumptionUnit() {
         if (this.getDistanceUnit() == DistanceUnit.mi) {
