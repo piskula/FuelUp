@@ -211,7 +211,7 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
             } else {
                 priceMode = SwitchPrice.perVolume;
                 mTxtInputPrice.setHint(getString(R.string.add_fillup_pricePerLitre));
-                mTxtCurrencySymbol.setText(getString(R.string.add_fillup_pricePerLitre_unit, mSelectedCar.getCurrencySymbol()));
+                mTxtCurrencySymbol.setText(getString(R.string.unit_pricePerLitre, mSelectedCar.getCurrencySymbol()));
             }
         }
     }

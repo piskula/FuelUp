@@ -4,20 +4,28 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <!--shared-->
     <string name="add">Add</string>
     <string name="advanced">Advanced</string>
+    <string name="answer_yes">Yes</string>
+    <string name="answer_no">No</string>
     <string name="cancel">Cancel</string>
     <string name="create">Create</string>
+    <string name="currency">Currency</string>
     <string name="Date">Date</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="distance_units">Distance units</string>
+    <string name="fuel">Fuel</string>
     <string name="ok">OK</string>
     <string name="password">Password</string>
     <string name="price">Price</string>
     <string name="remove">Remove</string>
     <string name="update">Update</string>
     <string name="vehicleName">Vehicle name</string>
-    <string name="dismiss">Dismiss</string>
-    <string name="fuel">Fuel</string>
-
+    <string name="vehicle_type">Vehicle type</string>
+    <string name="volumeUnit_gallons_us">US Gallons</string>
+    <string name="volumeUnit_gallons_uk">UK Gallons</string>
+    <string name="volumeUnit_litres">Litres</string>
 
     <string name="toast_emptyFields">There are some empty fields above.</string>
     <string name="title_expenses">Expenses</string>
@@ -27,10 +35,12 @@
     <string name="title_statistics">Statistics</string>
     <string name="title_vehicleManufacturer">Vehicle manufacturer</string>
 
-    <string name="LOG_badLongNumberFormat">Tried bad number format.</string>
-
     <string name="noExpenseInTheDatabase">No expense available for this car. Add a new one by clicking the add button on the bottom right</string>
     <string name="noFillupInTheDatabase">No fill-up available for this car. Add a new one by clicking the add button on the bottom right</string>
+    <string name="no_expense_created_yet">No expense created yet.</string>
+    <string name="no_fillup_created_yet">No fill up created yet.</string>
+    <string name="no_vehicle_created_yet">No vehicle created yet.</string>
+    <string name="no_data_to_show">No data to show.</string>
 
     <string name="addVehicle">Create vehicle</string>
     <string name="addVehicle_vehicle_picture">Select picture</string>
@@ -70,20 +80,13 @@
     <string name="carUpdate_Toast_successfullyUpdated">Vehicle have been successfully updated</string>
     <string name="carUpdate_Toast_updateFail">Vehicle update failed</string>
 
-    <string name="updateCarActivity_LOG_badLongNumberFormat">tryed bad number format of Distance travelled</string>
-    <string name="updateCarActivity_LOG_updateBtnClicked">update button clicked</string>
-    <string name="updateCarActivity_LOG_deleteBtnClicked">delete button clicked</string>
-    <string name="updateCarActivity_LOG_dialogConfirm">dialog window confirmed</string>
-    <string name="updateCarActivity_LOG_dialogDecline">dialog window declined</string>
     <string name="updateCarActivity_wrong_number_format">Wrong number format</string>
     <string name="updateCarActivity_Toast_carUpdatedSuccesfully01">Car</string>
     <string name="updateCarActivity_Toast_carUpdatedSuccesfully02">Update sucessfull</string>
     <string name="updateCarActivity_Toast_carNoUpdate">No change</string>
     <string name="updateCarActivity_emptyFields">One or more fields are empty!</string>
 
-    <string name="add_fillup_title_create">Create fill up</string>
-    <string name="add_fillup_title_update">Update fill up</string>
-
+    <string name="add_fillup_distance_mode_update_rejected">It is not possible to switch distance modes on edit</string>
     <string name="add_fillup_distance_overall">Overall distance</string>
     <string name="add_fillup_distanceFromLast">Distance from last fill up</string>
     <string name="add_fillup_distanceFromLast_short">From last</string>
@@ -98,14 +101,12 @@
     <string name="add_fillup_pricePerGallon_short">Per gallon</string>
     <string name="add_fillup_pricePerLitre">Price per litre</string>
     <string name="add_fillup_pricePerLitre_short">Per litre</string>
-    <string name="add_fillup_pricePerLitre_unit">%s/\u2113</string>
-
     <string name="add_fillup_priceTotal">Total price</string>
     <string name="add_fillup_priceTotal_short">Total</string>
     <string name="add_fillup_success">Fill up created</string>
     <string name="add_fillup_success_update">Fill up updated</string>
-
-    <string name="add_fillup_distance_mode_update_rejected">It is not possible to switch distance modes on edit</string>
+    <string name="add_fillup_title_create">Create fill up</string>
+    <string name="add_fillup_title_update">Update fill up</string>
 
     <string name="remove_fillup_dialog_title">Delete Fill Up</string>
     <string name="remove_fillup_dialog_message">Do you want to remove this fill up?</string>
@@ -114,95 +115,81 @@
 
     <string name="statistics_title">Detailed statistics</string>
 
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-
     <string name="desc_expensePic">service icon</string>
     <string name="desc_fillupPic">pump icon</string>
 
-    <string name="litre">\u2113</string>
     <string name="listFillUps_isNotFull">not full</string>
     <string name="listFillups_isFull">full</string>
-    <string name="na">N/A</string>
     <string name="days">days</string> <!--TODO check singular plural support -->
 
+    <string name="statistics_average_distance_per_day">Average daily driven distance</string>
+    <string name="statistics_average_distance_per_week">Average weekly driven distance</string>
+    <string name="statistics_average_distance_per_month">Average monthly driven distance</string>
+    <string name="statistics_average_distance_per_year">Average yearly driven distance</string>
+    <string name="statistics_average_expense_cost_per_week">Average expense costs per week</string>
+    <string name="statistics_average_expense_cost_per_month">Average expense costs per month</string>
+    <string name="statistics_average_expense_cost_per_year">Average expense costs per year</string>
+    <string name="statistics_average_fuel_cost_per_week">Average fuel costs per week</string>
+    <string name="statistics_average_fuel_cost_per_month">Average fuel costs per month</string>
+    <string name="statistics_average_fuel_cost_per_year">Average fuel costs per year</string>
+    <string name="statistics_average_number_of_expenses_per_week">Average expenses per week</string>
+    <string name="statistics_average_number_of_expenses_per_month">Average expenses per month</string>
+    <string name="statistics_average_number_of_expenses_per_year">Average expenses per year</string>
+    <string name="statistics_average_number_of_fill_ups_per_week">Average fill ups per week</string>
+    <string name="statistics_average_number_of_fill_ups_per_month">Average fill ups per month</string>
+    <string name="statistics_average_number_of_fill_ups_per_year">Average fill ups per year</string>
+    <string name="statistics_average_total_cost_per_week">Average costs per week</string>
+    <string name="statistics_average_total_cost_per_month">Average costs per month</string>
+    <string name="statistics_average_total_cost_per_year">Average costs per year</string>
+    <string name="statistics_avg_fuel_volume_per_fill_up">Average fuel volume per fill up</string>
+    <string name="statistics_avg_fuel_price_per_fill_up">Average fuel cost per fill up</string>
+    <string name="statistics_costs_per_distance">Total costs per 100%s</string>
+    <string name="statistics_costs_per_distance_fuel">Fuel costs per 100%s</string>
+    <string name="statistics_costs_per_distance_expense">Expense costs per 100%s</string>
+    <string name="statistics_distance_between_fill_ups_average">Average distance between fill ups</string>
+    <string name="statistics_distance_between_fill_ups_lowest">Min distance between fill ups</string>
+    <string name="statistics_distance_between_fill_ups_highest">Max distance between fill ups</string>
+    <string name="statistics_distance_driven_total">Total tracked distance</string>
+    <string name="statistics_expenses_number_total">Total expenses</string>
+    <string name="statistics_fill_ups_number_total">Total fill ups</string>
+    <string name="statistics_fuel_consumption_average">Average fuel consumption</string>
+    <string name="statistics_fuel_consumption_best">Best fuel consumption</string>
+    <string name="statistics_fuel_consumption_worst">Worst fuel consumption</string>
+    <string name="statistics_fuel_unit_price_average">Average fuel price</string>
+    <string name="statistics_fuel_unit_price_best">Lowest fuel price</string>
+    <string name="statistics_fuel_unit_price_worst">Highest fuel price</string>
+    <string name="statistics_price_total">Total costs</string>
+    <string name="statistics_price_total_fuel">Total fuel costs </string>
+    <string name="statistics_price_total_expense">Total expense costs</string>
+    <string name="statistics_tracking_period">Tracking period</string>
+    <string name="statistics_volume_total_fuel">Total fuel volume</string>
+
+    <string name="statistics_app_usage">FuelUp usage</string>
+    <string name="statistics_costs">Costs</string>
+    <string name="statistics_costs_per_distance_header">Costs &amp; distance</string>
+    <string name="statistics_costs_per_month">Monthly costs</string>
+    <string name="statistics_costs_per_time">Costs &amp; time</string>
+    <string name="statistics_distance_in_time">Distance &amp; time</string>
+    <string name="statistics_expenses">Expenses</string>
+    <string name="statistics_expense_price_alert">Expense price: %s </string>
+    <string name="statistics_fuel_consumption">Fuel consumption</string>
+    <string name="statistics_fuel_consumption_per_month">Monthly consumption</string>
+    <string name="statistics_fuel_price">Fuel price</string>
+    <string name="statistics_fuel_price_alert">Fuel price: %s </string>
+    <string name="statistics_fuel_unit_price">Fuel unit price</string>
+    <string name="statistics_refueling">Refueling</string>
+    <string name="statistics_totals">Totals</string>
+
+    <string name="fill_up_detail">Fill up detail</string>
+
+    <!--without translation-->
+    <string name="na">N/A</string>
+    <string name="unit_litre">\u2113</string>
+    <string name="unit_pricePerLitre">%s/\u2113</string>
     <string name="units_litreper100km">\u2113/100km</string>
     <string name="units_mpg">mpg</string>
     <string name="units_litreper100_distance_units">\u2113/100 %s</string>
     <string name="units_distance_units_per_litre">%s/\u2113</string>
     <string name="units_distance_units_per_litre_only">/\u2113</string>
-    <string name="currency">Currency</string>
-    <string name="vehicle_type">Vehicle type</string>
-    <string name="distance_units">Distance units</string>
-    <string name="no_expense_created_yet">No expense created yet.</string>
-    <string name="no_fillup_created_yet">No fill up created yet.</string>
-    <string name="no_vehicle_created_yet">No vehicle created yet.</string>
-    <string name="volumeUnit_gallons_us">US Gallons</string>
-    <string name="volumeUnit_gallons_uk">UK Gallons</string>
-    <string name="volumeUnit_litres">Litres</string>
-
-    <string name="statistics_fuel_consumption_average">Average fuel consumption</string>
-    <string name="statistics_fuel_consumption_best">Best fuel consumption</string>
-    <string name="statistics_fuel_consumption_worst">Worst fuel consumption</string>
-    <string name="statistics_price_total">Total costs</string>
-    <string name="statistics_price_total_fuel">Total fuel costs </string>
-    <string name="statistics_price_total_expense">Total expense costs</string>
-    <string name="statistics_fill_ups_number_total">Total fill ups</string>
-    <string name="statistics_expenses_number_total">Total expenses</string>
-    <string name="statistics_volume_total_fuel">Total fuel volume</string>
-    <string name="statistics_distance_driven_total">Total tracked distance</string>
-    <string name="statistics_costs_per_distance">Total costs per 100%s</string>
-    <string name="statistics_costs_per_distance_fuel">Fuel costs per 100%s</string>
-    <string name="statistics_costs_per_distance_expense">Expense costs per 100%s</string>
-    <string name="statistics_average_total_cost_per_week">Average costs per week</string>
-    <string name="statistics_average_total_cost_per_month">Average costs per month</string>
-    <string name="statistics_average_total_cost_per_year">Average costs per year</string>
-    <string name="statistics_average_fuel_cost_per_week">Average fuel costs per week</string>
-    <string name="statistics_average_fuel_cost_per_month">Average fuel costs per month</string>
-    <string name="statistics_average_fuel_cost_per_year">Average fuel costs per year</string>
-    <string name="statistics_average_expense_cost_per_week">Average expense costs per week</string>
-    <string name="statistics_average_expense_cost_per_month">Average expense costs per month</string>
-    <string name="statistics_average_expense_cost_per_year">Average expense costs per year</string>
-    <string name="statistics_avg_fuel_volume_per_fill_up">Average fuel volume per fill up</string>
-    <string name="statistics_avg_fuel_price_per_fill_up">Average fuel cost per fill up</string>
-    <string name="statistics_average_number_of_fill_ups_per_week">Average fill ups per week</string>
-    <string name="statistics_average_number_of_fill_ups_per_month">Average fill ups per month</string>
-    <string name="statistics_average_number_of_fill_ups_per_year">Average fill ups per year</string>
-    <string name="statistics_distance_between_fill_ups_average">Average distance between fill ups</string>
-    <string name="statistics_distance_between_fill_ups_lowest">Min distance between fill ups</string>
-    <string name="statistics_distance_between_fill_ups_highest">Max distance between fill ups</string>
-    <string name="statistics_fuel_unit_price_average">Average fuel price</string>
-    <string name="statistics_fuel_unit_price_best">Lowest fuel price</string>
-    <string name="statistics_fuel_unit_price_worst">Highest fuel price</string>
-    <string name="statistics_average_distance_per_day">Average daily driven distance</string>
-    <string name="statistics_average_distance_per_week">Average weekly driven distance</string>
-    <string name="statistics_average_distance_per_month">Average monthly driven distance</string>
-    <string name="statistics_average_distance_per_year">Average yearly driven distance</string>
-    <string name="statistics_average_number_of_expenses_per_week">Average expenses per week</string>
-    <string name="statistics_average_number_of_expenses_per_month">Average expenses per month</string>
-    <string name="statistics_average_number_of_expenses_per_year">Average expenses per year</string>
-    <string name="statistics_tracking_period">Tracking period</string>
-
-    <string name="statistics_fuel_consumption">Fuel consumption</string>
-    <string name="statistics_fuel_consumption_per_month">Monthly consumption</string>
-    <string name="statistics_totals">Totals</string>
-    <string name="statistics_costs">Costs</string>
-    <string name="statistics_costs_per_distance_header">Costs &amp; distance</string>
-    <string name="statistics_fuel_unit_price">Fuel unit price</string>
-    <string name="statistics_fuel_price">Fuel price</string>
-    <string name="statistics_refueling">Refueling</string>
-    <string name="statistics_expenses">Expenses</string>
-    <string name="statistics_costs_per_time">Costs &amp; time</string>
-    <string name="statistics_costs_per_month">Monthly costs</string>
-    <string name="statistics_distance_in_time">Distance &amp; time</string>
-    <string name="statistics_app_usage">FuelUp usage</string>
-
-    <string name="no_data_to_show">No data to show.</string>
-    <string name="fill_up_detail">Fill up detail</string>
-
-    <string name="statistics_expense_price_alert">Expense price: %s </string>
-    <string name="statistics_fuel_price_alert">Fuel price: %s </string>
-
-
 
 </resources>

@@ -1,6 +1,5 @@
 package sk.piskula.fuelup.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,7 +56,7 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
                     currentItem.getVehicle().getCurrency(), currentItem.getFuelPriceTotal()));
             holder.txtPricePerLitre.setText(CurrencyUtil.getPricePerLitre(
                     currentItem.getVehicle().getCurrency(), currentItem.getFuelPricePerLitre()));
-            holder.txtPricePerLitreSymbol.setText("/" + MainActivity.getInstance().getString(R.string.litre));
+            holder.txtPricePerLitreSymbol.setText("/" + MainActivity.getInstance().getString(R.string.unit_litre));
 
             DecimalFormat bddf = new DecimalFormat();
             bddf.setGroupingUsed(false);

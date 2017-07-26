@@ -77,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/default_padding"
                 app:name="@string/add_fillup_full_fillup"
-                app:value="@{fillUp.fullFillUp ? @string/yes : @string/no }" />
+                app:value="@{fillUp.fullFillUp ? @string/answer_yes : @string/answer_no }" />
 
         </LinearLayout>
     </ScrollView>
