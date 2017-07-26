@@ -77,9 +77,11 @@ public class StatisticsChartConsumptionPerTimeFragment extends Fragment implemen
 
     private void setViewport(Number minConsumption) {
         final Viewport maxViewPort = chart.getMaximumViewport();
+
         final Viewport v = new Viewport(maxViewPort);
         v.top = 1.05f * maxViewPort.top;
         v.bottom = 0.9f * minConsumption.floatValue();
+        v.right = 1.01f * maxViewPort.right;
         chart.setMaximumViewport(v);
         chart.setCurrentViewport(v);
     }

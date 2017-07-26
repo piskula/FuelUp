@@ -97,11 +97,12 @@ public class StatisticsChartFuelPricePreviewFragment extends Fragment implements
 
     private void setViewport() {
         final Viewport maxViewPort = chart.getMaximumViewport();
-        final Viewport v = new Viewport(maxViewPort);
-        v.bottom = maxViewPort.bottom - 0.03f * maxViewPort.bottom;
-        v.top = 1.03f * maxViewPort.top;
-        chart.setMaximumViewport(v);
-        chart.setCurrentViewport(v);
+        final Viewport chartViewPort = new Viewport(maxViewPort);
+        chartViewPort.bottom = maxViewPort.bottom - 0.03f * maxViewPort.bottom;
+        chartViewPort.top = 1.03f * maxViewPort.top;
+        chartViewPort.right = 1.01f * maxViewPort.right;
+        chart.setMaximumViewport(chartViewPort);
+        chart.setCurrentViewport(chartViewPort);
     }
 
     @Override

@@ -87,6 +87,7 @@ public class StatisticsChartCostsPerTimeFragment extends Fragment implements Loa
         final Viewport maxViewPort = chart.getMaximumViewport();
         final Viewport v = new Viewport(maxViewPort);
         v.top = 1.05f * maxViewPort.top;
+        v.right = 1.01f * maxViewPort.right;
         chart.setMaximumViewport(v);
         chart.setCurrentViewport(v);
     }
