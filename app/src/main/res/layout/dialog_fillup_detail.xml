@@ -8,6 +8,7 @@
         <import type="sk.piskula.fuelup.entity.Vehicle" />
 
         <import type="sk.piskula.fuelup.entity.util.DateUtil" />
+        <import type="sk.piskula.fuelup.entity.util.CurrencyUtil" />
 
         <variable
             name="fillUp"
@@ -21,7 +22,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             style="@style/StatisticsItemDetailLayout">
 
@@ -61,16 +62,16 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/default_padding"
                 app:name="@string/statistics_fuel_unit_price"
-                app:unit="@{fillUp.vehicle.getCurrencySymbol()}"
-                app:value="@{BigDecimalFormatter.getCommonFormat().format(fillUp.fuelPricePerLitre)}" />
+                app:unit=""
+                app:value="@{CurrencyUtil.getPricePerLitre(fillUp.getVehicle().getCurrency(), fillUp.fuelPricePerLitre)}" />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/default_padding"
                 app:name="@string/add_fillup_priceTotal"
-                app:unit="@{fillUp.vehicle.getCurrencySymbol()}"
-                app:value="@{BigDecimalFormatter.getCommonFormat().format(fillUp.fuelPriceTotal)}" />
+                app:unit=""
+                app:value="@{CurrencyUtil.getPrice(fillUp.getVehicle().getCurrency(), fillUp.fuelPriceTotal)}" />
 
             <sk.piskula.fuelup.view.StatisticsDetailItem
                 android:layout_width="match_parent"
