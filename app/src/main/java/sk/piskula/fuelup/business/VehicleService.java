@@ -36,7 +36,7 @@ public class VehicleService {
      * @param name name of car
      * @return success result
      */
-    public ServiceResult save(String name) {
+    public ServiceResult    save(String name) {
         Vehicle vehicle = new Vehicle();
         vehicle.setName(name);
         vehicle.setVolumeUnit(VolumeUnit.LITRE);
