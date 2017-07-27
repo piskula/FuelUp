@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="sk.piskula.fuelup">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -42,31 +45,23 @@
         <activity
             android:name=".screens.edit.EditExpenseActivity"
             android:label="Expense"
-            android:parentActivityName=".screens.VehicleTabbedDetailActivity">
-        </activity>
+            android:parentActivityName=".screens.VehicleTabbedDetailActivity"></activity>
         <activity
             android:name=".screens.edit.AddVehicleActivity"
             android:label="Add Vehicle"
-            android:parentActivityName=".screens.MainActivity">
-        </activity>
+            android:parentActivityName=".screens.MainActivity"></activity>
         <activity
             android:name=".screens.edit.EditVehicleActivity"
             android:label="Edit Vehicle"
-            android:parentActivityName=".screens.VehicleTabbedDetailActivity">
-        </activity>
+            android:parentActivityName=".screens.VehicleTabbedDetailActivity"></activity>
         <activity
             android:name=".screens.edit.AddFillUpActivity"
             android:label="Add Fill Up"
-            android:parentActivityName=".screens.VehicleTabbedDetailActivity">
-        </activity>
+            android:parentActivityName=".screens.VehicleTabbedDetailActivity"></activity>
         <activity
             android:name=".screens.edit.EditFillUpActivity"
             android:label="Edit Fill Up"
-            android:parentActivityName=".screens.VehicleTabbedDetailActivity">
-        </activity>
+            android:parentActivityName=".screens.VehicleTabbedDetailActivity"></activity>
     </application>
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
 </manifest>

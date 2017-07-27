@@ -183,6 +183,7 @@
 
     <string name="fill_up_detail">Fill up detail</string>
     <string name="vehicle_list">Vehicle list</string>
+    <string name="authors">&#169; Ondrej Oravčok, Martin Styk</string>
 
     <!--without translation-->
     <string name="na">N/A</string>
@@ -193,5 +194,8 @@
     <string name="units_litreper100_distance_units">\u2113/100 %s</string>
     <string name="units_distance_units_per_litre">%s/\u2113</string>
     <string name="units_distance_units_per_litre_only">/\u2113</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

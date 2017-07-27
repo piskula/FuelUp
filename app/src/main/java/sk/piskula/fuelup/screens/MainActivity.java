@@ -1,67 +1,34 @@
 package sk.piskula.fuelup.screens;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
-
-import java.util.List;
 
 import sk.piskula.fuelup.R;
-import sk.piskula.fuelup.adapters.ListVehiclesAdapter;
-import sk.piskula.fuelup.business.ServiceResult;
-import sk.piskula.fuelup.business.VehicleService;
-import sk.piskula.fuelup.entity.Vehicle;
-import sk.piskula.fuelup.loaders.VehicleLoader;
 import sk.piskula.fuelup.screens.dialog.CreateVehicleDialog;
-import sk.piskula.fuelup.screens.edit.AddVehicleActivity;
 
-public class MainActivity extends AppCompatActivity implements OnNavigationItemSelectedListener, ListVehiclesAdapter.Callback,
-        View.OnClickListener, CreateVehicleDialog.Callback, LoaderManager.LoaderCallbacks<List<Vehicle>> {
+public class MainActivity extends AppCompatActivity implements OnNavigationItemSelectedListener, CreateVehicleDialog.Callback {
 
     private static MainActivity singleton;
 
-    private static final String TAG = "MainActivity";
-
-    public static final int VEHICLE_ACTION_REQUEST_CODE = 33;
-    public static final String EXTRA_ADDED_CAR = "extra_key_added_car";
-
-    private FloatingActionButton addCarBtn;
-
-    private RecyclerView recyclerView;
-    private ListVehiclesAdapter adapter;
-
-    private TextView txtNoVehicle;
-
-    private VehicleService vehicleService;
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        vehicleService = new VehicleService(this);
-        //TODO open last viewed car if possible
+        setContentView(R.layout.activity_main);
 
-        setContentView(R.layout.fragment_vehicle_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -70,76 +37,14 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        if (adapter == null)
-            adapter = new ListVehiclesAdapter(this);
-
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 1);
-
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
-                ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation()));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setOnClickListener(this);
-
-        txtNoVehicle = (TextView) findViewById(R.id.txt_noVehicle);
-
-        addCarBtn = (FloatingActionButton) findViewById(R.id.fab_add_vehicle);
-        addCarBtn.setOnClickListener(this);
-
-        getSupportLoaderManager().initLoader(VehicleLoader.ID, savedInstanceState, this);
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.activty_main_frame, new VehicleListFragment(), TAG).commit();
+        }
+
         singleton = this;
-    }
-
-    @Override
-    protected void onResume() {
-        adapter.dataChange((new VehicleService(getApplicationContext())).findAll());
-        if (adapter.getItemCount() == 0)
-            txtNoVehicle.setVisibility(View.VISIBLE);
-        else
-            txtNoVehicle.setVisibility(View.GONE);
-        super.onResume();
-    }
-
-    @Override
-    public void onItemClick(View v, Vehicle vehicle, int position) {
-        Intent i = new Intent(this, VehicleTabbedDetailActivity.class);
-        i.putExtra(EXTRA_ADDED_CAR, vehicle);
-        Log.i(TAG, "Clicked vehicle " + vehicle);
-        startActivityForResult(i, VEHICLE_ACTION_REQUEST_CODE);
-    }
-
-    @Override
-    public void onClick(final View view) {
-        if (view.getId() == addCarBtn.getId()) {
-            new CreateVehicleDialog().show(getSupportFragmentManager(), CreateVehicleDialog.class.getSimpleName());
-        }
-    }
-
-    @Override
-    public void onDialogCreateBtnClick(CreateVehicleDialog dialog, Editable vehicleName) {
-        ServiceResult serviceResult = vehicleService.save(vehicleName.toString());
-        if (ServiceResult.SUCCESS.equals(serviceResult)) {
-            adapter.dataChange((new VehicleService(getApplicationContext())).findAll());
-            dialog.dismiss();
-            Snackbar.make(findViewById(android.R.id.content), R.string.addVehicle_success, Snackbar.LENGTH_LONG).show();
-        } else {
-            Snackbar.make(findViewById(android.R.id.content), R.string.addVehicle_fail, Snackbar.LENGTH_LONG).show();
-        }
-
-    }
-
-    @Override
-    public void onDialogAdvancedBtnClick(CreateVehicleDialog dialog, Editable vehicleName) {
-        dialog.dismiss();
-        Intent i = new Intent(this, AddVehicleActivity.class);
-        i.putExtra("vehicleName", vehicleName.toString());
-        startActivity(i);
     }
 
     @Override
@@ -152,35 +57,43 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        Fragment currentFragment;
         if (id == R.id.vehicle_list) {
-            // Handle the camera action
+            currentFragment = new VehicleListFragment();
         } else if (id == R.id.about) {
-
+            currentFragment = new AboutFragment();
+        } else {
+            throw new RuntimeException("onNavigationItemSelected unhandled case");
         }
+        final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.activty_main_frame, currentFragment, TAG).commit();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    /**
+     * Interfragment communication
+     */
     @Override
-    public Loader<List<Vehicle>> onCreateLoader(int id, Bundle args) {
-        return new VehicleLoader(getApplicationContext(), new VehicleService(this));
+    public void onDialogCreateBtnClick(CreateVehicleDialog dialog, Editable vehicleName) {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(TAG);
+        if (currentFragment instanceof CreateVehicleDialog.Callback) {
+            ((CreateVehicleDialog.Callback) currentFragment).onDialogCreateBtnClick(dialog, vehicleName);
+        }
     }
 
     @Override
-    public void onLoadFinished(Loader<List<Vehicle>> loader, List<Vehicle> data) {
-        adapter.dataChange(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<Vehicle>> loader) {
-        return;
+    public void onDialogAdvancedBtnClick(CreateVehicleDialog dialog, Editable vehicleName) {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(TAG);
+        if (currentFragment instanceof CreateVehicleDialog.Callback) {
+            ((CreateVehicleDialog.Callback) currentFragment).onDialogAdvancedBtnClick(dialog, vehicleName);
+        }
     }
 
     public static MainActivity getInstance() {

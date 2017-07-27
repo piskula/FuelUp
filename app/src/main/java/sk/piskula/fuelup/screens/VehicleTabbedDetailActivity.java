@@ -53,7 +53,7 @@ public class VehicleTabbedDetailActivity extends AppCompatActivity implements Bo
 
         if (savedInstanceState == null) {
             Intent intent = getIntent();
-            vehicle = intent.getParcelableExtra(MainActivity.EXTRA_ADDED_CAR);
+            vehicle = intent.getParcelableExtra(VehicleListFragment.EXTRA_ADDED_CAR);
 
             fragment = new FillUpsListFragment();
             Bundle bundle = new Bundle();

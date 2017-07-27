@@ -5,12 +5,10 @@
         <item
             android:id="@+id/vehicle_list"
             android:icon="@drawable/ic_type_sedan"
-            android:iconTint="@color/colorPrimary"
             android:title="@string/vehicle_list" />
         <item
             android:id="@+id/about"
             android:icon="@drawable/ic_menu_info"
-            android:iconTint="@color/colorPrimary"
             android:title="@string/about" />
     </group>
 
