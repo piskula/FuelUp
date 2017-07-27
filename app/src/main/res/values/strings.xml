@@ -26,6 +26,7 @@
     <string name="volumeUnit_gallons_us">US Gallons</string>
     <string name="volumeUnit_gallons_uk">UK Gallons</string>
     <string name="volumeUnit_litres">Litres</string>
+    <string name="about">About</string>
 
     <string name="toast_emptyFields">There are some empty fields above.</string>
     <string name="title_expenses">Expenses</string>
@@ -181,6 +182,7 @@
     <string name="statistics_totals">Totals</string>
 
     <string name="fill_up_detail">Fill up detail</string>
+    <string name="vehicle_list">Vehicle list</string>
 
     <!--without translation-->
     <string name="na">N/A</string>

@@ -26,6 +26,7 @@
     <string name="volumeUnit_gallons_us">US Galóny</string>
     <string name="volumeUnit_gallons_uk">UK Galóny</string>
     <string name="volumeUnit_litres">Litre</string>
+    <string name="about">O aplikácií</string>
 
     <string name="toast_emptyFields">Je potrebné vyplniť viac údajov.</string>
     <string name="title_expenses">Výdaje</string>
@@ -120,6 +121,7 @@
 
     <string name="listFillUps_isNotFull">čiastočne</string>
     <string name="listFillups_isFull">plná</string>
-    <string name="days">dní</string> <!--TODO check singular plural support -->
+    <string name="days">dní</string>
+    <string name="vehicle_list">Vozidlá</string>
 
 </resources>
