@@ -51,12 +51,10 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
     private TextView mTxtDistanceUnit;
     private TextView mTxtCurrencySymbol;
 
-    private ToggleButton mBtnSwitchDistance;
     private ToggleButton mBtnSwitchPrice;
     private CheckBox mCheckBoxIsFullFill;
 
     private Vehicle mSelectedCar;
-    private SwitchDistance distanceMode = SwitchDistance.fromLast;
     private SwitchPrice priceMode = SwitchPrice.perVolume;
 
     private Calendar fillUpDate;
@@ -96,11 +94,9 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
         mTxtDate = (TextView) findViewById(R.id.txt_addfillup_date);
         mTxtInfo = (EditText) findViewById(R.id.txt_addfillup_information);
         mCheckBoxIsFullFill = (CheckBox) findViewById(R.id.checkBox_fullFillUp);
-        mBtnSwitchDistance = (ToggleButton) findViewById(R.id.btn_switch_distance);
         mBtnSwitchPrice = (ToggleButton) findViewById(R.id.btn_switch_price);
 
         mBtnSwitchPrice.setOnCheckedChangeListener(this);
-        mBtnSwitchDistance.setOnCheckedChangeListener(this);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -141,11 +137,7 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
 
         FillUp newFillUp = new FillUp();
         newFillUp.setFullFillUp(mCheckBoxIsFullFill.isChecked());
-        if (distanceMode == SwitchDistance.fromLast) {
-            newFillUp.setDistanceFromLastFillUp(createdDistance);
-        } else {
-            newFillUp.setDistanceFromLastFillUp(createdDistance); //TODO
-        }
+        newFillUp.setDistanceFromLastFillUp(createdDistance);
 
         newFillUp.setFuelVolume(createdFuelVol);
         if (priceMode == SwitchPrice.perVolume) {
@@ -194,15 +186,6 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-        if (compoundButton.getId() == mBtnSwitchDistance.getId()) {
-            if (isChecked) {
-                distanceMode = SwitchDistance.whole;
-                mTxtInputDistance.setHint(getString(R.string.add_fillup_distance_overall));
-            } else {
-                distanceMode = SwitchDistance.fromLast;
-                mTxtInputDistance.setHint(getString(R.string.add_fillup_distanceFromLast));
-            }
-        }
         if (compoundButton.getId() == mBtnSwitchPrice.getId()) {
             if (isChecked) {
                 priceMode = SwitchPrice.total;
@@ -221,8 +204,4 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
         perVolume
     }
 
-    public enum SwitchDistance {
-        fromLast,
-        whole
-    }
 }

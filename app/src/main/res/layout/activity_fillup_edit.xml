@@ -21,11 +21,11 @@
                 android:id="@+id/txt_input_addfillup_distance_from_last_fillup_adding"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight = "@integer/edit_fillup_weight_text">
+                android:layout_weight="1">
 
                 <EditText
                     android:id="@+id/txt_addfillup_distance_from_last_fillup_adding"
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/add_fillup_distanceFromLast"
                     android:inputType="number"
@@ -34,24 +34,13 @@
 
             <TextView
                 android:id="@+id/txt_addfillup_distance_unit"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="@integer/edit_fillup_weight_unit"
                 android:paddingTop="@dimen/edit_fillup_expense_unit_paddingTop"
                 android:textAlignment="textStart"
-                android:textSize="@dimen/edit_fillup_expense_unit_fontSize"/>
-
-            <ToggleButton
-                android:id="@+id/btn_switch_distance"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="@integer/edit_fillup_weight_switchButtons"
-                android:minWidth="@dimen/edit_fillup_switchButton_min_width"
-                android:textOff="@string/add_fillup_distanceFromLast_short"
-                android:textOn="@string/add_fillup_distanceTotal_short" />
+                android:textSize="@dimen/edit_fillup_expense_unit_fontSize" />
 
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,7 +52,7 @@
                 android:id="@+id/txt_input_addfillup_price"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight = "@integer/edit_fillup_weight_text">
+                android:layout_weight="@integer/edit_fillup_weight_text">
 
                 <EditText
                     android:id="@+id/txt_addfillup_price"
@@ -89,8 +78,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="@integer/edit_fillup_weight_switchButtons"
                 android:minWidth="@dimen/edit_fillup_switchButton_min_width"
-                android:textOn="@string/add_fillup_priceTotal_short"
-                android:textOff="@string/add_fillup_pricePerLitre_short"/>
+                android:textOff="@string/add_fillup_pricePerLitre_short"
+                android:textOn="@string/add_fillup_priceTotal_short" />
         </LinearLayout>
 
         <LinearLayout
@@ -102,7 +91,7 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight = "@integer/edit_fillup_weight_text">
+                android:layout_weight="@integer/edit_fillup_weight_text">
 
                 <EditText
                     android:id="@+id/txt_addfillup_fuel_volume"
@@ -127,8 +116,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="@integer/edit_fillup_weight_switchButtons"
-                android:minWidth="@dimen/edit_fillup_switchButton_min_width"
                 android:checked="true"
+                android:minWidth="@dimen/edit_fillup_switchButton_min_width"
                 android:text="@string/add_fillup_full_fillup" />
         </LinearLayout>
 
@@ -146,7 +135,7 @@
                 android:freezesText="true"
                 android:hint="@string/Date"
                 android:inputType="date"
-                android:onClick="onClickDatePicker"/>
+                android:onClick="onClickDatePicker" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -163,9 +152,9 @@
 
         <Button
             android:id="@+id/btn_add_fillup"
+            style="@style/ConfirmButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/ConfirmButton"
             android:onClick="onClickAdd"
             android:text="@string/add" />
     </LinearLayout>

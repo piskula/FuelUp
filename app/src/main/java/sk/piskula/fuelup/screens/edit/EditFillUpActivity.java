@@ -33,7 +33,6 @@ import sk.piskula.fuelup.business.ServiceResult;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.util.DateUtil;
-import sk.piskula.fuelup.entity.util.VolumeUtil;
 import sk.piskula.fuelup.screens.dialog.DeleteDialog;
 
 
@@ -57,13 +56,11 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
     private TextView mTxtCurrencySymbol;
 
     private Button mBtnAdd;
-    private ToggleButton mBtnSwitchDistance;
     private ToggleButton mBtnSwitchPrice;
     private CheckBox mCheckBoxIsFullFill;
 
     private Vehicle mSelectedCar;
     private FillUp mSelectedFillUp;
-    private SwitchDistance distanceMode = SwitchDistance.fromLast;
     private SwitchPrice priceMode = SwitchPrice.perVolume;
 
     private Calendar fillUpDate;
@@ -105,7 +102,6 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         mTxtDate.setEnabled(false);
 
         mBtnAdd.setText(R.string.update);
-        mBtnSwitchDistance.setEnabled(false);
 
         mTxtCurrencySymbol.setText(mSelectedCar.getCurrencySymbol());
         mTxtDistanceUnit.setText(mSelectedCar.getDistanceUnit().toString());
@@ -124,13 +120,9 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         mTxtInfo = (EditText) findViewById(R.id.txt_addfillup_information);
         mCheckBoxIsFullFill = (CheckBox) findViewById(R.id.checkBox_fullFillUp);
         mBtnAdd = (Button) findViewById(R.id.btn_add_fillup);
-        mBtnSwitchDistance = (ToggleButton) findViewById(R.id.btn_switch_distance);
         mBtnSwitchPrice = (ToggleButton) findViewById(R.id.btn_switch_price);
 
-        mBtnSwitchPrice.setTextOff(VolumeUtil.getPricePerVolumeShortString(mSelectedCar.getVolumeUnit()));
-        mBtnSwitchPrice.setTextOn(getString(R.string.add_fillup_priceTotal_short));
         mBtnSwitchPrice.setOnCheckedChangeListener(this);
-        mBtnSwitchDistance.setOnCheckedChangeListener(this);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -217,23 +209,15 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-        if (compoundButton.getId() == mBtnSwitchDistance.getId()) {
-            if (isChecked) {
-                distanceMode = SwitchDistance.whole;
-                mTxtInputDistance.setHint(getString(R.string.add_fillup_distance_overall));
-            } else {
-                distanceMode = SwitchDistance.fromLast;
-                mTxtInputDistance.setHint(getString(R.string.add_fillup_distanceFromLast));
-            }
-        }
         if (compoundButton.getId() == mBtnSwitchPrice.getId()) {
             if (isChecked) {
                 priceMode = SwitchPrice.total;
+                mTxtInputPrice.setHint(getString(R.string.add_fillup_priceTotal));
                 mTxtCurrencySymbol.setText(mSelectedCar.getCurrencySymbol());
             } else {
                 priceMode = SwitchPrice.perVolume;
-                mTxtCurrencySymbol.setText(
-                        mSelectedCar.getCurrencySymbol() + "/" + mSelectedCar.getVolumeUnit());
+                mTxtInputPrice.setHint(getString(R.string.add_fillup_pricePerLitre));
+                mTxtCurrencySymbol.setText(getString(R.string.unit_pricePerLitre, mSelectedCar.getCurrencySymbol()));
             }
         }
     }
@@ -282,10 +266,5 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
     enum SwitchPrice {
         total,
         perVolume
-    }
-
-    public enum SwitchDistance {
-        fromLast,
-        whole
     }
 }
