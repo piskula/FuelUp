@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         navigationView.setNavigationItemSelectedListener(this);
 
         if (savedInstanceState == null) {
+            navigationView.setCheckedItem(R.id.vehicle_list);
             getSupportFragmentManager().beginTransaction().replace(R.id.activty_main_frame, new VehicleListFragment(), TAG).commit();
         }
 
