@@ -35,10 +35,10 @@ public class SampleDataUtils {
     private static final double MI_TO_KM = 1.5d; //original value 1 mile = 1.609344 km
     private static final double LITRE_TO_GALLON = 0.264172d;
 
-    private static final int MAX_FILLUPS = 310; //from there
+    private static final int MAX_FILLUPS = 60; //from there
     private static final int LOW_VEHICLE_FILLUPS = 10;
 
-    private static final int MAX_EXPENSES = 310; //from there
+    private static final int MAX_EXPENSES = 60; //from there
     private static final int LOW_VEHICLE_EXPENSES = 10;
 
     public static List<VehicleType> addVehicleTypes(Dao<VehicleType, Long> vehicleTypeDao) throws SQLException {
@@ -66,8 +66,6 @@ public class SampleDataUtils {
         vehicles.add(vehicleDao.queryBuilder().where().eq("name", "LongWay driver Pro").query().get(0));
         vehicleDao.create(vehicle("Amateur vehicle", "British sports car", VolumeUnit.GALLON_UK, types.get(7), 227880L, Currency.getInstance("GBP")));
         vehicles.add(vehicleDao.queryBuilder().where().eq("name", "Amateur vehicle").query().get(0));
-        vehicleDao.create(vehicle("Empty", "Initial Car", VolumeUnit.LITRE, types.get(0), 0L, Currency.getInstance("HUF")));
-        vehicles.add(vehicleDao.queryBuilder().where().eq("name", "Empty").query().get(0));
 
         return vehicles;
     }
