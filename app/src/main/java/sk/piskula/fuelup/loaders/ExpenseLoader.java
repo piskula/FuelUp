@@ -6,6 +6,7 @@ package sk.piskula.fuelup.loaders;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import sk.piskula.fuelup.business.ExpenseService;
@@ -37,7 +38,8 @@ public class ExpenseLoader extends FuelUpAbstractAsyncLoader<List<Expense>> {
      */
     @Override
     public List<Expense> loadInBackground() {
-        return expenseService.findExpensesOfVehicle(vehicleId);
+        return new ArrayList<>();
+// TODO       return expenseService.findExpensesOfVehicle(vehicleId);
     }
 }
 

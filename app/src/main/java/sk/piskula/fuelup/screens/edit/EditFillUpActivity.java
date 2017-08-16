@@ -1,7 +1,8 @@
 package sk.piskula.fuelup.screens.edit;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
@@ -29,10 +30,12 @@ import java.util.Calendar;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.business.FillUpService;
-import sk.piskula.fuelup.business.ServiceResult;
+import sk.piskula.fuelup.data.FuelUpContract.FillUpEntry;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.util.DateUtil;
+import sk.piskula.fuelup.entity.util.VolumeUtil;
+import sk.piskula.fuelup.screens.detailfragments.FillUpsListFragment;
 import sk.piskula.fuelup.screens.dialog.DeleteDialog;
 
 
@@ -59,7 +62,7 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
     private ToggleButton mBtnSwitchPrice;
     private CheckBox mCheckBoxIsFullFill;
 
-    private Vehicle mSelectedCar;
+    private Vehicle mVehicle;
     private FillUp mSelectedFillUp;
     private SwitchPrice priceMode = SwitchPrice.perVolume;
 
@@ -70,10 +73,9 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fillup_edit);
 
-        Intent intent = getIntent();
-
-        mSelectedFillUp = intent.getParcelableExtra(EXTRA_FILLUP);
-        mSelectedCar = mSelectedFillUp.getVehicle();
+        long fillUpId = getIntent().getLongExtra(FillUpsListFragment.FILLUP_ID_TO_EDIT, 0);
+        mSelectedFillUp = FillUpService.getFillUpById(fillUpId, getApplicationContext());
+        mVehicle = mSelectedFillUp.getVehicle();
 
         initViews();
     }
@@ -83,7 +85,7 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         super.onStart();
 
         mTxtDistance.setText(mSelectedFillUp.getDistanceFromLastFillUp().toString());
-        mTxtFuelVolumeUnit.setText(mSelectedCar.getVolumeUnit().toString());
+        mTxtFuelVolumeUnit.setText(mVehicle.getVolumeUnit().toString());
         mTxtFuelVolume.setText(NumberFormat.getNumberInstance().format(mSelectedFillUp.getFuelVolume()));
         this.onCheckedChanged(mBtnSwitchPrice, false);
         if (priceMode == SwitchPrice.perVolume) {
@@ -103,24 +105,24 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
 
         mBtnAdd.setText(R.string.update);
 
-        mTxtCurrencySymbol.setText(mSelectedCar.getCurrencySymbol());
-        mTxtDistanceUnit.setText(mSelectedCar.getDistanceUnit().toString());
+        mTxtCurrencySymbol.setText(mVehicle.getCurrencySymbol());
+        mTxtDistanceUnit.setText(mVehicle.getDistanceUnit().toString());
     }
 
     private void initViews() {
-        mTxtDistance = (EditText) findViewById(R.id.txt_addfillup_distance_from_last_fillup_adding);
-        mTxtDistanceUnit = (TextView) findViewById(R.id.txt_addfillup_distance_unit);
-        mTxtInputDistance = (TextInputLayout) findViewById(R.id.txt_input_addfillup_distance_from_last_fillup_adding);
-        mTxtFuelVolume = (EditText) findViewById(R.id.txt_addfillup_fuel_volume);
-        mTxtFuelVolumeUnit = (TextView) findViewById(R.id.txt_addfillup_volumeUnit);
-        mTxtPrice = (EditText) findViewById(R.id.txt_addfillup_price);
-        mTxtCurrencySymbol = (TextView) findViewById(R.id.txt_addfillup_currency);
-        mTxtInputPrice = (TextInputLayout) findViewById(R.id.txt_input_addfillup_price);
-        mTxtDate = (TextView) findViewById(R.id.txt_addfillup_date);
-        mTxtInfo = (EditText) findViewById(R.id.txt_addfillup_information);
-        mCheckBoxIsFullFill = (CheckBox) findViewById(R.id.checkBox_fullFillUp);
-        mBtnAdd = (Button) findViewById(R.id.btn_add_fillup);
-        mBtnSwitchPrice = (ToggleButton) findViewById(R.id.btn_switch_price);
+        mTxtDistance = findViewById(R.id.txt_addfillup_distance_from_last_fillup_adding);
+        mTxtDistanceUnit = findViewById(R.id.txt_addfillup_distance_unit);
+        mTxtInputDistance = findViewById(R.id.txt_input_addfillup_distance_from_last_fillup_adding);
+        mTxtFuelVolume = findViewById(R.id.txt_addfillup_fuel_volume);
+        mTxtFuelVolumeUnit = findViewById(R.id.txt_addfillup_volumeUnit);
+        mTxtPrice = findViewById(R.id.txt_addfillup_price);
+        mTxtCurrencySymbol = findViewById(R.id.txt_addfillup_currency);
+        mTxtInputPrice = findViewById(R.id.txt_input_addfillup_price);
+        mTxtDate = findViewById(R.id.txt_addfillup_date);
+        mTxtInfo = findViewById(R.id.txt_addfillup_information);
+        mCheckBoxIsFullFill = findViewById(R.id.checkBox_fullFillUp);
+        mBtnAdd = findViewById(R.id.btn_add_fillup);
+        mBtnSwitchPrice = findViewById(R.id.btn_switch_price);
 
         mBtnSwitchPrice.setOnCheckedChangeListener(this);
 
@@ -138,8 +140,9 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         Editable price = mTxtPrice.getText();
         Editable info = mTxtInfo.getText();
 //        String date = mTxtDate.getText().toString();
+        boolean isFull = mCheckBoxIsFullFill.isChecked();
 
-        if (TextUtils.isEmpty(distance) || TextUtils.isEmpty(fuelVol) || TextUtils.isEmpty(price) && mSelectedCar != null) {
+        if (TextUtils.isEmpty(distance) || TextUtils.isEmpty(fuelVol) || TextUtils.isEmpty(price) && mVehicle != null) {
             Toast.makeText(this, R.string.toast_emptyFields, Toast.LENGTH_LONG).show();
             return;
         }
@@ -156,32 +159,32 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
             createdFuelVol = (BigDecimal) decimalFormat.parse(fuelVol.toString());
             createdPrice = (BigDecimal) decimalFormat.parse(price.toString());
         } catch (ParseException ex) {
-            Log.d(TAG, "tried bad format");
+            Log.d(TAG, "tried bad format", ex);
             throw new RuntimeException(ex);
         }
 
-        FillUpService fillUpService = new FillUpService(getApplicationContext());
+        ContentValues contentValues = new ContentValues();
 
-        mSelectedFillUp.setFullFillUp(mCheckBoxIsFullFill.isChecked());
-        mSelectedFillUp.setDistanceFromLastFillUp(createdDistance);
+        contentValues.put(FillUpEntry.COLUMN_IS_FULL_FILLUP, isFull ? 1 : 0);
+        contentValues.put(FillUpEntry.COLUMN_DISTANCE_FROM_LAST, createdDistance);
+        contentValues.put(FillUpEntry.COLUMN_FUEL_VOLUME, createdFuelVol.doubleValue());
+        contentValues.put(FillUpEntry.COLUMN_INFO, info.toString().trim());
 
-        mSelectedFillUp.setFuelVolume(createdFuelVol);
         if (priceMode == SwitchPrice.perVolume) {
-            mSelectedFillUp.setFuelPricePerLitre(createdPrice);
-            mSelectedFillUp.setFuelPriceTotal(createdFuelVol.multiply(createdPrice));
+            contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE, createdPrice.doubleValue());
+            contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL, VolumeUtil.getTotalPriceFromPerLitre(
+                    createdFuelVol, createdPrice, mVehicle.getVolumeUnit()).doubleValue());
         } else {
-            mSelectedFillUp.setFuelPriceTotal(createdPrice);
-            mSelectedFillUp.setFuelPricePerLitre(createdPrice.divide(createdFuelVol, 2, BigDecimal.ROUND_HALF_UP));
+            contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL, createdPrice.doubleValue());
+            contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE, VolumeUtil.getPerLitrePriceFromTotal(
+                    createdFuelVol, createdPrice, mVehicle.getVolumeUnit()).doubleValue());
         }
-        mSelectedFillUp.setDate(fillUpDate.getTime());
-        mSelectedFillUp.setInfo(info.toString());
 
-        ServiceResult serviceResultUpdate = fillUpService.updateWithConsumptionCalculation(mSelectedFillUp);
-        if (ServiceResult.SUCCESS.equals(serviceResultUpdate)) {
-            Toast.makeText(this, R.string.add_fillup_success_update, Toast.LENGTH_LONG).show();
+        if (getContentResolver().update(ContentUris.withAppendedId(FillUpEntry.CONTENT_URI, mSelectedFillUp.getId()), contentValues, null, null) == 1) {
+            Toast.makeText(getApplicationContext(), R.string.add_fillup_success_update, Toast.LENGTH_LONG).show();
             setResult(RESULT_OK);
         } else {
-            Toast.makeText(this, R.string.add_fillup_fail_update, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.add_fillup_fail_update, Toast.LENGTH_LONG).show();
             setResult(RESULT_CANCELED);
         }
 
@@ -213,11 +216,11 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
             if (isChecked) {
                 priceMode = SwitchPrice.total;
                 mTxtInputPrice.setHint(getString(R.string.add_fillup_priceTotal));
-                mTxtCurrencySymbol.setText(mSelectedCar.getCurrencySymbol());
+                mTxtCurrencySymbol.setText(mVehicle.getCurrencySymbol());
             } else {
                 priceMode = SwitchPrice.perVolume;
                 mTxtInputPrice.setHint(getString(R.string.add_fillup_pricePerLitre));
-                mTxtCurrencySymbol.setText(getString(R.string.unit_pricePerLitre, mSelectedCar.getCurrencySymbol()));
+                mTxtCurrencySymbol.setText(getString(R.string.unit_pricePerLitre, mVehicle.getCurrencySymbol()));
             }
         }
     }
@@ -243,14 +246,17 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
 
     @Override
     public void onDeleteDialogPositiveClick(DeleteDialog dialog) {
-        FillUpService service = new FillUpService(EditFillUpActivity.this);
-        ServiceResult result = service.deleteWithConsumptionCalculation(mSelectedFillUp);
+        // TODO delete fillUp correctly with
+        // service.deleteWithConsumptionCalculation(mSelectedFillUp);
 
-        if (ServiceResult.SUCCESS.equals(result)) {
-            Toast.makeText(getApplicationContext(), getString(R.string.remove_fillup_success), Toast.LENGTH_LONG).show();
+        final int result = getContentResolver().delete(
+                ContentUris.withAppendedId(FillUpEntry.CONTENT_URI, mSelectedFillUp.getId()), null, null);
+
+        if (result != -1) {
+            Toast.makeText(getApplicationContext(), getString(R.string.remove_expense_success), Toast.LENGTH_LONG).show();
             setResult(RESULT_OK);
         } else {
-            Toast.makeText(getApplicationContext(), getString(R.string.remove_fillup_fail), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.remove_expense_fail), Toast.LENGTH_LONG).show();
             setResult(RESULT_CANCELED);
         }
 
@@ -263,7 +269,7 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         dialog.dismiss();
     }
 
-    enum SwitchPrice {
+    private enum SwitchPrice {
         total,
         perVolume
     }

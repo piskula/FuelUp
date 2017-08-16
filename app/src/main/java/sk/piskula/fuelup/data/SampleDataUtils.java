@@ -1,7 +1,5 @@
 package sk.piskula.fuelup.data;
 
-import com.j256.ormlite.dao.Dao;
-
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -41,15 +39,15 @@ public class SampleDataUtils {
     private static final int MAX_EXPENSES = 60; //from there
     private static final int LOW_VEHICLE_EXPENSES = 10;
 
-    public static List<VehicleType> addVehicleTypes(Dao<VehicleType, Long> vehicleTypeDao) throws SQLException {
-        List<String> types = Arrays.asList("Sedan", "Hatchback", "Combi", "Van", "Motocycle", "Pickup", "Quad", "Sport", "SUV", "Coupe");
-        List<VehicleType> result = new ArrayList<>();
-        for (String type : types) {
-            vehicleTypeDao.create(vehicleType(type));
-            result.add(vehicleTypeDao.queryBuilder().where().eq("name", type).query().get(0));
-        }
-        return result;
-    }
+//    public static List<VehicleType> addVehicleTypes(Dao<VehicleType, Long> vehicleTypeDao) throws SQLException {
+//        List<String> types = Arrays.asList("Sedan", "Hatchback", "Combi", "Van", "Motocycle", "Pickup", "Quad", "Sport", "SUV", "Coupe");
+//        List<VehicleType> result = new ArrayList<>();
+//        for (String type : types) {
+//            vehicleTypeDao.create(vehicleType(type));
+//            result.add(vehicleTypeDao.queryBuilder().where().eq("name", type).query().get(0));
+//        }
+//        return result;
+//    }
 
     private static VehicleType vehicleType(String name) {
         VehicleType vehicleType = new VehicleType();
@@ -59,16 +57,16 @@ public class SampleDataUtils {
         return vehicleType;
     }
 
-    public static List<Vehicle> addVehicles(Dao<Vehicle, Long> vehicleDao, List<VehicleType> types) throws SQLException {
-        List<Vehicle> vehicles = new ArrayList<>();
-
-        vehicleDao.create(vehicle("LongWay driver Pro", "Very massive asphalt destroyer (CZ)", VolumeUnit.LITRE, types.get(1), 16000L, Currency.getInstance("CZK")));
-        vehicles.add(vehicleDao.queryBuilder().where().eq("name", "LongWay driver Pro").query().get(0));
-        vehicleDao.create(vehicle("Amateur vehicle", "British sports car", VolumeUnit.GALLON_UK, types.get(7), 227880L, Currency.getInstance("GBP")));
-        vehicles.add(vehicleDao.queryBuilder().where().eq("name", "Amateur vehicle").query().get(0));
-
-        return vehicles;
-    }
+//    public static List<Vehicle> addVehicles(Dao<Vehicle, Long> vehicleDao, List<VehicleType> types) throws SQLException {
+//        List<Vehicle> vehicles = new ArrayList<>();
+//
+//        vehicleDao.create(vehicle("LongWay driver Pro", "Very massive asphalt destroyer (CZ)", VolumeUnit.LITRE, types.get(1), 16000L, Currency.getInstance("CZK")));
+//        vehicles.add(vehicleDao.queryBuilder().where().eq("name", "LongWay driver Pro").query().get(0));
+//        vehicleDao.create(vehicle("Amateur vehicle", "British sports car", VolumeUnit.GALLON_UK, types.get(7), 227880L, Currency.getInstance("GBP")));
+//        vehicles.add(vehicleDao.queryBuilder().where().eq("name", "Amateur vehicle").query().get(0));
+//
+//        return vehicles;
+//    }
 
     private static Vehicle vehicle(String name, String maker, VolumeUnit volumeUnit,
                                    VehicleType type, Long mileage, Currency currency) {
@@ -84,7 +82,7 @@ public class SampleDataUtils {
         return vehicle;
     }
 
-    public static void addFillUps(FillUpService fillUpService, List<Vehicle> vehicles) throws SQLException {
+    /*public static void addFillUps(FillUpService fillUpService, List<Vehicle> vehicles) throws SQLException {
 
         Random random = new Random();
 
@@ -116,7 +114,7 @@ public class SampleDataUtils {
             fillUpService.saveWithConsumptionCalculation(fillUp);
         }
 
-    }
+    }*/
 
     private static FillUp fillUp(Vehicle vehicle, BigDecimal perLitre, Date date, Long distanceFromLast, double amount, boolean isFull) {
         FillUp fillUp = new FillUp();
@@ -145,17 +143,17 @@ public class SampleDataUtils {
         Random random = new Random();
 
         int whichVehicle = 1;
-        for (int i = 0; i < MAX_EXPENSES; i++) {
-            Calendar cal = Calendar.getInstance();
-            cal.set(random.nextInt(NUMBER_OF_PREVIOUS_YEARS + 1) + LAST_YEAR - NUMBER_OF_PREVIOUS_YEARS, random.nextInt(11), random.nextInt(27) + 1);
-
-            if (i > LOW_VEHICLE_EXPENSES) whichVehicle = 0;
-            int currencyFactor = whichVehicle == 1 ? 1 : 4;
-            expenseService.save(expense(vehicles.get(whichVehicle),
-                    issues.get(random.nextInt(issues.size())),
-                    BigDecimal.valueOf(prices.get(random.nextInt(prices.size())) * currencyFactor),
-                    cal.getTime()));
-        }
+//        for (int i = 0; i < MAX_EXPENSES; i++) {
+//            Calendar cal = Calendar.getInstance();
+//            cal.set(random.nextInt(NUMBER_OF_PREVIOUS_YEARS + 1) + LAST_YEAR - NUMBER_OF_PREVIOUS_YEARS, random.nextInt(11), random.nextInt(27) + 1);
+//
+//            if (i > LOW_VEHICLE_EXPENSES) whichVehicle = 0;
+//            int currencyFactor = whichVehicle == 1 ? 1 : 4;
+//            expenseService.save(expense(vehicles.get(whichVehicle),
+//                    issues.get(random.nextInt(issues.size())),
+//                    BigDecimal.valueOf(prices.get(random.nextInt(prices.size())) * currencyFactor),
+//                    cal.getTime()));
+//        }
     }
 
     private static Expense expense(Vehicle vehicle, String info, BigDecimal price, Date date) {

@@ -1,5 +1,6 @@
 package sk.piskula.fuelup.screens;
 
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -15,6 +16,7 @@ import android.text.Editable;
 import android.view.MenuItem;
 
 import sk.piskula.fuelup.R;
+import sk.piskula.fuelup.data.FuelUpContract;
 import sk.piskula.fuelup.screens.dialog.CreateVehicleDialog;
 
 public class MainActivity extends AppCompatActivity implements OnNavigationItemSelectedListener, CreateVehicleDialog.Callback {
@@ -44,6 +46,10 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             navigationView.setCheckedItem(R.id.vehicle_list);
             getSupportFragmentManager().beginTransaction().replace(R.id.activty_main_frame, new VehicleListFragment(), TAG).commit();
         }
+
+//        ContentValues values = new ContentValues();
+//        getContentResolver().insert(FuelUpContract.VehicleEntry.CONTENT_URI,
+//                values);
 
         singleton = this;
     }

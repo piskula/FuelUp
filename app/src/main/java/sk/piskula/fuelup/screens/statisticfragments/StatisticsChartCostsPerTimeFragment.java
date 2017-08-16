@@ -71,7 +71,7 @@ public class StatisticsChartCostsPerTimeFragment extends Fragment implements Loa
     public Loader<ColumnChartData> onCreateLoader(int id, Bundle args) {
         Vehicle vehicle = args.getParcelable(ARG_VEHICLE);
         long vehicleId = vehicle.getId();
-        return new CostsPerMonthChartDataLoader(getActivity(), vehicleId, new FillUpService(getActivity()), new ExpenseService(getActivity()));
+        return new CostsPerMonthChartDataLoader(getActivity(), vehicleId, new FillUpService(), new ExpenseService());
     }
 
     @Override

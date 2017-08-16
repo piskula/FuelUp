@@ -1,34 +1,38 @@
 package sk.piskula.fuelup.business;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.util.Log;
-
-import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
 
-import sk.piskula.fuelup.data.DatabaseProvider;
-import sk.piskula.fuelup.entity.VehicleType;
+import sk.piskula.fuelup.data.FuelUpContract;
+import sk.piskula.fuelup.data.FuelUpContract.VehicleTypeEntry;
 
 /**
- * Created by Martin Styk on 23.06.2017.
+ * @author Martin Styk
+ * @version 16.08.2017
  */
 public class VehicleTypeService {
 
-    private static final String TAG = VehicleTypeService.class.getSimpleName();
+    private static final String LOG_TAG = VehicleTypeService.class.getSimpleName();
 
-    private Dao<VehicleType, Long> vehicleTypeDao;
+    public static String getVehicleTypeNameById(long typeId, Context context) {
+        String[] selectionArgs = { String.valueOf(typeId) };
+        Cursor cursor = context.getContentResolver().query(VehicleTypeEntry.CONTENT_URI,
+                FuelUpContract.ALL_COLUMNS_VEHICLE_TYPES, VehicleTypeEntry._ID + "=?",
+                selectionArgs, null);
 
-    public VehicleTypeService(Context context) {
-        this.vehicleTypeDao = DatabaseProvider.get(context).getVehicleTypeDao();
-    }
-
-    public VehicleType getFirst() {
-        try {
-            return vehicleTypeDao.queryBuilder().queryForFirst();
-        } catch (SQLException e) {
-            Log.e(TAG, e.getLocalizedMessage(), e);
+        if (cursor == null || cursor.getCount() != 1) {
+            Log.e(LOG_TAG, "Cannot get VehicleType for id=" + typeId);
+            return null;
         }
-        return null;
+
+        cursor.moveToFirst();
+        String name = cursor.getString(cursor.getColumnIndexOrThrow(VehicleTypeEntry.COLUMN_NAME));
+
+        cursor.close();
+        return name;
     }
+
 }

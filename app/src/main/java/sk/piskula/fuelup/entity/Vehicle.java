@@ -1,13 +1,9 @@
 package sk.piskula.fuelup.entity;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Currency;
 
@@ -21,31 +17,15 @@ import sk.piskula.fuelup.screens.MainActivity;
  * @author Ondrej Oravcok
  * @version 16.6.2017.
  */
-@DatabaseTable(tableName = "vehicles")
 public class Vehicle implements Parcelable {
 
-    @DatabaseField(generatedId = true)
     private Long id;
-
-    @DatabaseField(canBeNull = false, unique = true)
     private String name;
-
-    @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
     private VehicleType type;
-
-    @DatabaseField(columnName = "volume_unit", unknownEnumName = "LITRE", canBeNull = false)
     private VolumeUnit volumeUnit;
-
-    @DatabaseField(columnName = "vehicle_maker")
     private String vehicleMaker;
-
-    @DatabaseField(columnName = "start_mileage")
     private Long startMileage;
-
-    @DatabaseField(canBeNull = false)
     private String currency;
-
-    @DatabaseField(columnName = "path_to_picture", canBeNull = true)
     private String pathToPicture;
 
     //end of attributes

@@ -1,13 +1,16 @@
 package sk.piskula.fuelup.screens.detailfragments;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,27 +25,30 @@ import java.util.List;
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.adapters.ListFillUpsAdapter;
 import sk.piskula.fuelup.business.FillUpService;
+import sk.piskula.fuelup.data.FuelUpContract;
+import sk.piskula.fuelup.data.FuelUpContract.FillUpEntry;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.loaders.FillUpLoader;
 import sk.piskula.fuelup.screens.edit.AddFillUpActivity;
 import sk.piskula.fuelup.screens.edit.EditFillUpActivity;
+import sk.piskula.fuelup.screens.VehicleTabbedDetailActivity;
 
 import static android.app.Activity.RESULT_OK;
-import static sk.piskula.fuelup.screens.VehicleTabbedDetailActivity.VEHICLE_TO_FRAGMENT;
-import static sk.piskula.fuelup.screens.edit.AddFillUpActivity.EXTRA_CAR;
-import static sk.piskula.fuelup.screens.edit.EditFillUpActivity.EXTRA_FILLUP;
 
 /**
  * @author Ondrej Oravcok
  * @author Martin Styk
- * @version 21.6.2017
+ * @version 16.8.2017
  */
-public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.Callback, View.OnClickListener,
-        LoaderManager.LoaderCallbacks<List<FillUp>> {
+public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.Callback,
+        View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final String TAG = "FillUpsListFragment";
+    private static final String LOG_TAG = "FillUpsListFragment";
+
+    public static final String FILLUP_ID_TO_EDIT = "fillup_to_edit";
     public static final int FILLUP_ACTION_REQUEST_CODE = 32;
+    public static final String VEHICLE_FROM_FRAGMENT_TO_EDIT_FILLUP = "fromFragmentToFillUp";
 
     private Vehicle vehicle;
     private List<FillUp> data;
@@ -58,17 +64,15 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        vehicle = getArguments().getParcelable(VehicleTabbedDetailActivity.VEHICLE_TO_FRAGMENT);
         setRetainInstance(true);
+        adapter = new ListFillUpsAdapter(this, vehicle);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
         View view = inflater.inflate(R.layout.fragment_fillups_list, container, false);
-
-        Bundle args = getArguments();
-        vehicle = args.getParcelable(VEHICLE_TO_FRAGMENT);
 
         appBarLayout = getActivity().findViewById(R.id.toolbar_layout);
         appBarLayout.setTitle(getResources().getString(R.string.title_fillUps));
@@ -81,15 +85,14 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
         addButton.setOnClickListener(this);
 
         recyclerView = view.findViewById(R.id.fill_ups_list);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
                 ((LinearLayoutManager) recyclerView.getLayoutManager()).getOrientation()));
-
-        if (adapter == null)
-            adapter = new ListFillUpsAdapter(this);
-
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        getLoaderManager().initLoader(FillUpLoader.ID, args, this);
+        getLoaderManager().initLoader(FillUpLoader.ID, null, this);
 
         return view;
     }
@@ -100,37 +103,12 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
         addButton.setVisibility(View.GONE);
     }
 
-    @Override
-    public Loader<List<FillUp>> onCreateLoader(int id, Bundle args) {
-        Vehicle vehicle = args.getParcelable(VEHICLE_TO_FRAGMENT);
-        long vehicleId = vehicle.getId();
-        return new FillUpLoader(getActivity(), vehicleId, new FillUpService(getActivity()));
-    }
+
 
     @Override
-    public void onLoadFinished(Loader<List<FillUp>> loader, List<FillUp> data) {
-        this.data = data;
-        adapter.dataChange(data);
-        loadingBar.setVisibility(View.GONE);
-        if (data.isEmpty()) {
-            emptyList.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
-        } else {
-            emptyList.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<FillUp>> loader) {
-        if (!data.isEmpty())
-            data.clear();
-    }
-
-    @Override
-    public void onItemClick(View v, FillUp fillUp, int position) {
+    public void onItemClick(long fillUpId) {
         Intent i = new Intent(getActivity(), EditFillUpActivity.class);
-        i.putExtra(EXTRA_FILLUP, fillUp);
+        i.putExtra(FILLUP_ID_TO_EDIT, fillUpId);
         startActivityForResult(i, FILLUP_ACTION_REQUEST_CODE);
     }
 
@@ -138,10 +116,14 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
     public void onClick(View view) {
         if (view.getId() == addButton.getId()) {
             Intent i = new Intent(getActivity(), AddFillUpActivity.class);
-            i.putExtra(EXTRA_CAR, vehicle);
+            i.putExtra(VEHICLE_FROM_FRAGMENT_TO_EDIT_FILLUP, vehicle);
             startActivityForResult(i, FILLUP_ACTION_REQUEST_CODE);
         }
     }
+
+    /**
+     * Take care of notifying loader that data refresh is needed
+     */
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -150,4 +132,36 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
             getLoaderManager().getLoader(FillUpLoader.ID).onContentChanged();
     }
 
+
+    // LOADER:
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        loadingBar.setVisibility(View.VISIBLE);
+        String[] selectionArgs = { String.valueOf(vehicle.getId()) };
+        return new CursorLoader(getContext(),
+                FillUpEntry.CONTENT_URI,
+                FuelUpContract.ALL_COLUMNS_FILLUPS,
+                FillUpEntry.COLUMN_VEHICLE + "=?",
+                selectionArgs,
+                FillUpEntry.COLUMN_DATE);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        loadingBar.setVisibility(View.GONE);
+        if (cursor.getCount() == 0) {
+            emptyList.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            emptyList.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+        adapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        adapter.swapCursor(null);
+    }
 }

@@ -1,111 +1,88 @@
 package sk.piskula.fuelup.business;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.util.Log;
 
-import com.j256.ormlite.dao.Dao;
-
-import java.sql.SQLException;
 import java.util.Currency;
 import java.util.List;
 
-import sk.piskula.fuelup.data.DatabaseProvider;
+import sk.piskula.fuelup.data.FuelUpContract;
+import sk.piskula.fuelup.data.FuelUpContract.VehicleEntry;
 import sk.piskula.fuelup.entity.Vehicle;
-import sk.piskula.fuelup.entity.enums.DistanceUnit;
+import sk.piskula.fuelup.entity.VehicleType;
 import sk.piskula.fuelup.entity.enums.VolumeUnit;
 
 /**
- * Created by Martin Styk on 23.06.2017.
+ * @author Martin Styk
+ * @version 23.06.2017
  */
-
 public class VehicleService {
 
-    private static final String TAG = VehicleService.class.getSimpleName();
+    private static final String LOG_TAG = VehicleService.class.getSimpleName();
 
-    private Dao<Vehicle, Long> vehicleDao;
-    private VehicleTypeService vehicleTypeService;
+    public static Vehicle getVehicleById(long id, Context context) {
+        String[] selectionArgs = { String.valueOf(id) };
+        Cursor cursor = context.getContentResolver().query(VehicleEntry.CONTENT_URI,
+                FuelUpContract.ALL_COLUMNS_VEHICLES, VehicleEntry._ID + "=?",
+                selectionArgs, null);
 
-    public VehicleService(Context context) {
-        this.vehicleDao = DatabaseProvider.get(context).getVehicleDao();
-        vehicleTypeService = new VehicleTypeService(context);
-    }
+        if (cursor == null || cursor.getCount() != 1) {
+            Log.e(LOG_TAG, "Cannot get Vehicle for id=" + id);
+            return null;
+        }
 
-    /**
-     * Creates car with default values
-     *
-     * @param name name of car
-     * @return success result
-     */
-    public ServiceResult    save(String name) {
+        cursor.moveToFirst();
+        int typeId = cursor.getInt(cursor.getColumnIndexOrThrow(VehicleEntry.COLUMN_TYPE));
+        String[] selectionTypeArgs = { String.valueOf(typeId) };
+        Cursor cursorType = context.getContentResolver().query(FuelUpContract.VehicleTypeEntry.CONTENT_URI,
+                FuelUpContract.ALL_COLUMNS_VEHICLE_TYPES, FuelUpContract.VehicleTypeEntry._ID + "=?",
+                selectionTypeArgs, null);
+
+        if (cursorType == null || cursorType.getCount() != 1) {
+            Log.e(LOG_TAG, "Cannot get Vehicle Type for vehicleId=" + id + ", vehicleTypeId=" + typeId);
+            return null;
+        }
+
+        cursorType.moveToFirst();
         Vehicle vehicle = new Vehicle();
-        vehicle.setName(name);
-        vehicle.setVolumeUnit(VolumeUnit.LITRE);
-        vehicle.setCurrency(Currency.getInstance("EUR"));
-        vehicle.setType(vehicleTypeService.getFirst());
+        vehicle.setId(cursor.getLong(cursor.getColumnIndexOrThrow(VehicleEntry._ID)));
+        vehicle.setName(cursor.getString(cursor.getColumnIndexOrThrow(VehicleEntry.COLUMN_NAME)));
+        vehicle.setCurrency(Currency.getInstance(cursor.getString(cursor.getColumnIndexOrThrow(VehicleEntry.COLUMN_CURRENCY))));
+        vehicle.setVehicleMaker(cursor.getString(cursor.getColumnIndexOrThrow(VehicleEntry.COLUMN_VEHICLE_MAKER)));
+        vehicle.setType(getTypeFromCursor(cursorType));
+        vehicle.setVolumeUnit(getVolumeUnitFromString(cursor.getString(cursor.getColumnIndexOrThrow(VehicleEntry.COLUMN_VOLUME_UNIT))));
+        vehicle.setStartMileage(cursor.getLong(cursor.getColumnIndexOrThrow(VehicleEntry.COLUMN_START_MILEAGE)));
+        vehicle.setPathToPicture(cursor.getString(cursor.getColumnIndexOrThrow(VehicleEntry.COLUMN_PICTURE)));
 
-        return save(vehicle);
-    }
+        cursor.close();
+        cursorType.close();
 
-    /**
-     * Creates car with default values
-     *
-     * @param vehicle
-     * @return success result
-     */
-    public ServiceResult save(Vehicle vehicle) {
-        try {
-            vehicleDao.create(vehicle);
-            Log.i(TAG, "Successfully persisted new Vehicle: " + vehicle);
-            return ServiceResult.SUCCESS;
-        } catch (SQLException e) {
-            if (e.getCause().getCause().getMessage().contains("UNIQUE")) {
-                return ServiceResult.ERROR_DUPLICATE;
-            } else {
-                Log.e(TAG, "Unexpected error. See logs for details.", e);
-            }
-        }
-        return ServiceResult.ERROR;
-    }
-
-    public ServiceResult update(Vehicle vehicle) {
-        try {
-            vehicleDao.update(vehicle);
-            Log.i(TAG, "Successfully updated Vehicle: " + vehicle);
-            return ServiceResult.SUCCESS;
-        } catch (SQLException e) {
-            Log.e(TAG, "Unexpected error. See logs for details.", e);
-        }
-        return ServiceResult.ERROR;
-    }
-
-    public Vehicle find(long vehicleId) {
-        Vehicle vehicle = null;
-        try {
-            vehicle = vehicleDao.queryBuilder().where().eq("id", vehicleId).queryForFirst();
-        } catch (SQLException e) {
-            Log.e(TAG, "Unexpected error. See logs for details.", e);
-        }
         return vehicle;
     }
 
-    public List<Vehicle> findAll() {
-        List<Vehicle> vehicles = null;
-        try {
-            vehicles = vehicleDao.queryForAll();
-        } catch (SQLException e) {
-            Log.e(TAG, "Unexpected error. See logs for details.", e);
-        }
-        return vehicles;
+    private static VehicleType getTypeFromCursor(Cursor cursor) {
+        VehicleType vehicleType = new VehicleType();
+
+        vehicleType.setId(cursor.getLong(cursor.getColumnIndexOrThrow(FuelUpContract.VehicleTypeEntry._ID)));
+        vehicleType.setName(cursor.getString(cursor.getColumnIndexOrThrow(FuelUpContract.VehicleTypeEntry.COLUMN_NAME)));
+
+        return vehicleType;
     }
 
-    public ServiceResult delete(Vehicle vehicle) {
-        try {
-            vehicleDao.delete(vehicle);
-            Log.i(TAG, "Successfully deleted Vehicle: " + vehicle);
-            return ServiceResult.SUCCESS;
-        } catch (SQLException e) {
-            Log.e(TAG, "Unexpected error. See logs for details.", e);
+    private static VolumeUnit getVolumeUnitFromString(String volumeUnitString) {
+        if (VolumeUnit.LITRE.name().equals(volumeUnitString)) {
+            return VolumeUnit.LITRE;
+
+        } else if (VolumeUnit.GALLON_UK.name().equals(volumeUnitString)) {
+            return VolumeUnit.GALLON_UK;
+
+        } else if (VolumeUnit.GALLON_US.name().equals(volumeUnitString)) {
+            return VolumeUnit.GALLON_US;
+
+        } else {
+            Log.e(LOG_TAG, "Cannot find correct VolumeUnit for " + volumeUnitString);
+            return null;
         }
-        return ServiceResult.ERROR;
     }
 }

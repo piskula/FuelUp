@@ -4,9 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
-
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -14,22 +11,12 @@ import java.util.Date;
  * @author Ondrej Oravcok
  * @version 17.6.2017
  */
-@DatabaseTable(tableName = "expenses")
 public class Expense implements Parcelable, Comparable<Expense> {
 
-    @DatabaseField(generatedId = true)
     private Long id;
-
-    @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
     private Vehicle vehicle;
-
-    @DatabaseField
     private BigDecimal price;
-
-    @DatabaseField(canBeNull = false)
     private Date date;
-
-    @DatabaseField(canBeNull = false)
     private String info;
 
     //end of attributes

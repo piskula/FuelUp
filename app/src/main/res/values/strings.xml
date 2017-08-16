@@ -28,6 +28,7 @@
     <string name="volumeUnit_litres">Litres</string>
     <string name="about">About</string>
 
+    <string name="toast_emptyName">Name must be filled in.</string>
     <string name="toast_emptyFields">There are some empty fields above.</string>
     <string name="title_expenses">Expenses</string>
     <string name="title_fillUps">Fill Ups</string>
@@ -44,6 +45,7 @@
     <string name="no_data_to_show">No data to show.</string>
 
     <string name="addVehicle">Create vehicle</string>
+    <string name="addVehicle_nameNotUnique">Vehicle with this name already exists.</string>
     <string name="addVehicle_vehicle_picture">Select picture</string>
     <string name="addVehicle_takePhoto">Take photo</string>
     <string name="addVehicle_selectPhotoFromGallery">Select photo from gallery</string>

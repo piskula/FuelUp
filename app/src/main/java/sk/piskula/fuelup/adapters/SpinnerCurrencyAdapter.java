@@ -1,22 +1,16 @@
 package sk.piskula.fuelup.adapters;
 
 import android.app.Activity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
-import com.j256.ormlite.android.apptools.OpenHelperManager;
-
 import java.util.Currency;
 import java.util.List;
-import java.util.Locale;
 
 import sk.piskula.fuelup.R;
-import sk.piskula.fuelup.data.DatabaseHelper;
-import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.util.CurrencyUtil;
 
 /**

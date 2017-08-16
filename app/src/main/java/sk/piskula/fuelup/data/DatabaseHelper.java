@@ -2,138 +2,98 @@ package sk.piskula.fuelup.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+import android.database.sqlite.SQLiteOpenHelper;
 
-import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.support.ConnectionSource;
-import com.j256.ormlite.table.TableUtils;
-
-import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
-import sk.piskula.fuelup.R;
-import sk.piskula.fuelup.business.ExpenseService;
-import sk.piskula.fuelup.business.FillUpService;
-import sk.piskula.fuelup.entity.Expense;
-import sk.piskula.fuelup.entity.FillUp;
-import sk.piskula.fuelup.entity.Vehicle;
-import sk.piskula.fuelup.entity.VehicleType;
+import sk.piskula.fuelup.data.FuelUpContract.ExpenseEntry;
+import sk.piskula.fuelup.data.FuelUpContract.FillUpEntry;
+import sk.piskula.fuelup.data.FuelUpContract.VehicleEntry;
+import sk.piskula.fuelup.data.FuelUpContract.VehicleTypeEntry;
 
 /**
  * @author Ondrej Oravcok
  * @version 16.6.2017.
  */
-public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String TAG = "DatabaseHelper";
+    public static final String LOG_TAG = DatabaseHelper.class.getSimpleName();
 
     private static final String DATABASE_NAME = "fuelup.db";
     private static final int DATABASE_VERSION = 1;
 
-    private Dao<Vehicle, Long> vehicleDao;
-    private Dao<FillUp, Long> fillUpDao;
-    private Dao<Expense, Long> expenseDao;
-    private Dao<VehicleType, Long> vehicleTypeDao;
-    private Context context;
-
     public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION, R.raw.ormlite_config);
-        this.context = context;
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
-    public void onCreate(SQLiteDatabase sqliteDatabase, ConnectionSource connectionSource) {
-        try {
+    public void onCreate(SQLiteDatabase db) {
 
-            // Create tables. This onCreate() method will be invoked only once
-            // of the application life time i.e. the first time when the application starts.
-            TableUtils.createTable(connectionSource, Vehicle.class);
-            TableUtils.createTable(connectionSource, FillUp.class);
-            TableUtils.createTable(connectionSource, Expense.class);
-            TableUtils.createTable(connectionSource, VehicleType.class);
-            Log.i(TAG, "Tables created successfully.");
-        } catch (SQLException e) {
-            Log.e(TAG, "Unable to create databases.", e);
-        }
+        String SQL_CREATE_VEHICLE_TYPES_TABLE =  "CREATE TABLE " + VehicleTypeEntry.TABLE_NAME + " ("
+                + VehicleTypeEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + VehicleTypeEntry.COLUMN_NAME + " TEXT NOT NULL);";
 
-        try {
-            initSamlpeData();
-            Log.i(TAG, "Sample data initialized.");
-        } catch (SQLException e) {
-            Log.e(TAG, "Unable to create sample data.", e);
-        }
+        String SQL_CREATE_VEHICLES_TABLE =  "CREATE TABLE " + VehicleEntry.TABLE_NAME + " ("
+                + VehicleEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + VehicleEntry.COLUMN_NAME + " TEXT NOT NULL, "
+                + VehicleEntry.COLUMN_TYPE + " INTEGER NOT NULL, "
+                + VehicleEntry.COLUMN_VOLUME_UNIT + " TEXT NOT NULL, "
+                + VehicleEntry.COLUMN_VEHICLE_MAKER + " TEXT, "
+                + VehicleEntry.COLUMN_START_MILEAGE + " INTEGER, "
+                + VehicleEntry.COLUMN_CURRENCY + " TEXT NOT NULL, "
+                + VehicleEntry.COLUMN_PICTURE + " TEXT, "
+
+                + "FOREIGN KEY(" + VehicleEntry.COLUMN_TYPE + ") REFERENCES "
+                + VehicleTypeEntry.TABLE_NAME + "(" + VehicleTypeEntry._ID + ") );";
+
+        String SQL_CREATE_EXPENSES_TABLE =  "CREATE TABLE " + ExpenseEntry.TABLE_NAME + " ("
+                + ExpenseEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + ExpenseEntry.COLUMN_VEHICLE + " INTEGER NOT NULL, "
+                + ExpenseEntry.COLUMN_INFO + " TEXT NOT NULL, "
+                + ExpenseEntry.COLUMN_DATE + " INTEGER NOT NULL, "
+                + ExpenseEntry.COLUMN_PRICE + " REAL NOT NULL, "
+
+                + "FOREIGN KEY(" + ExpenseEntry.COLUMN_VEHICLE + ") REFERENCES "
+                + VehicleEntry.TABLE_NAME + "(" + VehicleEntry._ID + ") );";
+
+        String SQL_CREATE_FILLUPS_TABLE =  "CREATE TABLE " + FillUpEntry.TABLE_NAME + " ("
+                + FillUpEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + FillUpEntry.COLUMN_VEHICLE + " INTEGER NOT NULL, "
+                + FillUpEntry.COLUMN_DISTANCE_FROM_LAST + " INTEGER, "
+                + FillUpEntry.COLUMN_FUEL_VOLUME + " REAL NOT NULL, "
+                + FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE + " REAL NOT NULL, "
+                + FillUpEntry.COLUMN_FUEL_PRICE_TOTAL + " REAL NOT NULL, "
+                + FillUpEntry.COLUMN_IS_FULL_FILLUP + " INTEGER NOT NULL, "
+                + FillUpEntry.COLUMN_FUEL_CONSUMPTION + " INTEGER NOT NULL, "
+                + FillUpEntry.COLUMN_DATE + " INTEGER NOT NULL, "
+                + FillUpEntry.COLUMN_INFO + " TEXT, "
+
+                + "FOREIGN KEY(" + FillUpEntry.COLUMN_VEHICLE + ") REFERENCES "
+                + VehicleEntry.TABLE_NAME + "(" + VehicleEntry._ID + ") );";
+
+        db.execSQL(SQL_CREATE_VEHICLE_TYPES_TABLE);
+        db.execSQL(SQL_CREATE_VEHICLES_TABLE);
+        db.execSQL(SQL_CREATE_EXPENSES_TABLE);
+        db.execSQL(SQL_CREATE_FILLUPS_TABLE);
+        loadSampleData(db);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqliteDatabase, ConnectionSource connectionSource, int oldVer, int newVer) {
-        try {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    }
 
-            // In case of change in database of next version of application,
-            // please increase the value of DATABASE_VERSION variable, then this method will
-            // be invoked automatically. Developer needs to handle the upgrade logic here, i.e.
-            // create a new table or a new column to an existing table, take the backups of the
-            // existing database etc.
-
-            TableUtils.dropTable(connectionSource, Vehicle.class, true);
-            TableUtils.dropTable(connectionSource, FillUp.class, true);
-            TableUtils.dropTable(connectionSource, Expense.class, true);
-            TableUtils.dropTable(connectionSource, VehicleType.class, true);
-            onCreate(sqliteDatabase, connectionSource);
-
-        } catch (SQLException e) {
-            Log.e(TAG, "Unable to upgrade database from version " + oldVer + " to new " + newVer, e);
+    private void loadSampleData(SQLiteDatabase db) {
+        List<String> types = Arrays.asList("Sedan", "Hatchback", "Combi", "Van", "Motocycle", "Pickup", "Quad", "Sport", "SUV", "Coupe");
+        for (String typeName : types) {
+            db.execSQL("INSERT INTO "+ VehicleTypeEntry.TABLE_NAME +" ('name') VALUES ('" + typeName + "');");
         }
+        db.execSQL("INSERT INTO " + VehicleEntry.TABLE_NAME + "('name','type','currency','volume_unit') VALUES ('Mojko',6,'EUR','LITRE');");
+
+        db.execSQL("INSERT INTO " + ExpenseEntry.TABLE_NAME + "('vehicle','info','date','price') VALUES (1,'Front bumper','" + (new Date()).getTime() + "','60');");
+
+        db.execSQL("INSERT INTO " + FillUpEntry.TABLE_NAME + "('vehicle','fuel_volume','fuel_price_per_litre','fuel_price_total','is_full_fillup','fuel_consumption','date', 'distance_from_last_fillup') VALUES (1,'20','1.120','22.4',1,'7.6','" + (new Date()).getTime() + "','240');");
     }
 
-    public Dao<Vehicle, Long> getVehicleDao() {
-        if (vehicleDao == null) {
-            try {
-                vehicleDao = getDao(Vehicle.class);
-            } catch (SQLException e) {
-                Log.i(TAG, "Can not create fillup dao.");
-            }
-        }
-        return vehicleDao;
-    }
-
-    public Dao<FillUp, Long> getFillUpDao() {
-        if (fillUpDao == null) {
-            try {
-                fillUpDao = getDao(FillUp.class);
-            } catch (SQLException e) {
-                Log.i(TAG, "Can not create fillup dao.");
-            }
-        }
-        return fillUpDao;
-    }
-
-    public Dao<Expense, Long> getExpenseDao() {
-        if (expenseDao == null) {
-            try {
-                expenseDao = getDao(Expense.class);
-            } catch (SQLException e) {
-                Log.i(TAG, "Can not create expense dao.");
-            }
-        }
-        return expenseDao;
-    }
-
-    public Dao<VehicleType, Long> getVehicleTypeDao() {
-        if (vehicleTypeDao == null) {
-            try {
-                vehicleTypeDao = getDao(VehicleType.class);
-            } catch (SQLException e) {
-                Log.i(TAG, "Can not create vehicle type dao.");
-            }
-        }
-        return vehicleTypeDao;
-    }
-
-    private void initSamlpeData() throws SQLException {
-        List<VehicleType> types = SampleDataUtils.addVehicleTypes(getVehicleTypeDao());
-        List<Vehicle> vehicles = SampleDataUtils.addVehicles(getVehicleDao(), types);
-        SampleDataUtils.addFillUps(new FillUpService(context), vehicles);
-        SampleDataUtils.addExpenses(new ExpenseService(context), vehicles);
-    }
 }

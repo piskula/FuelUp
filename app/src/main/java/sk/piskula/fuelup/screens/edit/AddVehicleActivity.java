@@ -1,6 +1,7 @@
 package sk.piskula.fuelup.screens.edit;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,9 +25,8 @@ import java.util.Currency;
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.adapters.SpinnerCurrencyAdapter;
 import sk.piskula.fuelup.adapters.SpinnerVehicleTypesAdapter;
-import sk.piskula.fuelup.business.ServiceResult;
 import sk.piskula.fuelup.business.VehicleService;
-import sk.piskula.fuelup.entity.Vehicle;
+import sk.piskula.fuelup.data.FuelUpContract.VehicleEntry;
 import sk.piskula.fuelup.entity.VehicleType;
 import sk.piskula.fuelup.entity.enums.DistanceUnit;
 import sk.piskula.fuelup.entity.enums.VolumeUnit;
@@ -38,7 +39,8 @@ import sk.piskula.fuelup.util.ImageUtils;
  */
 public class AddVehicleActivity extends AppCompatActivity implements ImageChooserDialog.Callback {
 
-    public static final String TAG = "AddVehicleActivity";
+    private static final String LOG_TAG = AddVehicleActivity.class.getSimpleName();
+
     private static final String PHOTO = "photo";
     public static final int REQUEST_PICTURE = 1113;
     public static final int REQUEST_TAKE_PHOTOS = 1112;
@@ -166,33 +168,30 @@ public class AddVehicleActivity extends AppCompatActivity implements ImageChoose
         String name = txtName.getText().toString();
         String manufacturer = txtManufacturer.getText().toString();
         String actualMileage = txtActualMileage.getText().toString();
+        String currency = ((Currency) spinnerCurrency.getSelectedItem()).getCurrencyCode();
+        long typeId = ((VehicleType) spinnerType.getSelectedItem()).getId();
 
-        if (name.isEmpty() || manufacturer.isEmpty() || actualMileage.isEmpty()) {
-            Snackbar.make(findViewById(android.R.id.content), R.string.toast_emptyFields, Snackbar.LENGTH_LONG).show();
+        if (name.isEmpty()) {
+            Snackbar.make(findViewById(android.R.id.content), R.string.toast_emptyName, Snackbar.LENGTH_LONG).show();
             return;
         }
 
-        Vehicle createdVehicle = new Vehicle();
-        createdVehicle.setName(name);
-        createdVehicle.setVehicleMaker(manufacturer);
-        createdVehicle.setCurrency((Currency) spinnerCurrency.getSelectedItem());
-        createdVehicle.setType((VehicleType) spinnerType.getSelectedItem());
-        createdVehicle.setPathToPicture(vehiclePicturePath);
-        createdVehicle.setVolumeUnit(getVolumeUnitFromRadio());
-        createdVehicle.setStartMileage(Long.parseLong(actualMileage));
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(VehicleEntry.COLUMN_NAME, name);
+        contentValues.put(VehicleEntry.COLUMN_VEHICLE_MAKER, manufacturer);
+        contentValues.put(VehicleEntry.COLUMN_CURRENCY, currency);
+        contentValues.put(VehicleEntry.COLUMN_TYPE, typeId);
+        contentValues.put(VehicleEntry.COLUMN_PICTURE, vehiclePicturePath);
+        contentValues.put(VehicleEntry.COLUMN_VOLUME_UNIT, getVolumeUnitFromRadio().name());
+        contentValues.put(VehicleEntry.COLUMN_START_MILEAGE, actualMileage.isEmpty() ? null : Long.parseLong(actualMileage));
 
-        VehicleService vehicleService = new VehicleService(this);
-
-        ServiceResult result = vehicleService.save(createdVehicle);
-        if (ServiceResult.SUCCESS.equals(result)) {
+        // TODO check name unique
+        if (getContentResolver().insert(VehicleEntry.CONTENT_URI, contentValues) == null) {
+            Log.e(LOG_TAG, "Cannot create vehicle " + contentValues);
+            Snackbar.make(findViewById(android.R.id.content), R.string.addVehicle_fail, Snackbar.LENGTH_LONG).show();
+        } else {
             Toast.makeText(this, R.string.addVehicle_Toast_successfullyCreated, Toast.LENGTH_LONG).show();
             finish();
-        }
-        if (ServiceResult.ERROR_DUPLICATE.equals(result)) {
-            Snackbar.make(findViewById(android.R.id.content), R.string.addVehicle_fail_duplicate, Snackbar.LENGTH_LONG).show();
-        }
-        if (ServiceResult.ERROR.equals(result)) {
-            Snackbar.make(findViewById(android.R.id.content), R.string.addVehicle_fail, Snackbar.LENGTH_LONG).show();
         }
     }
 

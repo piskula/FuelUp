@@ -4,10 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-import com.j256.ormlite.field.DataType;
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
-
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -15,37 +11,17 @@ import java.util.Date;
  * @author Ondrej Oravcok
  * @version 17.6.2017
  */
-@DatabaseTable(tableName = "fill_ups")
 public class FillUp implements Parcelable, Comparable<FillUp> {
 
-    @DatabaseField(generatedId = true)
     private Long id;
-
-    @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
     private Vehicle vehicle;
-
-    @DatabaseField(columnName = "distance_from_last_fill_up")
     private Long distanceFromLastFillUp;
-
-    @DatabaseField(canBeNull = false, columnName = "fuel_volume", dataType = DataType.BIG_DECIMAL_NUMERIC)
     private BigDecimal fuelVolume;
-
-    @DatabaseField(columnName = "fuel_price_per_litre", dataType = DataType.BIG_DECIMAL_NUMERIC)
     private BigDecimal fuelPricePerLitre;
-
-    @DatabaseField(columnName = "fuel_price_total", dataType = DataType.BIG_DECIMAL_NUMERIC)
     private BigDecimal fuelPriceTotal;
-
-    @DatabaseField(columnName = "is_full")
     private boolean isFullFillUp;
-
-    @DatabaseField(columnName = "consumption", dataType = DataType.BIG_DECIMAL_NUMERIC)
     private BigDecimal fuelConsumption;
-
-    @DatabaseField(canBeNull = false)
     private Date date;
-
-    @DatabaseField
     private String info;
 
     public Long getId() {

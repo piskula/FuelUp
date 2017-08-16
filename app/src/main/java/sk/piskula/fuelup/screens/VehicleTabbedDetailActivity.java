@@ -1,6 +1,7 @@
 package sk.piskula.fuelup.screens;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,13 +11,21 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import java.util.Currency;
+
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.business.VehicleService;
+import sk.piskula.fuelup.data.FuelUpContract;
+import sk.piskula.fuelup.data.FuelUpContract.VehicleEntry;
+import sk.piskula.fuelup.data.FuelUpContract.VehicleTypeEntry;
 import sk.piskula.fuelup.entity.Vehicle;
+import sk.piskula.fuelup.entity.VehicleType;
+import sk.piskula.fuelup.entity.enums.VolumeUnit;
 import sk.piskula.fuelup.screens.detailfragments.ExpensesListFragment;
 import sk.piskula.fuelup.screens.detailfragments.FillUpsListFragment;
 import sk.piskula.fuelup.screens.detailfragments.StatisticsFragment;
@@ -29,7 +38,7 @@ import sk.piskula.fuelup.screens.edit.EditVehicleActivity;
  */
 public class VehicleTabbedDetailActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-    private static final String TAG = VehicleTabbedDetailActivity.class.getSimpleName();
+    private static final String LOG_TAG = VehicleTabbedDetailActivity.class.getSimpleName();
 
     public static final String VEHICLE_TO_FRAGMENT = "fragment-vehicle";
 
@@ -53,7 +62,8 @@ public class VehicleTabbedDetailActivity extends AppCompatActivity implements Bo
 
         if (savedInstanceState == null) {
             Intent intent = getIntent();
-            vehicle = intent.getParcelableExtra(VehicleListFragment.EXTRA_ADDED_CAR);
+            long vehicleId = intent.getLongExtra(VehicleListFragment.EXTRA_ADDED_VEHICLE_ID, 0);
+            vehicle = VehicleService.getVehicleById(vehicleId, this);
 
             fragment = new FillUpsListFragment();
             Bundle bundle = new Bundle();
@@ -125,7 +135,7 @@ public class VehicleTabbedDetailActivity extends AppCompatActivity implements Bo
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == UPDATE_VEHICLE_REQUEST && resultCode == RESULT_OK) {
-            vehicle = new VehicleService(this).find(vehicle.getId());
+            vehicle = VehicleService.getVehicleById(vehicle.getId(), this);
         }
     }
 }

@@ -3,20 +3,13 @@ package sk.piskula.fuelup.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
-
 /**
  * @author Ondrej Oravcok
  * @version 18.6.2017
  */
-@DatabaseTable(tableName = "vehicle_types")
 public class VehicleType implements Parcelable {
 
-    @DatabaseField(generatedId = true)
     private Long id;
-
-    @DatabaseField(canBeNull = false, unique = true)
     private String name;
 
     //end of atributes

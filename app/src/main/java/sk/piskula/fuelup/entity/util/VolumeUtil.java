@@ -2,6 +2,7 @@ package sk.piskula.fuelup.entity.util;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.entity.enums.VolumeUnit;
@@ -83,5 +84,14 @@ public class VolumeUtil {
 
     public static BigDecimal getLitresFromUkGallon(BigDecimal value) {
         return value.divide(ONE_LITRE_IS_UK_GALLONS, BigDecimal.ROUND_HALF_UP);
+    }
+
+    public static String getFuelVolume(double value) {
+        DecimalFormat bddf = new DecimalFormat();
+        bddf.setGroupingUsed(false);
+        bddf.setMaximumFractionDigits(2);
+        bddf.setMinimumFractionDigits(0);
+
+        return bddf.format(value);
     }
 }

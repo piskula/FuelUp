@@ -1,14 +1,13 @@
 package sk.piskula.fuelup.adapters;
 
 import android.app.Activity;
+import android.database.Cursor;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-
-import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,6 +16,8 @@ import java.util.List;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.data.DatabaseHelper;
+import sk.piskula.fuelup.data.FuelUpContract;
+import sk.piskula.fuelup.data.FuelUpContract.VehicleTypeEntry;
 import sk.piskula.fuelup.entity.VehicleType;
 
 /**
@@ -31,11 +32,23 @@ public class SpinnerVehicleTypesAdapter extends BaseAdapter implements SpinnerAd
     public SpinnerVehicleTypesAdapter(Activity activity) {
         this.activity = activity;
 
-        try {
-            this.vehicleTypes = OpenHelperManager.getHelper(activity, DatabaseHelper.class).getVehicleTypeDao().queryForAll();
-            OpenHelperManager.releaseHelper();
-        } catch (SQLException e) {
-            this.vehicleTypes = new ArrayList<>();
+        Cursor cursor = activity.getContentResolver().query(VehicleTypeEntry.CONTENT_URI,
+                FuelUpContract.ALL_COLUMNS_VEHICLE_TYPES,
+                null,
+                null,
+                null);
+
+        vehicleTypes = new ArrayList<>();
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                VehicleType type = new VehicleType();
+
+                type.setId(cursor.getLong(cursor.getColumnIndexOrThrow(VehicleTypeEntry._ID)));
+                type.setName(cursor.getString(cursor.getColumnIndexOrThrow(VehicleTypeEntry.COLUMN_NAME)));
+
+                vehicleTypes.add(type);
+            }
         }
     }
 

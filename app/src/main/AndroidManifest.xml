@@ -45,23 +45,29 @@
         <activity
             android:name=".screens.edit.EditExpenseActivity"
             android:label="Expense"
-            android:parentActivityName=".screens.VehicleTabbedDetailActivity"></activity>
+            android:parentActivityName=".screens.VehicleTabbedDetailActivity" />
         <activity
             android:name=".screens.edit.AddVehicleActivity"
             android:label="Add Vehicle"
-            android:parentActivityName=".screens.MainActivity"></activity>
+            android:parentActivityName=".screens.MainActivity" />
         <activity
             android:name=".screens.edit.EditVehicleActivity"
             android:label="Edit Vehicle"
-            android:parentActivityName=".screens.VehicleTabbedDetailActivity"></activity>
+            android:parentActivityName=".screens.VehicleTabbedDetailActivity" />
         <activity
             android:name=".screens.edit.AddFillUpActivity"
             android:label="Add Fill Up"
-            android:parentActivityName=".screens.VehicleTabbedDetailActivity"></activity>
+            android:parentActivityName=".screens.VehicleTabbedDetailActivity" />
         <activity
             android:name=".screens.edit.EditFillUpActivity"
             android:label="Edit Fill Up"
-            android:parentActivityName=".screens.VehicleTabbedDetailActivity"></activity>
+            android:parentActivityName=".screens.VehicleTabbedDetailActivity" />
+
+        <provider
+            android:name=".data.provider.VehicleProvider"
+            android:authorities="sk.piskula.fuelup"
+            android:exported="false" />
+
     </application>
 
 </manifest>

@@ -1,6 +1,8 @@
 package sk.piskula.fuelup.screens.edit;
 
 import android.Manifest;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -21,8 +23,8 @@ import java.io.File;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.adapters.SpinnerVehicleTypesAdapter;
-import sk.piskula.fuelup.business.ServiceResult;
-import sk.piskula.fuelup.business.VehicleService;
+import sk.piskula.fuelup.data.FuelUpContract.VehicleEntry;
+import sk.piskula.fuelup.data.provider.VehicleProvider;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.VehicleType;
 import sk.piskula.fuelup.screens.MainActivity;
@@ -73,10 +75,10 @@ public class EditVehicleActivity extends AppCompatActivity implements ImageChoos
     }
 
     private void initViews() {
-        this.txtName = (EditText) findViewById(R.id.txt_editVehicle_name);
-        this.txtManufacturer = (EditText) findViewById(R.id.txt_editVehicle_manufacturer);
-        this.spinnerType = (Spinner) findViewById(R.id.spinner_editVehicle_types);
-        this.imgCarPhotoStatus = (ImageView) findViewById(R.id.img_editVehicle_photo);
+        this.txtName = findViewById(R.id.txt_editVehicle_name);
+        this.txtManufacturer = findViewById(R.id.txt_editVehicle_manufacturer);
+        this.spinnerType = findViewById(R.id.spinner_editVehicle_types);
+        this.imgCarPhotoStatus = findViewById(R.id.img_editVehicle_photo);
 
         typeAdapter = new SpinnerVehicleTypesAdapter(this);
         spinnerType.setAdapter(typeAdapter);
@@ -195,17 +197,18 @@ public class EditVehicleActivity extends AppCompatActivity implements ImageChoos
     }
 
     private void saveVehicle() {
+        ContentValues contentValues = new ContentValues();
         String name = txtName.getText().toString();
         String vehicleManufacturer = txtManufacturer.getText().toString();
 
-        if (name.isEmpty() || vehicleManufacturer.isEmpty()) {
-            Snackbar.make(findViewById(android.R.id.content), R.string.toast_emptyFields, Snackbar.LENGTH_LONG).show();
+        if (name.isEmpty()) {
+            Snackbar.make(findViewById(android.R.id.content), R.string.toast_emptyName, Snackbar.LENGTH_LONG).show();
             return;
         }
 
-        vehicle.setName(name);
-        vehicle.setVehicleMaker(vehicleManufacturer);
-        vehicle.setType((VehicleType) spinnerType.getSelectedItem());
+        contentValues.put(VehicleEntry.COLUMN_NAME, name);
+        contentValues.put(VehicleEntry.COLUMN_VEHICLE_MAKER, vehicleManufacturer);
+        contentValues.put(VehicleEntry.COLUMN_TYPE, ((VehicleType) spinnerType.getSelectedItem()).getId());
 
         if (vehicle.getPathToPicture() != currentPhotoPath) {
             if (vehicle.getPathToPicture() != null && !vehicle.getPathToPicture().isEmpty()) {
@@ -214,20 +217,26 @@ public class EditVehicleActivity extends AppCompatActivity implements ImageChoos
                     Toast.makeText(this, getString(R.string.editVehicle_toast_oldPhotoWasNotRemovedDueToError), Toast.LENGTH_LONG).show();
                 }
             }
-            vehicle.setPathToPicture(currentPhotoPath);
+            contentValues.put(VehicleEntry.COLUMN_PICTURE, currentPhotoPath);
         }
 
-        VehicleService vehicleService = new VehicleService(this);
+        final int result = getContentResolver().update(
+                ContentUris.withAppendedId(VehicleEntry.CONTENT_URI, vehicle.getId()),
+                contentValues, null, null);
 
-        ServiceResult result = vehicleService.update(vehicle);
-        if (ServiceResult.SUCCESS.equals(result)) {
-            Toast.makeText(this, R.string.carUpdate_Toast_successfullyUpdated, Toast.LENGTH_LONG).show();
+        if (result == 1) {  //update OK
             setResult(RESULT_OK);
-        } else {
+            Toast.makeText(this, R.string.carUpdate_Toast_successfullyUpdated, Toast.LENGTH_LONG).show();
+            finish();
+
+        } else if (result == VehicleProvider.VEHICLE_UPDATE_NAME_NOT_UNIQUE) {
+            Toast.makeText(this, R.string.addVehicle_nameNotUnique, Toast.LENGTH_SHORT).show();
+
+        } else {    //update FAIL
             setResult(RESULT_CANCELED);
             Snackbar.make(findViewById(android.R.id.content), R.string.carUpdate_Toast_updateFail, Snackbar.LENGTH_LONG).show();
+            finish();
         }
-        finish();
     }
 
     private int getAlreadySelectedTypePosition(VehicleType type) {
@@ -245,10 +254,10 @@ public class EditVehicleActivity extends AppCompatActivity implements ImageChoos
     public void onDeleteDialogPositiveClick(DeleteDialog deleteDialog) {
         deleteDialog.dismiss();
 
-        VehicleService vehicleService = new VehicleService(EditVehicleActivity.this);
-        ServiceResult result = vehicleService.delete(vehicle);
+        final int result = getContentResolver().delete(
+                ContentUris.withAppendedId(VehicleEntry.CONTENT_URI, vehicle.getId()), null, null);
 
-        if (ServiceResult.SUCCESS.equals(result)) {
+        if (result != -1) {
             Toast.makeText(getApplicationContext(), getString(R.string.delete_vehicle_success, vehicle.getName()), Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(getApplicationContext(), R.string.delete_vehicle_fail, Toast.LENGTH_LONG).show();

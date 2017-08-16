@@ -78,7 +78,7 @@ public class StatisticsChartConsumptionPreviewFragment extends Fragment implemen
     public Loader<Map<String, Object>> onCreateLoader(int id, Bundle args) {
         Vehicle vehicle = args.getParcelable(ARG_VEHICLE);
         long vehicleId = vehicle.getId();
-        return new ConsumptionChartDataLoader(getActivity(), vehicleId, new FillUpService(getActivity()));
+        return new ConsumptionChartDataLoader(getActivity(), vehicleId, new FillUpService());
     }
 
     @Override

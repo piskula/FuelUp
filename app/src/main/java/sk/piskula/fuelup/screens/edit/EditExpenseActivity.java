@@ -2,6 +2,8 @@ package sk.piskula.fuelup.screens.edit;
 
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -18,14 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.business.ExpenseService;
-import sk.piskula.fuelup.business.ServiceResult;
+import sk.piskula.fuelup.data.FuelUpContract.ExpenseEntry;
 import sk.piskula.fuelup.entity.Expense;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.util.DateUtil;
@@ -47,7 +47,7 @@ public class EditExpenseActivity extends AppCompatActivity implements DeleteDial
 
     private Button mBtnAdd;
 
-    private Vehicle vehicle;
+    private Vehicle mVehicle;
     private Expense expense;
     private Calendar expenseDate;
     private Mode mode;
@@ -58,30 +58,30 @@ public class EditExpenseActivity extends AppCompatActivity implements DeleteDial
         setContentView(R.layout.activity_expense_edit);
 
         Intent intent = getIntent();
-        expense = intent.getParcelableExtra(ExpensesListFragment.EXPENSE_TO_EDIT);
+        long expenseId = intent.getLongExtra(ExpensesListFragment.EXPENSE_ID_TO_EDIT, 0);
+        expense = ExpenseService.getExpenseById(expenseId, getApplicationContext());
         mode = expense == null ? Mode.CREATING : Mode.UPDATING;
 
         initViews();
 
         if (mode == Mode.UPDATING) {
-            vehicle = expense.getVehicle();
+            mVehicle = expense.getVehicle();
             populateFields(expense);
         } else if (mode == Mode.CREATING) {
-            vehicle = intent.getParcelableExtra(ExpensesListFragment.VEHICLE_FROM_FRAGMENT_TO_EDIT_EXPENSE);
-            expense = new Expense();
+            mVehicle = intent.getParcelableExtra(ExpensesListFragment.VEHICLE_FROM_FRAGMENT_TO_EDIT_EXPENSE);
             setExpenseDate(Calendar.getInstance());
-            expense.setVehicle(vehicle);
         }
 
-        mTxtPriceUnit.setText(vehicle.getCurrencySymbol());
+        mTxtPriceUnit.setText(mVehicle.getCurrencySymbol());
     }
 
     private void initViews() {
-        this.mTxtInfo = (EditText) findViewById(R.id.txt_addexpense_information);
-        this.mTxtPrice = (EditText) findViewById(R.id.txt_addexpense_price);
-        this.mTxtDate = (EditText) findViewById(R.id.txt_addexpense_date);
-        this.mBtnAdd = (Button) findViewById(R.id.btn_addexpense_add);
-        this.mTxtPriceUnit = (TextView) findViewById(R.id.txt_addexpense_priceunit);
+        this.mTxtInfo = findViewById(R.id.txt_addexpense_information);
+        this.mTxtPrice = findViewById(R.id.txt_addexpense_price);
+        this.mTxtDate = findViewById(R.id.txt_addexpense_date);
+        this.mBtnAdd = findViewById(R.id.btn_addexpense_add);
+        this.mTxtPriceUnit = findViewById(R.id.txt_addexpense_priceunit);
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -143,22 +143,32 @@ public class EditExpenseActivity extends AppCompatActivity implements DeleteDial
             createdPrice = new BigDecimal(price);
         } catch (NumberFormatException e) {
             Log.e(TAG, "Error formatting price for Expense while saving.");
+            Snackbar.make(findViewById(android.R.id.content), R.string.updateCarActivity_wrong_number_format, Snackbar.LENGTH_SHORT).show();
+            return;
         }
 
-        expense.setDate(this.expenseDate.getTime());
-        expense.setInfo(info);
-        expense.setPrice(createdPrice);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ExpenseEntry.COLUMN_INFO, info);
+        contentValues.put(ExpenseEntry.COLUMN_DATE, expenseDate.getTime().getTime());
+        contentValues.put(ExpenseEntry.COLUMN_PRICE, createdPrice.doubleValue());
+        contentValues.put(ExpenseEntry.COLUMN_VEHICLE, mVehicle.getId());
 
-        ExpenseService expenseService = new ExpenseService(EditExpenseActivity.this);
-        ServiceResult result = (mode == Mode.UPDATING) ? expenseService.update(expense) : expenseService.save(expense);
-
-        if (ServiceResult.SUCCESS.equals(result)) {
-            Toast.makeText(EditExpenseActivity.this, mode == Mode.UPDATING ? R.string.editExpense_toast_updatedSuccessfully : R.string.editExpense_toast_createdSuccessfully, Toast.LENGTH_LONG).show();
-            setResult(RESULT_OK);
-        }
-        if (ServiceResult.ERROR.equals(result)) {
-            Toast.makeText(EditExpenseActivity.this, mode == Mode.UPDATING ? R.string.editExpense_toast_updateFailed : R.string.editExpense_toast_createFailed, Toast.LENGTH_LONG).show();
-            setResult(RESULT_CANCELED);
+        if (mode == Mode.UPDATING) {
+            if (getContentResolver().update(ContentUris.withAppendedId(ExpenseEntry.CONTENT_URI, expense.getId()), contentValues, null, null) == 1) {
+                Toast.makeText(getApplicationContext(), R.string.editExpense_toast_updatedSuccessfully, Toast.LENGTH_LONG).show();
+                setResult(RESULT_OK);
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.editExpense_toast_updateFailed, Toast.LENGTH_LONG).show();
+                setResult(RESULT_CANCELED);
+            }
+        } else {
+            if (getContentResolver().insert(ExpenseEntry.CONTENT_URI, contentValues) == null) {
+                Toast.makeText(EditExpenseActivity.this, R.string.editExpense_toast_createFailed, Toast.LENGTH_LONG).show();
+                setResult(RESULT_CANCELED);
+            } else {
+                Toast.makeText(EditExpenseActivity.this, R.string.editExpense_toast_createdSuccessfully, Toast.LENGTH_LONG).show();
+                setResult(RESULT_OK);
+            }
         }
         finish();
     }
@@ -196,10 +206,10 @@ public class EditExpenseActivity extends AppCompatActivity implements DeleteDial
 
     @Override
     public void onDeleteDialogPositiveClick(DeleteDialog dialog) {
-        ExpenseService service = new ExpenseService(EditExpenseActivity.this);
-        ServiceResult result = service.delete(expense);
+        final int result = getContentResolver().delete(
+                ContentUris.withAppendedId(ExpenseEntry.CONTENT_URI, expense.getId()), null, null);
 
-        if (ServiceResult.SUCCESS.equals(result)) {
+        if (result != -1) {
             Toast.makeText(getApplicationContext(), getString(R.string.remove_expense_success), Toast.LENGTH_LONG).show();
             setResult(RESULT_OK);
         } else {

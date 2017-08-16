@@ -28,6 +28,7 @@
     <string name="volumeUnit_litres">Litre</string>
     <string name="about">O aplikácií</string>
 
+    <string name="toast_emptyName">Je potrebné vyplniť názov vozidla.</string>
     <string name="toast_emptyFields">Je potrebné vyplniť viac údajov.</string>
     <string name="title_expenses">Výdaje</string>
     <string name="title_fillUps">Tankovania</string>
@@ -44,6 +45,7 @@
     <string name="no_data_to_show">Žiadne dáta pre zobrazenie.</string>
 
     <string name="addVehicle">Nové vozidlo</string>
+    <string name="addVehicle_nameNotUnique">Vozidlo s týmto menom už existuje.</string>
     <string name="addVehicle_vehicle_picture">Vybrať obrázok</string>
     <string name="addVehicle_takePhoto">Fotoaparát</string>
     <string name="addVehicle_selectPhotoFromGallery">Vybrať foto zo zariadenia</string>

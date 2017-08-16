@@ -1,5 +1,7 @@
 package sk.piskula.fuelup.adapters;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,79 +9,92 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import sk.piskula.fuelup.R;
+import sk.piskula.fuelup.data.FuelUpContract.FillUpEntry;
 import sk.piskula.fuelup.entity.FillUp;
+import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.enums.DistanceUnit;
 import sk.piskula.fuelup.entity.util.CurrencyUtil;
 import sk.piskula.fuelup.entity.util.DateUtil;
+import sk.piskula.fuelup.entity.util.VolumeUtil;
 import sk.piskula.fuelup.screens.MainActivity;
 
 /**
- * Created by Martin Styk on 19.06.2017.
+ * @author Martin Styk
+ * @version 16.08.2017
  */
-public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.ViewHolder> {
+public class ListFillUpsAdapter extends RecyclerViewCursorAdapter<ListFillUpsAdapter.FillUpViewHolder> {
 
-    private List<FillUp> items;
-    private Callback callback;
+    private Callback mCallback;
+    private Vehicle mVehicle;
 
-    public ListFillUpsAdapter(Callback callback) {
-        super();
-        this.items = new ArrayList<>();
-        this.callback = callback;
+    private DecimalFormat consumptionFormat;
+
+    public ListFillUpsAdapter(Callback callback, Vehicle vehicle) {
+        super(null);
+
+        this.mVehicle = vehicle;
+        this.mCallback = callback;
+
+        int consumptionFractionDigits = mVehicle.getDistanceUnit() == DistanceUnit.mi ? 1 : 2;
+        consumptionFormat = new DecimalFormat();
+        consumptionFormat.setGroupingUsed(false);
+        consumptionFormat.setMinimumFractionDigits(consumptionFractionDigits);
+        consumptionFormat.setMaximumFractionDigits(consumptionFractionDigits);
     }
 
     public interface Callback {
-        void onItemClick(View v, FillUp fillUp, int position);
+        void onItemClick(long fillUpId);
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_fillup, parent, false);
-        return new ViewHolder(view);
+    public FillUpViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item_fillup, parent, false);
+        return new FillUpViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
-        FillUp currentItem = items.get(position);
-        if (currentItem != null) {
-            //set views
-            holder.txtDistanceFromLastFillUp.setText(currentItem.getDistanceFromLastFillUp().toString());
-            holder.txtDistanceUnit.setText(currentItem.getVehicle().getDistanceUnit().toString());
-            holder.txtConsumptionUnit.setText(currentItem.getVehicle().getConsumptionUnit());
-            holder.txtDate.setText(DateUtil.getDateLocalized(currentItem.getDate()));
-            holder.imgFullnessFillUpSymbol.setImageResource(getImageResourceId(currentItem.isFullFillUp()));
-            holder.txtPriceTotal.setText(CurrencyUtil.getPrice(
-                    currentItem.getVehicle().getCurrency(), currentItem.getFuelPriceTotal()));
-            holder.txtPricePerLitre.setText(CurrencyUtil.getPricePerLitre(
-                    currentItem.getVehicle().getCurrency(), currentItem.getFuelPricePerLitre()));
-            holder.txtPricePerLitreSymbol.setText("/" + MainActivity.getInstance().getString(R.string.unit_litre));
+    protected void onBindViewHolder(FillUpViewHolder holder, Cursor cursor) {
 
-            DecimalFormat bddf = new DecimalFormat();
-            bddf.setGroupingUsed(false);
-            bddf.setMaximumFractionDigits(2);
-            bddf.setMinimumFractionDigits(0);
+        int idColumnIndex = cursor.getColumnIndexOrThrow(FillUpEntry._ID);
+        int pricePerLitreColumnIndex = cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE);
+        int priceTotalColumnIndex = cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL);
+        int consumptionColumnIndex = cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_FUEL_CONSUMPTION);
+        int fuelVolumeColumnIndex = cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_FUEL_VOLUME);
+        int isFullFillUpColumnIndex = cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_IS_FULL_FILLUP);
+        int distanceColumnIndex = cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_DISTANCE_FROM_LAST);
+        int dateColumnIndex = cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_DATE);
 
-            holder.txtFuelVolume.setText(bddf.format(currentItem.getFuelVolume()));
-            holder.txtFuelVolumeSymbol.setText(currentItem.getVehicle().getVolumeUnit().toString());
-
-            int fractionDigits = currentItem.getVehicle().getDistanceUnit() == DistanceUnit.mi ? 1 : 2;
-            if (currentItem.getFuelConsumption() != null) {
-                bddf.setMinimumFractionDigits(fractionDigits);
-                bddf.setMaximumFractionDigits(fractionDigits);
-                holder.txtConsumption.setText(bddf.format(currentItem.getFuelConsumption()));
-            } else {
-                holder.txtConsumption.setText("-");
-            }
+        final String consumptionString = cursor.getString(consumptionColumnIndex);
+        if (consumptionString == null || consumptionString.isEmpty()) {
+            holder.txtConsumption.setText("-");
+        } else {
+            holder.txtConsumption.setText(consumptionFormat.format(cursor.getDouble(consumptionColumnIndex)));
         }
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        final long fillUpId = cursor.getLong(idColumnIndex);
+        holder.txtConsumptionUnit.setText(mVehicle.getConsumptionUnit());
+        holder.txtDistanceFromLastFillUp.setText(cursor.getString(distanceColumnIndex));
+        holder.imgFullnessFillUpSymbol.setImageResource(getImageResourceId(cursor.getInt(isFullFillUpColumnIndex) != 0));
+        holder.txtDate.setText(DateUtil.getDateLocalized(new Date(cursor.getLong(dateColumnIndex))));
+        holder.txtDistanceUnit.setText(mVehicle.getDistanceUnit().toString());
+        holder.txtPriceTotal.setText(CurrencyUtil.getPrice(mVehicle.getCurrency(), cursor.getDouble(priceTotalColumnIndex)));
+        holder.txtPricePerLitre.setText(CurrencyUtil.getPricePerLitre(mVehicle.getCurrency(), cursor.getDouble(pricePerLitreColumnIndex)));
+        holder.txtPricePerLitreSymbol.setText("/" + MainActivity.getInstance().getString(R.string.unit_litre));
+        holder.txtFuelVolume.setText(VolumeUtil.getFuelVolume(cursor.getDouble(fuelVolumeColumnIndex)));
+        holder.txtFuelVolumeSymbol.setText(mVehicle.getVolumeUnit().toString());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                callback.onItemClick(v, items.get(position), position);
+            public void onClick(View view) {
+                mCallback.onItemClick(fillUpId);
             }
         });
     }
@@ -90,20 +105,7 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
                 .getIdentifier(fileName, "drawable", MainActivity.getInstance().getPackageName());
     }
 
-    @Override
-    public int getItemCount() {
-        return items.size();
-    }
-
-    public void dataChange(List<FillUp> items) {
-        this.items = items;
-        notifyDataSetChanged();
-    }
-
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-        final View mView;
-
+    class FillUpViewHolder extends RecyclerView.ViewHolder {
         TextView txtDistanceFromLastFillUp;
         TextView txtDate;
         TextView txtFuelVolume;
@@ -112,14 +114,13 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
         TextView txtPricePerLitre;
         TextView txtConsumption;
         TextView txtConsumptionUnit;
-        TextView txtAvgSymbol;
         TextView txtDistanceUnit;
         TextView txtPricePerLitreSymbol;
         ImageView imgFullnessFillUpSymbol;
 
-        ViewHolder(View v) {
+        FillUpViewHolder(View v) {
             super(v);
-            mView = v;
+
             txtDistanceFromLastFillUp = v.findViewById(R.id.txt_itemfillup_distance);
             txtDate = v.findViewById(R.id.txt_itemfillup_date);
             txtFuelVolume = v.findViewById(R.id.txt_itemfillup_fuel_volume);
@@ -127,7 +128,6 @@ public class ListFillUpsAdapter extends RecyclerView.Adapter<ListFillUpsAdapter.
             txtPriceTotal = v.findViewById(R.id.txt_itemfillup_price_total);
             txtPricePerLitre = v.findViewById(R.id.txt_itemfillup_price_per_litre);
             txtConsumptionUnit = v.findViewById(R.id.txt_itemfillup_consumptionUnit);
-            txtAvgSymbol = v.findViewById(R.id.txt_itemfillup_avg_symbol);
             txtConsumption = v.findViewById(R.id.txt_itemfillup_consumption);
             txtDistanceUnit = v.findViewById(R.id.txt_itemfillup_distanceUnit);
             txtPricePerLitreSymbol = v.findViewById(R.id.txt_itemfillup_price_per_liter_symbol);
