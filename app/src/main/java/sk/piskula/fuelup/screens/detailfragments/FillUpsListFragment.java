@@ -24,12 +24,10 @@ import java.util.List;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.adapters.ListFillUpsAdapter;
-import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.data.FuelUpContract;
 import sk.piskula.fuelup.data.FuelUpContract.FillUpEntry;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
-import sk.piskula.fuelup.loaders.FillUpLoader;
 import sk.piskula.fuelup.screens.edit.AddFillUpActivity;
 import sk.piskula.fuelup.screens.edit.EditFillUpActivity;
 import sk.piskula.fuelup.screens.VehicleTabbedDetailActivity;
@@ -49,6 +47,7 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
     public static final String FILLUP_ID_TO_EDIT = "fillup_to_edit";
     public static final int FILLUP_ACTION_REQUEST_CODE = 32;
     public static final String VEHICLE_FROM_FRAGMENT_TO_EDIT_FILLUP = "fromFragmentToFillUp";
+    public static final int FILLUP_LOADER_ID = 713;
 
     private Vehicle vehicle;
     private List<FillUp> data;
@@ -92,7 +91,7 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        getLoaderManager().initLoader(FillUpLoader.ID, null, this);
+        getLoaderManager().initLoader(FILLUP_LOADER_ID, null, this);
 
         return view;
     }
@@ -129,7 +128,7 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == FILLUP_ACTION_REQUEST_CODE && resultCode == RESULT_OK)
-            getLoaderManager().getLoader(FillUpLoader.ID).onContentChanged();
+            getLoaderManager().getLoader(FILLUP_LOADER_ID).onContentChanged();
     }
 
 

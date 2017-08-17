@@ -82,7 +82,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
     public Loader<StatisticsDTO> onCreateLoader(int id, Bundle args) {
         Vehicle vehicle = args.getParcelable(VEHICLE_TO_FRAGMENT);
         long vehicleId = vehicle.getId();
-        return new StatisticsLoader(getActivity(), new StatisticsService());
+        return new StatisticsLoader(getActivity(), new StatisticsService(getContext(), vehicleId));
     }
 
     @Override

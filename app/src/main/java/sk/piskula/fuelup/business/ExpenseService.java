@@ -48,35 +48,4 @@ public class ExpenseService {
         return expense;
     }
 
-    private static ContentValues transformExpense(Expense expense) {
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(ExpenseEntry.COLUMN_VEHICLE, expense.getVehicle().getId());
-        contentValues.put(ExpenseEntry.COLUMN_PRICE, expense.getPrice().doubleValue());
-        contentValues.put(ExpenseEntry.COLUMN_DATE, expense.getDate().getTime());
-        contentValues.put(ExpenseEntry.COLUMN_INFO, expense.getInfo());
-
-        return contentValues;
-    }
-
-    private static ContentValues transformExistingExpense(Expense expense) {
-        ContentValues contentValues = transformExpense(expense);
-
-        contentValues.put(ExpenseEntry._ID, expense.getId());
-
-        return contentValues;
-    }
-
-    public Cursor findExpensesOfVehicle(long vehicleId, Context context) {
-        ContentResolver contentResolver = context.getContentResolver();
-
-        String selection = ExpenseEntry.COLUMN_VEHICLE + "=?";
-        String[] selectionArgs = { String.valueOf(vehicleId) };
-
-        return contentResolver.query(ExpenseEntry.CONTENT_URI,
-                FuelUpContract.ALL_COLUMNS_EXPENSES,
-                selection,
-                selectionArgs,
-                ExpenseEntry.COLUMN_DATE);
-    }
 }

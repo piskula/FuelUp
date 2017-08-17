@@ -137,30 +137,28 @@ public class CostsPerMonthChartDataLoader extends FuelUpAbstractAsyncLoader<Colu
         return map;
     }
 
-}
+    private class ExpensePair {
+        float fuel = 0f;
+        float expense = 0f;
 
-class ExpensePair {
-    float fuel = 0f;
-    float expense = 0f;
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+            ExpensePair that = (ExpensePair) o;
 
-        ExpensePair that = (ExpensePair) o;
+            if (Float.compare(that.fuel, fuel) != 0) return false;
+            return Float.compare(that.expense, expense) == 0;
 
-        if (Float.compare(that.fuel, fuel) != 0) return false;
-        return Float.compare(that.expense, expense) == 0;
+        }
 
+        @Override
+        public int hashCode() {
+            int result = (fuel != +0.0f ? Float.floatToIntBits(fuel) : 0);
+            result = 31 * result + (expense != +0.0f ? Float.floatToIntBits(expense) : 0);
+            return result;
+        }
     }
 
-    @Override
-    public int hashCode() {
-        int result = (fuel != +0.0f ? Float.floatToIntBits(fuel) : 0);
-        result = 31 * result + (expense != +0.0f ? Float.floatToIntBits(expense) : 0);
-        return result;
-    }
 }
-
-

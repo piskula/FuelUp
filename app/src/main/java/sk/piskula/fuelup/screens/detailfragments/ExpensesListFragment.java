@@ -20,15 +20,11 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.List;
-
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.adapters.ListExpensesAdapter;
 import sk.piskula.fuelup.data.FuelUpContract;
 import sk.piskula.fuelup.data.FuelUpContract.ExpenseEntry;
-import sk.piskula.fuelup.entity.Expense;
 import sk.piskula.fuelup.entity.Vehicle;
-import sk.piskula.fuelup.loaders.ExpenseLoader;
 import sk.piskula.fuelup.screens.VehicleTabbedDetailActivity;
 import sk.piskula.fuelup.screens.edit.EditExpenseActivity;
 
@@ -47,6 +43,7 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
     public static final String EXPENSE_ID_TO_EDIT = "expense_to_edit";
     public static final int EXPENSE_ACTION_REQUEST_CODE = 31;
     public static final String VEHICLE_FROM_FRAGMENT_TO_EDIT_EXPENSE = "fromFragmentToExpense";
+    public static final int EXPENSE_LOADER_ID = 714;
 
     private Vehicle vehicle;
     private ListExpensesAdapter adapter;
@@ -89,7 +86,7 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        getLoaderManager().initLoader(ExpenseLoader.ID, null, this);
+        getLoaderManager().initLoader(EXPENSE_LOADER_ID, null, this);
 
         return view;
     }
@@ -116,7 +113,7 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EXPENSE_ACTION_REQUEST_CODE && resultCode == RESULT_OK)
-            getLoaderManager().getLoader(ExpenseLoader.ID).onContentChanged();
+            getLoaderManager().getLoader(EXPENSE_LOADER_ID).onContentChanged();
     }
 
     @Override

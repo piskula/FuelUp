@@ -1,5 +1,6 @@
 package sk.piskula.fuelup.business;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
@@ -17,17 +18,45 @@ import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.enums.DistanceUnit;
 import sk.piskula.fuelup.entity.enums.VolumeUnit;
+import sk.piskula.fuelup.entity.util.CurrencyUtil;
 
 /**
  * Created by Martin Styk on 23.06.2017.
  */
-
 public class FillUpService {
 
     private static final String LOG_TAG = FillUpService.class.getSimpleName();
 
 
-    /*public ServiceResult deleteWithConsumptionCalculation(FillUp fillUp) {
+    public static int deleteWithConsumptionCalculation(FillUp fillUp, Context context) {
+
+        /*if (-1 == context.getContentResolver().delete(
+                ContentUris.withAppendedId(FillUpEntry.CONTENT_URI, fillUp.getId()), null, null)) {
+            Log.e(LOG_TAG, "Cannot remove FillUp");
+        }
+
+        String[] projection = { FillUpEntry._ID, FillUpEntry.COLUMN_IS_FULL_FILLUP, FillUpEntry.COLUMN_FUEL_VOLUME, FillUpEntry.COLUMN_DISTANCE_FROM_LAST };
+        String selection = FillUpEntry.COLUMN_DATE + ">?";
+        String[] selectionArgs = { String.valueOf(fillUp.getDate().getTime()) };
+
+        Cursor cursor = context.getContentResolver().query(
+                FillUpEntry.CONTENT_URI,
+                projection,
+                selection,
+                selectionArgs,
+                FillUpEntry.COLUMN_DATE + " DESC");
+
+        BigDecimal fuelVol = BigDecimal.ZERO;
+        Long distance = 0L;
+        boolean isNewerFull = false;
+        while (cursor.moveToNext()) {
+
+
+            isNewerFull = 1 == cursor.getInt(cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_IS_FULL_FILLUP));
+            if (isNewerFull) {
+                break;
+            }
+        }
 
         List<FillUp> allFillUps = findFillUpsOfVehicle(fillUp.getVehicle().getId());
         int indexOfNewFillUp = allFillUps.indexOf(fillUp);
@@ -75,8 +104,9 @@ public class FillUpService {
             update(fUp);
         }
 
-        return serviceResult;
-    }*/
+        return serviceResult;*/
+        return 1;
+    }
 
     public List<FillUp> findFillUpsOfVehicle(long vehicleId) {
         List<FillUp> fillUps = new ArrayList<>();

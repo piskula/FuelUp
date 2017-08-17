@@ -34,29 +34,18 @@ public class VehicleService {
 
         cursor.moveToFirst();
         int typeId = cursor.getInt(cursor.getColumnIndexOrThrow(VehicleEntry.COLUMN_TYPE));
-        String[] selectionTypeArgs = { String.valueOf(typeId) };
-        Cursor cursorType = context.getContentResolver().query(FuelUpContract.VehicleTypeEntry.CONTENT_URI,
-                FuelUpContract.ALL_COLUMNS_VEHICLE_TYPES, FuelUpContract.VehicleTypeEntry._ID + "=?",
-                selectionTypeArgs, null);
 
-        if (cursorType == null || cursorType.getCount() != 1) {
-            Log.e(LOG_TAG, "Cannot get Vehicle Type for vehicleId=" + id + ", vehicleTypeId=" + typeId);
-            return null;
-        }
-
-        cursorType.moveToFirst();
         Vehicle vehicle = new Vehicle();
         vehicle.setId(cursor.getLong(cursor.getColumnIndexOrThrow(VehicleEntry._ID)));
         vehicle.setName(cursor.getString(cursor.getColumnIndexOrThrow(VehicleEntry.COLUMN_NAME)));
         vehicle.setCurrency(Currency.getInstance(cursor.getString(cursor.getColumnIndexOrThrow(VehicleEntry.COLUMN_CURRENCY))));
         vehicle.setVehicleMaker(cursor.getString(cursor.getColumnIndexOrThrow(VehicleEntry.COLUMN_VEHICLE_MAKER)));
-        vehicle.setType(getTypeFromCursor(cursorType));
+        vehicle.setType(VehicleTypeService.getVehicleTypeById(typeId, context));
         vehicle.setVolumeUnit(getVolumeUnitFromString(cursor.getString(cursor.getColumnIndexOrThrow(VehicleEntry.COLUMN_VOLUME_UNIT))));
         vehicle.setStartMileage(cursor.getLong(cursor.getColumnIndexOrThrow(VehicleEntry.COLUMN_START_MILEAGE)));
         vehicle.setPathToPicture(cursor.getString(cursor.getColumnIndexOrThrow(VehicleEntry.COLUMN_PICTURE)));
 
         cursor.close();
-        cursorType.close();
 
         return vehicle;
     }

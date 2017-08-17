@@ -55,7 +55,7 @@ public class ConsumptionPerMonthChartDataLoader extends FuelUpAbstractAsyncLoade
 
         Map<String,Object> map = new HashMap<>(2);
         map.put(CHART_DATA, generateColumnChartData(fillUps));
-        map.put(MIN_CONSUMPTION, statisticsService.getFuelConsumptionBest());
+        map.put(MIN_CONSUMPTION, statisticsService.getFuelConsumptionBest(vehicleId));
 
         return map;
     }
@@ -121,41 +121,38 @@ public class ConsumptionPerMonthChartDataLoader extends FuelUpAbstractAsyncLoade
         return map;
     }
 
+
+    private class ConsumptionPair {
+        long numerator;
+        float denumerator;
+
+        ConsumptionPair() {
+            this.numerator = 0;
+            this.denumerator = 0;
+        }
+
+        public ConsumptionPair(long numerator, float denumerator) {
+            this.numerator = numerator;
+            this.denumerator = denumerator;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            ConsumptionPair that = (ConsumptionPair) o;
+
+            if (numerator != that.numerator) return false;
+            return Float.compare(that.denumerator, denumerator) == 0;
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = (int) (numerator ^ (numerator >>> 32));
+            result = 31 * result + (denumerator != +0.0f ? Float.floatToIntBits(denumerator) : 0);
+            return result;
+        }
+    }
 }
-
-class ConsumptionPair {
-    long numerator;
-    float denumerator;
-
-    public ConsumptionPair() {
-        this.numerator = 0;
-        this.denumerator = 0;
-    }
-
-    public ConsumptionPair(long numerator, float denumerator) {
-        this.numerator = numerator;
-        this.denumerator = denumerator;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ConsumptionPair that = (ConsumptionPair) o;
-
-        if (numerator != that.numerator) return false;
-        return Float.compare(that.denumerator, denumerator) == 0;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = (int) (numerator ^ (numerator >>> 32));
-        result = 31 * result + (denumerator != +0.0f ? Float.floatToIntBits(denumerator) : 0);
-        return result;
-    }
-}
-
-
-

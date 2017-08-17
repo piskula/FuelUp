@@ -18,7 +18,8 @@ import sk.piskula.fuelup.entity.util.CurrencyUtil;
 import sk.piskula.fuelup.entity.util.DateUtil;
 
 /**
- * Created by Martin Styk on 19.06.2017.
+ * @author Ondrej Oravcok
+ * @version 16.8.2017
  */
 public class ListExpensesAdapter extends RecyclerViewCursorAdapter<ListExpensesAdapter.ExpenseViewHolder> {
 
@@ -63,6 +64,8 @@ public class ListExpensesAdapter extends RecyclerViewCursorAdapter<ListExpensesA
             }
         });
     }
+
+
 
     class ExpenseViewHolder extends RecyclerView.ViewHolder
     {

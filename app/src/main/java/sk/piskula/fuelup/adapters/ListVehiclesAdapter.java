@@ -23,11 +23,12 @@ import sk.piskula.fuelup.screens.MainActivity;
 
 /**
  * @author Ondrej Oravcok
- * @version 16.6.2017.
+ * @version 16.8.2017
  */
 public class ListVehiclesAdapter extends RecyclerViewCursorAdapter<ListVehiclesAdapter.VehicleViewHolder> {
 
     private static final String LOG_TAG = ListVehiclesAdapter.class.getSimpleName();
+
     private Callback mCallback;
 
     public interface Callback {
@@ -70,7 +71,8 @@ public class ListVehiclesAdapter extends RecyclerViewCursorAdapter<ListVehiclesA
     }
 
 
-    public static class VehicleViewHolder extends RecyclerView.ViewHolder
+
+    static class VehicleViewHolder extends RecyclerView.ViewHolder
     {
         ImageView thumbnail, overflow;
         TextView txtName, txtMaker;

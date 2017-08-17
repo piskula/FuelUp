@@ -105,6 +105,8 @@ public class ListFillUpsAdapter extends RecyclerViewCursorAdapter<ListFillUpsAda
                 .getIdentifier(fileName, "drawable", MainActivity.getInstance().getPackageName());
     }
 
+
+
     class FillUpViewHolder extends RecyclerView.ViewHolder {
         TextView txtDistanceFromLastFillUp;
         TextView txtDate;

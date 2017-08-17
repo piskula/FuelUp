@@ -38,7 +38,7 @@ public class VehicleListFragment extends Fragment implements ListVehiclesAdapter
 
     public static final int VEHICLE_ACTION_REQUEST_CODE = 33;
     public static final String EXTRA_ADDED_VEHICLE_ID = "extra_key_added_car";
-    private static final int VEHICLE_LOADER = 712;
+    private static final int VEHICLE_LOADER_ID = 712;
 
     private FloatingActionButton addCarBtn;
 
@@ -79,7 +79,7 @@ public class VehicleListFragment extends Fragment implements ListVehiclesAdapter
     @Override
     public void onResume() {
         super.onResume();
-        getLoaderManager().restartLoader(VEHICLE_LOADER, null, this);
+        getLoaderManager().restartLoader(VEHICLE_LOADER_ID, null, this);
     }
 
     @Override

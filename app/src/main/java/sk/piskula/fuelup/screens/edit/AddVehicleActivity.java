@@ -25,7 +25,6 @@ import java.util.Currency;
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.adapters.SpinnerCurrencyAdapter;
 import sk.piskula.fuelup.adapters.SpinnerVehicleTypesAdapter;
-import sk.piskula.fuelup.business.VehicleService;
 import sk.piskula.fuelup.data.FuelUpContract.VehicleEntry;
 import sk.piskula.fuelup.entity.VehicleType;
 import sk.piskula.fuelup.entity.enums.DistanceUnit;
@@ -54,7 +53,6 @@ public class AddVehicleActivity extends AppCompatActivity implements ImageChoose
     private Spinner spinnerType;
     private Spinner spinnerCurrency;
     private RadioGroup radioGroupVolumeUnit;
-    private Button buttonAdd;
     private ImageView imgCarPhotoStatus;
 
     private String vehiclePicturePath;
@@ -112,15 +110,14 @@ public class AddVehicleActivity extends AppCompatActivity implements ImageChoose
     }
 
     private void initViews() {
-        this.txtName = (EditText) findViewById(R.id.txt_addVehicle_name);
-        this.txtManufacturer = (EditText) findViewById(R.id.txt_addVehicle_manufacturer);
-        this.txtActualMileage = (EditText) findViewById(R.id.txt_addVehicle_mileage);
-        this.txtActualMileageDistanceUnit = (TextView) findViewById(R.id.txt_addVehicle_mileage_distanceUnit);
-        this.buttonAdd = (Button) findViewById(R.id.btn_addVehicle_add);
-        this.spinnerType = (Spinner) findViewById(R.id.spinner_addVehicle_types);
-        this.spinnerCurrency = (Spinner) findViewById(R.id.spinner_currency);
-        this.radioGroupVolumeUnit = (RadioGroup) findViewById(R.id.radio_volume_unit);
-        this.imgCarPhotoStatus = (ImageView) findViewById(R.id.img_addVehicle_photo);
+        this.txtName = findViewById(R.id.txt_addVehicle_name);
+        this.txtManufacturer = findViewById(R.id.txt_addVehicle_manufacturer);
+        this.txtActualMileage = findViewById(R.id.txt_addVehicle_mileage);
+        this.txtActualMileageDistanceUnit = findViewById(R.id.txt_addVehicle_mileage_distanceUnit);
+        this.spinnerType = findViewById(R.id.spinner_addVehicle_types);
+        this.spinnerCurrency = findViewById(R.id.spinner_currency);
+        this.radioGroupVolumeUnit = findViewById(R.id.radio_volume_unit);
+        this.imgCarPhotoStatus = findViewById(R.id.img_addVehicle_photo);
 
         spinnerCurrency.setAdapter(new SpinnerCurrencyAdapter(this));
         spinnerType.setAdapter(new SpinnerVehicleTypesAdapter(this));

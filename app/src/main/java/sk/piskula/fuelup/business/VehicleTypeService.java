@@ -1,13 +1,13 @@
 package sk.piskula.fuelup.business;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
-import java.sql.SQLException;
-
 import sk.piskula.fuelup.data.FuelUpContract;
 import sk.piskula.fuelup.data.FuelUpContract.VehicleTypeEntry;
+import sk.piskula.fuelup.entity.VehicleType;
 
 /**
  * @author Martin Styk
@@ -33,6 +33,15 @@ public class VehicleTypeService {
 
         cursor.close();
         return name;
+    }
+
+    public static VehicleType getVehicleTypeById(long typeId, Context context) {
+        VehicleType vehicleType = new VehicleType();
+
+        vehicleType.setId(typeId);
+        vehicleType.setName(getVehicleTypeNameById(typeId, context));
+
+        return vehicleType;
     }
 
 }
