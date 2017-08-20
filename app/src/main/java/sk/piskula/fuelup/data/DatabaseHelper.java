@@ -66,7 +66,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE + " REAL NOT NULL, "
                 + FillUpEntry.COLUMN_FUEL_PRICE_TOTAL + " REAL NOT NULL, "
                 + FillUpEntry.COLUMN_IS_FULL_FILLUP + " INTEGER NOT NULL, "
-                + FillUpEntry.COLUMN_FUEL_CONSUMPTION + " INTEGER NOT NULL, "
+                + FillUpEntry.COLUMN_FUEL_CONSUMPTION + " INTEGER, "
                 + FillUpEntry.COLUMN_DATE + " INTEGER NOT NULL, "
                 + FillUpEntry.COLUMN_INFO + " TEXT, "
 

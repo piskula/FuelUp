@@ -135,7 +135,7 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
                 FuelUpContract.ALL_COLUMNS_EXPENSES,
                 ExpenseEntry.COLUMN_VEHICLE + "=?",
                 selectionArgs,
-                ExpenseEntry.COLUMN_DATE);
+                ExpenseEntry.COLUMN_DATE + " DESC");
     }
 
     @Override

@@ -143,7 +143,7 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
                 FuelUpContract.ALL_COLUMNS_FILLUPS,
                 FillUpEntry.COLUMN_VEHICLE + "=?",
                 selectionArgs,
-                FillUpEntry.COLUMN_DATE);
+                FillUpEntry.COLUMN_DATE + " DESC");
     }
 
     @Override

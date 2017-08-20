@@ -282,7 +282,7 @@ public class FillUpService {
         }
     }*/
 
-    enum ConsumtpionUnit {
+    public enum ConsumtpionUnit {
         milesPerGallon, litresPer100km
     }
 }
