@@ -37,7 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String SQL_CREATE_VEHICLES_TABLE =  "CREATE TABLE " + VehicleEntry.TABLE_NAME + " ("
                 + VehicleEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + VehicleEntry.COLUMN_NAME + " TEXT NOT NULL, "
+                + VehicleEntry.COLUMN_NAME + " TEXT NOT NULL UNIQUE, "
                 + VehicleEntry.COLUMN_TYPE + " INTEGER NOT NULL, "
                 + VehicleEntry.COLUMN_VOLUME_UNIT + " TEXT NOT NULL, "
                 + VehicleEntry.COLUMN_VEHICLE_MAKER + " TEXT, "
@@ -67,7 +67,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + FillUpEntry.COLUMN_FUEL_PRICE_TOTAL + " REAL NOT NULL, "
                 + FillUpEntry.COLUMN_IS_FULL_FILLUP + " INTEGER NOT NULL, "
                 + FillUpEntry.COLUMN_FUEL_CONSUMPTION + " INTEGER, "
-                + FillUpEntry.COLUMN_DATE + " INTEGER NOT NULL, "
+                + FillUpEntry.COLUMN_DATE + " INTEGER NOT NULL UNIQUE, "
                 + FillUpEntry.COLUMN_INFO + " TEXT, "
 
                 + "FOREIGN KEY(" + FillUpEntry.COLUMN_VEHICLE + ") REFERENCES "

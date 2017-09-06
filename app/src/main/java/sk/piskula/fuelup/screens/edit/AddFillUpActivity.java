@@ -23,6 +23,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Date;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.business.FillUpService;
@@ -124,7 +125,12 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
         try {
             createdFuelVol = (BigDecimal) decimalFormat.parse(fuelVol.toString());
             createdPrice = (BigDecimal) decimalFormat.parse(price.toString());
+            Calendar timePart = Calendar.getInstance();
             createdDate.setTime(dateFormatter.parse(date));
+            createdDate.set(Calendar.HOUR, timePart.get(Calendar.HOUR));
+            createdDate.set(Calendar.MINUTE, timePart.get(Calendar.MINUTE));
+            createdDate.set(Calendar.SECOND, timePart.get(Calendar.SECOND));
+            createdDate.set(Calendar.MILLISECOND, timePart.get(Calendar.MILLISECOND));
         } catch (ParseException ex) {
             Log.d(TAG, "tried bad format", ex);
             throw new RuntimeException(ex);

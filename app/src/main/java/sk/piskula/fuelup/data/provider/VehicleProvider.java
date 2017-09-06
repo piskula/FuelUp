@@ -601,26 +601,124 @@ public class VehicleProvider extends ContentProvider {
         return ContentUris.withAppendedId(uri, id);
     }
 
+    private Uri insertNotFullValidatedFillUp(Uri uri, ContentValues contentValues) {
+
+        // first insert fillUp
+        long id = mDbHelper.getWritableDatabase().insert(FillUpEntry.TABLE_NAME, null, contentValues);
+
+        long vehicleId = contentValues.getAsLong(FillUpEntry.COLUMN_VEHICLE);
+        long timestamp = contentValues.getAsLong(FillUpEntry.COLUMN_DATE);
+
+        // then recalculate consumption
+        // firstly count newer fillUps
+        String selectionNewer = FillUpEntry.COLUMN_VEHICLE + "=? AND " + FillUpEntry.COLUMN_DATE + ">=?";
+        String[] selectionNewerArgs = new String[] { String.valueOf(vehicleId), String.valueOf(timestamp) };
+
+        Cursor cursorNewerFillUps = mDbHelper.getReadableDatabase().query(
+                FillUpEntry.TABLE_NAME,
+                FuelUpContract.ALL_COLUMNS_FILLUPS,
+                selectionNewer,
+                selectionNewerArgs,
+                null,
+                null,
+                FillUpEntry.COLUMN_DATE + " ASC");
+
+        // find fillups until full newer fillUp
+        List<Long> newerIds = new ArrayList<>();
+        BigDecimal newerFuelUpsVol = BigDecimal.ZERO;
+        Long newerFuelUpsDistance = 0L;
+        boolean existsNewerFullFillUp = false;
+
+        while (cursorNewerFillUps.moveToNext()) {
+            newerIds.add(cursorNewerFillUps.getLong(cursorNewerFillUps.getColumnIndexOrThrow(FillUpEntry._ID)));
+            newerFuelUpsDistance += cursorNewerFillUps.getLong(cursorNewerFillUps.getColumnIndexOrThrow(FillUpEntry.COLUMN_DISTANCE_FROM_LAST));
+            newerFuelUpsVol = newerFuelUpsVol.add(BigDecimal.valueOf(cursorNewerFillUps.getDouble(cursorNewerFillUps.getColumnIndexOrThrow(FillUpEntry.COLUMN_FUEL_VOLUME))));
+            if (1 == cursorNewerFillUps.getInt(cursorNewerFillUps.getColumnIndexOrThrow(FillUpEntry.COLUMN_IS_FULL_FILLUP))) {
+                existsNewerFullFillUp = true;
+                break;
+            }
+        }
+        cursorNewerFillUps.close();
+
+        // if there is no newer full fill up, we do not compute consumption
+        if (!existsNewerFullFillUp) {
+            getContext().getContentResolver().notifyChange(uri, null);
+            return ContentUris.withAppendedId(uri, id);
+        }
+
+        // secondly count older fillUps until full (respecting this)
+        String selectionOlder = FillUpEntry.COLUMN_VEHICLE + "=? AND " + FillUpEntry.COLUMN_DATE + "<?";
+        String[] selectionOlderArgs = new String[] { String.valueOf(vehicleId), String.valueOf(timestamp) };
+
+        Cursor cursorOlderFillUps = mDbHelper.getReadableDatabase().query(
+                FillUpEntry.TABLE_NAME,
+                FuelUpContract.ALL_COLUMNS_FILLUPS,
+                selectionOlder,
+                selectionOlderArgs,
+                null,
+                null,
+                FillUpEntry.COLUMN_DATE + " DESC");
+
+        // find fillUps until first full older fillUp (without that one full)
+        List<Long> olderIds = new ArrayList<>();
+        BigDecimal olderFuelUpsVol = BigDecimal.ZERO;
+        Long olderFuelUpsDistance = 0L;
+        boolean existsOlderFullFillUp = false;
+
+        while (cursorOlderFillUps.moveToNext()) {
+            if (1 == cursorOlderFillUps.getInt(cursorOlderFillUps.getColumnIndexOrThrow(FillUpEntry.COLUMN_IS_FULL_FILLUP))) {
+                existsOlderFullFillUp = true;
+                break;
+            }
+            olderIds.add(cursorOlderFillUps.getLong(cursorOlderFillUps.getColumnIndexOrThrow(FillUpEntry._ID)));
+            olderFuelUpsDistance += cursorOlderFillUps.getLong(cursorOlderFillUps.getColumnIndexOrThrow(FillUpEntry.COLUMN_DISTANCE_FROM_LAST));
+            olderFuelUpsVol = olderFuelUpsVol.add(BigDecimal.valueOf(cursorOlderFillUps.getDouble(cursorOlderFillUps.getColumnIndexOrThrow(FillUpEntry.COLUMN_FUEL_VOLUME))));
+        }
+        cursorOlderFillUps.close();
+
+        // if there is no older full fill up, we do not compute consumption
+        if (!existsOlderFullFillUp) {
+            getContext().getContentResolver().notifyChange(uri, null);
+            return ContentUris.withAppendedId(uri, id);
+        }
+
+        // update all neighbouring fillUps with new consumption
+        // compute consumption for all
+        VolumeUnit unit = VehicleService.getVehicleById(vehicleId, getContext()).getVolumeUnit();
+        BigDecimal fuelVol = newerFuelUpsVol.add(olderFuelUpsVol);
+        Long distance = newerFuelUpsDistance + olderFuelUpsDistance;
+        BigDecimal avgConsumption = FillUpService.getConsumptionFromVolumeDistance(fuelVol, distance, unit);
+
+        ContentValues contentValuesUpdate = new ContentValues();
+        contentValuesUpdate.put(FillUpEntry.COLUMN_FUEL_CONSUMPTION, avgConsumption.doubleValue());
+
+        String selectionUpdate = FillUpEntry._ID + "=?";
+        String[] selectionUpdateArgs;
+
+        newerIds.addAll(olderIds);
+        // and update all not full until it including it
+        for (Long fillUpId : newerIds) {
+            selectionUpdateArgs = new String[] { String.valueOf(fillUpId) };
+            mDbHelper.getWritableDatabase().update(
+                    FillUpEntry.TABLE_NAME,
+                    contentValuesUpdate,
+                    selectionUpdate,
+                    selectionUpdateArgs);
+        }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+        return ContentUris.withAppendedId(uri, id);
+    }
+
     private Uri validateFillUpAndInsert(Uri uri, ContentValues contentValues) {
         
         validateFillUpBasics(contentValues, false);
 
         boolean isFullFillUp = 1 == contentValues.getAsInteger(FillUpEntry.COLUMN_IS_FULL_FILLUP);
-
         if (isFullFillUp) {
             return insertFullValidatedFillUp(uri, contentValues);
-
         } else {
-            SQLiteDatabase database = mDbHelper.getWritableDatabase();
-            long id = database.insert(FillUpEntry.TABLE_NAME, null, contentValues);
-
-            if (id == -1) {
-                Log.e(LOG_TAG, "Failed to insert row for " + uri);
-                return null;
-            }
-
-            getContext().getContentResolver().notifyChange(uri, null);
-            return ContentUris.withAppendedId(uri, id);
+            return insertNotFullValidatedFillUp(uri, contentValues);
         }
     }
 
