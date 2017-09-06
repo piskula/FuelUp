@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Currency;
+import java.util.Date;
 import java.util.List;
 
 import sk.piskula.fuelup.business.FillUpService;
@@ -25,6 +26,7 @@ import sk.piskula.fuelup.data.FuelUpContract;
 import sk.piskula.fuelup.data.FuelUpContract.ExpenseEntry;
 import sk.piskula.fuelup.data.FuelUpContract.FillUpEntry;
 import sk.piskula.fuelup.data.FuelUpContract.VehicleEntry;
+import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.enums.DistanceUnit;
 import sk.piskula.fuelup.entity.enums.VolumeUnit;
 import sk.piskula.fuelup.entity.util.CurrencyUtil;
@@ -182,6 +184,8 @@ public class VehicleProvider extends ContentProvider {
             case EXPENSE_ID:
                 String[] expenseId = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 return db.delete(ExpenseEntry.TABLE_NAME, ExpenseEntry._ID + "=?", expenseId);
+            case FILLUP_ID:
+                return deleteFillUpInTransaction(ContentUris.parseId(uri));
             default:
                 throw new IllegalArgumentException("Delete is not supported for " + uri);
         }
@@ -192,30 +196,17 @@ public class VehicleProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case VEHICLE_ID:
-                return validateVehicleAndUpdate(contentValues, ContentUris.parseId(uri));
+                return validateVehicleAndUpdate(uri, contentValues, ContentUris.parseId(uri));
             case EXPENSE_ID:
-                return validateExpenseAndUpdate(contentValues, ContentUris.parseId(uri));
+                return validateExpenseAndUpdate(uri, contentValues, ContentUris.parseId(uri));
             case FILLUP_ID:
-                return validateFillUpAndUpdate(contentValues, ContentUris.parseId(uri));
-            case VEHICLE_TYPE_ID:
-                return validateVehicleTypeAndInsert(uri, contentValues, selection, selectionArgs);
+                return validateFillUpAndUpdate(uri, contentValues, ContentUris.parseId(uri));
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
         }
     }
 
-    private int validateVehicleTypeAndInsert(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
-
-        if (!contentValues.containsKey(FuelUpContract.VehicleTypeEntry.COLUMN_NAME)
-                || !isVehicleTypeNameUnique(contentValues.getAsString(FuelUpContract.VehicleTypeEntry.COLUMN_NAME).trim())) {
-            throw new IllegalArgumentException("VehicleType name must be filled and unique to update.");
-        }
-
-        return mDbHelper.getWritableDatabase().update(
-                FuelUpContract.VehicleTypeEntry.TABLE_NAME, contentValues, selection, selectionArgs);
-    }
-
-    private int validateFillUpAndUpdate(ContentValues contentValues, long id) {
+    private int validateFillUpAndUpdate(final Uri uri, final ContentValues contentValues, long id) {
         
         validateFillUpBasics(contentValues, true);
         
@@ -225,12 +216,13 @@ public class VehicleProvider extends ContentProvider {
 
         final String selection = FillUpEntry._ID + "=?";
         final String[] idArgument = new String[] { String.valueOf(id) };
-        
+
+        getContext().getContentResolver().notifyChange(uri, null);
         return mDbHelper.getWritableDatabase().update(
                 FillUpEntry.TABLE_NAME, contentValues, selection, idArgument);
     }
 
-    private int validateExpenseAndUpdate(ContentValues contentValues, long id) {
+    private int validateExpenseAndUpdate(final Uri uri, final ContentValues contentValues, long id) {
 
         if (contentValues.containsKey(ExpenseEntry.COLUMN_INFO)) {
             String info = contentValues.getAsString(ExpenseEntry.COLUMN_INFO).trim();
@@ -259,13 +251,14 @@ public class VehicleProvider extends ContentProvider {
         final String selection = ExpenseEntry._ID + "=?";
         final String[] idArgument = new String[] { String.valueOf(id) };
 
+        getContext().getContentResolver().notifyChange(uri, null);
         return mDbHelper.getWritableDatabase().update(
                 ExpenseEntry.TABLE_NAME, contentValues, selection, idArgument);
     }
 
     public static final int VEHICLE_UPDATE_NAME_NOT_UNIQUE = 6325;
 
-    private int validateVehicleAndUpdate(final ContentValues contentValues, final long id) {
+    private int validateVehicleAndUpdate(final Uri uri, final ContentValues contentValues, final long id) {
 
         if (contentValues.containsKey(VehicleEntry.COLUMN_NAME)) {
             String name = contentValues.getAsString(VehicleEntry.COLUMN_NAME).trim();
@@ -309,6 +302,7 @@ public class VehicleProvider extends ContentProvider {
         final String selection = VehicleEntry._ID + "=?";
         final String[] idArgument = new String[] { String.valueOf(id) };
 
+        getContext().getContentResolver().notifyChange(uri, null);
         return mDbHelper.getWritableDatabase().update(
                 VehicleEntry.TABLE_NAME, contentValues, selection, idArgument);
     }
@@ -489,7 +483,7 @@ public class VehicleProvider extends ContentProvider {
         long vehicleId = contentValues.getAsLong(FillUpEntry.COLUMN_VEHICLE);
         long timestamp = contentValues.getAsLong(FillUpEntry.COLUMN_DATE);
 
-        String selectionOlder = FillUpEntry.COLUMN_VEHICLE + "=? AND " + FillUpEntry.COLUMN_DATE + "<=?";
+        String selectionOlder = FillUpEntry.COLUMN_VEHICLE + "=? AND " + FillUpEntry.COLUMN_DATE + "<?";
         String[] selectionOlderArgs = new String[] { String.valueOf(vehicleId), String.valueOf(timestamp) };
 
         Cursor cursorOlderFillUps = mDbHelper.getReadableDatabase().query(
@@ -710,18 +704,14 @@ public class VehicleProvider extends ContentProvider {
         ContentValues contentValuesUpdate = new ContentValues();
         contentValuesUpdate.put(FillUpEntry.COLUMN_FUEL_CONSUMPTION, avgConsumption.doubleValue());
 
-        String selectionUpdate = FillUpEntry._ID + "=?";
-        String[] selectionUpdateArgs;
-
         newerIds.addAll(olderIds);
         // and update all not full until it including it
         for (Long fillUpId : newerIds) {
-            selectionUpdateArgs = new String[] { String.valueOf(fillUpId) };
             db.update(
                     FillUpEntry.TABLE_NAME,
                     contentValuesUpdate,
-                    selectionUpdate,
-                    selectionUpdateArgs);
+                    FillUpEntry._ID + "=?",
+                    new String[] { String.valueOf(fillUpId) });
         }
 
         db.setTransactionSuccessful();
@@ -730,6 +720,105 @@ public class VehicleProvider extends ContentProvider {
 
         getContext().getContentResolver().notifyChange(uri, null);
         return ContentUris.withAppendedId(uri, id);
+    }
+
+    private int deleteFillUpInTransaction(final Long fillUpId) {
+        FillUp fillUp = FillUpService.getFillUpById(fillUpId, getContext());
+        if (fillUp == null) {
+            Log.e(LOG_TAG, "Cannot remove not existing fillUp (id=" + fillUpId + ")");
+            return -1;
+        }
+
+        long vehicleId = fillUp.getVehicle().getId();
+        long timestamp = fillUp.getDate().getTime();
+
+        List<Long> ids = new ArrayList<>();
+        BigDecimal fuelUpsVol = BigDecimal.ZERO;
+        Long fuelUpsDistance = 0L;
+
+        String selectionOlder = FillUpEntry.COLUMN_VEHICLE + "=? AND " + FillUpEntry.COLUMN_DATE + "<?";
+        String[] selectionOlderArgs = new String[] { String.valueOf(vehicleId), String.valueOf(timestamp) };
+
+        Cursor cursorOlderFillUps = mDbHelper.getReadableDatabase().query(
+                FillUpEntry.TABLE_NAME,
+                FuelUpContract.ALL_COLUMNS_FILLUPS,
+                selectionOlder,
+                selectionOlderArgs,
+                null,
+                null,
+                FillUpEntry.COLUMN_DATE + " DESC");
+
+        // find first full older fillUp
+        boolean existsOlderFullFillUp = false;
+        while (cursorOlderFillUps.moveToNext()) {
+            if (1 == cursorOlderFillUps.getInt(cursorOlderFillUps.getColumnIndexOrThrow(FillUpEntry.COLUMN_IS_FULL_FILLUP))) {
+                existsOlderFullFillUp = true;
+                break;
+            }
+            ids.add(cursorOlderFillUps.getLong(cursorOlderFillUps.getColumnIndexOrThrow(FillUpEntry._ID)));
+            fuelUpsDistance += cursorOlderFillUps.getLong(cursorOlderFillUps.getColumnIndexOrThrow(FillUpEntry.COLUMN_DISTANCE_FROM_LAST));
+            fuelUpsVol = fuelUpsVol.add(BigDecimal.valueOf(cursorOlderFillUps.getDouble(cursorOlderFillUps.getColumnIndexOrThrow(FillUpEntry.COLUMN_FUEL_VOLUME))));
+        }
+        cursorOlderFillUps.close();
+
+        String selectionNewer = FillUpEntry.COLUMN_VEHICLE + "=? AND " + FillUpEntry.COLUMN_DATE + ">?";
+        String[] selectionNewerArgs = new String[] { String.valueOf(vehicleId), String.valueOf(timestamp) };
+
+        Cursor cursorNewerFillUps = mDbHelper.getReadableDatabase().query(
+                FillUpEntry.TABLE_NAME,
+                FuelUpContract.ALL_COLUMNS_FILLUPS,
+                selectionNewer,
+                selectionNewerArgs,
+                null,
+                null,
+                FillUpEntry.COLUMN_DATE + " ASC");
+
+        // find first newer full FillUp
+        boolean existsNewerFullFillUp = false;
+        while (cursorNewerFillUps.moveToNext()) {
+            ids.add(cursorNewerFillUps.getLong(cursorNewerFillUps.getColumnIndexOrThrow(FillUpEntry._ID)));
+            fuelUpsDistance += cursorNewerFillUps.getLong(cursorNewerFillUps.getColumnIndexOrThrow(FillUpEntry.COLUMN_DISTANCE_FROM_LAST));
+            fuelUpsVol = fuelUpsVol.add(BigDecimal.valueOf(cursorNewerFillUps.getDouble(cursorNewerFillUps.getColumnIndexOrThrow(FillUpEntry.COLUMN_FUEL_VOLUME))));
+            if (1 == cursorNewerFillUps.getInt(cursorNewerFillUps.getColumnIndexOrThrow(FillUpEntry.COLUMN_IS_FULL_FILLUP))) {
+                existsNewerFullFillUp = true;
+                break;
+            }
+        }
+        cursorNewerFillUps.close();
+
+        VolumeUnit unit = fillUp.getVehicle().getVolumeUnit();
+        BigDecimal avgConsumption = null;
+
+        if (existsNewerFullFillUp && existsOlderFullFillUp) {   // when newer or older does not exist, we set null to all fillUps
+            avgConsumption = FillUpService.getConsumptionFromVolumeDistance(fuelUpsVol, fuelUpsDistance, unit);
+        }
+
+        ContentValues contentValuesUpdate = new ContentValues();
+        contentValuesUpdate.put(FillUpEntry.COLUMN_FUEL_CONSUMPTION, avgConsumption.doubleValue());
+
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        db.beginTransactionNonExclusive();
+
+        int result = db.delete(
+                FillUpEntry.TABLE_NAME,
+                FillUpEntry._ID + "=?",
+                new String[] { String.valueOf(fillUpId) }
+        );
+
+        // and update all not full until it including it
+        for (Long id : ids) {
+            db.update(
+                    FillUpEntry.TABLE_NAME,
+                    contentValuesUpdate,
+                    FillUpEntry._ID + "=?",
+                    new String[] { String.valueOf(id) });
+        }
+
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
+
+        return result;
     }
 
     private Uri validateFillUpAndInsert(Uri uri, ContentValues contentValues) {
