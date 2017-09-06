@@ -524,8 +524,12 @@ public class VehicleProvider extends ContentProvider {
 
         // insert new fillUp with fuel consumption
         contentValues.put(FillUpEntry.COLUMN_FUEL_CONSUMPTION, avgOlderConsumptionDouble);
-        long id = mDbHelper.getWritableDatabase().insert(FillUpEntry.TABLE_NAME, null, contentValues);
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        db.beginTransactionNonExclusive();
+        long id = db.insert(FillUpEntry.TABLE_NAME, null, contentValues);
         if (id == -1) {
+            db.endTransaction();
+            db.close();
             Log.e(LOG_TAG, "Cannot insert FillUp.");
             throw new IllegalArgumentException("Cannot insert new FillUp.");
         }
@@ -540,7 +544,7 @@ public class VehicleProvider extends ContentProvider {
             // and update all not full until it
             for (Long fillUpId : olderIds) {
                 selectionUpdateArgs = new String[] { String.valueOf(fillUpId) };
-                mDbHelper.getWritableDatabase().update(
+                db.update(
                         FillUpEntry.TABLE_NAME,
                         contentValuesUpdate,
                         selectionUpdate,
@@ -589,13 +593,17 @@ public class VehicleProvider extends ContentProvider {
             // and update all not full until it including it
             for (Long fillUpId : newerIds) {
                 selectionUpdateArgs = new String[] { String.valueOf(fillUpId) };
-                mDbHelper.getWritableDatabase().update(
+                db.update(
                         FillUpEntry.TABLE_NAME,
                         contentValuesUpdate,
                         selectionUpdate,
                         selectionUpdateArgs);
             }
         }
+
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
 
         getContext().getContentResolver().notifyChange(uri, null);
         return ContentUris.withAppendedId(uri, id);
@@ -604,7 +612,9 @@ public class VehicleProvider extends ContentProvider {
     private Uri insertNotFullValidatedFillUp(Uri uri, ContentValues contentValues) {
 
         // first insert fillUp
-        long id = mDbHelper.getWritableDatabase().insert(FillUpEntry.TABLE_NAME, null, contentValues);
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        db.beginTransactionNonExclusive();
+        long id = db.insert(FillUpEntry.TABLE_NAME, null, contentValues);
 
         long vehicleId = contentValues.getAsLong(FillUpEntry.COLUMN_VEHICLE);
         long timestamp = contentValues.getAsLong(FillUpEntry.COLUMN_DATE);
@@ -642,6 +652,10 @@ public class VehicleProvider extends ContentProvider {
 
         // if there is no newer full fill up, we do not compute consumption
         if (!existsNewerFullFillUp) {
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            db.close();
+
             getContext().getContentResolver().notifyChange(uri, null);
             return ContentUris.withAppendedId(uri, id);
         }
@@ -678,6 +692,10 @@ public class VehicleProvider extends ContentProvider {
 
         // if there is no older full fill up, we do not compute consumption
         if (!existsOlderFullFillUp) {
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            db.close();
+
             getContext().getContentResolver().notifyChange(uri, null);
             return ContentUris.withAppendedId(uri, id);
         }
@@ -699,12 +717,16 @@ public class VehicleProvider extends ContentProvider {
         // and update all not full until it including it
         for (Long fillUpId : newerIds) {
             selectionUpdateArgs = new String[] { String.valueOf(fillUpId) };
-            mDbHelper.getWritableDatabase().update(
+            db.update(
                     FillUpEntry.TABLE_NAME,
                     contentValuesUpdate,
                     selectionUpdate,
                     selectionUpdateArgs);
         }
+
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
 
         getContext().getContentResolver().notifyChange(uri, null);
         return ContentUris.withAppendedId(uri, id);
