@@ -574,8 +574,6 @@ public class VehicleProvider extends ContentProvider {
             }
         }
 
-        // TODO recompute consumption
-
         if (contentValues.containsKey(FillUpEntry.COLUMN_IS_FULL_FILLUP) || !isUpdate) {
             Long isFullFillUp = contentValues.getAsLong(FillUpEntry.COLUMN_IS_FULL_FILLUP);
             if (isFullFillUp == null || isFullFillUp < 0 || isFullFillUp > 1) {

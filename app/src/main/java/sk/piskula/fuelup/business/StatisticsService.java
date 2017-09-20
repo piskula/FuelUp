@@ -73,7 +73,6 @@ public class StatisticsService {
         dto.setAvgConsumption(getAverageConsumption(mVehicleId));
         dto.setAvgConsumptionReversed(getAverageConsumptionReversed(mVehicleId));
         dto.setConsumptionReversedUnitMpg(vehicle.getConsumptionUnit().equals("mpg"));
-        dto.setConsumptionReversedUnitMpg(false);  // TODO
         dto.setFuelConsumptionBest(getFuelConsumptionBest(mVehicleId));
         dto.setFuelConsumptionWorst(getFuelConsumptionWorst(mVehicleId));
 

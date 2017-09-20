@@ -198,8 +198,6 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
             }
         }
 
-        // TODO allow updating date
-
         int result = getContentResolver().update(ContentUris.withAppendedId(FillUpEntry.CONTENT_URI, mSelectedFillUp.getId()), contentValues, null, null);
         if (result == 1) {
             Toast.makeText(getApplicationContext(), R.string.add_fillup_success_update, Toast.LENGTH_LONG).show();
@@ -270,8 +268,6 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
 
     @Override
     public void onDeleteDialogPositiveClick(DeleteDialog dialog) {
-        // TODO delete fillUp correctly with
-        // service.deleteWithConsumptionCalculation(mSelectedFillUp);
 
         final int result = getContentResolver().delete(
                 ContentUris.withAppendedId(FillUpEntry.CONTENT_URI, mSelectedFillUp.getId()), null, null);
