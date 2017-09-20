@@ -108,6 +108,7 @@
     <string name="add_fillup_priceTotal_short">Total</string>
     <string name="add_fillup_success">Fill up created</string>
     <string name="add_fillup_success_update">Fill up updated</string>
+    <string name="add_fillup_success_update_noChange">No change</string>
     <string name="add_fillup_title_create">Create fill up</string>
     <string name="add_fillup_title_update">Update fill up</string>
 

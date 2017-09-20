@@ -50,6 +50,8 @@ public class VehicleProvider extends ContentProvider {
     private static final int FILLUPS = 400;
     private static final int FILLUP_ID = 401;
 
+    public static final int UPDATE_NO_CHANGE = 492;
+
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
@@ -207,6 +209,10 @@ public class VehicleProvider extends ContentProvider {
     }
 
     private int validateFillUpAndUpdate(final Uri uri, final ContentValues contentValues, long id) {
+
+        if (contentValues.size() == 0) {
+            return UPDATE_NO_CHANGE;
+        }
         
         validateFillUpBasics(contentValues, true, id);
         
@@ -929,7 +935,9 @@ public class VehicleProvider extends ContentProvider {
         }
 
         ContentValues contentValuesUpdate = new ContentValues();
-        contentValuesUpdate.put(FillUpEntry.COLUMN_FUEL_CONSUMPTION, avgConsumption.doubleValue());
+        contentValuesUpdate.put(
+                FillUpEntry.COLUMN_FUEL_CONSUMPTION,
+                avgConsumption == null ? null : avgConsumption.doubleValue());
 
         boolean isOutsideTransaction = transaction != null; // we can already be in transaction, when e.g. updating fillUp
         SQLiteDatabase db;

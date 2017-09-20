@@ -108,6 +108,7 @@
     <string name="add_fillup_priceTotal_short">Celkovo</string>
     <string name="add_fillup_success">Tankovanie vytvorené</string>
     <string name="add_fillup_success_update">Tankovanie aktializované</string>
+    <string name="add_fillup_success_update_noChange">Žiadna zmena</string>
     <string name="add_fillup_title_create">Vytvoriť tankovanie</string>
     <string name="add_fillup_title_update">Upraviť tankovanie</string>
 

@@ -31,6 +31,7 @@ import java.util.Calendar;
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.data.FuelUpContract.FillUpEntry;
+import sk.piskula.fuelup.data.provider.VehicleProvider;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.util.DateUtil;
@@ -169,20 +170,23 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         if (!createdDistance.equals(mSelectedFillUp.getDistanceFromLastFillUp()))
             contentValues.put(FillUpEntry.COLUMN_DISTANCE_FROM_LAST, createdDistance);
 
-        if (createdFuelVol.doubleValue() != mSelectedFillUp.getFuelVolume().doubleValue())
+        boolean isPriceNeeded = false;
+        if (createdFuelVol.doubleValue() != mSelectedFillUp.getFuelVolume().doubleValue()) {
             contentValues.put(FillUpEntry.COLUMN_FUEL_VOLUME, createdFuelVol.doubleValue());
+            isPriceNeeded = true;
+        }
 
         if (!info.toString().trim().equals(mSelectedFillUp.getInfo()))
             contentValues.put(FillUpEntry.COLUMN_INFO, info.toString().trim());
 
         if (priceMode == SwitchPrice.perVolume) {
-            if (!createdPrice.equals(mSelectedFillUp.getFuelPricePerLitre())) {
+            if (!createdPrice.equals(mSelectedFillUp.getFuelPricePerLitre()) || isPriceNeeded) {
                 contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE, createdPrice.doubleValue());
                 contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL, VolumeUtil.getTotalPriceFromPerLitre(
                         createdFuelVol, createdPrice, mVehicle.getVolumeUnit()).doubleValue());
             }
         } else {
-            if (!createdPrice.equals(mSelectedFillUp.getFuelPriceTotal())) {
+            if (!createdPrice.equals(mSelectedFillUp.getFuelPriceTotal()) || isPriceNeeded) {
                 contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL, createdPrice.doubleValue());
                 contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE, VolumeUtil.getPerLitrePriceFromTotal(
                         createdFuelVol, createdPrice, mVehicle.getVolumeUnit()).doubleValue());
@@ -191,9 +195,13 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
 
         // TODO allow updating date
 
-        if (getContentResolver().update(ContentUris.withAppendedId(FillUpEntry.CONTENT_URI, mSelectedFillUp.getId()), contentValues, null, null) == 1) {
+        int result = getContentResolver().update(ContentUris.withAppendedId(FillUpEntry.CONTENT_URI, mSelectedFillUp.getId()), contentValues, null, null);
+        if (result == 1) {
             Toast.makeText(getApplicationContext(), R.string.add_fillup_success_update, Toast.LENGTH_LONG).show();
             setResult(RESULT_OK);
+        } else if (result == VehicleProvider.UPDATE_NO_CHANGE) {
+            Toast.makeText(getApplicationContext(), R.string.add_fillup_success_update_noChange, Toast.LENGTH_LONG).show();
+            setResult(RESULT_CANCELED);
         } else {
             Toast.makeText(getApplicationContext(), R.string.add_fillup_fail_update, Toast.LENGTH_LONG).show();
             setResult(RESULT_CANCELED);
