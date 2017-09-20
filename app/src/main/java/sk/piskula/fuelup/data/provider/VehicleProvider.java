@@ -165,7 +165,7 @@ public class VehicleProvider extends ContentProvider {
             case EXPENSES:
                 return validateExpenseAndInsert(uri, contentValues);
             case FILLUPS:
-                return validateFillUpAndInsert(uri, contentValues);
+                return validateFillUpAndInsertInTransaction(uri, contentValues, null);
             case VEHICLE_TYPES:
                 return validateVehicleTypeAndInsert(uri, contentValues);
             default:
@@ -185,7 +185,7 @@ public class VehicleProvider extends ContentProvider {
                 String[] expenseId = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 return db.delete(ExpenseEntry.TABLE_NAME, ExpenseEntry._ID + "=?", expenseId);
             case FILLUP_ID:
-                return deleteFillUpInTransaction(ContentUris.parseId(uri));
+                return deleteFillUpInTransaction(ContentUris.parseId(uri), null);
             default:
                 throw new IllegalArgumentException("Delete is not supported for " + uri);
         }
@@ -208,18 +208,60 @@ public class VehicleProvider extends ContentProvider {
 
     private int validateFillUpAndUpdate(final Uri uri, final ContentValues contentValues, long id) {
         
-        validateFillUpBasics(contentValues, true);
+        validateFillUpBasics(contentValues, true, id);
         
         if (contentValues.containsKey(FillUpEntry.COLUMN_VEHICLE)) {
             throw new IllegalArgumentException("Cannot change vehicle of FillUp. Please, create a fresh new FillUp in this case.");
         }
 
-        final String selection = FillUpEntry._ID + "=?";
-        final String[] idArgument = new String[] { String.valueOf(id) };
+        boolean isDeleteAndInsertNeeded = contentValues.containsKey(FillUpEntry.COLUMN_DATE)
+                || contentValues.containsKey(FillUpEntry.COLUMN_FUEL_VOLUME)
+                || contentValues.containsKey(FillUpEntry.COLUMN_DISTANCE_FROM_LAST)
+                || contentValues.containsKey(FillUpEntry.COLUMN_IS_FULL_FILLUP);
 
-        getContext().getContentResolver().notifyChange(uri, null);
-        return mDbHelper.getWritableDatabase().update(
-                FillUpEntry.TABLE_NAME, contentValues, selection, idArgument);
+        if (!isDeleteAndInsertNeeded) {
+            // if only Not-Neighbour-Affecting values have been changed
+            final String selection = FillUpEntry._ID + "=?";
+            final String[] idArgument = new String[] { String.valueOf(id) };
+
+            getContext().getContentResolver().notifyChange(uri, null);
+            return mDbHelper.getWritableDatabase().update(
+                    FillUpEntry.TABLE_NAME, contentValues, selection, idArgument);
+        } else {
+            // if date, distance or fuelVolume have been changed, it may affect neighbouring fillUps
+            SQLiteDatabase db = mDbHelper.getWritableDatabase();
+            db.beginTransactionNonExclusive();
+
+            FillUp fillUp = FillUpService.getFillUpById(id, getContext());
+
+            ContentValues recreatedValues = new ContentValues();
+            recreatedValues.putAll(contentValues);
+            if (!recreatedValues.containsKey(FillUpEntry.COLUMN_VEHICLE))
+                recreatedValues.put(FillUpEntry.COLUMN_VEHICLE, fillUp.getVehicle().getId());
+            if (!recreatedValues.containsKey(FillUpEntry.COLUMN_DISTANCE_FROM_LAST))
+                recreatedValues.put(FillUpEntry.COLUMN_DISTANCE_FROM_LAST, fillUp.getDistanceFromLastFillUp());
+            if (!recreatedValues.containsKey(FillUpEntry.COLUMN_FUEL_VOLUME))
+                recreatedValues.put(FillUpEntry.COLUMN_FUEL_VOLUME, fillUp.getFuelVolume().doubleValue());
+            if (!recreatedValues.containsKey(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE))
+                recreatedValues.put(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE, fillUp.getFuelPricePerLitre().doubleValue());
+            if (!recreatedValues.containsKey(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL))
+                recreatedValues.put(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL, fillUp.getFuelPriceTotal().doubleValue());
+            if (!recreatedValues.containsKey(FillUpEntry.COLUMN_IS_FULL_FILLUP))
+                recreatedValues.put(FillUpEntry.COLUMN_IS_FULL_FILLUP, fillUp.isFullFillUp() ? 1 : 0);
+            if (!recreatedValues.containsKey(FillUpEntry.COLUMN_DATE))
+                recreatedValues.put(FillUpEntry.COLUMN_DATE, fillUp.getDate().getTime());
+            if (!recreatedValues.containsKey(FillUpEntry.COLUMN_INFO))
+                recreatedValues.put(FillUpEntry.COLUMN_INFO, fillUp.getInfo());
+
+            deleteFillUpInTransaction(id, db);
+            validateFillUpAndInsertInTransaction(uri, recreatedValues, db);
+
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            db.close();
+
+            return 1;
+        }
     }
 
     private int validateExpenseAndUpdate(final Uri uri, final ContentValues contentValues, long id) {
@@ -421,7 +463,7 @@ public class VehicleProvider extends ContentProvider {
         return ContentUris.withAppendedId(uri, id);
     }
     
-    private void validateFillUpBasics(ContentValues contentValues, boolean isUpdate) {
+    private void validateFillUpBasics(ContentValues contentValues, boolean isUpdate, Long existingFillUpId) {
 
         if (contentValues.containsKey(FillUpEntry.COLUMN_DISTANCE_FROM_LAST) || !isUpdate) {
             Long distance = contentValues.getAsLong(FillUpEntry.COLUMN_DISTANCE_FROM_LAST);
@@ -454,10 +496,75 @@ public class VehicleProvider extends ContentProvider {
             }
         }
 
-        if (fuelVolume != null || fuelPricePerLitre != null || fuelPriceTotal != null) {
-            if (fuelVolume == null || fuelPricePerLitre == null || fuelPriceTotal == null
-                    || Math.abs(fuelPriceTotal - (fuelPricePerLitre * fuelVolume)) > ERROR) {
-                throw new IllegalArgumentException("Fuel priceTotal must equals (pricePerLitre * fuelVolume)");
+
+        if (isUpdate) {
+            /* we must handle three types of situations while updating
+             *  - updating only fuelVolume -> we must update also PriceTotal
+             *  - updating only pricePerLitre -> we have to update priceTotal
+             *  - updating only priceTotal -> we have to update pricePerLitre
+             */
+            FillUp updatingFillUp = FillUpService.getFillUpById(existingFillUpId, getContext());
+
+            if (fuelVolume != null || fuelPricePerLitre != null || fuelPriceTotal != null) {
+                // at least on of important value has changed
+
+                // if only price changed
+                if (fuelVolume == null) {
+                    fuelVolume = updatingFillUp.getFuelVolume().doubleValue();
+
+                    // we must update price total if pricePerLitre changed
+                    if (fuelPriceTotal == null) {
+                        fuelPriceTotal = fuelPricePerLitre * fuelVolume;
+                        contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL, fuelPriceTotal);
+                    }
+
+                    // we must update pricePerLitre if priceTotal changed
+                    else if (fuelPricePerLitre == null) {
+                        fuelPricePerLitre = fuelPriceTotal / fuelVolume;
+                        contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE, fuelPricePerLitre);
+                    }
+
+                    // we must only check correctness if both prices changed
+                    else {
+                        if (Math.abs(fuelPriceTotal - (fuelPricePerLitre * fuelVolume)) > ERROR) {
+                            throw new IllegalArgumentException("Fuel priceTotal must equals (pricePerLitre * fuelVolume)");
+                        }
+                    }
+                }
+
+                else if (fuelPriceTotal == null) {
+                    // fuelVolume changed and fuelPriceTotal NOT
+                    fuelPriceTotal = updatingFillUp.getFuelPriceTotal().doubleValue();
+
+                    if (fuelPricePerLitre == null) {
+                        throw new IllegalArgumentException("Cannot update fuelVolume without changing priceTotal or pricePerLitre.");
+                    } else {
+                        if (Math.abs(fuelPriceTotal - (fuelPricePerLitre * fuelVolume)) > ERROR) {
+                            throw new IllegalArgumentException("Fuel priceTotal must equals (pricePerLitre * fuelVolume)");
+                        }
+                    }
+                }
+
+                else {
+                    // fuelVol changed and priceTotal changed also
+
+                    if (fuelPricePerLitre == null) {
+                        fuelPricePerLitre = updatingFillUp.getFuelPricePerLitre().doubleValue();
+                    }
+
+                    if (Math.abs(fuelPriceTotal - (fuelPricePerLitre * fuelVolume)) > ERROR) {
+                        throw new IllegalArgumentException("Fuel priceTotal must equals (pricePerLitre * fuelVolume)");
+                    }
+                }
+            }
+
+        } else {
+            // when inserting, all values must be filled
+            if (fuelVolume != null || fuelPricePerLitre != null || fuelPriceTotal != null) {
+                if (fuelVolume == null || fuelPricePerLitre == null || fuelPriceTotal == null
+                        || Math.abs(fuelPriceTotal - (fuelPricePerLitre * fuelVolume)) > ERROR) {
+                    throw new IllegalArgumentException("Fuel priceTotal must equals (pricePerLitre * fuelVolume)");
+                }
             }
         }
 
@@ -479,7 +586,7 @@ public class VehicleProvider extends ContentProvider {
 
     }
 
-    private Uri insertFullValidatedFillUp(Uri uri, ContentValues contentValues) {
+    private Uri insertFullValidatedFillUp(Uri uri, ContentValues contentValues, SQLiteDatabase transaction) {
         long vehicleId = contentValues.getAsLong(FillUpEntry.COLUMN_VEHICLE);
         long timestamp = contentValues.getAsLong(FillUpEntry.COLUMN_DATE);
 
@@ -516,14 +623,24 @@ public class VehicleProvider extends ContentProvider {
         BigDecimal avgOlderConsumption = existsOlderFullFillUp ? FillUpService.getConsumptionFromVolumeDistance(olderFuelUpsVol, olderFuelUpsDistance, unit) : null;
         Double avgOlderConsumptionDouble = avgOlderConsumption == null ? null : avgOlderConsumption.doubleValue();
 
+        // we can already be in transaction, when e.g. updating fillUp
+        boolean isOutsideTransaction = transaction != null;
+        SQLiteDatabase db;
+        if (isOutsideTransaction) {
+            db = transaction;
+        } else {
+            db = mDbHelper.getWritableDatabase();
+            db.beginTransactionNonExclusive();
+        }
+
         // insert new fillUp with fuel consumption
         contentValues.put(FillUpEntry.COLUMN_FUEL_CONSUMPTION, avgOlderConsumptionDouble);
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        db.beginTransactionNonExclusive();
         long id = db.insert(FillUpEntry.TABLE_NAME, null, contentValues);
         if (id == -1) {
-            db.endTransaction();
-            db.close();
+            if (!isOutsideTransaction) {
+                db.endTransaction();
+                db.close();
+            }
             Log.e(LOG_TAG, "Cannot insert FillUp.");
             throw new IllegalArgumentException("Cannot insert new FillUp.");
         }
@@ -575,7 +692,8 @@ public class VehicleProvider extends ContentProvider {
         }
         cursorNewerFillUps.close();
 
-        BigDecimal avgNewerConsumption = existsNewerFullFillUp ? FillUpService.getConsumptionFromVolumeDistance(newerFuelUpsVol, newerFuelUpsDistance, unit) : null;
+        BigDecimal avgNewerConsumption = !existsNewerFullFillUp ? null :
+                FillUpService.getConsumptionFromVolumeDistance(newerFuelUpsVol, newerFuelUpsDistance, unit);
 
         if (existsNewerFullFillUp) {
             // if newer full fillUp exists, compute consumption for all including that one full
@@ -595,19 +713,30 @@ public class VehicleProvider extends ContentProvider {
             }
         }
 
-        db.setTransactionSuccessful();
-        db.endTransaction();
-        db.close();
+        if (!isOutsideTransaction) {
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            db.close();
+        }
 
         getContext().getContentResolver().notifyChange(uri, null);
         return ContentUris.withAppendedId(uri, id);
     }
 
-    private Uri insertNotFullValidatedFillUp(Uri uri, ContentValues contentValues) {
+    private Uri insertNotFullValidatedFillUp(final Uri uri, final ContentValues contentValues,
+                                             final SQLiteDatabase transaction) {
+
+        // we can already be in transaction, when e.g. updating fillUp
+        boolean isOutsideTransaction = transaction != null;
+        SQLiteDatabase db;
+        if (isOutsideTransaction) {
+            db = transaction;
+        } else {
+            db = mDbHelper.getWritableDatabase();
+            db.beginTransactionNonExclusive();
+        }
 
         // first insert fillUp
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        db.beginTransactionNonExclusive();
         long id = db.insert(FillUpEntry.TABLE_NAME, null, contentValues);
 
         long vehicleId = contentValues.getAsLong(FillUpEntry.COLUMN_VEHICLE);
@@ -646,9 +775,11 @@ public class VehicleProvider extends ContentProvider {
 
         // if there is no newer full fill up, we do not compute consumption
         if (!existsNewerFullFillUp) {
-            db.setTransactionSuccessful();
-            db.endTransaction();
-            db.close();
+            if (!isOutsideTransaction) {
+                db.setTransactionSuccessful();
+                db.endTransaction();
+                db.close();
+            }
 
             getContext().getContentResolver().notifyChange(uri, null);
             return ContentUris.withAppendedId(uri, id);
@@ -686,9 +817,11 @@ public class VehicleProvider extends ContentProvider {
 
         // if there is no older full fill up, we do not compute consumption
         if (!existsOlderFullFillUp) {
-            db.setTransactionSuccessful();
-            db.endTransaction();
-            db.close();
+            if (!isOutsideTransaction) {
+                db.setTransactionSuccessful();
+                db.endTransaction();
+                db.close();
+            }
 
             getContext().getContentResolver().notifyChange(uri, null);
             return ContentUris.withAppendedId(uri, id);
@@ -714,15 +847,17 @@ public class VehicleProvider extends ContentProvider {
                     new String[] { String.valueOf(fillUpId) });
         }
 
-        db.setTransactionSuccessful();
-        db.endTransaction();
-        db.close();
+        if (!isOutsideTransaction) {
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            db.close();
+        }
 
         getContext().getContentResolver().notifyChange(uri, null);
         return ContentUris.withAppendedId(uri, id);
     }
 
-    private int deleteFillUpInTransaction(final Long fillUpId) {
+    private int deleteFillUpInTransaction(final Long fillUpId, final SQLiteDatabase transaction) {
         FillUp fillUp = FillUpService.getFillUpById(fillUpId, getContext());
         if (fillUp == null) {
             Log.e(LOG_TAG, "Cannot remove not existing fillUp (id=" + fillUpId + ")");
@@ -796,8 +931,14 @@ public class VehicleProvider extends ContentProvider {
         ContentValues contentValuesUpdate = new ContentValues();
         contentValuesUpdate.put(FillUpEntry.COLUMN_FUEL_CONSUMPTION, avgConsumption.doubleValue());
 
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        db.beginTransactionNonExclusive();
+        boolean isOutsideTransaction = transaction != null; // we can already be in transaction, when e.g. updating fillUp
+        SQLiteDatabase db;
+        if (isOutsideTransaction) {
+            db = transaction;
+        } else {
+            db = mDbHelper.getWritableDatabase();
+            db.beginTransactionNonExclusive();
+        }
 
         int result = db.delete(
                 FillUpEntry.TABLE_NAME,
@@ -814,22 +955,24 @@ public class VehicleProvider extends ContentProvider {
                     new String[] { String.valueOf(id) });
         }
 
-        db.setTransactionSuccessful();
-        db.endTransaction();
-        db.close();
+        if (!isOutsideTransaction) {
+            db.setTransactionSuccessful();
+            db.endTransaction();
+            db.close();
+        }
 
         return result;
     }
 
-    private Uri validateFillUpAndInsert(Uri uri, ContentValues contentValues) {
+    private Uri validateFillUpAndInsertInTransaction(Uri uri, ContentValues contentValues, SQLiteDatabase transaction) {
         
-        validateFillUpBasics(contentValues, false);
+        validateFillUpBasics(contentValues, false, null);
 
         boolean isFullFillUp = 1 == contentValues.getAsInteger(FillUpEntry.COLUMN_IS_FULL_FILLUP);
         if (isFullFillUp) {
-            return insertFullValidatedFillUp(uri, contentValues);
+            return insertFullValidatedFillUp(uri, contentValues, transaction);
         } else {
-            return insertNotFullValidatedFillUp(uri, contentValues);
+            return insertNotFullValidatedFillUp(uri, contentValues, transaction);
         }
     }
 

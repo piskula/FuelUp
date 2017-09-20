@@ -43,8 +43,6 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
 
     public static final String TAG = EditFillUpActivity.class.getSimpleName();
 
-    public static final String EXTRA_FILLUP = "extra_fillup_to_update";
-
     private EditText mTxtDistance;
     private EditText mTxtFuelVolume;
     private TextView mTxtFuelVolumeUnit;
@@ -165,20 +163,33 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
 
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(FillUpEntry.COLUMN_IS_FULL_FILLUP, isFull ? 1 : 0);
-        contentValues.put(FillUpEntry.COLUMN_DISTANCE_FROM_LAST, createdDistance);
-        contentValues.put(FillUpEntry.COLUMN_FUEL_VOLUME, createdFuelVol.doubleValue());
-        contentValues.put(FillUpEntry.COLUMN_INFO, info.toString().trim());
+        if (isFull != mSelectedFillUp.isFullFillUp())
+            contentValues.put(FillUpEntry.COLUMN_IS_FULL_FILLUP, isFull ? 1 : 0);
+
+        if (!createdDistance.equals(mSelectedFillUp.getDistanceFromLastFillUp()))
+            contentValues.put(FillUpEntry.COLUMN_DISTANCE_FROM_LAST, createdDistance);
+
+        if (createdFuelVol.doubleValue() != mSelectedFillUp.getFuelVolume().doubleValue())
+            contentValues.put(FillUpEntry.COLUMN_FUEL_VOLUME, createdFuelVol.doubleValue());
+
+        if (!info.toString().trim().equals(mSelectedFillUp.getInfo()))
+            contentValues.put(FillUpEntry.COLUMN_INFO, info.toString().trim());
 
         if (priceMode == SwitchPrice.perVolume) {
-            contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE, createdPrice.doubleValue());
-            contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL, VolumeUtil.getTotalPriceFromPerLitre(
-                    createdFuelVol, createdPrice, mVehicle.getVolumeUnit()).doubleValue());
+            if (!createdPrice.equals(mSelectedFillUp.getFuelPricePerLitre())) {
+                contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE, createdPrice.doubleValue());
+                contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL, VolumeUtil.getTotalPriceFromPerLitre(
+                        createdFuelVol, createdPrice, mVehicle.getVolumeUnit()).doubleValue());
+            }
         } else {
-            contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL, createdPrice.doubleValue());
-            contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE, VolumeUtil.getPerLitrePriceFromTotal(
-                    createdFuelVol, createdPrice, mVehicle.getVolumeUnit()).doubleValue());
+            if (!createdPrice.equals(mSelectedFillUp.getFuelPriceTotal())) {
+                contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL, createdPrice.doubleValue());
+                contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE, VolumeUtil.getPerLitrePriceFromTotal(
+                        createdFuelVol, createdPrice, mVehicle.getVolumeUnit()).doubleValue());
+            }
         }
+
+        // TODO allow updating date
 
         if (getContentResolver().update(ContentUris.withAppendedId(FillUpEntry.CONTENT_URI, mSelectedFillUp.getId()), contentValues, null, null) == 1) {
             Toast.makeText(getApplicationContext(), R.string.add_fillup_success_update, Toast.LENGTH_LONG).show();
