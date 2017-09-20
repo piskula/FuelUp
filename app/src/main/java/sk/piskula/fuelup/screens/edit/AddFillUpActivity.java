@@ -29,6 +29,7 @@ import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.data.FuelUpContract.FillUpEntry;
 import sk.piskula.fuelup.entity.Vehicle;
+import sk.piskula.fuelup.entity.util.DateUtil;
 import sk.piskula.fuelup.entity.util.VolumeUtil;
 import sk.piskula.fuelup.screens.detailfragments.FillUpsListFragment;
 
@@ -118,19 +119,13 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
 
         Long createdDistance = Long.parseLong(distance.toString());
 
-        Calendar createdDate = Calendar.getInstance();
-        DateFormat dateFormatter = android.text.format.DateFormat.getDateFormat(getApplicationContext());
-        BigDecimal createdFuelVol = null;
-        BigDecimal createdPrice = null;
+        Calendar createdDate;
+        BigDecimal createdFuelVol;
+        BigDecimal createdPrice;
         try {
             createdFuelVol = (BigDecimal) decimalFormat.parse(fuelVol.toString());
             createdPrice = (BigDecimal) decimalFormat.parse(price.toString());
-            Calendar timePart = Calendar.getInstance();
-            createdDate.setTime(dateFormatter.parse(date));
-            createdDate.set(Calendar.HOUR, timePart.get(Calendar.HOUR));
-            createdDate.set(Calendar.MINUTE, timePart.get(Calendar.MINUTE));
-            createdDate.set(Calendar.SECOND, timePart.get(Calendar.SECOND));
-            createdDate.set(Calendar.MILLISECOND, timePart.get(Calendar.MILLISECOND));
+            createdDate = DateUtil.parseDateTimeFromString(date, getApplicationContext());
         } catch (ParseException ex) {
             Log.d(TAG, "tried bad format", ex);
             throw new RuntimeException(ex);
@@ -189,7 +184,7 @@ public class AddFillUpActivity extends AppCompatActivity implements CompoundButt
 
     private void setFillUpDate(Calendar calendar) {
         this.fillUpDate = calendar;
-        mTxtDate.setText(android.text.format.DateFormat.getDateFormat(getApplicationContext()).format(calendar.getTime()));
+        mTxtDate.setText(DateUtil.getDateFormat(getApplicationContext()).format(calendar.getTime()));
     }
 
     @Override

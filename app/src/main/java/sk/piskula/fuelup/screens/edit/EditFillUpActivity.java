@@ -100,7 +100,6 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         mTxtInfo.setText(mSelectedFillUp.getInfo());
 
         setFillUpDate(DateUtil.transformToCal(mSelectedFillUp.getDate()));
-        mTxtDate.setEnabled(false);
 
         mBtnAdd.setText(R.string.update);
 
@@ -138,7 +137,7 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         Editable fuelVol = mTxtFuelVolume.getText();
         Editable price = mTxtPrice.getText();
         Editable info = mTxtInfo.getText();
-//        String date = mTxtDate.getText().toString();
+        String date = mTxtDate.getText().toString();
         boolean isFull = mCheckBoxIsFullFill.isChecked();
 
         if (TextUtils.isEmpty(distance) || TextUtils.isEmpty(fuelVol) || TextUtils.isEmpty(price) && mVehicle != null) {
@@ -151,18 +150,24 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
 
         Long createdDistance = Long.parseLong(distance.toString());
 
-        BigDecimal createdFuelVol = null;
-        BigDecimal createdPrice = null;
+        Calendar createdDate;
+        BigDecimal createdFuelVol;
+        BigDecimal createdPrice;
 
         try {
             createdFuelVol = (BigDecimal) decimalFormat.parse(fuelVol.toString());
             createdPrice = (BigDecimal) decimalFormat.parse(price.toString());
+            createdDate = DateUtil.parseDateTimeFromString(date, getApplicationContext());
         } catch (ParseException ex) {
             Log.d(TAG, "tried bad format", ex);
             throw new RuntimeException(ex);
         }
 
         ContentValues contentValues = new ContentValues();
+
+        if (!DateUtil.areTwoDatesEquals(createdDate, mSelectedFillUp.getDate())) {
+            contentValues.put(FillUpEntry.COLUMN_DATE, createdDate.getTime().getTime());
+        }
 
         if (isFull != mSelectedFillUp.isFullFillUp())
             contentValues.put(FillUpEntry.COLUMN_IS_FULL_FILLUP, isFull ? 1 : 0);
@@ -226,7 +231,7 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
 
     private void setFillUpDate(Calendar calendar) {
         this.fillUpDate = calendar;
-        mTxtDate.setText(DateUtil.getDateLocalized(calendar));
+        mTxtDate.setText(DateUtil.getDateFormat(getApplicationContext()).format(calendar.getTime()));
     }
 
     @Override
