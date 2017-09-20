@@ -2,16 +2,20 @@ package sk.piskula.fuelup.util;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import static sk.piskula.fuelup.screens.edit.AddVehicleActivity.REQUEST_PICTURE;
 import static sk.piskula.fuelup.screens.edit.AddVehicleActivity.REQUEST_PIC_CROP;
@@ -34,6 +38,7 @@ public class ImageUtils {
         if (takePictureIntent.resolveActivity(caller.getPackageManager()) != null) {
             // Create the File where the photo should go
             File photoFile = null;
+
             try {
                 photoFile = ImageUtils.createImageFile();
             } catch (IOException ex) {
@@ -41,7 +46,9 @@ public class ImageUtils {
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                Uri photoURI = FileProvider.getUriForFile(caller, GenericFileProvider.AUTHORITY, photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 caller.startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTOS);
             }
             return photoFile.getAbsolutePath();
@@ -51,12 +58,13 @@ public class ImageUtils {
 
     /**
      * Caller needs to call this method on activityResult
+     *
      * @param caller caller activity
-     * @param data intent comming as a parameter of a=onActivityResult
+     * @param data   intent comming as a parameter of a=onActivityResult
      * @return path to image file
      */
     public static String onActivityResultTakePhoto(@NonNull Activity caller, @NonNull Intent data) {
-        if(data == null){
+        if (data == null) {
             return null;
         }
         Uri selectedImage = data.getData();
@@ -86,7 +94,7 @@ public class ImageUtils {
     private static File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp ;
+        String imageFileName = "JPEG_" + timeStamp;
 
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         storageDir = new File(storageDir, "FuelApp");
@@ -98,9 +106,11 @@ public class ImageUtils {
 
     public static String performCrop(Activity caller, String picturePath) {
         Intent cropIntent = new Intent("com.android.camera.action.CROP");
+        cropIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
         //indicate image type and Uri
-        cropIntent.setDataAndType(Uri.fromFile(new File(picturePath)), "image/*");
+        Uri inputUri = FileProvider.getUriForFile(caller, GenericFileProvider.AUTHORITY, new File(picturePath));
+        cropIntent.setDataAndType(inputUri, "image/*");
 
         cropIntent.putExtra("crop", "true");
         //indicate aspect of desired crop
@@ -118,7 +128,11 @@ public class ImageUtils {
         }
         // Continue only if the File was successfully created
         if (photoFile != null) {
-            cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+            Uri outputPicture = FileProvider.getUriForFile(caller, GenericFileProvider.AUTHORITY, photoFile);
+            GenericFileProvider.grantUriPermission(caller, cropIntent, inputUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            GenericFileProvider.grantUriPermission(caller, cropIntent, outputPicture, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+            cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputPicture);
             caller.startActivityForResult(cropIntent, REQUEST_PIC_CROP);
         }
         return photoFile.getAbsolutePath();
