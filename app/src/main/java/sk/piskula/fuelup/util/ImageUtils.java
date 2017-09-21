@@ -43,14 +43,14 @@ public class ImageUtils {
                 photoFile = ImageUtils.createImageFile();
             } catch (IOException ex) {
                 ex.printStackTrace();
+                return null;
             }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(caller, GenericFileProvider.AUTHORITY, photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                caller.startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTOS);
-            }
+
+            Uri photoURI = FileProvider.getUriForFile(caller, GenericFileProvider.AUTHORITY, photoFile);
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+            takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            caller.startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTOS);
+
             return photoFile.getAbsolutePath();
         }
         return null;
@@ -97,7 +97,7 @@ public class ImageUtils {
         String imageFileName = "JPEG_" + timeStamp;
 
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        storageDir = new File(storageDir, "FuelApp");
+        storageDir = new File(storageDir, "FuelUp");
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }
@@ -119,22 +119,23 @@ public class ImageUtils {
         //retrieve data on return
         cropIntent.putExtra("scale", true);
         cropIntent.putExtra("return-data", false);
-        //start the activity - we handle returning in onActivityResult
+
         File photoFile = null;
         try {
             photoFile = createImageFile();
         } catch (IOException ex) {
             // Error occurred while creating the File
+            ex.printStackTrace();
+            return null;
         }
-        // Continue only if the File was successfully created
-        if (photoFile != null) {
-            Uri outputPicture = FileProvider.getUriForFile(caller, GenericFileProvider.AUTHORITY, photoFile);
-            GenericFileProvider.grantUriPermission(caller, cropIntent, inputUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            GenericFileProvider.grantUriPermission(caller, cropIntent, outputPicture, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-            cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputPicture);
-            caller.startActivityForResult(cropIntent, REQUEST_PIC_CROP);
-        }
+        Uri outputPicture = FileProvider.getUriForFile(caller, GenericFileProvider.AUTHORITY, photoFile);
+        GenericFileProvider.grantUriPermission(caller, cropIntent, inputUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        GenericFileProvider.grantUriPermission(caller, cropIntent, outputPicture, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputPicture);
+        caller.startActivityForResult(cropIntent, REQUEST_PIC_CROP);
+
         return photoFile.getAbsolutePath();
     }
 }
