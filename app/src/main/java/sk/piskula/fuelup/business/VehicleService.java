@@ -13,7 +13,7 @@ import sk.piskula.fuelup.entity.VehicleType;
 import sk.piskula.fuelup.entity.enums.VolumeUnit;
 
 /**
- * @author Martin Styk
+ * @author Martin Styk, Ondrej Oravcok
  * @version 23.06.2017
  */
 public class VehicleService {

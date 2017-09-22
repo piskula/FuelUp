@@ -18,8 +18,8 @@ import sk.piskula.fuelup.entity.enums.VolumeUnit;
 import sk.piskula.fuelup.entity.util.VolumeUtil;
 
 /**
- * @author Martin Styk
- * @version 17.8.2017 by Ondrej Oravcok
+ * @author Martin Styk, Ondrej Oravcok
+ * @version 17.8.2017
  */
 public class StatisticsService {
 
@@ -173,10 +173,6 @@ public class StatisticsService {
             BigDecimal litrePerOneMile = BigDecimal.ONE.divide(milesPerOneLitre, 14, RoundingMode.HALF_UP);
             return litrePerOneMile.multiply(HUNDRED);
         }
-    }
-
-    private String[] getAsArgument(long value) {
-        return new String[]{String.valueOf(value)};
     }
 
     private BigDecimal getTotalPriceFillUpsForVehicle(long vehicleId) {
@@ -389,6 +385,10 @@ public class StatisticsService {
         }
         Log.e(LOG_TAG, "Cannot retrieve min distance between fillups for vehicleId=" + mVehicleId);
         return 0;
+    }
+
+    private String[] getAsArgument(long value) {
+        return new String[]{String.valueOf(value)};
     }
 
     private enum TimePeriod {

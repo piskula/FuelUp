@@ -15,11 +15,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Currency;
-import java.util.Date;
 import java.util.List;
 
 import sk.piskula.fuelup.business.FillUpService;
-import sk.piskula.fuelup.business.FillUpService.ConsumtpionUnit;
 import sk.piskula.fuelup.business.VehicleService;
 import sk.piskula.fuelup.data.DatabaseHelper;
 import sk.piskula.fuelup.data.FuelUpContract;
@@ -27,7 +25,6 @@ import sk.piskula.fuelup.data.FuelUpContract.ExpenseEntry;
 import sk.piskula.fuelup.data.FuelUpContract.FillUpEntry;
 import sk.piskula.fuelup.data.FuelUpContract.VehicleEntry;
 import sk.piskula.fuelup.entity.FillUp;
-import sk.piskula.fuelup.entity.enums.DistanceUnit;
 import sk.piskula.fuelup.entity.enums.VolumeUnit;
 import sk.piskula.fuelup.entity.util.CurrencyUtil;
 

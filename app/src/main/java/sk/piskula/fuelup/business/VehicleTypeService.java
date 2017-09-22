@@ -10,7 +10,7 @@ import sk.piskula.fuelup.data.FuelUpContract.VehicleTypeEntry;
 import sk.piskula.fuelup.entity.VehicleType;
 
 /**
- * @author Martin Styk
+ * @author Martin Styk, Ondrej Oravcok
  * @version 16.08.2017
  */
 public class VehicleTypeService {
