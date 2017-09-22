@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -85,7 +86,6 @@ public abstract class VehicleAbstractActivity extends AppCompatActivity {
         } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
-                //TODO picture is in cache - move it somewhere
                 vehiclePicturePath = result.getUri().getPath();
                 imgCarPhotoStatus.setImageResource(R.drawable.ic_camera_deny);
                 Snackbar.make(findViewById(android.R.id.content), getString(R.string.addVehicle_picture_add_success), Snackbar.LENGTH_SHORT).show();
@@ -117,7 +117,11 @@ public abstract class VehicleAbstractActivity extends AppCompatActivity {
     }
 
     private void startCropImageActivity(Uri imageUri) {
-        CropImage.activity(imageUri).setAspectRatio(16,9).setOutputCompressQuality(50)
+        CropImage.activity(imageUri)
+                .setAspectRatio(16, 9)
+                .setOutputCompressQuality(50)
+                .setOutputCompressFormat(Bitmap.CompressFormat.JPEG)
+                .setOutputUri(android.net.Uri.fromFile(new File(getFilesDir(), System.currentTimeMillis() + ".jpg")))
                 .start(this);
     }
 
