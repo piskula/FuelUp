@@ -9,6 +9,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -60,7 +62,14 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
 
         getLoaderManager().initLoader(StatisticsLoader.ID, args, this);
 
+        setHasOptionsMenu(true);
+
         return binding.getRoot();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.getItem(0).setVisible(false);
     }
 
     @Override
