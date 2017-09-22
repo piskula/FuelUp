@@ -93,7 +93,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("INSERT INTO " + ExpenseEntry.TABLE_NAME + "('vehicle','info','date','price') VALUES (1,'Front bumper','" + (new Date()).getTime() + "','60');");
 
-        db.execSQL("INSERT INTO " + FillUpEntry.TABLE_NAME + "('vehicle','fuel_volume','fuel_price_per_litre','fuel_price_total','is_full_fillup','fuel_consumption','date', 'distance_from_last_fillup') VALUES (1,'20','1.120','22.4',1,'7.6','" + (new Date()).getTime() + "','240');");
+        db.execSQL("INSERT INTO " + FillUpEntry.TABLE_NAME + "('vehicle','fuel_volume','fuel_price_per_litre','fuel_price_total','is_full_fillup','fuel_consumption','date', 'distance_from_last_fillup') VALUES (1,'20','1.120','22.4',1,null,'" + (new Date()).getTime() + "','240');");
     }
 
 }

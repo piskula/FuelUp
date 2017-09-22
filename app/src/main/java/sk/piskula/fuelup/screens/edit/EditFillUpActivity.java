@@ -273,10 +273,10 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
                 ContentUris.withAppendedId(FillUpEntry.CONTENT_URI, mSelectedFillUp.getId()), null, null);
 
         if (result != -1) {
-            Toast.makeText(getApplicationContext(), getString(R.string.remove_expense_success), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.remove_fillup_success), Toast.LENGTH_LONG).show();
             setResult(RESULT_OK);
         } else {
-            Toast.makeText(getApplicationContext(), getString(R.string.remove_expense_fail), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.remove_fillup_fail), Toast.LENGTH_LONG).show();
             setResult(RESULT_CANCELED);
         }
 
