@@ -16,7 +16,6 @@ import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.dto.StatisticsDTO;
 import sk.piskula.fuelup.entity.enums.VolumeUnit;
 import sk.piskula.fuelup.entity.util.VolumeUtil;
-import sk.piskula.fuelup.screens.MainActivity;
 
 /**
  * @author Martin Styk
@@ -177,7 +176,7 @@ public class StatisticsService {
     }
 
     private String[] getAsArgument(long value) {
-        return new String[] { String.valueOf(value) };
+        return new String[]{String.valueOf(value)};
     }
 
     private BigDecimal getTotalPriceFillUpsForVehicle(long vehicleId) {

@@ -46,8 +46,8 @@ public class CostsPerMonthChartDataLoader extends FuelUpAbstractAsyncLoader<Colu
 
     @Override
     public ColumnChartData loadInBackground() {
-        List<FillUp> fillUps = fillUpService.findFillUpsOfVehicle(vehicleId);
-        List<Expense> expenses = new ArrayList<>();
+        List<FillUp> fillUps = fillUpService.findFillUpsOfVehicle(vehicleId, getContext());
+        List<Expense> expenses = expenseService.getExpensesOfVehicle(vehicleId, getContext());
 
         return fillUps.isEmpty() && expenses.isEmpty() ? null : generateColumnChartData(fillUps, expenses);
     }

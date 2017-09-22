@@ -1,9 +1,7 @@
 package sk.piskula.fuelup.business;
 
-import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.math.BigDecimal;
@@ -16,9 +14,7 @@ import sk.piskula.fuelup.data.FuelUpContract;
 import sk.piskula.fuelup.data.FuelUpContract.FillUpEntry;
 import sk.piskula.fuelup.entity.FillUp;
 import sk.piskula.fuelup.entity.Vehicle;
-import sk.piskula.fuelup.entity.enums.DistanceUnit;
 import sk.piskula.fuelup.entity.enums.VolumeUnit;
-import sk.piskula.fuelup.entity.util.CurrencyUtil;
 
 /**
  * Created by Martin Styk on 23.06.2017.
@@ -108,25 +104,47 @@ public class FillUpService {
         return 1;
     }
 
-    public List<FillUp> findFillUpsOfVehicle(long vehicleId) {
-        List<FillUp> fillUps = new ArrayList<>();
-//        try {
-//            fillUps = fillUpDao.queryBuilder().orderBy("date", false).orderBy("id", false).where().eq("vehicle_id", vehicleId).query();
-//            Log.i(TAG, "Successfully found fillups of vehicle id " + vehicleId);
-//        } catch (SQLException e) {
-//            Log.e(TAG, "Unexpected error. See logs for details.", e);
-//        }
+    public static List<FillUp> findFillUpsOfVehicle(long vehicleId, Context context) {
+
+        String[] selectionArgs = {String.valueOf(vehicleId)};
+        Cursor cursor = context.getContentResolver()
+                .query(FillUpEntry.CONTENT_URI,
+                        FuelUpContract.ALL_COLUMNS_FILLUPS,
+                        FillUpEntry.COLUMN_VEHICLE + "=?",
+                        selectionArgs,
+                        FillUpEntry.COLUMN_DATE + " DESC");
+
+        List<FillUp> fillUps = new ArrayList<>(cursor.getCount());
+
+        while (cursor.moveToNext()) {
+            FillUp fillUp = cursorToFillup(cursor, context);
+            fillUps.add(fillUp);
+        }
+
+        cursor.close();
+
         return fillUps;
     }
 
-    public List<FillUp> findFillUpsOfVehicleWithComputedConsumption(long vehicleId) {
-        List<FillUp> fillUps = new ArrayList<>();
-//        try {
-//            fillUps = fillUpDao.queryBuilder().orderBy("date", false).orderBy("id", false).where().eq("vehicle_id", vehicleId).and().isNotNull("consumption").query();
-//            Log.i(TAG, "Successfully found fillups of vehicle id " + vehicleId);
-//        } catch (SQLException e) {
-//            Log.e(TAG, "Unexpected error. See logs for details.", e);
-//        }
+    public List<FillUp> findFillUpsOfVehicleWithComputedConsumption(long vehicleId, Context context) {
+
+        String[] selectionArgs = {String.valueOf(vehicleId)};
+        Cursor cursor = context.getContentResolver()
+                .query(FillUpEntry.CONTENT_URI,
+                        FuelUpContract.ALL_COLUMNS_FILLUPS,
+                        FillUpEntry.COLUMN_VEHICLE + "=? AND " + FillUpEntry.COLUMN_FUEL_CONSUMPTION + " IS NOT NULL",
+                        selectionArgs,
+                        FillUpEntry.COLUMN_DATE + " DESC");
+
+        List<FillUp> fillUps = new ArrayList<>(cursor.getCount());
+
+        while (cursor.moveToNext()) {
+            FillUp fillUp = cursorToFillup(cursor, context);
+            fillUps.add(fillUp);
+        }
+
+        cursor.close();
+
         return fillUps;
     }
 
@@ -153,7 +171,7 @@ public class FillUpService {
     }
 
     public static FillUp getFillUpById(long fillUpId, Context context) {
-        String[] selectionArgs = { String.valueOf(fillUpId) };
+        String[] selectionArgs = {String.valueOf(fillUpId)};
         Cursor cursor = context.getContentResolver().query(FillUpEntry.CONTENT_URI,
                 FuelUpContract.ALL_COLUMNS_FILLUPS, FillUpEntry._ID + "=?",
                 selectionArgs, null);
@@ -164,20 +182,7 @@ public class FillUpService {
         }
 
         cursor.moveToFirst();
-        long vehicleId = cursor.getLong(cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_VEHICLE));
-        Vehicle vehicle = VehicleService.getVehicleById(vehicleId, context);
-
-        FillUp fillUp = new FillUp();
-        fillUp.setId(cursor.getLong(cursor.getColumnIndexOrThrow(FillUpEntry._ID)));
-        fillUp.setInfo(cursor.getString(cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_INFO)));
-        fillUp.setFuelPriceTotal(BigDecimal.valueOf(cursor.getDouble(cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL))));
-        fillUp.setFuelPricePerLitre(BigDecimal.valueOf(cursor.getDouble(cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE))));
-        fillUp.setFuelVolume(BigDecimal.valueOf(cursor.getDouble(cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_FUEL_VOLUME))));
-        fillUp.setDistanceFromLastFillUp(cursor.getLong(cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_DISTANCE_FROM_LAST)));
-        fillUp.setFullFillUp(cursor.getInt(cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_IS_FULL_FILLUP)) == 1);
-        fillUp.setDate(new Date(cursor.getLong(cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_DATE))));
-        fillUp.setFuelConsumption(BigDecimal.valueOf(cursor.getDouble(cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_FUEL_CONSUMPTION))));
-        fillUp.setVehicle(vehicle);
+        FillUp fillUp = cursorToFillup(cursor, context);
 
         cursor.close();
         return fillUp;
@@ -284,6 +289,25 @@ public class FillUpService {
 
     public enum ConsumtpionUnit {
         milesPerGallon, litresPer100km
+    }
+
+    private static FillUp cursorToFillup(Cursor cursor, Context ctx) {
+        long vehicleId = cursor.getLong(cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_VEHICLE));
+        Vehicle vehicle = VehicleService.getVehicleById(vehicleId, ctx);
+
+        FillUp fillUp = new FillUp();
+        fillUp.setId(cursor.getLong(cursor.getColumnIndexOrThrow(FillUpEntry._ID)));
+        fillUp.setInfo(cursor.getString(cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_INFO)));
+        fillUp.setFuelPriceTotal(BigDecimal.valueOf(cursor.getDouble(cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL))));
+        fillUp.setFuelPricePerLitre(BigDecimal.valueOf(cursor.getDouble(cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE))));
+        fillUp.setFuelVolume(BigDecimal.valueOf(cursor.getDouble(cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_FUEL_VOLUME))));
+        fillUp.setDistanceFromLastFillUp(cursor.getLong(cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_DISTANCE_FROM_LAST)));
+        fillUp.setFullFillUp(cursor.getInt(cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_IS_FULL_FILLUP)) == 1);
+        fillUp.setDate(new Date(cursor.getLong(cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_DATE))));
+        fillUp.setFuelConsumption(BigDecimal.valueOf(cursor.getDouble(cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_FUEL_CONSUMPTION))));
+        fillUp.setVehicle(vehicle);
+
+        return fillUp;
     }
 }
 

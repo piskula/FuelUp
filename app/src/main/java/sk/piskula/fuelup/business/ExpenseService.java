@@ -1,13 +1,13 @@
 package sk.piskula.fuelup.business;
 
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import sk.piskula.fuelup.data.FuelUpContract;
 import sk.piskula.fuelup.data.FuelUpContract.ExpenseEntry;
@@ -23,7 +23,7 @@ public class ExpenseService {
     private static final String LOG_TAG = ExpenseService.class.getSimpleName();
 
     public static Expense getExpenseById(long expenseId, Context context) {
-        String[] selectionArgs = { String.valueOf(expenseId) };
+        String[] selectionArgs = {String.valueOf(expenseId)};
         Cursor cursor = context.getContentResolver().query(ExpenseEntry.CONTENT_URI,
                 FuelUpContract.ALL_COLUMNS_EXPENSES, ExpenseEntry._ID + "=?",
                 selectionArgs, null);
@@ -34,6 +34,35 @@ public class ExpenseService {
         }
 
         cursor.moveToFirst();
+        Expense expense = cursorToExpense(cursor, context);
+        cursor.close();
+
+        return expense;
+    }
+
+    public static List<Expense> getExpensesOfVehicle(long vehicleId, Context context) {
+        String[] selectionArgs = {String.valueOf(vehicleId)};
+
+        Cursor cursor = context.getContentResolver()
+                .query(FuelUpContract.ExpenseEntry.CONTENT_URI,
+                        FuelUpContract.ALL_COLUMNS_EXPENSES,
+                        FuelUpContract.ExpenseEntry.COLUMN_VEHICLE + "=?",
+                        selectionArgs,
+                        FuelUpContract.ExpenseEntry.COLUMN_DATE + " DESC");
+
+        List<Expense> expenses = new ArrayList<>(cursor.getCount());
+
+        while (cursor.moveToNext()) {
+            Expense expense = cursorToExpense(cursor, context);
+            expenses.add(expense);
+        }
+
+        cursor.close();
+
+        return expenses;
+    }
+
+    private static Expense cursorToExpense(Cursor cursor, Context context) {
         long vehicleId = cursor.getLong(cursor.getColumnIndexOrThrow(ExpenseEntry.COLUMN_VEHICLE));
         Vehicle vehicle = VehicleService.getVehicleById(vehicleId, context);
 
@@ -44,7 +73,6 @@ public class ExpenseService {
         expense.setDate(new Date(cursor.getLong(cursor.getColumnIndexOrThrow(ExpenseEntry.COLUMN_DATE))));
         expense.setVehicle(vehicle);
 
-        cursor.close();
         return expense;
     }
 

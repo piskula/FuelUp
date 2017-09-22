@@ -51,7 +51,7 @@ public class FuelPriceChartDataLoader extends FuelUpAbstractAsyncLoader<Map<Stri
      */
     @Override
     public Map<String, Object> loadInBackground() {
-        List<FillUp> fillUps = fillUpService.findFillUpsOfVehicle(vehicleId);
+        List<FillUp> fillUps = fillUpService.findFillUpsOfVehicle(vehicleId, getContext());
         if (fillUps.isEmpty()) {
             return null;
         }
