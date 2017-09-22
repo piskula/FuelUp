@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.v4.content.FileProvider;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 public class GenericFileProvider extends FileProvider {
 
     public static final String AUTHORITY = "sk.piskula.fuelup.file.provider";
+    public static final String EXTERNAL_PATH = "external_files";
 
     /**
      * Grants URI permissions to all applications which can respond to given intent
@@ -34,5 +36,16 @@ public class GenericFileProvider extends FileProvider {
 
             ctx.grantUriPermission(packageName, uri, permissionFlags);
         }
+    }
+
+    public static String uriToPath(Uri uri) {
+//        URI looks like this content://sk.piskula.fuelup.file.provider/external_files/Pictures/FuelUp/JPEF....
+        if (!AUTHORITY.equals(uri.getAuthority())) {
+            throw new IllegalArgumentException("This URI is not provided by " + GenericFileProvider.class.getSimpleName());
+        }
+
+        String path = uri.getEncodedPath();
+        path = path.replace("/"+ EXTERNAL_PATH, Environment.getExternalStorageDirectory().getAbsolutePath());
+        return path;
     }
 }

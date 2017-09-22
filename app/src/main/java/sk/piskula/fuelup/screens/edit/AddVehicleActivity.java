@@ -1,20 +1,13 @@
 package sk.piskula.fuelup.screens.edit;
 
-import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -29,22 +22,14 @@ import sk.piskula.fuelup.data.FuelUpContract.VehicleEntry;
 import sk.piskula.fuelup.entity.VehicleType;
 import sk.piskula.fuelup.entity.enums.DistanceUnit;
 import sk.piskula.fuelup.entity.enums.VolumeUnit;
-import sk.piskula.fuelup.screens.dialog.ImageChooserDialog;
-import sk.piskula.fuelup.util.ImageUtils;
 
 /**
  * @author Ondrej Oravcok
  * @version 18.6.2017
  */
-public class AddVehicleActivity extends AppCompatActivity implements ImageChooserDialog.Callback {
+public class AddVehicleActivity extends VehicleAbstractActivity {
 
     private static final String LOG_TAG = AddVehicleActivity.class.getSimpleName();
-
-    private static final String PHOTO = "photo";
-    public static final int REQUEST_PICTURE = 1113;
-    public static final int REQUEST_TAKE_PHOTOS = 1112;
-    public static final int REQUEST_PIC_CROP = 1111;
-    public static final int STORAGE_PERMISSIONS_REQUEST = 1114;
 
     private EditText txtName;
     private EditText txtManufacturer;
@@ -53,11 +38,6 @@ public class AddVehicleActivity extends AppCompatActivity implements ImageChoose
     private Spinner spinnerType;
     private Spinner spinnerCurrency;
     private RadioGroup radioGroupVolumeUnit;
-    private ImageView imgCarPhotoStatus;
-
-    private String vehiclePicturePath;
-
-    private boolean showImageChooseDialog = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,41 +51,6 @@ public class AddVehicleActivity extends AppCompatActivity implements ImageChoose
         if (nameFromDialog != null) {
             txtName.setText(nameFromDialog);
             txtName.setSelection(nameFromDialog.length());
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // This is workaround to display image chooser dialog when selecting photo
-        // see https://stackoverflow.com/questions/33264031/calling-dialogfragments-show-from-within-onrequestpermissionsresult-causes
-        if (showImageChooseDialog) {
-            if (vehiclePicturePath != null) {
-                deletePhoto();
-            } else {
-                getSupportFragmentManager();
-                ImageChooserDialog d = new ImageChooserDialog();
-                d.show(getSupportFragmentManager(), ImageChooserDialog.class.getSimpleName());
-            }
-            showImageChooseDialog = false;
-        }
-
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (vehiclePicturePath != null)
-            outState.putString(PHOTO, vehiclePicturePath);
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState.containsKey(PHOTO)) {
-            vehiclePicturePath = savedInstanceState.getString(PHOTO);
-            imgCarPhotoStatus.setImageResource(R.drawable.ic_camera_deny);
         }
     }
 
@@ -135,18 +80,6 @@ public class AddVehicleActivity extends AppCompatActivity implements ImageChoose
 
     public void onClickAdd(View w) {
         saveVehicle();
-    }
-
-    public void onClickPhoto(View w) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSIONS_REQUEST);
-        } else {
-            if (vehiclePicturePath != null) {
-                deletePhoto();
-            } else {
-                new ImageChooserDialog().show(getSupportFragmentManager(), ImageChooserDialog.class.getSimpleName());
-            }
-        }
     }
 
     private VolumeUnit getVolumeUnitFromRadio() {
@@ -190,50 +123,6 @@ public class AddVehicleActivity extends AppCompatActivity implements ImageChoose
             Toast.makeText(this, R.string.addVehicle_Toast_successfullyCreated, Toast.LENGTH_LONG).show();
             finish();
         }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_PICTURE) {
-                vehiclePicturePath = ImageUtils.onActivityResultTakePhoto(this, data);
-            }
-            if (requestCode == REQUEST_TAKE_PHOTOS) {
-                vehiclePicturePath = ImageUtils.performCrop(this, vehiclePicturePath);
-            }
-            if (vehiclePicturePath != null)
-                Snackbar.make(findViewById(android.R.id.content), R.string.addVehicle_picture_added, Snackbar.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        switch (requestCode) {
-            case STORAGE_PERMISSIONS_REQUEST: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    showImageChooseDialog = true;
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onSelectFromGallery(ImageChooserDialog dialog) {
-        ImageUtils.selectPhotoFromGallery(this);
-    }
-
-    @Override
-    public void onTakePhoto(ImageChooserDialog dialog) {
-        vehiclePicturePath = ImageUtils.onStartTakePhoto(this);
-    }
-
-    public void deletePhoto() {
-        // TODO remove photo from storage
-        vehiclePicturePath = null;
-        imgCarPhotoStatus.setImageResource(R.drawable.ic_camera);
-        Snackbar.make(findViewById(android.R.id.content), R.string.delete_vehicle_photo, Snackbar.LENGTH_SHORT).show();
     }
 
 }

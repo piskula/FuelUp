@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.util.Log;
 
 import java.util.Currency;
-import java.util.List;
 
 import sk.piskula.fuelup.data.FuelUpContract;
 import sk.piskula.fuelup.data.FuelUpContract.VehicleEntry;

@@ -53,7 +53,7 @@
     <string name="addVehicle_success">Vozidlo bolo vytvorené</string>
     <string name="addVehicle_fail">Nepodarilo sa vytvoriť vozidlo</string>
     <string name="addVehicle_fail_duplicate">Vozidlo s týmto názvom už existuje</string>
-    <string name="addVehicle_picture_added">Obrázok bol priradený</string>
+    <string name="addVehicle_picture_add_success">Obrázok bol priradený</string>
     <string name="permission_image_not_granted">Táto aplikácia nemá dostatočné práva pre prácu s galériou. Obrázok nebude použitý.</string>
 
     <string name="editVehicle_toast_oldPhotoWasNotRemovedDueToError">Chyba: Pôvodný obrázok sa nepodarilo odstrániť !!!</string>

@@ -1,21 +1,15 @@
 package sk.piskula.fuelup.screens.edit;
 
-import android.Manifest;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -30,31 +24,21 @@ import sk.piskula.fuelup.entity.VehicleType;
 import sk.piskula.fuelup.screens.MainActivity;
 import sk.piskula.fuelup.screens.VehicleTabbedDetailActivity;
 import sk.piskula.fuelup.screens.dialog.DeleteDialog;
-import sk.piskula.fuelup.screens.dialog.ImageChooserDialog;
-import sk.piskula.fuelup.util.ImageUtils;
-
-import static sk.piskula.fuelup.screens.edit.AddVehicleActivity.REQUEST_PICTURE;
-import static sk.piskula.fuelup.screens.edit.AddVehicleActivity.REQUEST_TAKE_PHOTOS;
-import static sk.piskula.fuelup.screens.edit.AddVehicleActivity.STORAGE_PERMISSIONS_REQUEST;
 
 /**
  * @author Ondrej Oravcok
  * @version 21.6.2017
  */
-public class EditVehicleActivity extends AppCompatActivity implements ImageChooserDialog.Callback, MenuItem.OnMenuItemClickListener, DeleteDialog.Callback {
+public class EditVehicleActivity extends VehicleAbstractActivity implements MenuItem.OnMenuItemClickListener, DeleteDialog.Callback {
 
     public static final String TAG = EditVehicleActivity.class.getSimpleName();
 
-    private String currentPhotoPath;
     private EditText txtName;
     private EditText txtManufacturer;
     private Spinner spinnerType;
-    private ImageView imgCarPhotoStatus;
 
     private Vehicle vehicle;
     private SpinnerVehicleTypesAdapter typeAdapter;
-
-    private boolean showImageChooseDialog = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,25 +69,6 @@ public class EditVehicleActivity extends AppCompatActivity implements ImageChoos
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-        // This is workaround to display image chooser dialog when selecting photo
-        // see https://stackoverflow.com/questions/33264031/calling-dialogfragments-show-from-within-onrequestpermissionsresult-causes
-        if (showImageChooseDialog) {
-            if (currentPhotoPath != null) {
-                deletePhoto();
-            } else {
-                getSupportFragmentManager();
-                ImageChooserDialog d = new ImageChooserDialog();
-                d.show(getSupportFragmentManager(), ImageChooserDialog.class.getSimpleName());
-            }
-            showImageChooseDialog = false;
-        }
-
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.vehicle_edit_create, menu);
         return true;
@@ -126,65 +91,12 @@ public class EditVehicleActivity extends AppCompatActivity implements ImageChoos
         txtName.setText(vehicle.getName());
         txtManufacturer.setText(vehicle.getVehicleMaker());
         spinnerType.setSelection(getAlreadySelectedTypePosition(vehicle.getType()));
-        currentPhotoPath = vehicle.getPathToPicture();
-        imgCarPhotoStatus.setImageResource(currentPhotoPath != null && !currentPhotoPath.isEmpty() ? R.drawable.ic_camera_deny : R.drawable.ic_camera);
+        vehiclePicturePath = vehicle.getPathToPicture();
+        imgCarPhotoStatus.setImageResource(vehiclePicturePath != null && new File(vehiclePicturePath).exists() ? R.drawable.ic_camera_deny : R.drawable.ic_camera);
     }
 
     public void onClickAdd(View w) {
         saveVehicle();
-    }
-
-    public void onClickPhoto(View w) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSIONS_REQUEST);
-        } else {
-            if (currentPhotoPath != null && !currentPhotoPath.isEmpty()) {
-                deletePhoto();
-            } else {
-                new ImageChooserDialog().show(getSupportFragmentManager(), ImageChooserDialog.class.getSimpleName());
-            }
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_PICTURE) {
-            currentPhotoPath = ImageUtils.onActivityResultTakePhoto(this, data);
-        }
-        if (requestCode == REQUEST_TAKE_PHOTOS) {
-            currentPhotoPath = ImageUtils.performCrop(this, currentPhotoPath);
-        }
-        if (currentPhotoPath != null)
-            Snackbar.make(findViewById(android.R.id.content), R.string.addVehicle_picture_added, Snackbar.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        switch (requestCode) {
-            case STORAGE_PERMISSIONS_REQUEST: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    showImageChooseDialog = true;
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onSelectFromGallery(ImageChooserDialog dialog) {
-        ImageUtils.selectPhotoFromGallery(this);
-    }
-
-    @Override
-    public void onTakePhoto(ImageChooserDialog dialog) {
-        currentPhotoPath = ImageUtils.onStartTakePhoto(this);
-    }
-
-    public void deletePhoto() {
-        currentPhotoPath = null;
-        imgCarPhotoStatus.setImageResource(R.drawable.ic_camera);
-        Snackbar.make(findViewById(android.R.id.content), R.string.delete_vehicle_photo, Snackbar.LENGTH_SHORT).show();
     }
 
     private boolean deleteVehicle() {
@@ -210,14 +122,14 @@ public class EditVehicleActivity extends AppCompatActivity implements ImageChoos
         contentValues.put(VehicleEntry.COLUMN_VEHICLE_MAKER, vehicleManufacturer);
         contentValues.put(VehicleEntry.COLUMN_TYPE, ((VehicleType) spinnerType.getSelectedItem()).getId());
 
-        if (vehicle.getPathToPicture() != currentPhotoPath) {
+        if (vehicle.getPathToPicture() != vehiclePicturePath) {
             if (vehicle.getPathToPicture() != null && !vehicle.getPathToPicture().isEmpty()) {
                 File file = new File(vehicle.getPathToPicture());
                 if (!file.delete()) {
                     Toast.makeText(this, getString(R.string.editVehicle_toast_oldPhotoWasNotRemovedDueToError), Toast.LENGTH_LONG).show();
                 }
             }
-            contentValues.put(VehicleEntry.COLUMN_PICTURE, currentPhotoPath);
+            contentValues.put(VehicleEntry.COLUMN_PICTURE, vehiclePicturePath);
         }
 
         final int result = getContentResolver().update(

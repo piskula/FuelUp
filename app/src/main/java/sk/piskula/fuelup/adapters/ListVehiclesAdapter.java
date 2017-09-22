@@ -10,15 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import sk.piskula.fuelup.R;
-import sk.piskula.fuelup.business.VehicleService;
 import sk.piskula.fuelup.business.VehicleTypeService;
 import sk.piskula.fuelup.data.FuelUpContract.VehicleEntry;
-import sk.piskula.fuelup.entity.Vehicle;
-import sk.piskula.fuelup.entity.VehicleType;
 import sk.piskula.fuelup.screens.MainActivity;
 
 /**
@@ -71,9 +65,7 @@ public class ListVehiclesAdapter extends RecyclerViewCursorAdapter<ListVehiclesA
     }
 
 
-
-    static class VehicleViewHolder extends RecyclerView.ViewHolder
-    {
+    static class VehicleViewHolder extends RecyclerView.ViewHolder {
         ImageView thumbnail, overflow;
         TextView txtName, txtMaker;
 
@@ -90,7 +82,7 @@ public class ListVehiclesAdapter extends RecyclerViewCursorAdapter<ListVehiclesA
     private int getImageResourceId(int vehicleTypeId) {
         Context cxt = MainActivity.getInstance();
         return cxt.getResources().getIdentifier("ic_type_"
-                + VehicleTypeService.getVehicleTypeNameById(vehicleTypeId, cxt).toLowerCase(),
+                        + VehicleTypeService.getVehicleTypeNameById(vehicleTypeId, cxt).toLowerCase(),
                 "drawable", cxt.getPackageName());
     }
 
