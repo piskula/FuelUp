@@ -1,6 +1,6 @@
 package sk.piskula.fuelup.screens;
 
-import android.content.ContentValues;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -16,7 +16,7 @@ import android.text.Editable;
 import android.view.MenuItem;
 
 import sk.piskula.fuelup.R;
-import sk.piskula.fuelup.data.FuelUpContract;
+import sk.piskula.fuelup.data.SampleDataUtils;
 import sk.piskula.fuelup.screens.dialog.CreateVehicleDialog;
 
 public class MainActivity extends AppCompatActivity implements OnNavigationItemSelectedListener, CreateVehicleDialog.Callback {
@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private static MainActivity singleton;
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String IS_FIRST_RUN = "is_this_fisrt_run";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,15 +32,15 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         if (savedInstanceState == null) {
@@ -47,16 +48,19 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             getSupportFragmentManager().beginTransaction().replace(R.id.activty_main_frame, new VehicleListFragment(), TAG).commit();
         }
 
-//        ContentValues values = new ContentValues();
-//        getContentResolver().insert(FuelUpContract.VehicleEntry.CONTENT_URI,
-//                values);
+        // initialize with data when first running
+        SharedPreferences settings = getSharedPreferences(IS_FIRST_RUN, 0);
+        if (settings.getBoolean("my_first_time", true)) {
+            SampleDataUtils.initializeWhenFirstRun(getApplicationContext());
+            settings.edit().putBoolean("my_first_time", false).apply();
+        }
 
         singleton = this;
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
