@@ -1,5 +1,6 @@
 package sk.piskula.fuelup.util;
 
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 /**
@@ -14,6 +15,7 @@ public class BigDecimalFormatter {
             format = new DecimalFormat();
             format.setMaximumFractionDigits(2);
             format.setMinimumFractionDigits(2);
+            format.setRoundingMode(RoundingMode.HALF_UP);
         }
         return format;
     }

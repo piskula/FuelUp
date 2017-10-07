@@ -64,7 +64,7 @@
             </android.support.design.widget.TextInputLayout>
 
             <TextView
-                android:id="@+id/txt_addfillup_currency"
+                android:id="@+id/txt_addfillup_fuel_price_unit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="@integer/edit_fillup_weight_unit"

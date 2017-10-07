@@ -1,26 +1,15 @@
 package sk.piskula.fuelup.screens.edit;
 
-import android.app.DatePickerDialog;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -33,44 +22,22 @@ import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.data.FuelUpContract.FillUpEntry;
 import sk.piskula.fuelup.data.provider.VehicleProvider;
 import sk.piskula.fuelup.entity.FillUp;
-import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.util.DateUtil;
 import sk.piskula.fuelup.entity.util.VolumeUtil;
 import sk.piskula.fuelup.screens.detailfragments.FillUpsListFragment;
 import sk.piskula.fuelup.screens.dialog.DeleteDialog;
+import sk.piskula.fuelup.util.BigDecimalFormatter;
 
 
-public class EditFillUpActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, DeleteDialog.Callback {
+public class EditFillUpActivity extends FillUpAbstractActivity implements DeleteDialog.Callback {
 
     public static final String TAG = EditFillUpActivity.class.getSimpleName();
 
-    private EditText mTxtDistance;
-    private EditText mTxtFuelVolume;
-    private TextView mTxtFuelVolumeUnit;
-    private EditText mTxtPrice;
-    private EditText mTxtInfo;
-    private TextView mTxtDate;
-
-    private TextInputLayout mTxtInputDistance;
-    private TextInputLayout mTxtInputPrice;
-
-    private TextView mTxtDistanceUnit;
-    private TextView mTxtCurrencySymbol;
-
-    private Button mBtnAdd;
-    private ToggleButton mBtnSwitchPrice;
-    private CheckBox mCheckBoxIsFullFill;
-
-    private Vehicle mVehicle;
     private FillUp mSelectedFillUp;
-    private SwitchPrice priceMode = SwitchPrice.perVolume;
-
-    private Calendar fillUpDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fillup_edit);
 
         long fillUpId = getIntent().getLongExtra(FillUpsListFragment.FILLUP_ID_TO_EDIT, 0);
         mSelectedFillUp = FillUpService.getFillUpById(fillUpId, getApplicationContext());
@@ -88,44 +55,24 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         mTxtFuelVolume.setText(NumberFormat.getNumberInstance().format(mSelectedFillUp.getFuelVolume()));
         this.onCheckedChanged(mBtnSwitchPrice, false);
         if (priceMode == SwitchPrice.perVolume) {
-            mTxtPrice.setText(mSelectedFillUp.getFuelPricePerLitre().setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+            mTxtPrice.setText(BigDecimalFormatter.getCommonFormat().format(mSelectedFillUp.getFuelPricePerLitre()));
         } else {
-            mTxtPrice.setText(mSelectedFillUp.getFuelPriceTotal().setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+            mTxtPrice.setText(BigDecimalFormatter.getCommonFormat().format(mSelectedFillUp.getFuelPriceTotal()));
         }
-        if (mSelectedFillUp.isFullFillUp()) {
-            mCheckBoxIsFullFill.setChecked(true);
-        } else {
-            mCheckBoxIsFullFill.setChecked(false);
-        }
+        mCheckBoxIsFullFill.setChecked(mSelectedFillUp.isFullFillUp());
+
         mTxtInfo.setText(mSelectedFillUp.getInfo());
 
         setFillUpDate(DateUtil.transformToCal(mSelectedFillUp.getDate()));
 
         mBtnAdd.setText(R.string.update);
 
-        mTxtCurrencySymbol.setText(mVehicle.getCurrencySymbol());
         mTxtDistanceUnit.setText(mVehicle.getDistanceUnit().toString());
     }
 
-    private void initViews() {
-        mTxtDistance = findViewById(R.id.txt_addfillup_distance_from_last_fillup_adding);
-        mTxtDistanceUnit = findViewById(R.id.txt_addfillup_distance_unit);
-        mTxtInputDistance = findViewById(R.id.txt_input_addfillup_distance_from_last_fillup_adding);
-        mTxtFuelVolume = findViewById(R.id.txt_addfillup_fuel_volume);
-        mTxtFuelVolumeUnit = findViewById(R.id.txt_addfillup_volumeUnit);
-        mTxtPrice = findViewById(R.id.txt_addfillup_price);
-        mTxtCurrencySymbol = findViewById(R.id.txt_addfillup_currency);
-        mTxtInputPrice = findViewById(R.id.txt_input_addfillup_price);
-        mTxtDate = findViewById(R.id.txt_addfillup_date);
-        mTxtInfo = findViewById(R.id.txt_addfillup_information);
-        mCheckBoxIsFullFill = findViewById(R.id.checkBox_fullFillUp);
-        mBtnAdd = findViewById(R.id.btn_add_fillup);
-        mBtnSwitchPrice = findViewById(R.id.btn_switch_price);
+    protected void initViews() {
+        super.initViews();
 
-        mBtnSwitchPrice.setOnCheckedChangeListener(this);
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.add_fillup_title_update);
     }
 
@@ -213,40 +160,6 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         finish();
     }
 
-    /**
-     * OnClick listener for date text view
-     */
-    public void onClickDatePicker(View view) {
-        new DatePickerDialog(EditFillUpActivity.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int y, int m, int d) {
-                Calendar serviceDate = Calendar.getInstance();
-                serviceDate.set(y, m, d);
-                setFillUpDate(serviceDate);
-            }
-        }, fillUpDate.get(Calendar.YEAR), fillUpDate.get(Calendar.MONTH), fillUpDate.get(Calendar.DAY_OF_MONTH)).show();
-    }
-
-    private void setFillUpDate(Calendar calendar) {
-        this.fillUpDate = calendar;
-        mTxtDate.setText(DateUtil.getDateFormat(getApplicationContext()).format(calendar.getTime()));
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-        if (compoundButton.getId() == mBtnSwitchPrice.getId()) {
-            if (isChecked) {
-                priceMode = SwitchPrice.total;
-                mTxtInputPrice.setHint(getString(R.string.add_fillup_priceTotal));
-                mTxtCurrencySymbol.setText(mVehicle.getCurrencySymbol());
-            } else {
-                priceMode = SwitchPrice.perVolume;
-                mTxtInputPrice.setHint(getString(R.string.add_fillup_pricePerLitre));
-                mTxtCurrencySymbol.setText(getString(R.string.unit_pricePerLitre, mVehicle.getCurrencySymbol()));
-            }
-        }
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.fillup_edit, menu);
@@ -289,8 +202,5 @@ public class EditFillUpActivity extends AppCompatActivity implements CompoundBut
         dialog.dismiss();
     }
 
-    private enum SwitchPrice {
-        total,
-        perVolume
-    }
+
 }
