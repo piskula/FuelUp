@@ -33,8 +33,8 @@
         <item name="android:minHeight">45dp</item>
     </style>
 
-    <style name="ConfirmButton" parent="android:Widget.Button">
-        <item name="android:background">@drawable/selector_btn_confirm</item>
+    <style name="ConfirmButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:colorButtonNormal">@android:color/holo_orange_dark</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
     <style name="WarningButton" parent="android:Widget.Button">

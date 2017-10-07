@@ -30,4 +30,22 @@
     <integer name="edit_fillup_weight_unit">2</integer>
     <integer name="edit_fillup_weight_switchButtons">4</integer>
 
+    <!--spinners-->
+    <dimen name="item_padding_top">5dp</dimen>
+    <dimen name="item_padding_bottom">10dp</dimen>
+    <dimen name="item_left_part_width">50dp</dimen>
+    <dimen name="item_left_part_font_size">20sp</dimen>
+    <dimen name="item_left_part_left_padding">10dp</dimen>
+    <dimen name="item_right_part_font_size">18sp</dimen>
+    <dimen name="spinner_height">38dp</dimen>
+    <dimen name="whole_spinner_margin_bottom">5dp</dimen>
+    <dimen name="whole_spinner_margin_left">4dp</dimen>
+
+    <!--radio button-->
+    <dimen name="radio_btn_font_size">18sp</dimen>
+
+    <!--button confirm-->
+    <dimen name="btn_height">50dp</dimen>
+    <dimen name="btn_confirm_margin_top">10dp</dimen>
+
 </resources>

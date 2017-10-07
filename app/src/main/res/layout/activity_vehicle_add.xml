@@ -63,7 +63,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/whole_spinner_margin_bottom">
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
@@ -94,20 +95,20 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/whole_spinner_margin_bottom"
+            android:layout_marginLeft="@dimen/whole_spinner_margin_left">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/currency"
-                android:textColor="@color/colorAccent"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"/>
+                android:textColor="@color/colorAccent" />
 
             <Spinner
                 android:id="@+id/spinner_currency"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="@dimen/spinner_height">
             </Spinner>
 
         </LinearLayout>
@@ -115,20 +116,20 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/whole_spinner_margin_bottom"
+            android:layout_marginLeft="@dimen/whole_spinner_margin_left">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/vehicle_type"
-                android:textColor="@color/colorAccent"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"/>
+                android:textColor="@color/colorAccent" />
 
             <Spinner
                 android:id="@+id/spinner_addVehicle_types"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="@dimen/spinner_height">
             </Spinner>
 
         </LinearLayout>
@@ -136,16 +137,16 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="8dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/whole_spinner_margin_bottom"
+            android:layout_marginLeft="@dimen/whole_spinner_margin_left">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/distance_units"
                 android:textColor="@color/colorAccent"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"/>
+                android:paddingBottom="10dp"/>
 
             <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/radio_volume_unit"
@@ -160,7 +161,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/volumeUnit_litres"
-                    android:textSize="18sp"/>
+                    android:textSize="@dimen/radio_btn_font_size"/>
 
                 <RadioButton
                     android:id="@+id/radio_us_gallons"
@@ -168,7 +169,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/volumeUnit_gallons_us"
-                    android:textSize="18sp"/>
+                    android:textSize="@dimen/radio_btn_font_size"/>
 
                 <RadioButton
                     android:id="@+id/radio_uk_gallons"
@@ -176,7 +177,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/volumeUnit_gallons_uk"
-                    android:textSize="18sp"/>
+                    android:textSize="@dimen/radio_btn_font_size"/>
             </RadioGroup>
 
         </LinearLayout>
@@ -184,10 +185,10 @@
         <Button
             android:id="@+id/btn_addVehicle_add"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/btn_height"
             style="@style/ConfirmButton"
             android:gravity="center"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="@dimen/btn_confirm_margin_top"
             android:text="@string/add"
             android:onClick="onClickAdd"
            />

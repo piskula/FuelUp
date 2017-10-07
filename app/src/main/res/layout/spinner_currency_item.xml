@@ -3,23 +3,24 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingBottom="10dp"
+    android:paddingTop="@dimen/item_padding_top"
+    android:paddingBottom="@dimen/item_padding_bottom"
     android:gravity="center_vertical">
 
     <TextView
         android:id="@+id/spinner_item_currency_symbol"
         android:gravity="center"
-        android:layout_width="50dp"
+        android:layout_width="@dimen/item_left_part_width"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:paddingLeft="10dp"
+        android:textSize="@dimen/item_left_part_font_size"
+        android:paddingLeft="@dimen/item_left_part_left_padding"
         />
 
     <TextView
         android:id="@+id/spinner_item_currency_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="@dimen/item_right_part_font_size"
         />
 
 </LinearLayout>

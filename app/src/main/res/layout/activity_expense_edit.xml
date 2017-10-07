@@ -56,7 +56,8 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/whole_spinner_margin_bottom">
 
             <EditText
                 android:id="@+id/txt_addexpense_date"
@@ -74,7 +75,7 @@
         <Button
             android:id="@+id/btn_addexpense_add"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/btn_height"
             style="@style/ConfirmButton"
             android:onClick="onClickAdd"
             android:text="@string/add" />

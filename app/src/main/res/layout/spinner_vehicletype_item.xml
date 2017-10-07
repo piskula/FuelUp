@@ -3,23 +3,23 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingTop="5dp"
-    android:paddingBottom="7dp"
+    android:paddingTop="@dimen/item_padding_top"
+    android:paddingBottom="@dimen/item_padding_bottom"
     android:gravity="center_vertical">
 
     <ImageView
         android:id="@+id/spinner_item_vehicletype_pic"
-        android:layout_width="50dp"
+        android:layout_width="@dimen/item_left_part_width"
         android:layout_height="wrap_content"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp"
+        android:paddingEnd="10dp"
+        android:paddingStart="@dimen/item_left_part_left_padding"
         android:adjustViewBounds="true"/>
 
     <TextView
         android:id="@+id/spinner_item_vehicletype_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="@dimen/item_right_part_font_size"
         />
 
 </LinearLayout>

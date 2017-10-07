@@ -51,7 +51,8 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/whole_spinner_margin_bottom">
 
             <EditText
                 android:id="@+id/txt_editVehicle_manufacturer"
@@ -65,29 +66,29 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/whole_spinner_margin_bottom"
+            android:layout_marginLeft="@dimen/whole_spinner_margin_left">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingBottom="0dp"
-                android:paddingTop="0dp"
                 android:text="@string/vehicle_type"
                 android:textColor="@color/colorAccent" />
 
             <Spinner
                 android:id="@+id/spinner_editVehicle_types"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"></Spinner>
+                android:layout_height="@dimen/spinner_height" />
 
         </LinearLayout>
 
         <Button
             android:id="@+id/btn_editVehicle_add"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/btn_height"
             style="@style/ConfirmButton"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="@dimen/btn_confirm_margin_top"
             android:gravity="center"
             android:onClick="onClickAdd"
             android:text="@string/update" />

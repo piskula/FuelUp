@@ -140,7 +140,8 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/whole_spinner_margin_bottom">
 
             <EditText
                 android:id="@+id/txt_addfillup_information"
@@ -154,7 +155,7 @@
             android:id="@+id/btn_add_fillup"
             style="@style/ConfirmButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/btn_height"
             android:onClick="onClickAdd"
             android:text="@string/add" />
     </LinearLayout>
