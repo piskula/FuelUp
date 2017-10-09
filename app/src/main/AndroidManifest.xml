@@ -25,7 +25,7 @@
         </activity>
         <activity
             android:name=".screens.VehicleTabbedDetailActivity"
-            android:label="Detail"
+            android:label="@string/Detail"
             android:launchMode="singleTop"
             android:parentActivityName=".screens.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -35,7 +35,7 @@
         </activity>
         <activity
             android:name=".screens.VehicleStatisticsActivity"
-            android:label="Detailed Statistics"
+            android:label="@string/Detailed_statistics"
             android:launchMode="singleTop"
             android:parentActivityName=".screens.VehicleTabbedDetailActivity">
             <meta-data
@@ -44,23 +44,23 @@
         </activity>
         <activity
             android:name=".screens.edit.EditExpenseActivity"
-            android:label="Expense"
+            android:label="@string/Expense"
             android:parentActivityName=".screens.VehicleTabbedDetailActivity" />
         <activity
             android:name=".screens.edit.AddVehicleActivity"
-            android:label="Add Vehicle"
+            android:label="@string/Add_vehicle"
             android:parentActivityName=".screens.MainActivity" />
         <activity
             android:name=".screens.edit.EditVehicleActivity"
-            android:label="Edit Vehicle"
+            android:label="@string/Edit_vehicle"
             android:parentActivityName=".screens.VehicleTabbedDetailActivity" />
         <activity
             android:name=".screens.edit.AddFillUpActivity"
-            android:label="Add Fill Up"
+            android:label="@string/Add_fillup"
             android:parentActivityName=".screens.VehicleTabbedDetailActivity" />
         <activity
             android:name=".screens.edit.EditFillUpActivity"
-            android:label="Edit Fill Up"
+            android:label="@string/Edit_fillup"
             android:parentActivityName=".screens.VehicleTabbedDetailActivity" />
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat"/>

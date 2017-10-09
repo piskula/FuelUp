@@ -80,8 +80,6 @@
     <string name="carUpdate_Toast_updateFail">Vehicle update failed</string>
 
     <string name="updateCarActivity_wrong_number_format">Wrong number format</string>
-    <string name="updateCarActivity_Toast_carUpdatedSuccesfully01">Car</string>
-    <string name="updateCarActivity_Toast_carUpdatedSuccesfully02">Update sucessfull</string>
     <string name="updateCarActivity_Toast_carNoUpdate">No change</string>
     <string name="updateCarActivity_emptyFields">One or more fields are empty!</string>
 
@@ -175,6 +173,15 @@
     <string name="vehicle_list">Vehicle list</string>
     <string name="statistics_title">Detailed statistics</string>
     <string name="days">days</string> <!--TODO check singular plural support -->
+
+    <!--screens-->
+    <string name="Add_fillup">Add Fill Up</string>
+    <string name="Add_vehicle">Add vehicle</string>
+    <string name="Detail">Detail</string>
+    <string name="Detailed_statistics">Detailed statistics</string>
+    <string name="Edit_fillup">Edit Fill Up</string>
+    <string name="Edit_vehicle">Edit vehicle</string>
+    <string name="Expense">Expense</string>
 
     <!--without translation-->
     <string name="authors">&#169; Ondrej Oravčok, Martin Styk</string>
