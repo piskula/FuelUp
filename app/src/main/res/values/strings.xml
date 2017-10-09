@@ -48,7 +48,6 @@
     <string name="addVehicle_Toast_successfullyCreated">Vehicle have been successfully created</string>
     <string name="addVehicle_success">Vehicle created</string>
     <string name="addVehicle_fail">Vehicle create failed</string>
-    <string name="addVehicle_fail_duplicate">Vehicle with this name already exists</string>
     <string name="addVehicle_picture_add_success">Picture added</string>
     <string name="addVehicle_picture_add_fail">Cannot add picture %s</string>
     <string name="permission_image_not_granted">Permissions required for work with images not granted. Image will not be used.</string>
