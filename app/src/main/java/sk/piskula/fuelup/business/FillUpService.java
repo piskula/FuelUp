@@ -93,10 +93,6 @@ public class FillUpService {
         return fillUp;
     }
 
-    public enum ConsumptionUnit {
-        milesPerGallon, litresPer100km
-    }
-
     private static FillUp cursorToFillup(Cursor cursor, Context ctx) {
         long vehicleId = cursor.getLong(cursor.getColumnIndexOrThrow(FillUpEntry.COLUMN_VEHICLE));
         Vehicle vehicle = VehicleService.getVehicleById(vehicleId, ctx);

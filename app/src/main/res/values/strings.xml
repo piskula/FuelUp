@@ -1,10 +1,7 @@
 <resources>
-    <string name="app_name">Fuel Up</string>
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <!--shared-->
+    <string name="about">About</string>
     <string name="add">Add</string>
     <string name="advanced">Advanced</string>
     <string name="answer_yes">Yes</string>
@@ -26,7 +23,6 @@
     <string name="volumeUnit_gallons_us">US Gallons</string>
     <string name="volumeUnit_gallons_uk">UK Gallons</string>
     <string name="volumeUnit_litres">Litres</string>
-    <string name="about">About</string>
 
     <string name="toast_emptyName">Name must be filled in.</string>
     <string name="toast_emptyFields">There are some empty fields above.</string>
@@ -54,7 +50,7 @@
     <string name="addVehicle_fail">Vehicle create failed</string>
     <string name="addVehicle_fail_duplicate">Vehicle with this name already exists</string>
     <string name="addVehicle_picture_add_success">Picture added</string>
-    <string name="addVehicle_picture_add_fail">Can not add picture %s</string>
+    <string name="addVehicle_picture_add_fail">Cannot add picture %s</string>
     <string name="permission_image_not_granted">Permissions required for work with images not granted. Image will not be used.</string>
 
     <string name="editVehicle_toast_oldPhotoWasNotRemovedDueToError">Error: Old picture was not removed !!!</string>
@@ -118,15 +114,6 @@
     <string name="remove_fillup_success">Fill up removed</string>
     <string name="remove_fillup_fail">Fill up remove failed</string>
 
-    <string name="statistics_title">Detailed statistics</string>
-
-    <string name="desc_expensePic">service icon</string>
-    <string name="desc_fillupPic">pump icon</string>
-
-    <string name="listFillUps_isNotFull">not full</string>
-    <string name="listFillups_isFull">full</string>
-    <string name="days">days</string> <!--TODO check singular plural support -->
-
     <string name="statistics_average_distance_per_day">Average daily driven distance</string>
     <string name="statistics_average_distance_per_week">Average weekly driven distance</string>
     <string name="statistics_average_distance_per_month">Average monthly driven distance</string>
@@ -187,6 +174,8 @@
 
     <string name="fill_up_detail">Fill up detail</string>
     <string name="vehicle_list">Vehicle list</string>
+    <string name="statistics_title">Detailed statistics</string>
+    <string name="days">days</string> <!--TODO check singular plural support -->
 
     <!--without translation-->
     <string name="authors">&#169; Ondrej Oravčok, Martin Styk</string>
@@ -198,5 +187,13 @@
     <string name="units_litreper100_distance_units">\u2113/100 %s</string>
     <string name="units_distance_units_per_litre">%s/\u2113</string>
     <string name="units_distance_units_per_litre_only">/\u2113</string>
+
+    <string name="desc_expensePic">service icon</string>
+    <string name="desc_fillupPic">pump icon</string>
+
+    <string name="app_name">Fuel Up</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 
 </resources>
