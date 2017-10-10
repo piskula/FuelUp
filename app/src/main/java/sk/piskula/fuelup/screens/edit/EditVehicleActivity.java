@@ -3,6 +3,7 @@ package sk.piskula.fuelup.screens.edit;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.Menu;
@@ -62,7 +63,8 @@ public class EditVehicleActivity extends VehicleAbstractActivity implements Menu
         this.txtName = findViewById(R.id.txt_editVehicle_name);
         this.txtManufacturer = findViewById(R.id.txt_editVehicle_manufacturer);
         this.spinnerType = findViewById(R.id.spinner_editVehicle_types);
-        this.imgCarPhotoStatus = findViewById(R.id.img_editVehicle_photo);
+        this.imgCarPhoto = findViewById(R.id.img_editVehicle_photo);
+        this.imgCarPhotoRemove = findViewById(R.id.img_editVehicle_removePhoto);
 
         typeAdapter = new SpinnerVehicleTypesAdapter(this);
         spinnerType.setAdapter(typeAdapter);
@@ -92,7 +94,15 @@ public class EditVehicleActivity extends VehicleAbstractActivity implements Menu
         txtManufacturer.setText(vehicle.getVehicleMaker());
         spinnerType.setSelection(getAlreadySelectedTypePosition(vehicle.getType()));
         vehiclePicturePath = vehicle.getPathToPicture();
-        imgCarPhotoStatus.setImageResource(vehiclePicturePath != null && new File(vehiclePicturePath).exists() ? R.drawable.ic_camera_deny : R.drawable.ic_camera);
+        if (vehiclePicturePath != null && new File(vehiclePicturePath).exists()) {
+            imgCarPhoto.setImageBitmap(BitmapFactory.decodeFile(vehiclePicturePath));
+            imgCarPhoto.setAlpha(REMOVE_PHOTO_ALPHA_CHANNEL);
+            imgCarPhotoRemove.setVisibility(View.VISIBLE);
+        } else {
+            imgCarPhoto.setImageResource(R.drawable.ic_insert_photo);
+            imgCarPhoto.setAlpha(1f);
+            imgCarPhotoRemove.setVisibility(View.GONE);
+        }
     }
 
     public void onClickAdd(View w) {

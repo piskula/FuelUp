@@ -31,18 +31,35 @@
                     android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
 
-            <ImageView
-                android:id="@+id/img_addVehicle_photo"
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:adjustViewBounds="false"
-                android:cropToPadding="false"
                 android:paddingEnd="4dp"
                 android:paddingStart="4dp"
-                android:src="@drawable/ic_camera"
                 android:onClick="onClickPhoto"
-                />
+                >
+
+                <ImageView
+                    android:id="@+id/img_addVehicle_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="false"
+                    android:cropToPadding="false"
+                    android:src="@drawable/ic_insert_photo"
+                    />
+
+                <ImageView
+                    android:id="@+id/img_addVehicle_removePhoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="false"
+                    android:cropToPadding="false"
+                    android:visibility="gone"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_close" />
+
+            </RelativeLayout>
 
         </LinearLayout>
 

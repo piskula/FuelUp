@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -28,7 +29,10 @@ public abstract class VehicleAbstractActivity extends AppCompatActivity {
 
     protected static final String PHOTO = "photo";
 
-    protected ImageView imgCarPhotoStatus;
+    public static final float REMOVE_PHOTO_ALPHA_CHANNEL = 0.5f;
+
+    protected ImageView imgCarPhoto;
+    protected ImageView imgCarPhotoRemove;
 
     protected String vehiclePicturePath;
     protected Uri cropImageUri;
@@ -45,10 +49,12 @@ public abstract class VehicleAbstractActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState.containsKey(PHOTO)) {
             vehiclePicturePath = savedInstanceState.getString(PHOTO);
-            imgCarPhotoStatus.setImageResource(R.drawable.ic_camera_deny);
+            imgCarPhoto.setImageBitmap(BitmapFactory.decodeFile(vehiclePicturePath));
+            imgCarPhotoRemove.setVisibility(View.VISIBLE);
         } else {
             vehiclePicturePath = null;
-            imgCarPhotoStatus.setImageResource(R.drawable.ic_camera);
+            imgCarPhoto.setImageResource(R.drawable.ic_insert_photo);
+            imgCarPhotoRemove.setVisibility(View.GONE);
         }
     }
 
@@ -87,7 +93,9 @@ public abstract class VehicleAbstractActivity extends AppCompatActivity {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 vehiclePicturePath = result.getUri().getPath();
-                imgCarPhotoStatus.setImageResource(R.drawable.ic_camera_deny);
+                imgCarPhoto.setImageBitmap(BitmapFactory.decodeFile(vehiclePicturePath));
+                imgCarPhoto.setAlpha(REMOVE_PHOTO_ALPHA_CHANNEL);
+                imgCarPhotoRemove.setVisibility(View.VISIBLE);
                 Snackbar.make(findViewById(android.R.id.content), getString(R.string.addVehicle_picture_add_success), Snackbar.LENGTH_SHORT).show();
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
@@ -127,7 +135,9 @@ public abstract class VehicleAbstractActivity extends AppCompatActivity {
 
     public void deletePhoto() {
         vehiclePicturePath = null;
-        imgCarPhotoStatus.setImageResource(R.drawable.ic_camera);
+        imgCarPhoto.setImageResource(R.drawable.ic_insert_photo);
+        imgCarPhoto.setAlpha(1f);
+        imgCarPhotoRemove.setVisibility(View.GONE);
         Snackbar.make(findViewById(android.R.id.content), R.string.delete_vehicle_photo, Snackbar.LENGTH_SHORT).show();
     }
 

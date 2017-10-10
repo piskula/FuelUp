@@ -62,7 +62,8 @@ public class AddVehicleActivity extends VehicleAbstractActivity {
         this.spinnerType = findViewById(R.id.spinner_addVehicle_types);
         this.spinnerCurrency = findViewById(R.id.spinner_currency);
         this.radioGroupVolumeUnit = findViewById(R.id.radio_volume_unit);
-        this.imgCarPhotoStatus = findViewById(R.id.img_addVehicle_photo);
+        this.imgCarPhoto = findViewById(R.id.img_addVehicle_photo);
+        this.imgCarPhotoRemove = findViewById(R.id.img_addVehicle_removePhoto);
 
         spinnerCurrency.setAdapter(new SpinnerCurrencyAdapter(this));
         spinnerType.setAdapter(new SpinnerVehicleTypesAdapter(this));
