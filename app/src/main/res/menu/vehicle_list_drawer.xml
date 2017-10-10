@@ -4,11 +4,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/vehicle_list"
-            android:icon="@drawable/ic_type_sedan"
+            android:icon="@drawable/ic_directions_car_black_48dp"
             android:title="@string/vehicle_list" />
         <item
             android:id="@+id/about"
-            android:icon="@drawable/ic_menu_info"
+            android:icon="@drawable/ic_info"
             android:title="@string/about" />
     </group>
 

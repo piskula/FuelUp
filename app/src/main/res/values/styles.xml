@@ -37,11 +37,6 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="WarningButton" parent="android:Widget.Button">
-        <item name="android:background">@drawable/selector_btn_warning</item>
-        <item name="android:textColor">@android:color/white</item>
-    </style>
-
     <style name="StatisticsItemDetailLayout" parent="Widget.AppCompat.ListView">
         <item name="android:divider">?android:attr/listDivider</item>
         <item name="android:orientation">vertical</item>
