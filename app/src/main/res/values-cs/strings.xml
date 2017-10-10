@@ -11,7 +11,7 @@
     <string name="currency">Měna</string>
     <string name="Date">Datum</string>
     <string name="dismiss">Zavřít</string>
-    <string name="distance_units">Jednotka vzdálenosti</string>
+    <string name="volume_units">Jednotka objemu</string>
     <string name="fuel">Palivo</string>
     <string name="ok">OK</string>
     <string name="password">Heslo</string>
