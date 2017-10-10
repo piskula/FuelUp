@@ -1,6 +1,7 @@
 package sk.piskula.fuelup.adapters;
 
 import android.app.Activity;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -57,6 +58,9 @@ public class SpinnerCurrencyAdapter extends BaseAdapter implements SpinnerAdapte
         //TODO getDisplayName() API level 19
         currencyName.setText(currencies.get(position).getCurrencyCode());
         currencySymbol.setText(CurrencyUtil.getCurrencySymbol(currencies.get(position)));
+        if (Build.VERSION.SDK_INT >= 19) {
+            currencyName.setText(currencies.get(position).getDisplayName());
+        }
 
         return spinView;
     }
