@@ -170,6 +170,10 @@ public class StatisticsService {
                             VolumeUtil.ONE_UK_GALLON_IS_LITRES :
                             VolumeUtil.ONE_US_GALLON_IS_LITRES,
                     14, RoundingMode.HALF_UP);
+
+            if (milesPerOneLitre.compareTo(BigDecimal.ZERO) == 0)
+                return BigDecimal.ZERO;
+
             BigDecimal litrePerOneMile = BigDecimal.ONE.divide(milesPerOneLitre, 14, RoundingMode.HALF_UP);
             return litrePerOneMile.multiply(HUNDRED);
         }

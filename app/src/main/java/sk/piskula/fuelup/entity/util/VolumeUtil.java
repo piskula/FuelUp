@@ -94,4 +94,18 @@ public class VolumeUtil {
 
         return bddf.format(value);
     }
+
+    public static DecimalFormat getFormatterForConsumption(String consumptionUnit) {
+        DecimalFormat format = new DecimalFormat();
+
+        if (MainActivity.getInstance().getString(R.string.units_mpg).equals(consumptionUnit)) {
+            format.setMaximumFractionDigits(1);
+            format.setMinimumFractionDigits(1);
+        } else {
+            format.setMaximumFractionDigits(2);
+            format.setMinimumFractionDigits(2);
+        }
+
+        return format;
+    }
 }
