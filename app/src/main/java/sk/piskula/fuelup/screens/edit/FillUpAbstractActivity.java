@@ -21,9 +21,9 @@ import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.util.DateUtil;
 
 /**
- * Created by Martin Styk on 07.10.2017.
+ * @author Martin Styk
+ * @version 07.10.2017.
  */
-
 public abstract class FillUpAbstractActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
     protected EditText mTxtDistance;
@@ -108,7 +108,7 @@ public abstract class FillUpAbstractActivity extends AppCompatActivity implement
             } else {
                 priceMode = AddFillUpActivity.SwitchPrice.perVolume;
                 mTxtInputPrice.setHint(getString(R.string.add_fillup_pricePerLitre));
-                mTxtFuelPriceUnit.setText(getString(R.string.unit_pricePerLitre, mVehicle.getCurrencySymbol()));
+                mTxtFuelPriceUnit.setText(getString(R.string.unit_pricePerLitre, mVehicle.getPerLitreSubcurrencySymbol()));
             }
         }
     }

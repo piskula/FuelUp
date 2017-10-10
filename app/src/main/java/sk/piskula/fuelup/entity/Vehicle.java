@@ -140,6 +140,10 @@ public class Vehicle implements Parcelable {
         return CurrencyUtil.getCurrencySymbol(this.getCurrency());
     }
 
+    public String getPerLitreSubcurrencySymbol() {
+        return CurrencyUtil.getPerLitreSubcurrencySymbol(this.getCurrency());
+    }
+
     public Vehicle() {
     }
 

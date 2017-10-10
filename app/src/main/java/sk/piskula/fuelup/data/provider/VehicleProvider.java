@@ -25,8 +25,10 @@ import sk.piskula.fuelup.data.FuelUpContract.ExpenseEntry;
 import sk.piskula.fuelup.data.FuelUpContract.FillUpEntry;
 import sk.piskula.fuelup.data.FuelUpContract.VehicleEntry;
 import sk.piskula.fuelup.entity.FillUp;
+import sk.piskula.fuelup.entity.Vehicle;
 import sk.piskula.fuelup.entity.enums.VolumeUnit;
 import sk.piskula.fuelup.entity.util.CurrencyUtil;
+import sk.piskula.fuelup.entity.util.VolumeUtil;
 
 /**
  * @author Ondrej Oravcok
@@ -475,11 +477,11 @@ public class VehicleProvider extends ContentProvider {
             }
         }
 
-        Double fuelVolume = null;
+        Double fuelVolumeLocalized = null;
         if (contentValues.containsKey(FillUpEntry.COLUMN_FUEL_VOLUME) || !isUpdate) {
-            fuelVolume = contentValues.getAsDouble(FillUpEntry.COLUMN_FUEL_VOLUME);
-            if (fuelVolume == null || fuelVolume <= 0) {
-                throw new IllegalArgumentException("Wrong fuelVolume " + fuelVolume);
+            fuelVolumeLocalized = contentValues.getAsDouble(FillUpEntry.COLUMN_FUEL_VOLUME);
+            if (fuelVolumeLocalized == null || fuelVolumeLocalized <= 0) {
+                throw new IllegalArgumentException("Wrong fuelVolume " + fuelVolumeLocalized);
             }
         }
 
@@ -508,12 +510,13 @@ public class VehicleProvider extends ContentProvider {
              */
             FillUp updatingFillUp = FillUpService.getFillUpById(existingFillUpId, getContext());
 
-            if (fuelVolume != null || fuelPricePerLitre != null || fuelPriceTotal != null) {
+            if (fuelVolumeLocalized != null || fuelPricePerLitre != null || fuelPriceTotal != null) {
                 // at least on of important value has changed
 
+
                 // if only price changed
-                if (fuelVolume == null) {
-                    fuelVolume = updatingFillUp.getFuelVolume().doubleValue();
+                if (fuelVolumeLocalized == null) {
+                    final Double fuelVolume = getLitresFromLocalizedVolume(updatingFillUp.getFuelVolume().doubleValue(), updatingFillUp.getVehicle().getVolumeUnit());
 
                     // we must update price total if pricePerLitre changed
                     if (fuelPriceTotal == null) {
@@ -538,6 +541,7 @@ public class VehicleProvider extends ContentProvider {
                 else if (fuelPriceTotal == null) {
                     // fuelVolume changed and fuelPriceTotal NOT
                     fuelPriceTotal = updatingFillUp.getFuelPriceTotal().doubleValue();
+                    final Double fuelVolume = getLitresFromLocalizedVolume(fuelVolumeLocalized, updatingFillUp.getVehicle().getVolumeUnit());
 
                     if (fuelPricePerLitre == null) {
                         throw new IllegalArgumentException("Cannot update fuelVolume without changing priceTotal or pricePerLitre.");
@@ -550,6 +554,7 @@ public class VehicleProvider extends ContentProvider {
 
                 else {
                     // fuelVol changed and priceTotal changed also
+                    final Double fuelVolume = getLitresFromLocalizedVolume(fuelVolumeLocalized, updatingFillUp.getVehicle().getVolumeUnit());
 
                     if (fuelPricePerLitre == null) {
                         fuelPricePerLitre = updatingFillUp.getFuelPricePerLitre().doubleValue();
@@ -562,12 +567,12 @@ public class VehicleProvider extends ContentProvider {
             }
 
         } else {
+            long vehicleId = contentValues.getAsLong(FillUpEntry.COLUMN_VEHICLE);
+            Vehicle vehicle = VehicleService.getVehicleById(vehicleId, getContext());
+            Double fuelVolume = getLitresFromLocalizedVolume(fuelVolumeLocalized, vehicle.getVolumeUnit());
             // when inserting, all values must be filled
-            if (fuelVolume != null || fuelPricePerLitre != null || fuelPriceTotal != null) {
-                if (fuelVolume == null || fuelPricePerLitre == null || fuelPriceTotal == null
-                        || Math.abs(fuelPriceTotal - (fuelPricePerLitre * fuelVolume)) > ERROR) {
-                    throw new IllegalArgumentException("Fuel priceTotal must equals (pricePerLitre * fuelVolume)");
-                }
+            if (Math.abs(fuelPriceTotal - (fuelPricePerLitre * fuelVolume)) > ERROR) {
+                throw new IllegalArgumentException("Fuel priceTotal must equals (pricePerLitre * fuelVolume)");
             }
         }
 
@@ -585,6 +590,20 @@ public class VehicleProvider extends ContentProvider {
             }
         }
 
+    }
+
+    private Double getLitresFromLocalizedVolume(final Double volume, final VolumeUnit unit) {
+        if (volume == null)
+            return null;
+
+        Double fuelVolume = volume;
+
+        if (unit.equals(VolumeUnit.GALLON_UK))
+            fuelVolume = VolumeUtil.getLitresFromUkGallon(BigDecimal.valueOf(fuelVolume)).doubleValue();
+        else if (unit.equals(VolumeUnit.GALLON_US))
+            fuelVolume = VolumeUtil.getLitresFromUsGallon(BigDecimal.valueOf(fuelVolume)).doubleValue();
+
+        return fuelVolume;
     }
 
     private Uri insertFullValidatedFillUp(Uri uri, ContentValues contentValues, SQLiteDatabase transaction) {

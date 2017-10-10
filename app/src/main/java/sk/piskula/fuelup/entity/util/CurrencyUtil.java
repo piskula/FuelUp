@@ -10,6 +10,8 @@ import java.text.Format;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Currency;
 import java.util.List;
 import java.util.Properties;
@@ -35,11 +37,25 @@ public class CurrencyUtil {
     private static final String DELIMETER = ",";
     private static final List<String> currencyBefore = Arrays.asList("GBP");    //TODO property file?
 
-    private static Properties properties = new Properties();;
+    private static Properties properties = new Properties();
 
     public static String getCurrencySymbol(Currency currency) {
         checkPropertiesAreLoaded();
         return getCurrencySymbolFromProperties(currency);
+    }
+
+    public static String getPerLitreSubcurrencySymbol(Currency currency) {
+        if (!(getCoefficientPerLitreMultiply(currency).equals(BigDecimal.valueOf(1)))) {
+            return properties.getProperty(currency.getCurrencyCode()).split(DELIMETER)[CODE_PER_LITRE];
+        }
+        return getCurrencySymbolFromProperties(currency);
+    }
+
+    public static int getPerLitreFractionDigits(Currency currency) {
+        checkPropertiesAreLoaded();
+        if (properties.containsKey(currency.getCurrencyCode()))
+            return Integer.valueOf(properties.getProperty(currency.getCurrencyCode()).split(DELIMETER)[FRACTIONS_PER_LITRE]);
+        return currency.getDefaultFractionDigits() + 1;
     }
 
     private static void checkPropertiesAreLoaded() {
@@ -53,11 +69,9 @@ public class CurrencyUtil {
     }
 
     private static String getCurrencySymbolFromProperties(Currency currency) {
-        if (properties.containsKey(currency.getCurrencyCode())) {
+        if (properties.containsKey(currency.getCurrencyCode()))
             return properties.getProperty(currency.getCurrencyCode()).split(DELIMETER)[CODE];
-        } else {
-            return currency.getSymbol();
-        }
+        return currency.getSymbol();
     }
 
     public static List<Currency> getSupportedCurrencies() {
@@ -66,6 +80,13 @@ public class CurrencyUtil {
         List<Currency> currencies = new ArrayList<>();
         for (String currencyString : properties.stringPropertyNames())
             currencies.add(Currency.getInstance(currencyString));
+
+        Collections.sort(currencies, new Comparator<Currency>() {
+            @Override
+            public int compare(Currency c1, Currency c2) {
+                return c1.getCurrencyCode().compareTo(c2.getCurrencyCode());
+            }
+        });
 
         return currencies;
     }
@@ -96,6 +117,15 @@ public class CurrencyUtil {
         } else {
             return "not supported currency " + currency.getCurrencyCode();
         }
+    }
+
+    public static BigDecimal getCoefficientPerLitreMultiply(Currency currency) {
+        checkPropertiesAreLoaded();
+        if (properties.containsKey(currency.getCurrencyCode())) {
+            String[] currencyStrings = properties.getProperty(currency.getCurrencyCode()).split(DELIMETER);
+            return BigDecimal.valueOf(Integer.valueOf(currencyStrings[COEFFICIENT_PER_LITRE_MULTIPLY]));
+        }
+        return BigDecimal.ONE;
     }
 
     public static String getPricePerLitre(Currency currency, double value) {

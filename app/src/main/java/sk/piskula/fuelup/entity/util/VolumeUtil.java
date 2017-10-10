@@ -58,13 +58,13 @@ public class VolumeUtil {
         BigDecimal total = null;
         switch (volumeUnit) {
             case LITRE:
-                total = price.divide(volume, 3, RoundingMode.HALF_UP);
+                total = price.divide(volume, 7, RoundingMode.HALF_UP);
                 break;
             case GALLON_UK:
-                total = price.divide(getLitresFromUkGallon(volume), 3, RoundingMode.HALF_UP);
+                total = price.divide(getLitresFromUkGallon(volume), 7, RoundingMode.HALF_UP);
                 break;
             case GALLON_US:
-                total = price.divide(getLitresFromUsGallon(volume), 3, RoundingMode.HALF_UP);
+                total = price.divide(getLitresFromUsGallon(volume), 7, RoundingMode.HALF_UP);
                 break;
         }
         return total;
@@ -75,7 +75,7 @@ public class VolumeUtil {
     }
 
     public static BigDecimal getLitresFromUsGallon(BigDecimal value) {
-        return value.divide(ONE_LITRE_IS_US_GALLONS, BigDecimal.ROUND_HALF_UP);
+        return value.divide(ONE_LITRE_IS_US_GALLONS, 7, BigDecimal.ROUND_HALF_UP);
     }
 
     public static BigDecimal getUkGallonsFromLitre(BigDecimal value) {
@@ -83,7 +83,7 @@ public class VolumeUtil {
     }
 
     public static BigDecimal getLitresFromUkGallon(BigDecimal value) {
-        return value.divide(ONE_LITRE_IS_UK_GALLONS, BigDecimal.ROUND_HALF_UP);
+        return value.divide(ONE_LITRE_IS_UK_GALLONS, 7, BigDecimal.ROUND_HALF_UP);
     }
 
     public static String getFuelVolume(double value) {

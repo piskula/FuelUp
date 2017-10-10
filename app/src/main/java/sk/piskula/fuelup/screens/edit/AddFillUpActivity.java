@@ -10,6 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Calendar;
@@ -17,6 +18,7 @@ import java.util.Calendar;
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.data.FuelUpContract.FillUpEntry;
+import sk.piskula.fuelup.entity.util.CurrencyUtil;
 import sk.piskula.fuelup.entity.util.DateUtil;
 import sk.piskula.fuelup.entity.util.VolumeUtil;
 import sk.piskula.fuelup.screens.detailfragments.FillUpsListFragment;
@@ -92,20 +94,26 @@ public class AddFillUpActivity extends FillUpAbstractActivity implements Compoun
         contentValues.put(FillUpEntry.COLUMN_DATE, createdDate.getTime().getTime());
         contentValues.put(FillUpEntry.COLUMN_INFO, info.toString().trim());
 
-        if (isFull) {
-            contentValues.put(FillUpEntry.COLUMN_FUEL_CONSUMPTION,
-                    FillUpService.getConsumptionFromVolumeDistance(createdFuelVol, createdDistance,
-                            mVehicle.getVolumeUnit()).doubleValue());
+        if (isFull) {   // if it is not full, do not compute consumption
+            BigDecimal fuelConsumption = FillUpService.getConsumptionFromVolumeDistance(
+                    createdFuelVol, createdDistance, mVehicle.getVolumeUnit());
+
+            contentValues.put(FillUpEntry.COLUMN_FUEL_CONSUMPTION, fuelConsumption.doubleValue());
         }
 
         if (priceMode == SwitchPrice.perVolume) {
-            contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE, createdPrice.doubleValue());
-            contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL, VolumeUtil.getTotalPriceFromPerLitre(
-                    createdFuelVol, createdPrice, mVehicle.getVolumeUnit()).doubleValue());
+            BigDecimal subcurrencyCoefficient = CurrencyUtil.getCoefficientPerLitreMultiply(mVehicle.getCurrency());
+            BigDecimal perLitre = createdPrice.divide(subcurrencyCoefficient, 7, RoundingMode.HALF_UP);
+            BigDecimal total = VolumeUtil.getTotalPriceFromPerLitre(createdFuelVol, perLitre, mVehicle.getVolumeUnit());
+
+            contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE, perLitre.doubleValue());
+            contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL, total.doubleValue());
+
         } else {
+            BigDecimal perLitre = VolumeUtil.getPerLitrePriceFromTotal(createdFuelVol, createdPrice, mVehicle.getVolumeUnit());
+
             contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL, createdPrice.doubleValue());
-            contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE, VolumeUtil.getPerLitrePriceFromTotal(
-                    createdFuelVol, createdPrice, mVehicle.getVolumeUnit()).doubleValue());
+            contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE, perLitre.doubleValue());
         }
 
         if (getContentResolver().insert(FillUpEntry.CONTENT_URI, contentValues) == null) {

@@ -12,16 +12,19 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Currency;
 
 import sk.piskula.fuelup.R;
 import sk.piskula.fuelup.business.FillUpService;
 import sk.piskula.fuelup.data.FuelUpContract.FillUpEntry;
 import sk.piskula.fuelup.data.provider.VehicleProvider;
 import sk.piskula.fuelup.entity.FillUp;
+import sk.piskula.fuelup.entity.util.CurrencyUtil;
 import sk.piskula.fuelup.entity.util.DateUtil;
 import sk.piskula.fuelup.entity.util.VolumeUtil;
 import sk.piskula.fuelup.screens.detailfragments.FillUpsListFragment;
@@ -55,7 +58,13 @@ public class EditFillUpActivity extends FillUpAbstractActivity implements Delete
         mTxtFuelVolume.setText(NumberFormat.getNumberInstance().format(mSelectedFillUp.getFuelVolume()));
         this.onCheckedChanged(mBtnSwitchPrice, false);
         if (priceMode == SwitchPrice.perVolume) {
-            mTxtPrice.setText(BigDecimalFormatter.getCommonFormat().format(mSelectedFillUp.getFuelPricePerLitre()));
+            Currency currency = mVehicle.getCurrency();
+            DecimalFormat formatter = BigDecimalFormatter.getCommonFormat();
+
+            formatter.setMaximumFractionDigits(CurrencyUtil.getPerLitreFractionDigits(currency) + 1);
+            formatter.setMinimumFractionDigits(CurrencyUtil.getPerLitreFractionDigits(currency));
+
+            mTxtPrice.setText(formatter.format(mSelectedFillUp.getFuelPricePerLitre().multiply(CurrencyUtil.getCoefficientPerLitreMultiply(mSelectedFillUp.getVehicle().getCurrency()))));
         } else {
             mTxtPrice.setText(BigDecimalFormatter.getCommonFormat().format(mSelectedFillUp.getFuelPriceTotal()));
         }
@@ -132,16 +141,23 @@ public class EditFillUpActivity extends FillUpAbstractActivity implements Delete
             contentValues.put(FillUpEntry.COLUMN_INFO, info.toString().trim());
 
         if (priceMode == SwitchPrice.perVolume) {
-            if (!createdPrice.equals(mSelectedFillUp.getFuelPricePerLitre()) || isPriceNeeded) {
-                contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE, createdPrice.doubleValue());
-                contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL, VolumeUtil.getTotalPriceFromPerLitre(
-                        createdFuelVol, createdPrice, mVehicle.getVolumeUnit()).doubleValue());
+            BigDecimal subcurrencyCoefficient = CurrencyUtil.getCoefficientPerLitreMultiply(mSelectedFillUp.getVehicle().getCurrency());
+            // if price has changed or fuel volume has changed
+            if (!createdPrice.equals(mSelectedFillUp.getFuelPricePerLitre().multiply(subcurrencyCoefficient)) || isPriceNeeded) {
+                BigDecimal perLitre = createdPrice.divide(subcurrencyCoefficient, 7, RoundingMode.HALF_UP);
+                BigDecimal total = VolumeUtil.getTotalPriceFromPerLitre(createdFuelVol, perLitre, mVehicle.getVolumeUnit());
+
+                contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE, perLitre.doubleValue());
+                contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL, total.doubleValue());
             }
+
         } else {
+            // if price has changed or fuel volume has changed
             if (!createdPrice.equals(mSelectedFillUp.getFuelPriceTotal()) || isPriceNeeded) {
+                BigDecimal perLitre = VolumeUtil.getPerLitrePriceFromTotal(createdFuelVol, createdPrice, mVehicle.getVolumeUnit());
+
                 contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL, createdPrice.doubleValue());
-                contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE, VolumeUtil.getPerLitrePriceFromTotal(
-                        createdFuelVol, createdPrice, mVehicle.getVolumeUnit()).doubleValue());
+                contentValues.put(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE, perLitre.doubleValue());
             }
         }
 
