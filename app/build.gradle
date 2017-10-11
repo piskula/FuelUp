@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
     defaultConfig {
-        applicationId "sk.piskula.fuelup"
+        applicationId "sk.momosi.fuelup"
         minSdkVersion 17
         targetSdkVersion 26
         versionCode 1

@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context="sk.piskula.fuelup.screens.statisticfragments.StatisticsChartConsumptionFragment">
+        tools:context="sk.momosi.fuelup.screens.statisticfragments.StatisticsChartConsumptionFragment">
 
         <lecho.lib.hellocharts.view.LineChartView
             android:id="@+id/chart"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="sk.piskula.fuelup">
+    package="sk.momosi.fuelup">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -36,7 +36,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="sk.piskula.fuelup.screens.MainActivity" />
+                android:value="sk.momosi.fuelup.screens.MainActivity" />
         </activity>
         <activity
             android:name=".screens.VehicleStatisticsActivity"
@@ -45,7 +45,7 @@
             android:parentActivityName=".screens.VehicleTabbedDetailActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="sk.piskula.fuelup.screens.VehicleTabbedDetailActivity" />
+                android:value="sk.momosi.fuelup.screens.VehicleTabbedDetailActivity" />
         </activity>
         <activity
             android:name=".screens.edit.EditExpenseActivity"
@@ -72,12 +72,12 @@
 
         <provider
             android:name=".data.provider.VehicleProvider"
-            android:authorities="sk.piskula.fuelup"
+            android:authorities="sk.momosi.fuelup"
             android:exported="false" />
 
         <provider
             android:name=".util.GenericFileProvider"
-            android:authorities="sk.piskula.fuelup.file.provider"
+            android:authorities="sk.momosi.fuelup.file.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

@@ -4,13 +4,13 @@
 
     <data>
 
-        <import type="sk.piskula.fuelup.util.BigDecimalFormatter" />
-        <import type="sk.piskula.fuelup.entity.util.CurrencyUtil" />
-        <import type="sk.piskula.fuelup.entity.util.VolumeUtil" />
+        <import type="sk.momosi.fuelup.util.BigDecimalFormatter" />
+        <import type="sk.momosi.fuelup.entity.util.CurrencyUtil" />
+        <import type="sk.momosi.fuelup.entity.util.VolumeUtil" />
 
         <variable
             name="vehicle"
-            type="sk.piskula.fuelup.entity.Vehicle" />
+            type="sk.momosi.fuelup.entity.Vehicle" />
 
         <variable
             name="currency"
@@ -18,7 +18,7 @@
 
         <variable
             name="data"
-            type="sk.piskula.fuelup.entity.dto.StatisticsDTO" />
+            type="sk.momosi.fuelup.entity.dto.StatisticsDTO" />
     </data>
 
     <android.support.v4.widget.NestedScrollView
@@ -48,7 +48,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/statistics_fuel_consumption" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/fuel_consumption"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -56,7 +56,7 @@
                         app:unit="@{vehicle.consumptionUnit}"
                         app:value="@{data!= null ? VolumeUtil.getFormatterForConsumption(vehicle.consumptionUnit).format(data.avgConsumption) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/fuel_consumption_reversed"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -64,7 +64,7 @@
                         app:unit='@{data.consumptionReversedUnitMpg ? @string/units_litreper100_distance_units(vehicle.distanceUnit.toString()) : @string/units_distance_units_per_litre(vehicle.distanceUnit.toString())}'
                         app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.avgConsumptionReversed) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/fuel_consumption_best"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -72,7 +72,7 @@
                         app:unit="@{vehicle.consumptionUnit}"
                         app:value="@{data!= null ? VolumeUtil.getFormatterForConsumption(vehicle.consumptionUnit).format(data.fuelConsumptionBest) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/fuel_consumption_worst"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -100,7 +100,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/statistics_totals" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/price_total"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -108,7 +108,7 @@
                         app:unit=""
                         app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.totalCosts) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/price_total_fuel"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -116,7 +116,7 @@
                         app:unit=""
                         app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.totalCostsFuel) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/price_total_expense"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -124,21 +124,21 @@
                         app:unit=""
                         app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.totalCostsExpenses) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/fill_ups_number_total"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_fill_ups_number_total"
                         app:value="@{data!= null ? String.valueOf(data.totalNumberFillUps) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/expenses_number_total"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_expenses_number_total"
                         app:value="@{data!= null ? String.valueOf(data.totalNumberExpenses) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/volume_total_fuel"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -146,7 +146,7 @@
                         app:unit="@{vehicle.getVolumeUnit().toString()}"
                         app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.totalFuelVolume) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/distance_driven_total"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -174,7 +174,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/statistics_costs_per_distance_header" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/price_per_distance_total"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -182,7 +182,7 @@
                         app:unit=""
                         app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.totalCostsPerDistance) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/price_per_distance_fill_up"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -190,7 +190,7 @@
                         app:unit=""
                         app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.fuelCostsPerDistance) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/price_per_distance_expense"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -217,7 +217,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/statistics_costs_per_time" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_total_cost_per_week"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -225,7 +225,7 @@
                         app:unit=""
                         app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.averageTotalCostPerWeek) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_total_cost_per_month"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -233,7 +233,7 @@
                         app:unit=""
                         app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.averageTotalCostPerMonth) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_total_cost_per_year"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -241,7 +241,7 @@
                         app:unit=""
                         app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.averageTotalCostPerYear) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_fuel_cost_per_week"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -249,7 +249,7 @@
                         app:unit=""
                         app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.averageFuelCostPerWeek) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_fuel_cost_per_month"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -257,7 +257,7 @@
                         app:unit=""
                         app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.averageFuelCostPerMonth) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_fuel_cost_per_year"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -265,7 +265,7 @@
                         app:unit=""
                         app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.averageFuelCostPerYear) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_expense_cost_per_week"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -273,7 +273,7 @@
                         app:unit=""
                         app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.averageExpenseCostPerWeek) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_expense_cost_per_month"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -281,7 +281,7 @@
                         app:unit=""
                         app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.averageExpenseCostPerMonth) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_expense_cost_per_year"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -310,7 +310,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/statistics_refueling" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/avg_fuel_price_per_fill_up"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -318,7 +318,7 @@
                         app:unit=""
                         app:value="@{data!= null ? CurrencyUtil.getPrice(vehicle.getCurrency(), data.averageFuelPricePerFillUp) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/avg_fuel_volume_per_fill_up"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -326,28 +326,28 @@
                         app:unit="@{vehicle.getVolumeUnit().toString()}"
                         app:value="@{data!= null ? String.valueOf(data.averageFuelVolumePerFillUp) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_number_of_fill_ups_per_week"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_average_number_of_fill_ups_per_week"
                         app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageNumberOfFillUpsPerWeek) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_number_of_fill_ups_per_month"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_average_number_of_fill_ups_per_month"
                         app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageNumberOfFillUpsPerMonth) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_number_of_fill_ups_per_year"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_average_number_of_fill_ups_per_year"
                         app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageNumberOfFillUpsPerYear) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/distance_between_fill_ups_average"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -355,7 +355,7 @@
                         app:unit="@{vehicle.distanceUnit.toString()}"
                         app:value="@{data!= null ? Integer.toString(data.distanceBetweenFillUpsAverage) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/distance_between_fill_ups_lowest"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -363,7 +363,7 @@
                         app:unit="@{vehicle.distanceUnit.toString()}"
                         app:value="@{data!= null ? Integer.toString(data.distanceBetweenFillUpsLowest) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/distance_between_fill_ups_highest"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -391,7 +391,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/statistics_fuel_unit_price" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/avg_fuel_price_per_litre"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -399,7 +399,7 @@
                         app:unit=""
                         app:value="@{data!= null ? @string/units_distance_units_per_litre(CurrencyUtil.getPricePerLitre(vehicle.getCurrency(), data.fuelUnitPriceAverage)) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/price_per_litre_best"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -407,7 +407,7 @@
                         app:unit=""
                         app:value="@{data!= null ? @string/units_distance_units_per_litre(CurrencyUtil.getPricePerLitre(vehicle.getCurrency(), data.fuelUnitPriceLowest)) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/price_per_litre_worst"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -436,7 +436,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/statistics_distance_in_time" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_distance_per_day"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -444,7 +444,7 @@
                         app:unit="@{vehicle.distanceUnit.toString()}"
                         app:value="@{data!= null ? String.valueOf(data.averageDistancePerDay) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_distance_per_week"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -452,7 +452,7 @@
                         app:unit="@{vehicle.distanceUnit.toString()}"
                         app:value="@{data!= null ? String.valueOf(data.averageDistancePerWeek) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_distance_per_month"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -460,7 +460,7 @@
                         app:unit="@{vehicle.distanceUnit.toString()}"
                         app:value="@{data!= null ? String.valueOf(data.averageDistancePerMonth) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_distance_per_year"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -488,21 +488,21 @@
                         android:layout_height="wrap_content"
                         android:text="@string/statistics_expenses" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_number_of_expenses_per_week"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_average_number_of_expenses_per_week"
                         app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageNumberOfExpensesPerWeek) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_number_of_expenses_per_month"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
                         app:name="@string/statistics_average_number_of_expenses_per_month"
                         app:value="@{data!= null ? BigDecimalFormatter.getCommonFormat().format(data.averageNumberOfExpensesPerMonth) : @string/na}" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/average_number_of_expenses_per_year"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"
@@ -529,7 +529,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/statistics_app_usage" />
 
-                    <sk.piskula.fuelup.view.StatisticsDetailItem
+                    <sk.momosi.fuelup.view.StatisticsDetailItem
                         android:id="@+id/tracking_period"
                         android:layout_width="match_parent"
                         android:layout_height="?android:attr/listPreferredItemHeight"

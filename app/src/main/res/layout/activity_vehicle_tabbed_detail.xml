@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="sk.piskula.fuelup.screens.VehicleTabbedDetailActivity"
+    tools:context="sk.momosi.fuelup.screens.VehicleTabbedDetailActivity"
     tools:ignore="MergeRootFrame">
 
     <android.support.design.widget.AppBarLayout

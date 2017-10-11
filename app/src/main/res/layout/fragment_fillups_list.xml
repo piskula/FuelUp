@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="sk.piskula.fuelup.screens.detailfragments.FillUpsListFragment">
+    tools:context="sk.momosi.fuelup.screens.detailfragments.FillUpsListFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fill_ups_list"

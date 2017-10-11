@@ -3,16 +3,16 @@
 
     <data>
 
-        <import type="sk.piskula.fuelup.util.BigDecimalFormatter" />
+        <import type="sk.momosi.fuelup.util.BigDecimalFormatter" />
 
-        <import type="sk.piskula.fuelup.entity.Vehicle" />
+        <import type="sk.momosi.fuelup.entity.Vehicle" />
 
-        <import type="sk.piskula.fuelup.entity.util.DateUtil" />
-        <import type="sk.piskula.fuelup.entity.util.CurrencyUtil" />
+        <import type="sk.momosi.fuelup.entity.util.DateUtil" />
+        <import type="sk.momosi.fuelup.entity.util.CurrencyUtil" />
 
         <variable
             name="fillUp"
-            type="sk.piskula.fuelup.entity.FillUp" />
+            type="sk.momosi.fuelup.entity.FillUp" />
 
     </data>
 
@@ -26,14 +26,14 @@
             android:orientation="vertical"
             style="@style/StatisticsItemDetailLayout">
 
-            <sk.piskula.fuelup.view.StatisticsDetailItem
+            <sk.momosi.fuelup.view.StatisticsDetailItem
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/default_padding"
                 app:name="@string/Date"
                 app:value="@{DateUtil.getDateLocalized(fillUp.date)}" />
 
-            <sk.piskula.fuelup.view.StatisticsDetailItem
+            <sk.momosi.fuelup.view.StatisticsDetailItem
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/default_padding"
@@ -41,7 +41,7 @@
                 app:unit="@{fillUp.vehicle.getConsumptionUnit()}"
                 app:value="@{fillUp.fuelConsumption != null ? BigDecimalFormatter.getCommonFormat().format(fillUp.fuelConsumption) : @string/na}" />
 
-            <sk.piskula.fuelup.view.StatisticsDetailItem
+            <sk.momosi.fuelup.view.StatisticsDetailItem
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/default_padding"
@@ -49,7 +49,7 @@
                 app:unit="@{fillUp.vehicle.distanceUnit.toString()}"
                 app:value="@{String.valueOf(fillUp.distanceFromLastFillUp)}" />
 
-            <sk.piskula.fuelup.view.StatisticsDetailItem
+            <sk.momosi.fuelup.view.StatisticsDetailItem
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/default_padding"
@@ -57,7 +57,7 @@
                 app:unit="@{fillUp.vehicle.volumeUnit.toString()}"
                 app:value="@{BigDecimalFormatter.getCommonFormat().format(fillUp.fuelVolume)}" />
 
-            <sk.piskula.fuelup.view.StatisticsDetailItem
+            <sk.momosi.fuelup.view.StatisticsDetailItem
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/default_padding"
@@ -65,7 +65,7 @@
                 app:unit=""
                 app:value="@{CurrencyUtil.getPricePerLitre(fillUp.getVehicle().getCurrency(), fillUp.fuelPricePerLitre)}" />
 
-            <sk.piskula.fuelup.view.StatisticsDetailItem
+            <sk.momosi.fuelup.view.StatisticsDetailItem
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/default_padding"
@@ -73,7 +73,7 @@
                 app:unit=""
                 app:value="@{CurrencyUtil.getPrice(fillUp.getVehicle().getCurrency(), fillUp.fuelPriceTotal)}" />
 
-            <sk.piskula.fuelup.view.StatisticsDetailItem
+            <sk.momosi.fuelup.view.StatisticsDetailItem
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/default_padding"
