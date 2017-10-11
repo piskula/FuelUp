@@ -7,6 +7,10 @@
             android:icon="@drawable/ic_directions_car_black_48dp"
             android:title="@string/vehicle_list" />
         <item
+            android:id="@+id/google_drive"
+            android:icon="@drawable/ic_google_drive"
+            android:title="Drive" />
+        <item
             android:id="@+id/about"
             android:icon="@drawable/ic_info"
             android:title="@string/about" />

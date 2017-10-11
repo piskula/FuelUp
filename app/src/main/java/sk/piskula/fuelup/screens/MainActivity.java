@@ -77,13 +77,15 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             currentFragment = new VehicleListFragment();
         } else if (id == R.id.about) {
             currentFragment = new AboutFragment();
+        } else if (id == R.id.google_drive) {
+            currentFragment = new BackupFragment();
         } else {
             throw new RuntimeException("onNavigationItemSelected unhandled case");
         }
         final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.activty_main_frame, currentFragment, TAG).commit();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
