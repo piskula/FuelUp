@@ -12,7 +12,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,15 +33,18 @@ import com.google.api.services.drive.model.FileList;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.business.googledrive.GoogleDriveAbstractAsyncTask;
+import sk.momosi.fuelup.business.googledrive.JsonUtil;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -51,6 +53,8 @@ import static android.app.Activity.RESULT_OK;
  * @version 10.10.2017
  */
 public class BackupFragment extends Fragment implements EasyPermissions.PermissionCallbacks {
+
+    private static final String LOG_TAG = BackupFragment.class.getSimpleName();
 
     GoogleAccountCredential mCredential;
     private TextView mOutputText;
@@ -67,6 +71,8 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
     private static final String PREF_ACCOUNT_NAME = "accountName";
+    private static final String BACKUP_DB_FILE_NAME = "fuelup_backup.json";
+    private static final String BACKUP_DB_FOLDER = "appDataFolder";
     private static final String[] SCOPES = { DriveScopes.DRIVE_APPDATA, DriveScopes.DRIVE_FILE };
 
     @Override
@@ -366,24 +372,40 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
         private Boolean uploadFile() throws IOException {
 
-            java.io.File file = new java.io.File(getContext().getFilesDir(), "config.json");
-            FileOutputStream os = new FileOutputStream(file);
-            os.write("frjfneifbnier".getBytes());
+            String json = JsonUtil.getWholeDbAsJson(getContext());
+            if (json == null) {
+                throw new IOException("Cannot backup database because of Error while parsing data.");
+            }
+
+//           java.io.File file = java.io.File.createTempFile("config", "json");
+            // TODO temporary file
+            String path = getContext().getExternalFilesDir(null) + "/" + BACKUP_DB_FILE_NAME;
+            FileOutputStream os = new FileOutputStream(path);
+            os.write(json.getBytes());
             os.flush();
             os.close();
 
+            java.io.File file = new java.io.File(path);
+
             File fileMetadata = new File();
-            fileMetadata.setName("config.json");
-            fileMetadata.setParents(Collections.singletonList("appDataFolder"));
+            fileMetadata.setName(BACKUP_DB_FILE_NAME);
+            fileMetadata.setParents(Collections.singletonList(BACKUP_DB_FOLDER));
 
             if (!file.exists()) {
-                return false;
+                throw new IOException("Failed to prepare backup file (before upload to Google Drive).");
             }
-            FileContent mediaContent = new FileContent("application/json", file);
-            mService.files().create(fileMetadata, mediaContent)
-                    .setFields("id")
-                    .execute();
 
+            FileContent mediaContent = new FileContent("application/json", file);
+            String backupFileId = getBackupFileId(mService);
+
+            if (backupFileId == null) {
+                mService.files().create(fileMetadata, mediaContent)
+                        .setFields("id")
+                        .execute();
+            } else {
+                mService.files().update(backupFileId, null, mediaContent)
+                        .execute();
+            }
             return true;
         }
 
@@ -429,7 +451,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
             // try to get file to check permissions
             List<String> fileInfo = new ArrayList<String>();
             FileList result = mService.files().list()
-                    .setSpaces("appDataFolder")
+                    .setSpaces(BACKUP_DB_FOLDER)
                     .setPageSize(1)
                     .setFields("nextPageToken, files(id, name)")
                     .execute();
@@ -465,18 +487,14 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
      * An asynchronous task that handles the Drive API call.
      * Placing the API calls in their own task ensures the UI stays responsive.
      */
-    private class MakeRequestTask extends GoogleDriveAbstractAsyncTask<Void, Void, List<String>> {
+    private class MakeRequestTask extends GoogleDriveAbstractAsyncTask<Void, Void, String> {
 
         MakeRequestTask(GoogleAccountCredential credential) {
             super(credential);
         }
 
-        /**
-         * Background task to call Drive API.
-         * @param params no parameters needed for this task.
-         */
         @Override
-        protected List<String> doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
             try {
                 return getDataFromApi();
             } catch (Exception e) {
@@ -486,28 +504,17 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
             }
         }
 
-        /**
-         * Fetch a list of up to 10 file names and IDs.
-         * @return List of Strings describing files, or an empty list if no files
-         *         found.
-         * @throws IOException
-         */
-        private List<String> getDataFromApi() throws IOException {
+        private String getDataFromApi() throws IOException {
             // Get a list of up to 10 files.
-            List<String> fileInfo = new ArrayList<String>();
-            FileList result = mService.files().list()
-                    .setSpaces("appDataFolder")
-                    .setPageSize(10)
-                    .setFields("nextPageToken, files(id, name)")
-                    .execute();
-            List<File> files = result.getFiles();
-            if (files != null) {
-                for (File file : files) {
-                    fileInfo.add(String.format("%s (%s)\n",
-                            file.getName(), file.getId()));
-                }
+
+            String backupFileId = getBackupFileId(mService);
+            if (backupFileId == null) {
+                throw new IOException("Cannot find your previous Backup.");
             }
-            return fileInfo;
+
+            InputStream is = mService.files().get(backupFileId).executeMediaAsInputStream();
+            String result = JsonUtil.getWholeJsonInputStreamAsString(is);
+            return result.length() > 1000 ? result.substring(0, 1000) + "\n..." : result;
         }
 
 
@@ -518,15 +525,16 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         }
 
         @Override
-        protected void onPostExecute(List<String> output) {
+        protected void onPostExecute(String output) {
             mProgress.hide();
             if (output == null) {
                 mOutputText.setText("Error occured.");
-            } else if (output.size() == 0) {
-                mOutputText.setText("No results returned.");
+//            } else if (output.size() == 0) {
+//                mOutputText.setText("No results returned.");
             } else {
-                output.add(0, "Data retrieved using the Drive API:");
-                mOutputText.setText(TextUtils.join("\n", output));
+//                output.add(0, "Data retrieved using the Drive API:");
+//                mOutputText.setText(TextUtils.join("\n", output));
+                mOutputText.setText("Data:\n" + output);
             }
         }
 
@@ -534,6 +542,27 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         protected void onCancelled() {
             onAsyncTaskCancel(mLastError);
         }
+    }
+
+    private String getBackupFileId(com.google.api.services.drive.Drive mService) throws IOException {
+        FileList result = mService.files().list()
+                .setSpaces(BACKUP_DB_FOLDER)
+                .setPageSize(10)
+                .setFields("nextPageToken, files(id, name, modifiedTime)")
+                .execute();
+
+        if (result == null || result.getFiles().isEmpty()) {
+            return null;
+        }
+
+        List<File> files = result.getFiles();
+        Collections.sort(files, new Comparator<File>() {
+            @Override
+            public int compare(File f1, File f2) {
+                return Long.valueOf(f2.getModifiedTime().getValue()).compareTo(f1.getModifiedTime().getValue());
+            }
+        });
+        return files.get(0).getId();
     }
 
     private void onAsyncTaskCancel(Exception mLastError) {
