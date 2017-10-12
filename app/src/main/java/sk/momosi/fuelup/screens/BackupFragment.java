@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -24,26 +23,26 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.http.FileContent;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 import sk.momosi.fuelup.R;
+import sk.momosi.fuelup.business.googledrive.GoogleDriveAbstractAsyncTask;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -55,7 +54,11 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
     GoogleAccountCredential mCredential;
     private TextView mOutputText;
-    private Button mCallApiButton;
+    private TextView mAccountName;
+    private TextView mSyncStatus;
+    private Button uploadBtn;
+    private Button downloadBtn;
+    private Button removeBtn;
     ProgressDialog mProgress;
 
     static final int REQUEST_ACCOUNT_PICKER = 1000;
@@ -63,9 +66,8 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
-    private static final String BUTTON_TEXT = "Call Drive API";
     private static final String PREF_ACCOUNT_NAME = "accountName";
-    private static final String[] SCOPES = { DriveScopes.DRIVE_METADATA_READONLY };
+    private static final String[] SCOPES = { DriveScopes.DRIVE_APPDATA, DriveScopes.DRIVE_FILE };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,32 +75,95 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         super.onCreateView(inflater, container, savedInstanceState);
 
         View rootview = inflater.inflate(R.layout.fragment_backup, container, false);
-        mCallApiButton = rootview.findViewById(R.id.btn_sync);
-        mCallApiButton.setText(BUTTON_TEXT);
-        mCallApiButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallApiButton.setEnabled(false);
-                mOutputText.setText("");
-                getResultsFromApi();
-                mCallApiButton.setEnabled(true);
-            }
-        });
-        mOutputText = rootview.findViewById(R.id.txt_sync);
-        mOutputText.setVerticalScrollBarEnabled(true);
-        mOutputText.setMovementMethod(new ScrollingMovementMethod());
-        mOutputText.setText(
-                "Click the \'" + BUTTON_TEXT +"\' button to test the API.");
-
-        mProgress = new ProgressDialog(getContext());
-        mProgress.setMessage("Calling Drive API ...");
+        initializeViews(rootview);
 
         mCredential = GoogleAccountCredential.usingOAuth2(
                 getContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
 
+        String accountName = getActivity().getPreferences(Context.MODE_PRIVATE)
+                .getString(PREF_ACCOUNT_NAME, null);
+
+        if (accountName != null) {
+            mCredential.setSelectedAccountName(accountName);
+            removeBtn.setEnabled(true);
+            mAccountName.setText(accountName);
+            mSyncStatus.setText(R.string.googledrive_cannot_connect);
+        } else {
+            removeBtn.setEnabled(false);
+            mAccountName.setText(R.string.googledrive_none);
+            mSyncStatus.setText(R.string.googledrive_not_configured);
+        }
+
+        connectToDrive();
         getActivity().findViewById(R.id.fab_add_vehicle).setVisibility(View.GONE);
         return rootview;
+    }
+
+    private void initializeViews(View rootview) {
+        mAccountName = rootview.findViewById(R.id.txt_sync_account);
+        mProgress = new ProgressDialog(getContext());
+        downloadBtn = rootview.findViewById(R.id.btn_sync);
+        uploadBtn = rootview.findViewById(R.id.btn_sync_upload_file);
+        mSyncStatus = rootview.findViewById(R.id.sync_status);
+        removeBtn = rootview.findViewById(R.id.btn_sync_remove_account);
+        mOutputText = rootview.findViewById(R.id.txt_sync);
+
+        downloadBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFilesFromDrive();
+            }
+        });
+
+        uploadBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uploadFileThroughApi();
+            }
+        });
+
+        removeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences settings =
+                        getActivity().getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.remove(PREF_ACCOUNT_NAME);
+                editor.apply();
+                mCredential.setSelectedAccountName(null);
+                removeBtn.setEnabled(false);
+                mAccountName.setText(R.string.googledrive_none);
+                mSyncStatus.setText(R.string.googledrive_not_configured);
+                connectToDrive();
+            }
+        });
+
+        mProgress.setMessage("Calling Drive API ...");
+
+        mOutputText.setVerticalScrollBarEnabled(true);
+        mOutputText.setMovementMethod(new ScrollingMovementMethod());
+    }
+
+    private void connectToDrive() {
+        uploadBtn.setEnabled(false);
+        downloadBtn.setEnabled(false);
+        mOutputText.setText("");
+
+        if (! isGooglePlayServicesAvailable()) {
+            acquireGooglePlayServices();
+        } else if (mCredential.getSelectedAccountName() == null) {
+            chooseAccount();
+        } else if (! isDeviceOnline()) {
+//            Toast.makeText(getContext(), R.string.googledrive_no_connection, Toast.LENGTH_SHORT).show();
+            mSyncStatus.setText(R.string.googledrive_no_connection);
+        } else {
+            // allright, Google Drive account successfully connected
+            // TODO Snackbar (but must check View for null)
+            Toast.makeText(getContext(), mCredential.getSelectedAccountName(), Toast.LENGTH_SHORT).show();
+            mAccountName.setText(mCredential.getSelectedAccountName());
+            new CheckPermissionsTask(mCredential).execute();
+        }
     }
 
     @Override
@@ -107,35 +172,15 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         getActivity().findViewById(R.id.fab_add_vehicle).setVisibility(View.VISIBLE);
     }
 
-    /**
-     * Attempt to call the API, after verifying that all the preconditions are
-     * satisfied. The preconditions are: Google Play Services installed, an
-     * account was selected and the device currently has online access. If any
-     * of the preconditions are not satisfied, the app will prompt the user as
-     * appropriate.
-     */
-    private void getResultsFromApi() {
-        if (! isGooglePlayServicesAvailable()) {
-            acquireGooglePlayServices();
-        } else if (mCredential.getSelectedAccountName() == null) {
-            chooseAccount();
-        } else if (! isDeviceOnline()) {
-            mOutputText.setText("No network connection available.");
-        } else {
-            new MakeRequestTask(mCredential).execute();
-        }
+
+    private void getFilesFromDrive() {
+        new MakeRequestTask(mCredential).execute();
     }
 
-    /**
-     * Attempts to set the account used with the API credentials. If an account
-     * name was previously saved it will use that one; otherwise an account
-     * picker dialog will be shown to the user. Note that the setting the
-     * account to use with the credentials object requires the app to have the
-     * GET_ACCOUNTS permission, which is requested here if it is not already
-     * present. The AfterPermissionGranted annotation indicates that this
-     * function will be rerun automatically whenever the GET_ACCOUNTS permission
-     * is granted.
-     */
+    private void uploadFileThroughApi() {
+        new UploadFileTask(mCredential).execute();
+    }
+
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private void chooseAccount() {
         if (EasyPermissions.hasPermissions(
@@ -144,7 +189,8 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
                     .getString(PREF_ACCOUNT_NAME, null);
             if (accountName != null) {
                 mCredential.setSelectedAccountName(accountName);
-                getResultsFromApi();
+                removeBtn.setEnabled(true);
+                connectToDrive();
             } else {
                 // Start a dialog from which the user can choose an account
                 startActivityForResult(
@@ -155,7 +201,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
             // Request the GET_ACCOUNTS permission via a user dialog
             EasyPermissions.requestPermissions(
                     this,
-                    "This app needs to access your Google account (via Contacts).",
+                    "This app needs to access your Google accounts list.",
                     REQUEST_PERMISSION_GET_ACCOUNTS,
                     Manifest.permission.GET_ACCOUNTS);
         }
@@ -178,16 +224,13 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         switch(requestCode) {
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode != RESULT_OK) {
-                    mOutputText.setText(
-                            "This app requires Google Play Services. Please install " +
-                                    "Google Play Services on your device and relaunch this app.");
+                    mSyncStatus.setText(R.string.googledrive_requires_google_play);
                 } else {
-                    getResultsFromApi();
+                    connectToDrive();
                 }
                 break;
             case REQUEST_ACCOUNT_PICKER:
-                if (resultCode == RESULT_OK && data != null &&
-                        data.getExtras() != null) {
+                if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
                     String accountName =
                             data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     if (accountName != null) {
@@ -197,13 +240,15 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
                         editor.putString(PREF_ACCOUNT_NAME, accountName);
                         editor.apply();
                         mCredential.setSelectedAccountName(accountName);
-                        getResultsFromApi();
+                        removeBtn.setEnabled(true);
+                        mAccountName.setText(accountName);
+                        connectToDrive();
                     }
                 }
                 break;
             case REQUEST_AUTHORIZATION:
                 if (resultCode == RESULT_OK) {
-                    getResultsFromApi();
+                    connectToDrive();
                 }
                 break;
         }
@@ -218,9 +263,8 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
      *     which is either PERMISSION_GRANTED or PERMISSION_DENIED. Never null.
      */
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(
+            int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         EasyPermissions.onRequestPermissionsResult(
                 requestCode, permissions, grantResults, this);
@@ -304,21 +348,127 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         dialog.show();
     }
 
+    private class UploadFileTask extends GoogleDriveAbstractAsyncTask<Void, Void, Boolean> {
+        UploadFileTask (GoogleAccountCredential credential) {
+            super(credential);
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                return uploadFile();
+            } catch (Exception e) {
+                mLastError = e;
+                cancel(true);
+                return null;
+            }
+        }
+
+        private Boolean uploadFile() throws IOException {
+
+            java.io.File file = new java.io.File(getContext().getFilesDir(), "config.json");
+            FileOutputStream os = new FileOutputStream(file);
+            os.write("frjfneifbnier".getBytes());
+            os.flush();
+            os.close();
+
+            File fileMetadata = new File();
+            fileMetadata.setName("config.json");
+            fileMetadata.setParents(Collections.singletonList("appDataFolder"));
+
+            if (!file.exists()) {
+                return false;
+            }
+            FileContent mediaContent = new FileContent("application/json", file);
+            mService.files().create(fileMetadata, mediaContent)
+                    .setFields("id")
+                    .execute();
+
+            return true;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            mOutputText.setText("Upload in progress ...");
+            mProgress.show();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean output) {
+            mProgress.hide();
+            if (output) {
+                mOutputText.setText("Uploaded successfully.");
+            } else {
+                mOutputText.setText("Upload failed.");
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            onAsyncTaskCancel(mLastError);
+        }
+    }
+
+    private class CheckPermissionsTask extends GoogleDriveAbstractAsyncTask<Void, Void, Boolean> {
+        CheckPermissionsTask (GoogleAccountCredential credential) {
+            super(credential);
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                return hasPermissions();
+            } catch (Exception e) {
+                mLastError = e;
+                cancel(true);
+                return null;
+            }
+        }
+
+        private Boolean hasPermissions() throws IOException {
+            // try to get file to check permissions
+            List<String> fileInfo = new ArrayList<String>();
+            FileList result = mService.files().list()
+                    .setSpaces("appDataFolder")
+                    .setPageSize(1)
+                    .setFields("nextPageToken, files(id, name)")
+                    .execute();
+            return result.getFiles() != null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            mOutputText.setText("Checking permissions ...");
+            mProgress.show();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean output) {
+            mProgress.hide();
+            if (output) {
+                mOutputText.setText("Permissions OK.");
+            } else {
+                mOutputText.setText("Permissions not granted.");
+            }
+            uploadBtn.setEnabled(true);
+            downloadBtn.setEnabled(true);
+            mSyncStatus.setText("");
+        }
+
+        @Override
+        protected void onCancelled() {
+            onAsyncTaskCancel(mLastError);
+        }
+    }
+
     /**
      * An asynchronous task that handles the Drive API call.
      * Placing the API calls in their own task ensures the UI stays responsive.
      */
-    private class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
-        private com.google.api.services.drive.Drive mService = null;
-        private Exception mLastError = null;
+    private class MakeRequestTask extends GoogleDriveAbstractAsyncTask<Void, Void, List<String>> {
 
         MakeRequestTask(GoogleAccountCredential credential) {
-            HttpTransport transport = AndroidHttp.newCompatibleTransport();
-            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-            mService = new com.google.api.services.drive.Drive.Builder(
-                    transport, jsonFactory, credential)
-                    .setApplicationName("Drive API Android Quickstart")
-                    .build();
+            super(credential);
         }
 
         /**
@@ -346,6 +496,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
             // Get a list of up to 10 files.
             List<String> fileInfo = new ArrayList<String>();
             FileList result = mService.files().list()
+                    .setSpaces("appDataFolder")
                     .setPageSize(10)
                     .setFields("nextPageToken, files(id, name)")
                     .execute();
@@ -362,14 +513,16 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
         @Override
         protected void onPreExecute() {
-            mOutputText.setText("");
+            mOutputText.setText("Retrieving data ...");
             mProgress.show();
         }
 
         @Override
         protected void onPostExecute(List<String> output) {
             mProgress.hide();
-            if (output == null || output.size() == 0) {
+            if (output == null) {
+                mOutputText.setText("Error occured.");
+            } else if (output.size() == 0) {
                 mOutputText.setText("No results returned.");
             } else {
                 output.add(0, "Data retrieved using the Drive API:");
@@ -379,23 +532,27 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
         @Override
         protected void onCancelled() {
-            mProgress.hide();
-            if (mLastError != null) {
-                if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
-                    showGooglePlayServicesAvailabilityErrorDialog(
-                            ((GooglePlayServicesAvailabilityIOException) mLastError)
-                                    .getConnectionStatusCode());
-                } else if (mLastError instanceof UserRecoverableAuthIOException) {
-                    startActivityForResult(
-                            ((UserRecoverableAuthIOException) mLastError).getIntent(),
-                            REQUEST_AUTHORIZATION);
-                } else {
-                    mOutputText.setText("The following error occurred:\n"
-                            + mLastError.getMessage());
-                }
+            onAsyncTaskCancel(mLastError);
+        }
+    }
+
+    private void onAsyncTaskCancel(Exception mLastError) {
+        mProgress.hide();
+        if (mLastError != null) {
+            if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
+                showGooglePlayServicesAvailabilityErrorDialog(
+                        ((GooglePlayServicesAvailabilityIOException) mLastError)
+                                .getConnectionStatusCode());
+            } else if (mLastError instanceof UserRecoverableAuthIOException) {
+                startActivityForResult(
+                        ((UserRecoverableAuthIOException) mLastError).getIntent(),
+                        REQUEST_AUTHORIZATION);
             } else {
-                mOutputText.setText("Request cancelled.");
+                mOutputText.setText("The following error occurred:\n"
+                        + mLastError.getMessage());
             }
+        } else {
+            mOutputText.setText("Request cancelled.");
         }
     }
 }

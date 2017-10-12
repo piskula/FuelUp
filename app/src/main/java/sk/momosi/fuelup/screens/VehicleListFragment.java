@@ -73,6 +73,7 @@ public class VehicleListFragment extends Fragment implements ListVehiclesAdapter
         addCarBtn = getActivity().findViewById(R.id.fab_add_vehicle);
         addCarBtn.setOnClickListener(this);
 
+        getActivity().findViewById(R.id.fab_add_vehicle).setVisibility(View.VISIBLE);
         return rootView;
     }
 

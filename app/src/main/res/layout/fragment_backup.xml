@@ -6,11 +6,49 @@
     android:orientation="vertical"
     tools:context="sk.momosi.fuelup.screens.BackupFragment">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:text="Your Google account for this app:"/>
+
+    <TextView
+        android:id="@+id/txt_sync_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorAppOrange"
+        android:layout_marginBottom="30dp"/>
+
+    <TextView
+        android:id="@+id/sync_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:lines="3"/>
+
     <Button
         android:id="@+id/btn_sync"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sync"/>
+        android:text="Get My Data From Drive"/>
+
+    <Button
+        android:id="@+id/btn_sync_upload_file"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Upload To Drive"/>
+
+    <Button
+        android:id="@+id/btn_sync_remove_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Remove Account"/>
 
     <TextView
         android:id="@+id/txt_sync"

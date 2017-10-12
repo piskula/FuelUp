@@ -183,6 +183,13 @@
     <string name="Edit_vehicle">Edit vehicle</string>
     <string name="Expense">Expense</string>
 
+    <!--Google Drive API-->
+    <string name="googledrive_cannot_connect">You have connected this app with Google account, but we cannot connect to your Google Drive now.</string>
+    <string name="googledrive_requires_google_play">This app requires Google Play Services. Please install Google Play Services on your device and relaunch this app.</string>
+    <string name="googledrive_no_connection">No network connection available. We cannot go online to check your account settings.</string>
+    <string name="googledrive_none">none</string>
+    <string name="googledrive_not_configured">You have not configured Google account yet.</string>
+
     <!--without translation-->
     <string name="authors">&#169; Ondrej Oravčok, Martin Styk</string>
     <string name="na">N/A</string>
