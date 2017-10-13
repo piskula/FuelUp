@@ -4,7 +4,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Currency;
+import java.util.List;
 
 import sk.momosi.fuelup.data.FuelUpContract;
 import sk.momosi.fuelup.data.FuelUpContract.VehicleEntry;
@@ -47,6 +49,23 @@ public class VehicleService {
         cursor.close();
 
         return vehicle;
+    }
+
+    public static List<Long> getAvailableVehicleIds(Context context) {
+        String[] projection = { VehicleEntry._ID };
+        Cursor cursor = context.getContentResolver().query(
+                VehicleEntry.CONTENT_URI,
+                projection, null, null, null);
+
+        List<Long> ids = new ArrayList<>();
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                ids.add(cursor.getLong(cursor.getColumnIndex(VehicleEntry._ID)));
+            }
+            cursor.close();
+        }
+
+        return ids;
     }
 
     private static VehicleType getTypeFromCursor(Cursor cursor) {

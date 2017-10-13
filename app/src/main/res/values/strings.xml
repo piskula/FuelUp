@@ -185,6 +185,7 @@
 
     <!--Google Drive API-->
     <string name="googledrive_cannot_connect">You have connected this app with Google account, but we cannot connect to your Google Drive now.</string>
+    <string name="googledrive_startimport_btn">Start import</string>
     <string name="googledrive_requires_google_play">This app requires Google Play Services. Please install Google Play Services on your device and relaunch this app.</string>
     <string name="googledrive_no_connection">No network connection available. We cannot go online to check your account settings.</string>
     <string name="googledrive_none">none</string>

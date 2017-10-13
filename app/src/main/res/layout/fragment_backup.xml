@@ -36,18 +36,21 @@
         android:id="@+id/btn_sync"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:enabled="false"
         android:text="Get My Data From Drive"/>
 
     <Button
         android:id="@+id/btn_sync_upload_file"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:enabled="false"
         android:text="Upload To Drive"/>
 
     <Button
         android:id="@+id/btn_sync_remove_account"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:enabled="false"
         android:text="Remove Account"/>
 
     <TextView
