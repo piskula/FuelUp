@@ -180,8 +180,7 @@ public class VehicleProvider extends ContentProvider {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         switch (match) {
             case VEHICLE_ID:
-                String[] vehicleId = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-                return db.delete(VehicleEntry.TABLE_NAME, VehicleEntry._ID + "=?", vehicleId);
+                return deleteVehicleWithAllData(db, uri);
             case EXPENSE_ID:
                 String[] expenseId = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 return db.delete(ExpenseEntry.TABLE_NAME, ExpenseEntry._ID + "=?", expenseId);
@@ -190,6 +189,23 @@ public class VehicleProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Delete is not supported for " + uri);
         }
+    }
+
+    private int deleteVehicleWithAllData(final SQLiteDatabase db, Uri uri) {
+        String[] vehicleId = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+
+        db.beginTransactionNonExclusive();
+
+        db.delete(ExpenseEntry.TABLE_NAME, ExpenseEntry.COLUMN_VEHICLE + "=?", vehicleId);
+        db.delete(FillUpEntry.TABLE_NAME, FillUpEntry.COLUMN_VEHICLE + "=?", vehicleId);
+        int result = db.delete(VehicleEntry.TABLE_NAME, VehicleEntry._ID + "=?", vehicleId);
+
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
+
+        getContext().getContentResolver().notifyChange(uri, null);
+        return result;
     }
 
     @Override
