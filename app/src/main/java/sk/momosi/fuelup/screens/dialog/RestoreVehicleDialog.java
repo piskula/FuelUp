@@ -28,11 +28,7 @@ public class RestoreVehicleDialog extends DialogFragment implements Dialog.OnSho
     private static final String BUNDLE_ARGS_VEHICLE_NAMES = "vehicle_names_to_restore_dialog";
 
     private Callback callback;
-
-    private ArrayList<String> vehicleNames;
     private Set<String> vehicleNamesResult = new HashSet<>();
-    private TextView vehicleName;
-    private ListView vehicleList;
 
     @Override
     public void onItemClickAdd(String vehicleName) {
@@ -68,11 +64,9 @@ public class RestoreVehicleDialog extends DialogFragment implements Dialog.OnSho
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.confirm_restore_dialog, null);
 
-        vehicleNames = getArguments().getStringArrayList(BUNDLE_ARGS_VEHICLE_NAMES);
-
         final AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setView(dialogView)
-                .setTitle(R.string.create)
+                .setTitle(R.string.select_vehicles)
                 .setPositiveButton(R.string.googledrive_startimport_btn,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
@@ -90,11 +84,9 @@ public class RestoreVehicleDialog extends DialogFragment implements Dialog.OnSho
                 .create();
         dialog.setOnShowListener(this);
 
-        vehicleName = dialogView.findViewById(R.id.restore_dialog_title);
-        vehicleName.setText("Are you sure to import data?");
-
-        vehicleList = dialogView.findViewById(R.id.list_vehicle_restore);
-        vehicleList.setAdapter(new ListVehiclesRestoreAdapter(getContext(), vehicleNames, this));
+        ListView vehicleList = dialogView.findViewById(R.id.list_vehicle_restore);
+        vehicleList.setAdapter(new ListVehiclesRestoreAdapter(
+                getContext(), getArguments().getStringArrayList(BUNDLE_ARGS_VEHICLE_NAMES), this));
 
         return dialog;
     }

@@ -61,8 +61,6 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
     private static final String LOG_TAG = BackupFragment.class.getSimpleName();
-    private static final String BACKUP_DB_FILE_NAME = "fuelup_backup.json";
-    private static final String BACKUP_DB_FOLDER = "appDataFolder";
     private static final String[] SCOPES = {DriveScopes.DRIVE_APPDATA, DriveScopes.DRIVE_FILE};
     private GoogleAccountCredential mCredential;
     private ProgressDialog mProgress;
@@ -96,9 +94,6 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
         if (!ConnectivityUtils.isGooglePlayServicesAvailable(getContext())) {
             acquireGooglePlayServices();
-
-        } else if (!ConnectivityUtils.isDeviceOnline(getContext())) {
-            mSyncStatus.setText(R.string.googledrive_no_connection);
 
         } else if (accountName != null) {
             mCredential.setSelectedAccountName(accountName);
@@ -164,7 +159,10 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     }
 
     private void checkPermissions() {
-        new CheckPermissionsTask(mCredential, this).execute();
+        if (!ConnectivityUtils.isDeviceOnline(getContext()))
+            Toast.makeText(getContext(), "You must be online to check permissions", Toast.LENGTH_SHORT).show();
+        else
+            new CheckPermissionsTask(mCredential, this).execute();
     }
 
     private void assignAccount(String googleDriveAccount) {
