@@ -51,6 +51,7 @@ import sk.momosi.fuelup.business.VehicleService;
 import sk.momosi.fuelup.business.googledrive.GoogleDriveAbstractAsyncTask;
 import sk.momosi.fuelup.business.googledrive.JsonUtil;
 import sk.momosi.fuelup.screens.dialog.RestoreVehicleDialog;
+import sk.momosi.fuelup.util.PreferencesUtils;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -61,27 +62,22 @@ import static android.app.Activity.RESULT_OK;
 public class BackupFragment extends Fragment implements EasyPermissions.PermissionCallbacks,
         RestoreVehicleDialog.Callback {
 
+    static final int REQUEST_ACCOUNT_PICKER = 1000;
+    static final int REQUEST_AUTHORIZATION = 1001;
+    static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
+    static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
     private static final String LOG_TAG = BackupFragment.class.getSimpleName();
-
+    private static final String BACKUP_DB_FILE_NAME = "fuelup_backup.json";
+    private static final String BACKUP_DB_FOLDER = "appDataFolder";
+    private static final String[] SCOPES = {DriveScopes.DRIVE_APPDATA, DriveScopes.DRIVE_FILE};
     GoogleAccountCredential mCredential;
+    ProgressDialog mProgress;
     private TextView mOutputText;
     private TextView mAccountName;
     private TextView mSyncStatus;
     private Button uploadBtn;
     private Button downloadBtn;
     private Button removeBtn;
-    ProgressDialog mProgress;
-
-    static final int REQUEST_ACCOUNT_PICKER = 1000;
-    static final int REQUEST_AUTHORIZATION = 1001;
-    static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
-    static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
-
-    private static final String PREF_ACCOUNT_NAME = "accountName";
-    private static final String PREF_ACCOUNT_IMPORT_ASKED = "accountImportAsked";
-    private static final String BACKUP_DB_FILE_NAME = "fuelup_backup.json";
-    private static final String BACKUP_DB_FOLDER = "appDataFolder";
-    private static final String[] SCOPES = { DriveScopes.DRIVE_APPDATA, DriveScopes.DRIVE_FILE };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -103,13 +99,12 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     public void onStart() {
         super.onStart();
 
-        String accountName = getActivity().getPreferences(Context.MODE_PRIVATE)
-                .getString(PREF_ACCOUNT_NAME, null);
+        String accountName = PreferencesUtils.getString(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_NAME);
 
-        if (! isGooglePlayServicesAvailable()) {
+        if (!isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices();
 
-        } else if (! isDeviceOnline()) {
+        } else if (!isDeviceOnline()) {
             mSyncStatus.setText(R.string.googledrive_no_connection);
 
         } else if (accountName != null) {
@@ -164,10 +159,8 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     }
 
     private void removeAccount() {
-        SharedPreferences.Editor editor = getActivity().getPreferences(Context.MODE_PRIVATE).edit();
-        editor.remove(PREF_ACCOUNT_NAME);
-        editor.remove(PREF_ACCOUNT_IMPORT_ASKED);
-        editor.apply();
+        PreferencesUtils.remove(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED,
+                PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_NAME);
 
         mCredential.setSelectedAccountName(null);
         removeBtn.setEnabled(false);
@@ -182,11 +175,8 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     }
 
     private void assignAccount(String googleDriveAccount) {
-        SharedPreferences.Editor editor = getActivity().getPreferences(Context.MODE_PRIVATE).edit();
-
-        editor.putString(PREF_ACCOUNT_NAME, googleDriveAccount);
-        editor.remove(PREF_ACCOUNT_IMPORT_ASKED);
-        editor.apply();
+        PreferencesUtils.setString(getContext(),PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_NAME, googleDriveAccount);
+        PreferencesUtils.remove(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED);
 
         mCredential.setSelectedAccountName(googleDriveAccount);
         removeBtn.setEnabled(true);
@@ -229,17 +219,18 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
      * Called when an activity launched here (specifically, AccountPicker
      * and authorization) exits, giving you the requestCode you started it with,
      * the resultCode it returned, and any additional data from it.
+     *
      * @param requestCode code indicating which activity result is incoming.
-     * @param resultCode code indicating the result of the incoming
-     *     activity result.
-     * @param data Intent (containing result data) returned by incoming
-     *     activity result.
+     * @param resultCode  code indicating the result of the incoming
+     *                    activity result.
+     * @param data        Intent (containing result data) returned by incoming
+     *                    activity result.
      */
     @Override
     public void onActivityResult(
             int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode) {
+        switch (requestCode) {
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode != RESULT_OK) {
                     mSyncStatus.setText(R.string.googledrive_requires_google_play);
@@ -249,8 +240,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
                 break;
             case REQUEST_ACCOUNT_PICKER:
                 if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
-                    String accountName =
-                            data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                    String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     if (accountName != null) {
                         assignAccount(accountName);
                     }
@@ -266,11 +256,12 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
     /**
      * Respond to requests for permissions at runtime for API 23 and above.
-     * @param requestCode The request code passed in
-     *     requestPermissions(android.app.Activity, String, int, String[])
-     * @param permissions The requested permissions. Never null.
+     *
+     * @param requestCode  The request code passed in
+     *                     requestPermissions(android.app.Activity, String, int, String[])
+     * @param permissions  The requested permissions. Never null.
      * @param grantResults The grant results for the corresponding permissions
-     *     which is either PERMISSION_GRANTED or PERMISSION_DENIED. Never null.
+     *                     which is either PERMISSION_GRANTED or PERMISSION_DENIED. Never null.
      */
     @Override
     public void onRequestPermissionsResult(
@@ -283,9 +274,10 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     /**
      * Callback for when a permission is granted using the EasyPermissions
      * library.
+     *
      * @param requestCode The request code associated with the requested
-     *         permission
-     * @param list The requested permission list. Never null.
+     *                    permission
+     * @param list        The requested permission list. Never null.
      */
     @Override
     public void onPermissionsGranted(int requestCode, List<String> list) {
@@ -295,9 +287,10 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     /**
      * Callback for when a permission is denied using the EasyPermissions
      * library.
+     *
      * @param requestCode The request code associated with the requested
-     *         permission
-     * @param list The requested permission list. Never null.
+     *                    permission
+     * @param list        The requested permission list. Never null.
      */
     @Override
     public void onPermissionsDenied(int requestCode, List<String> list) {
@@ -306,6 +299,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
     /**
      * Checks whether the device currently has a network connection.
+     *
      * @return true if the device has a network connection, false otherwise.
      */
     private boolean isDeviceOnline() {
@@ -317,8 +311,9 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
     /**
      * Check that Google Play services APK is installed and up to date.
+     *
      * @return true if Google Play Services is available and up to
-     *     date on this device; false otherwise.
+     * date on this device; false otherwise.
      */
     private boolean isGooglePlayServicesAvailable() {
         GoogleApiAvailability apiAvailability =
@@ -345,8 +340,9 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     /**
      * Display an error dialog showing that Google Play Services is missing
      * or out of date.
+     *
      * @param connectionStatusCode code describing the presence (or lack of)
-     *     Google Play Services on this device.
+     *                             Google Play Services on this device.
      */
     void showGooglePlayServicesAvailabilityErrorDialog(
             final int connectionStatusCode) {
@@ -362,13 +358,65 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     public void onDialogPositiveClick(Set<String> vehicleNames) {
         Toast.makeText(getContext(), "You have choosed: " + vehicleNames.size() + " vehicles to import. Now it is time to import and save preference.", Toast.LENGTH_LONG).show();
 
-        SharedPreferences.Editor editor = getActivity().getPreferences(Context.MODE_PRIVATE).edit();
-        editor.putBoolean(PREF_ACCOUNT_IMPORT_ASKED, true);
-        editor.apply();
+        PreferencesUtils.setBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, true);
+    }
+
+    private void importSpecifiedVehiclesFromJson(JSONObject json) {
+
+        ArrayList<String> vehicles;
+        try {
+            vehicles = JsonUtil.getVehicleNamesFromJson(json);
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Json format exception occured.");
+            vehicles = new ArrayList<>();
+        }
+
+        RestoreVehicleDialog.newInstance(vehicles, this).show(getFragmentManager(), RestoreVehicleDialog.class.getSimpleName());
+    }
+
+    private String getBackupFileId(com.google.api.services.drive.Drive mService) throws IOException {
+        FileList result = mService.files().list()
+                .setSpaces(BACKUP_DB_FOLDER)
+                .setPageSize(10)
+                .setFields("nextPageToken, files(id, name, modifiedTime)")
+                .execute();
+
+        if (result == null || result.getFiles().isEmpty()) {
+            return null;
+        }
+
+        List<File> files = result.getFiles();
+        Collections.sort(files, new Comparator<File>() {
+            @Override
+            public int compare(File f1, File f2) {
+                return Long.valueOf(f2.getModifiedTime().getValue()).compareTo(f1.getModifiedTime().getValue());
+            }
+        });
+        return files.get(0).getId();
+    }
+
+    private void onAsyncTaskCancel(Exception mLastError) {
+        mProgress.hide();
+        if (mLastError != null) {
+            if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
+                showGooglePlayServicesAvailabilityErrorDialog(
+                        ((GooglePlayServicesAvailabilityIOException) mLastError)
+                                .getConnectionStatusCode());
+            } else if (mLastError instanceof UserRecoverableAuthIOException) {
+                startActivityForResult(
+                        ((UserRecoverableAuthIOException) mLastError).getIntent(),
+                        REQUEST_AUTHORIZATION);
+            } else {
+                mOutputText.setText("The following error occurred:\n"
+                        + mLastError.getMessage());
+            }
+        } else {
+            mOutputText.setText("Request cancelled.");
+        }
     }
 
     private class UploadFileTask extends GoogleDriveAbstractAsyncTask<Void, Void, Boolean> {
-        UploadFileTask (GoogleAccountCredential credential) {
+        UploadFileTask(GoogleAccountCredential credential) {
             super(credential);
         }
 
@@ -445,21 +493,8 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         }
     }
 
-    private void importSpecifiedVehiclesFromJson(JSONObject json) {
-
-        ArrayList<String> vehicles;
-        try {
-            vehicles = JsonUtil.getVehicleNamesFromJson(json);
-        } catch (JSONException e) {
-            Log.e(LOG_TAG, "Json format exception occured.");
-            vehicles = new ArrayList<>();
-        }
-
-        RestoreVehicleDialog.newInstance(vehicles, this).show(getFragmentManager(), RestoreVehicleDialog.class.getSimpleName());
-    }
-
     private class CheckPreviousVersionsOfAppInstalledTask extends GoogleDriveAbstractAsyncTask<Void, Void, JSONObject> {
-        CheckPreviousVersionsOfAppInstalledTask (GoogleAccountCredential credential) {
+        CheckPreviousVersionsOfAppInstalledTask(GoogleAccountCredential credential) {
             super(credential);
         }
 
@@ -501,9 +536,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
             mProgress.hide();
             if (json == null) {
                 mOutputText.setText("There is no backed-up previous version on Google Drive to restore. Your account is now syncing.");
-                SharedPreferences.Editor editor = getActivity().getPreferences(Context.MODE_PRIVATE).edit();
-                editor.putBoolean(PREF_ACCOUNT_IMPORT_ASKED, true);
-                editor.apply();
+                PreferencesUtils.setBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, true);
             }
             importSpecifiedVehiclesFromJson(json);
         }
@@ -515,7 +548,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     }
 
     private class CheckPermissionsTask extends GoogleDriveAbstractAsyncTask<Void, Void, Boolean> {
-        CheckPermissionsTask (GoogleAccountCredential credential) {
+        CheckPermissionsTask(GoogleAccountCredential credential) {
             super(credential);
         }
 
@@ -558,8 +591,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
                 downloadBtn.setEnabled(true);
                 mSyncStatus.setText("");
 
-                SharedPreferences prefs = getActivity().getPreferences(Context.MODE_PRIVATE);
-                if (!prefs.getBoolean(PREF_ACCOUNT_IMPORT_ASKED, false)) {
+                if (!PreferencesUtils.getBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED)) {
                     new CheckPreviousVersionsOfAppInstalledTask(mCredential).execute();
                 }
             } else {
@@ -627,47 +659,6 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         @Override
         protected void onCancelled() {
             onAsyncTaskCancel(mLastError);
-        }
-    }
-
-    private String getBackupFileId(com.google.api.services.drive.Drive mService) throws IOException {
-        FileList result = mService.files().list()
-                .setSpaces(BACKUP_DB_FOLDER)
-                .setPageSize(10)
-                .setFields("nextPageToken, files(id, name, modifiedTime)")
-                .execute();
-
-        if (result == null || result.getFiles().isEmpty()) {
-            return null;
-        }
-
-        List<File> files = result.getFiles();
-        Collections.sort(files, new Comparator<File>() {
-            @Override
-            public int compare(File f1, File f2) {
-                return Long.valueOf(f2.getModifiedTime().getValue()).compareTo(f1.getModifiedTime().getValue());
-            }
-        });
-        return files.get(0).getId();
-    }
-
-    private void onAsyncTaskCancel(Exception mLastError) {
-        mProgress.hide();
-        if (mLastError != null) {
-            if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
-                showGooglePlayServicesAvailabilityErrorDialog(
-                        ((GooglePlayServicesAvailabilityIOException) mLastError)
-                                .getConnectionStatusCode());
-            } else if (mLastError instanceof UserRecoverableAuthIOException) {
-                startActivityForResult(
-                        ((UserRecoverableAuthIOException) mLastError).getIntent(),
-                        REQUEST_AUTHORIZATION);
-            } else {
-                mOutputText.setText("The following error occurred:\n"
-                        + mLastError.getMessage());
-            }
-        } else {
-            mOutputText.setText("Request cancelled.");
         }
     }
 }
