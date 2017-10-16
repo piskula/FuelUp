@@ -13,6 +13,7 @@ import android.widget.CompoundButton;
 import java.util.List;
 
 import sk.momosi.fuelup.R;
+import sk.momosi.fuelup.business.VehicleService;
 
 /**
  * @author Ondrej Oravcok
@@ -42,8 +43,10 @@ public class ListVehiclesRestoreAdapter extends ArrayAdapter<String> {
         LayoutInflater inflater = ((Activity)getContext()).getLayoutInflater();
         convertView = inflater.inflate(R.layout.list_item_vehicle_restore, parent, false);
 
+        String name = vehicleNames.get(position);
         CheckBox vehicleName = convertView.findViewById(R.id.checkbox_restore_vehicle);
-        vehicleName.setText(vehicleNames.get(position));
+        vehicleName.setText(name);
+        vehicleName.setEnabled(!VehicleService.isVehicleNameTaken(name, getContext()));
         vehicleName.setOnCheckedChangeListener(
                 new CompoundButton.OnCheckedChangeListener() {
                     @Override

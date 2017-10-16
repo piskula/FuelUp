@@ -51,6 +51,18 @@ public class VehicleService {
         return vehicle;
     }
 
+    public static boolean isVehicleNameTaken(String name, Context context) {
+        String[] selectionArgs = { name };
+        Cursor cursor = context.getContentResolver().query(VehicleEntry.CONTENT_URI,
+                FuelUpContract.ALL_COLUMNS_VEHICLES, VehicleEntry.COLUMN_NAME + "=?",
+                selectionArgs, null);
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.close();
+            return true;
+        }
+        return false;
+    }
+
     public static List<Long> getAvailableVehicleIds(Context context) {
         String[] projection = { VehicleEntry._ID };
         Cursor cursor = context.getContentResolver().query(
