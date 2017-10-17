@@ -1,9 +1,11 @@
 package sk.momosi.fuelup.screens;
 
 import android.Manifest;
+import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,14 +23,11 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
-import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.drive.DriveScopes;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -36,11 +35,13 @@ import pub.devrel.easypermissions.EasyPermissions;
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.business.googledrive.CheckPermissionsTask;
 import sk.momosi.fuelup.business.googledrive.CheckPreviousAppInstalledTask;
+import sk.momosi.fuelup.business.googledrive.DriveBackupFileUtil;
 import sk.momosi.fuelup.business.googledrive.DriveFileUploadTask;
 import sk.momosi.fuelup.business.googledrive.DriveRequestTask;
 import sk.momosi.fuelup.business.googledrive.ImportVehicleJsonException;
 import sk.momosi.fuelup.business.googledrive.ImportVehiclesTask;
 import sk.momosi.fuelup.business.googledrive.JsonUtil;
+import sk.momosi.fuelup.data.FuelUpContract;
 import sk.momosi.fuelup.screens.dialog.RestoreVehicleDialog;
 import sk.momosi.fuelup.util.ConnectivityUtils;
 import sk.momosi.fuelup.util.PreferencesUtils;
@@ -64,7 +65,6 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
     private static final String LOG_TAG = BackupFragment.class.getSimpleName();
-    private static final String[] SCOPES = {DriveScopes.DRIVE_APPDATA, DriveScopes.DRIVE_FILE};
     private GoogleAccountCredential mCredential;
     private ProgressDialog mProgress;
     private TextView mOutputText;
@@ -82,8 +82,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         View rootview = inflater.inflate(R.layout.fragment_backup, container, false);
         initializeViews(rootview);
 
-        mCredential = GoogleAccountCredential.usingOAuth2(getContext(), Arrays.asList(SCOPES))
-                .setBackOff(new ExponentialBackOff());
+        mCredential = DriveBackupFileUtil.generateCredential(getContext());
 
         getActivity().findViewById(R.id.fab_add_vehicle).setVisibility(View.GONE);
         return rootview;
@@ -174,8 +173,15 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         PreferencesUtils.setString(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_NAME, googleDriveAccount);
         PreferencesUtils.remove(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED);
 
+        mAccountName.setText(googleDriveAccount);
         mCredential.setSelectedAccountName(googleDriveAccount);
         removeBtn.setEnabled(true);
+        Account account = new Account(FuelUpContract.CONTENT_AUTHORITY, FuelUpContract.CONTENT_AUTHORITY);
+        ContentResolver.setIsSyncable(account, FuelUpContract.CONTENT_AUTHORITY, 1);
+        ContentResolver.setSyncAutomatically(account, FuelUpContract.CONTENT_AUTHORITY, true);
+        ContentResolver.addPeriodicSync(
+                account, FuelUpContract.CONTENT_AUTHORITY, new Bundle(), 60 * 60);
+        Log.e(LOG_TAG, "Sync enabled");
         checkPermissions();
     }
 
@@ -193,7 +199,16 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
     private void uploadFileThroughApi() {
         if (PreferencesUtils.getBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED)) {
-            new DriveFileUploadTask(mCredential, this, getContext()).execute();
+//            new DriveFileUploadTask(mCredential, this, getContext()).execute();
+
+            Bundle b = new Bundle();
+            b.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+            b.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+
+            Account account = new Account(FuelUpContract.CONTENT_AUTHORITY, FuelUpContract.CONTENT_AUTHORITY);
+            ContentResolver.requestSync(account, FuelUpContract.CONTENT_AUTHORITY, b);
+
+            Toast.makeText(getContext(), "Syncing started", Toast.LENGTH_SHORT).show();
         } else {
             mOutputText.setText("Backup is available only after importing or deleting previous version from Google Drive. If you want to remove your old backup and use only actual data, select no vehicle and press 'Start import' on Import Dialog.");
         }

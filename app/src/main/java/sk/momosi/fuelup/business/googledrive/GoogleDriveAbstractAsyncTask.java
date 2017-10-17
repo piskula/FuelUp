@@ -17,16 +17,8 @@ public abstract class GoogleDriveAbstractAsyncTask<Params, Progress, Object> ext
     protected Exception mLastError = null;
 
     protected GoogleDriveAbstractAsyncTask(GoogleAccountCredential credential) {
-        mService = getServiceForCredentials(credential);
+        mService = DriveBackupFileUtil.getServiceForCredentials(credential);
     }
 
-    private com.google.api.services.drive.Drive getServiceForCredentials(GoogleAccountCredential credential) {
-        HttpTransport transport = AndroidHttp.newCompatibleTransport();
-        JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
-        return new com.google.api.services.drive.Drive.Builder(
-                transport, jsonFactory, credential)
-                .setApplicationName("fuelup")
-                .build();
-    }
 }
