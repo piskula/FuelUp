@@ -3,12 +3,14 @@ package sk.momosi.fuelup.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -44,17 +46,25 @@ public class ListVehiclesRestoreAdapter extends ArrayAdapter<String> {
         convertView = inflater.inflate(R.layout.list_item_vehicle_restore, parent, false);
 
         String name = vehicleNames.get(position);
-        CheckBox vehicleName = convertView.findViewById(R.id.checkbox_restore_vehicle);
+        final boolean enabled = !VehicleService.isVehicleNameTaken(name, getContext());
+
+        final CheckBox vehicleName = convertView.findViewById(R.id.checkbox_restore_vehicle);
         vehicleName.setText(name);
-        vehicleName.setEnabled(!VehicleService.isVehicleNameTaken(name, getContext()));
+        if (!enabled)
+            vehicleName.setTextColor(getContext().getResources().getColor(R.color.colorDisabled));
         vehicleName.setOnCheckedChangeListener(
                 new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                        if (isChecked)
-                            callback.onItemClickAdd(compoundButton.getText().toString());
-                        else
-                            callback.onItemClickRemove(compoundButton.getText().toString());
+                        if (!enabled) {
+                            vehicleName.setChecked(false);
+                            Toast.makeText(getContext(), R.string.googledrive_existing_vehicle, Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (isChecked)
+                                callback.onItemClickAdd(compoundButton.getText().toString());
+                            else
+                                callback.onItemClickRemove(compoundButton.getText().toString());
+                        }
                     }
                 }
         );

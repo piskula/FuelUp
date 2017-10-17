@@ -1,7 +1,10 @@
 package sk.momosi.fuelup.business.googledrive;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.util.Log;
 
 import com.google.android.gms.iid.InstanceID;
@@ -153,5 +156,81 @@ public class JsonUtil {
             vehicleNames.add(vehicle.getJSONObject(JSON_VEHICLE).getString(VehicleEntry.COLUMN_NAME));
         }
         return vehicleNames;
+    }
+
+    public static JSONObject getVehicle(final JSONObject json, final String vehicleName) throws JSONException {
+        JSONArray vehicles = json.getJSONArray(VehicleEntry.TABLE_NAME);
+        for (int i = 0; i < vehicles.length(); i++) {
+            JSONObject vehicle = vehicles.getJSONObject(i);
+            if (vehicleName.equals(vehicle.getJSONObject(JSON_VEHICLE).getString(VehicleEntry.COLUMN_NAME))) {
+                return vehicle;
+            }
+        }
+        throw new JSONException("Vehicle " + vehicleName + "not found in json.");
+    }
+
+    public static long importVehicle(final JSONObject vehicleItem, final Context context) throws JSONException {
+        ContentValues values = new ContentValues();
+        JSONObject vehicle = vehicleItem.getJSONObject(JSON_VEHICLE);
+
+        if (vehicle.has(VehicleEntry.COLUMN_NAME))
+            values.put(VehicleEntry.COLUMN_NAME, vehicle.getString(VehicleEntry.COLUMN_NAME));
+
+        if (vehicle.has(VehicleEntry.COLUMN_TYPE))
+            values.put(VehicleEntry.COLUMN_TYPE, vehicle.getString(VehicleEntry.COLUMN_TYPE));
+
+        if (vehicle.has(VehicleEntry.COLUMN_VOLUME_UNIT))
+            values.put(VehicleEntry.COLUMN_VOLUME_UNIT, vehicle.getString(VehicleEntry.COLUMN_VOLUME_UNIT));
+
+        if (vehicle.has(VehicleEntry.COLUMN_VEHICLE_MAKER))
+            values.put(VehicleEntry.COLUMN_VEHICLE_MAKER, vehicle.getString(VehicleEntry.COLUMN_VEHICLE_MAKER));
+
+        if (vehicle.has(VehicleEntry.COLUMN_START_MILEAGE))
+            values.put(VehicleEntry.COLUMN_START_MILEAGE, vehicle.getInt(VehicleEntry.COLUMN_START_MILEAGE));
+
+        if (vehicle.has(VehicleEntry.COLUMN_CURRENCY))
+            values.put(VehicleEntry.COLUMN_CURRENCY, vehicle.getString(VehicleEntry.COLUMN_CURRENCY));
+
+        if (vehicle.has(VehicleEntry.COLUMN_PICTURE))
+            values.put(VehicleEntry.COLUMN_PICTURE, vehicle.getString(VehicleEntry.COLUMN_PICTURE));
+
+        Uri uri = context.getContentResolver().insert(VehicleEntry.CONTENT_URI, values);
+        long id = ContentUris.parseId(uri);
+
+        JSONArray fillups = vehicleItem.getJSONArray(FillUpEntry.TABLE_NAME);
+        for (int i = 0; i < fillups.length(); i++) {
+            JSONObject fillUp = fillups.getJSONObject(i);
+            ContentValues fillUpValues = new ContentValues();
+
+            fillUpValues.put(FillUpEntry.COLUMN_VEHICLE, id);
+
+            if (fillUp.has(FillUpEntry.COLUMN_DISTANCE_FROM_LAST))
+                fillUpValues.put(FillUpEntry.COLUMN_DISTANCE_FROM_LAST, fillUp.getString(FillUpEntry.COLUMN_DISTANCE_FROM_LAST));
+
+            if (fillUp.has(FillUpEntry.COLUMN_FUEL_VOLUME))
+                fillUpValues.put(FillUpEntry.COLUMN_FUEL_VOLUME, fillUp.getDouble(FillUpEntry.COLUMN_FUEL_VOLUME));
+
+            if (fillUp.has(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE))
+                fillUpValues.put(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE, fillUp.getDouble(FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE));
+
+            if (fillUp.has(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL))
+                fillUpValues.put(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL, fillUp.getDouble(FillUpEntry.COLUMN_FUEL_PRICE_TOTAL));
+
+            if (fillUp.has(FillUpEntry.COLUMN_IS_FULL_FILLUP))
+                fillUpValues.put(FillUpEntry.COLUMN_IS_FULL_FILLUP, fillUp.getInt(FillUpEntry.COLUMN_IS_FULL_FILLUP));
+
+            if (fillUp.has(FillUpEntry.COLUMN_FUEL_CONSUMPTION))
+                fillUpValues.put(FillUpEntry.COLUMN_FUEL_CONSUMPTION, fillUp.getDouble(FillUpEntry.COLUMN_FUEL_CONSUMPTION));
+
+            if (fillUp.has(FillUpEntry.COLUMN_DATE))
+                fillUpValues.put(FillUpEntry.COLUMN_DATE, fillUp.getLong(FillUpEntry.COLUMN_DATE));
+
+            if (fillUp.has(FillUpEntry.COLUMN_INFO))
+                fillUpValues.put(FillUpEntry.COLUMN_INFO, fillUp.getString(FillUpEntry.COLUMN_INFO));
+
+            context.getContentResolver().insert(FillUpEntry.CONTENT_URI, fillUpValues);
+        }
+
+        return id;
     }
 }

@@ -186,6 +186,7 @@
 
     <!--Google Drive API-->
     <string name="googledrive_cannot_connect">You have connected this app with Google account, but we cannot connect to your Google Drive now.</string>
+    <string name="googledrive_existing_vehicle">Importing this vehicle may cause duplicate vehicles. First rename existing vehicle.</string>
     <string name="googleDrive_import_dialog_warning">Not included vehicles will be removed also from your Google Drive account!</string>
     <string name="googledrive_no_connection">No network connection available. We cannot go online to check your account settings.</string>
     <string name="googledrive_none">none</string>

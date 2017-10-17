@@ -15,11 +15,10 @@
     </ListView>
 
     <TextView
-        android:id="@+id/restore_dialog_title"
+        android:id="@+id/restore_dialog_warning"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/colorWarningRed"
         android:text="@string/googleDrive_import_dialog_warning"/>
-
 
 </LinearLayout>

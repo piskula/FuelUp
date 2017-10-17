@@ -38,6 +38,8 @@ import sk.momosi.fuelup.business.googledrive.CheckPermissionsTask;
 import sk.momosi.fuelup.business.googledrive.CheckPreviousAppInstalledTask;
 import sk.momosi.fuelup.business.googledrive.DriveFileUploadTask;
 import sk.momosi.fuelup.business.googledrive.DriveRequestTask;
+import sk.momosi.fuelup.business.googledrive.ImportVehicleJsonException;
+import sk.momosi.fuelup.business.googledrive.ImportVehiclesTask;
 import sk.momosi.fuelup.business.googledrive.JsonUtil;
 import sk.momosi.fuelup.screens.dialog.RestoreVehicleDialog;
 import sk.momosi.fuelup.util.ConnectivityUtils;
@@ -54,7 +56,8 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         DriveRequestTask.Callback,
         DriveFileUploadTask.Callback,
         CheckPermissionsTask.Callback,
-        CheckPreviousAppInstalledTask.Callback {
+        CheckPreviousAppInstalledTask.Callback,
+        ImportVehiclesTask.Callback {
 
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
@@ -90,6 +93,11 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     public void onStart() {
         super.onStart();
 
+        mProgress = new ProgressDialog(getContext());
+        mProgress.setCanceledOnTouchOutside(false);
+        mProgress.setCancelable(false);
+        mProgress.setMessage("Calling Drive API ...");
+
         String accountName = PreferencesUtils.getString(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_NAME);
 
         if (!ConnectivityUtils.isGooglePlayServicesAvailable(getContext())) {
@@ -112,7 +120,6 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
     private void initializeViews(View rootview) {
         mAccountName = rootview.findViewById(R.id.txt_sync_account);
-        mProgress = new ProgressDialog(getContext());
         downloadBtn = rootview.findViewById(R.id.btn_sync);
         uploadBtn = rootview.findViewById(R.id.btn_sync_upload_file);
         mSyncStatus = rootview.findViewById(R.id.sync_status);
@@ -139,8 +146,6 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
                 removeAccount();
             }
         });
-
-        mProgress.setMessage("Calling Drive API ...");
 
         mOutputText.setVerticalScrollBarEnabled(true);
         mOutputText.setMovementMethod(new ScrollingMovementMethod());
@@ -187,7 +192,11 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     }
 
     private void uploadFileThroughApi() {
-        new DriveFileUploadTask(mCredential, this, getContext()).execute();
+        if (PreferencesUtils.getBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED)) {
+            new DriveFileUploadTask(mCredential, this, getContext()).execute();
+        } else {
+            mOutputText.setText("Backup is available only after importing or deleting previous version from Google Drive. If you want to remove your old backup and use only actual data, select no vehicle and press 'Start import' on Import Dialog.");
+        }
     }
 
     // @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
@@ -272,7 +281,6 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
      */
     @Override
     public void onPermissionsGranted(int requestCode, List<String> list) {
-        Toast.makeText(getContext(), "onPermissionsGranted " + requestCode, Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -285,7 +293,6 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
      */
     @Override
     public void onPermissionsDenied(int requestCode, List<String> list) {
-        Toast.makeText(getContext(), "onPermissionsDenied " + requestCode, Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -318,10 +325,17 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
     @Override
     public void onDialogPositiveClick(Set<String> vehicleNames) {
-        Toast.makeText(getContext(), "You have choosed: " + vehicleNames.size() + " vehicles to import. Now it is time to import and save preference.", Toast.LENGTH_LONG).show();
-
-        PreferencesUtils.setBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, true);
+        if (vehicleNames != null && !vehicleNames.isEmpty()) {
+            new ImportVehiclesTask(vehicleNames, json, this, getContext()).execute();
+        } else {
+            Toast.makeText(getContext(), "You chose nothing to import. Your previous back up have been removed.", Toast.LENGTH_LONG).show();
+            mOutputText.setText("Your account is set and syncing.");
+            // TODO set syncing job
+            PreferencesUtils.setBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, true);
+        }
     }
+
+    private JSONObject json = null;
 
     private void importSpecifiedVehiclesFromJson(JSONObject json) {
 
@@ -329,16 +343,18 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         try {
             vehicles = JsonUtil.getVehicleNamesFromJson(json);
         } catch (JSONException e) {
-            Log.e(LOG_TAG, "Json format exception occured.");
+            Log.e(LOG_TAG, "Json format exception occurred.", e);
             vehicles = new ArrayList<>();
         }
 
+        this.json = json;
         RestoreVehicleDialog.newInstance(vehicles, this).show(getFragmentManager(), RestoreVehicleDialog.class.getSimpleName());
     }
 
 
     @Override
     public void onDriveRequestTaskPreExecute() {
+        Log.i(LOG_TAG, "AsyncTask DriveRequestTask started");
         mOutputText.setText("Retrieving data ...");
         mProgress.show();
     }
@@ -355,6 +371,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
     @Override
     public void onDriveFileUploadTaskPreExecute() {
+        Log.i(LOG_TAG, "AsyncTask DriveFileUploadTask started");
         mOutputText.setText("Upload in progress ...");
         mProgress.show();
     }
@@ -371,6 +388,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
     @Override
     public void onCheckPermissionsTaskPreExecute() {
+        Log.i(LOG_TAG, "AsyncTask CheckPermissionsTask started");
         mOutputText.setText("Checking permissions ...");
         uploadBtn.setEnabled(false);
         downloadBtn.setEnabled(false);
@@ -397,7 +415,8 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
     @Override
     public void onCheckPreviousAppInstalledTaskPreExecute() {
-        mOutputText.setText("Retrieving Google Drive last used InstanceID ...");
+        Log.i(LOG_TAG, "AsyncTask CheckPreviousAppInstalledTask started");
+        mOutputText.setText("Retrieving Google Drive last backup ...");
         mProgress.show();
     }
 
@@ -407,8 +426,10 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         if (json == null) {
             mOutputText.setText("There is no backed-up previous version on Google Drive to restore. Your account is now syncing.");
             PreferencesUtils.setBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, true);
+        } else {
+            mOutputText.setText("There is previous version of backup on your Google Drive account.");
+            importSpecifiedVehiclesFromJson(json);
         }
-        importSpecifiedVehiclesFromJson(json);
     }
 
     @Override
@@ -426,6 +447,34 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
             } else {
                 mOutputText.setText("The following error occurred:\n"
                         + mLastError.getMessage());
+            }
+        } else {
+            mOutputText.setText("Request cancelled.");
+        }
+    }
+
+    @Override
+    public void onImportVehiclesTaskPreExecute() {
+        Log.i(LOG_TAG, "AsyncTask ImportVehiclesTask started");
+        mOutputText.setText("Importing vehicles from backup ...");
+        mProgress.show();
+    }
+
+    @Override
+    public void onImportVehiclesTaskPostExecute(Integer output) {
+        PreferencesUtils.setBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, true);
+        mOutputText.setText("Your vehicles have been imported successfully. Your account is now set and syncing.");
+        // TODO set syncing job
+        mProgress.hide();
+    }
+
+    @Override
+    public void onImportVehiclesTaskCancel(Exception mLastError) {
+        mProgress.hide();
+        if (mLastError != null) {
+            if (mLastError instanceof ImportVehicleJsonException) {
+                mOutputText.setText("Your backed-up vehicles are broken. Please, try again later and if problem persist, contact us.");
+                Log.e(LOG_TAG, "ImportingVehicleError: " + mLastError.toString());
             }
         } else {
             mOutputText.setText("Request cancelled.");
