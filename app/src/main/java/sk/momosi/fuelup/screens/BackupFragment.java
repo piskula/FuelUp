@@ -6,6 +6,7 @@ import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -41,12 +42,15 @@ import sk.momosi.fuelup.business.googledrive.DriveRequestTask;
 import sk.momosi.fuelup.business.googledrive.ImportVehicleJsonException;
 import sk.momosi.fuelup.business.googledrive.ImportVehiclesTask;
 import sk.momosi.fuelup.business.googledrive.JsonUtil;
+import sk.momosi.fuelup.business.googledrive.syncing.DriveSyncingUtils;
 import sk.momosi.fuelup.data.FuelUpContract;
 import sk.momosi.fuelup.screens.dialog.RestoreVehicleDialog;
 import sk.momosi.fuelup.util.ConnectivityUtils;
 import sk.momosi.fuelup.util.PreferencesUtils;
+import sk.momosi.fuelup.business.googledrive.authenticator.AccountService;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.ACCOUNT_SERVICE;
 
 /**
  * @author Ondro
@@ -73,6 +77,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     private Button uploadBtn;
     private Button downloadBtn;
     private Button removeBtn;
+    private JSONObject json = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -176,15 +181,9 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         mAccountName.setText(googleDriveAccount);
         mCredential.setSelectedAccountName(googleDriveAccount);
         removeBtn.setEnabled(true);
-        Account account = new Account(FuelUpContract.CONTENT_AUTHORITY, FuelUpContract.CONTENT_AUTHORITY);
-        ContentResolver.setIsSyncable(account, FuelUpContract.CONTENT_AUTHORITY, 1);
-        ContentResolver.setSyncAutomatically(account, FuelUpContract.CONTENT_AUTHORITY, true);
-        ContentResolver.addPeriodicSync(
-                account, FuelUpContract.CONTENT_AUTHORITY, new Bundle(), 60 * 60);
-        Log.e(LOG_TAG, "Sync enabled");
+
         checkPermissions();
     }
-
 
     @Override
     public void onDestroyView() {
@@ -192,23 +191,15 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         getActivity().findViewById(R.id.fab_add_vehicle).setVisibility(View.VISIBLE);
     }
 
-
     private void getFilesFromDrive() {
         new DriveRequestTask(mCredential, this).execute();
     }
 
     private void uploadFileThroughApi() {
         if (PreferencesUtils.getBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED)) {
-//            new DriveFileUploadTask(mCredential, this, getContext()).execute();
 
-            Bundle b = new Bundle();
-            b.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-            b.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+            DriveSyncingUtils.requestImmediateSync(getContext());
 
-            Account account = new Account(FuelUpContract.CONTENT_AUTHORITY, FuelUpContract.CONTENT_AUTHORITY);
-            ContentResolver.requestSync(account, FuelUpContract.CONTENT_AUTHORITY, b);
-
-            Toast.makeText(getContext(), "Syncing started", Toast.LENGTH_SHORT).show();
         } else {
             mOutputText.setText("Backup is available only after importing or deleting previous version from Google Drive. If you want to remove your old backup and use only actual data, select no vehicle and press 'Start import' on Import Dialog.");
         }
@@ -349,8 +340,6 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
             PreferencesUtils.setBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, true);
         }
     }
-
-    private JSONObject json = null;
 
     private void importSpecifiedVehiclesFromJson(JSONObject json) {
 

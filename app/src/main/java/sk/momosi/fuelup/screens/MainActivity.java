@@ -16,6 +16,7 @@ import android.text.Editable;
 import android.view.MenuItem;
 
 import sk.momosi.fuelup.R;
+import sk.momosi.fuelup.business.googledrive.syncing.DriveSyncingUtils;
 import sk.momosi.fuelup.data.SampleDataUtils;
 import sk.momosi.fuelup.screens.dialog.CreateVehicleDialog;
 
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             SampleDataUtils.initializeWhenFirstRun(getApplicationContext());
             settings.edit().putBoolean("my_first_time", false).apply();
         }
+
+        DriveSyncingUtils.setUpPeriodicSync(getApplicationContext());
 
         singleton = this;
     }

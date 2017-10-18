@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
 
     <application
         android:allowBackup="true"
@@ -71,8 +72,9 @@
             android:name=".screens.edit.EditFillUpActivity"
             android:label="@string/Edit_fillup"
             android:parentActivityName=".screens.VehicleTabbedDetailActivity" />
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/>
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
 
         <provider
             android:name=".data.provider.VehicleProvider"
@@ -86,17 +88,27 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
 
-        <service android:name=".business.googledrive.syncing.GoogleDriveSyncService"
+        <service
+            android:name=".business.googledrive.syncing.GoogleDriveSyncService"
             android:exported="true">
-            <!--android:process=":sync">-->
             <intent-filter>
-                <action android:name="android.content.SyncAdapter"/>
+                <action android:name="android.content.SyncAdapter" />
             </intent-filter>
-            <meta-data android:name="android.content.SyncAdapter"
-                android:resource="@xml/googledrivesyncadapter"/>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/google_drive_sync_adapter" />
+        </service>
+
+        <service android:name=".business.googledrive.authenticator.AccountService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
         </service>
 
     </application>
