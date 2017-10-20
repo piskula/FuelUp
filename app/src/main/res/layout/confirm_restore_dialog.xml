@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <ListView
-        android:id="@+id/list_vehicle_restore"
+        android:id="@+id/rd_list_vehicles"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@android:color/transparent"
@@ -15,9 +15,9 @@
     </ListView>
 
     <TextView
-        android:id="@+id/restore_dialog_warning"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textAlignment="center"
         android:textColor="@color/colorWarningRed"
         android:text="@string/googleDrive_import_dialog_warning"/>
 

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import sk.momosi.fuelup.R;
@@ -84,7 +85,7 @@ public class RestoreVehicleDialog extends DialogFragment implements Dialog.OnSho
                 .create();
         dialog.setOnShowListener(this);
 
-        ListView vehicleList = dialogView.findViewById(R.id.list_vehicle_restore);
+        ListView vehicleList = dialogView.findViewById(R.id.rd_list_vehicles);
         vehicleList.setAdapter(new ListVehiclesRestoreAdapter(
                 getContext(), getArguments().getStringArrayList(BUNDLE_ARGS_VEHICLE_NAMES), this));
 

@@ -365,21 +365,6 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         PreferencesUtils.setBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, true);
     }
 
-    private void importSpecifiedVehiclesFromJson(JSONObject json) {
-
-        ArrayList<String> vehicles;
-        try {
-            vehicles = JsonUtil.getVehicleNamesFromJson(json);
-        } catch (JSONException e) {
-            Log.e(LOG_TAG, "Json format exception occurred.", e);
-            vehicles = new ArrayList<>();
-        }
-
-        this.json = json;
-        RestoreVehicleDialog.newInstance(vehicles, this).show(getFragmentManager(), RestoreVehicleDialog.class.getSimpleName());
-    }
-
-
     @Override
     public void onDriveRequestTaskPreExecute() {
         Log.i(LOG_TAG, "AsyncTask DriveRequestTask started");
@@ -437,7 +422,22 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
             initializeSyncing();
         } else {
             mOutputText.setText("There is previous version of backup on your Google Drive account.");
-            importSpecifiedVehiclesFromJson(json);
+
+            ArrayList<String> vehicles;
+            try {
+                vehicles = JsonUtil.getVehicleNamesFromJson(json);
+            } catch (JSONException e) {
+                Log.e(LOG_TAG, "Json format exception occurred.", e);
+                vehicles = new ArrayList<>();
+            }
+
+            if (vehicles.isEmpty()) {   // previous version exists but is empty
+                initializeSyncing();
+
+            } else {
+                this.json = json;
+                RestoreVehicleDialog.newInstance(vehicles, this).show(getFragmentManager(), RestoreVehicleDialog.class.getSimpleName());
+            }
         }
     }
 
