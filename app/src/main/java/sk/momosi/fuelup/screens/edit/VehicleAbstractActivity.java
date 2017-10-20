@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,8 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import java.io.File;
 
 import sk.momosi.fuelup.R;
+import sk.momosi.fuelup.business.googledrive.syncing.SyncAdapterContentObserver;
+import sk.momosi.fuelup.data.FuelUpContract;
 
 /**
  * Created by Martin Styk on 22.09.2017.
@@ -36,6 +39,8 @@ public abstract class VehicleAbstractActivity extends AppCompatActivity {
 
     protected String vehiclePicturePath;
     protected Uri cropImageUri;
+
+    private SyncAdapterContentObserver mObserver;
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -141,4 +146,17 @@ public abstract class VehicleAbstractActivity extends AppCompatActivity {
         Snackbar.make(findViewById(android.R.id.content), R.string.delete_vehicle_photo, Snackbar.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onResume () {
+        super.onResume();
+        if (mObserver == null)
+            mObserver = new SyncAdapterContentObserver(new Handler());
+        getContentResolver().registerContentObserver(FuelUpContract.VehicleEntry.CONTENT_URI, true, mObserver);
+    }
+
+    @Override
+    public void onPause () {
+        super.onPause();
+        getContentResolver().unregisterContentObserver(mObserver);
+    }
 }

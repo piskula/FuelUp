@@ -1,6 +1,10 @@
 package sk.momosi.fuelup.screens;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.ContentObserver;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -16,7 +20,7 @@ import android.text.Editable;
 import android.view.MenuItem;
 
 import sk.momosi.fuelup.R;
-import sk.momosi.fuelup.business.googledrive.syncing.DriveSyncingUtils;
+import sk.momosi.fuelup.business.googledrive.authenticator.AccountService;
 import sk.momosi.fuelup.data.SampleDataUtils;
 import sk.momosi.fuelup.screens.dialog.CreateVehicleDialog;
 
@@ -26,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String IS_FIRST_RUN = "is_this_fisrt_run";
+
+    private ContentObserver mObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +59,14 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         SharedPreferences settings = getSharedPreferences(IS_FIRST_RUN, 0);
         if (settings.getBoolean("my_first_time", true)) {
             SampleDataUtils.initializeWhenFirstRun(getApplicationContext());
+
+            Account genericAccount = AccountService.getAccount();
+
+            AccountManager accountManager = (AccountManager) this.getSystemService(Context.ACCOUNT_SERVICE);
+            accountManager.addAccountExplicitly(genericAccount, null, null);
+
             settings.edit().putBoolean("my_first_time", false).apply();
         }
-
-        DriveSyncingUtils.setUpPeriodicSync(getApplicationContext());
 
         singleton = this;
     }

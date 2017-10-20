@@ -90,6 +90,7 @@ public class VehicleListFragment extends Fragment implements ListVehiclesAdapter
         }
     }
 
+    // TODO remove fast-inserting dialog before release
     @Override
     public void onDialogCreateBtnClick(CreateVehicleDialog dialog, Editable vehicleName) {
         ContentValues contentValues = new ContentValues();

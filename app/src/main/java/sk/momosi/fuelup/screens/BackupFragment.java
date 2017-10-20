@@ -1,12 +1,9 @@
 package sk.momosi.fuelup.screens;
 
 import android.Manifest;
-import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 
@@ -37,20 +35,16 @@ import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.business.googledrive.CheckPermissionsTask;
 import sk.momosi.fuelup.business.googledrive.CheckPreviousAppInstalledTask;
 import sk.momosi.fuelup.business.googledrive.DriveBackupFileUtil;
-import sk.momosi.fuelup.business.googledrive.DriveFileUploadTask;
 import sk.momosi.fuelup.business.googledrive.DriveRequestTask;
 import sk.momosi.fuelup.business.googledrive.ImportVehicleJsonException;
 import sk.momosi.fuelup.business.googledrive.ImportVehiclesTask;
 import sk.momosi.fuelup.business.googledrive.JsonUtil;
 import sk.momosi.fuelup.business.googledrive.syncing.DriveSyncingUtils;
-import sk.momosi.fuelup.data.FuelUpContract;
 import sk.momosi.fuelup.screens.dialog.RestoreVehicleDialog;
 import sk.momosi.fuelup.util.ConnectivityUtils;
 import sk.momosi.fuelup.util.PreferencesUtils;
-import sk.momosi.fuelup.business.googledrive.authenticator.AccountService;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.Context.ACCOUNT_SERVICE;
 
 /**
  * @author Ondro
@@ -59,7 +53,6 @@ import static android.content.Context.ACCOUNT_SERVICE;
 public class BackupFragment extends Fragment implements EasyPermissions.PermissionCallbacks,
         RestoreVehicleDialog.Callback,
         DriveRequestTask.Callback,
-        DriveFileUploadTask.Callback,
         CheckPermissionsTask.Callback,
         CheckPreviousAppInstalledTask.Callback,
         ImportVehiclesTask.Callback {
@@ -77,6 +70,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     private Button uploadBtn;
     private Button downloadBtn;
     private Button removeBtn;
+    private Button testSyncBtn;
     private JSONObject json = null;
 
     @Override
@@ -128,6 +122,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         uploadBtn = rootview.findViewById(R.id.btn_sync_upload_file);
         mSyncStatus = rootview.findViewById(R.id.sync_status);
         removeBtn = rootview.findViewById(R.id.btn_sync_remove_account);
+        testSyncBtn = rootview.findViewById(R.id.test_sync);
         mOutputText = rootview.findViewById(R.id.txt_sync);
 
         downloadBtn.setOnClickListener(new View.OnClickListener() {
@@ -151,8 +146,28 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
             }
         });
 
+        testSyncBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                testSync();
+            }
+        });
+
         mOutputText.setVerticalScrollBarEnabled(true);
         mOutputText.setMovementMethod(new ScrollingMovementMethod());
+    }
+
+    private void testSync() {
+        boolean active = DriveSyncingUtils.isSyncable();
+        boolean pending = DriveSyncingUtils.isSyncPending();
+
+        if (!active)
+            Toast.makeText(getContext(), "Syncing is NOT active", Toast.LENGTH_SHORT).show();
+        else
+            if (pending)
+            Toast.makeText(getContext(), "Syncing Active, but there are some pending uploads.", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(getContext(), "Syncing is active and backup is up to date.", Toast.LENGTH_SHORT).show();
     }
 
     private void removeAccount() {
@@ -163,6 +178,8 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         removeBtn.setEnabled(false);
         mAccountName.setText(R.string.googledrive_none);
         mSyncStatus.setText(R.string.googledrive_not_configured);
+
+        DriveSyncingUtils.disableSync();
 
         chooseAccount();
     }
@@ -191,6 +208,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         getActivity().findViewById(R.id.fab_add_vehicle).setVisibility(View.VISIBLE);
     }
 
+    // TODO remove before release
     private void getFilesFromDrive() {
         new DriveRequestTask(mCredential, this).execute();
     }
@@ -198,8 +216,8 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     private void uploadFileThroughApi() {
         if (PreferencesUtils.getBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED)) {
 
-            DriveSyncingUtils.requestImmediateSync(getContext());
-
+            DriveSyncingUtils.requestImmediateSync();
+            Toast.makeText(getContext(), "Syncing..", Toast.LENGTH_SHORT).show();
         } else {
             mOutputText.setText("Backup is available only after importing or deleting previous version from Google Drive. If you want to remove your old backup and use only actual data, select no vehicle and press 'Start import' on Import Dialog.");
         }
@@ -333,12 +351,18 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     public void onDialogPositiveClick(Set<String> vehicleNames) {
         if (vehicleNames != null && !vehicleNames.isEmpty()) {
             new ImportVehiclesTask(vehicleNames, json, this, getContext()).execute();
+
         } else {
+            initializeSyncing();
             Toast.makeText(getContext(), "You chose nothing to import. Your previous back up have been removed.", Toast.LENGTH_LONG).show();
-            mOutputText.setText("Your account is set and syncing.");
-            // TODO set syncing job
-            PreferencesUtils.setBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, true);
         }
+    }
+
+    private void initializeSyncing() {
+        DriveSyncingUtils.enableSyncGlobally(getContext());
+        mOutputText.setText("Your account is set and syncing.");
+        DriveSyncingUtils.requestImmediateSync();
+        PreferencesUtils.setBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, true);
     }
 
     private void importSpecifiedVehiclesFromJson(JSONObject json) {
@@ -374,23 +398,6 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     }
 
     @Override
-    public void onDriveFileUploadTaskPreExecute() {
-        Log.i(LOG_TAG, "AsyncTask DriveFileUploadTask started");
-        mOutputText.setText("Upload in progress ...");
-        mProgress.show();
-    }
-
-    @Override
-    public void onDriveFileUploadTaskPostExecute(Boolean output) {
-        mProgress.hide();
-        if (output) {
-            mOutputText.setText("Uploaded successfully.");
-        } else {
-            mOutputText.setText("Upload failed.");
-        }
-    }
-
-    @Override
     public void onCheckPermissionsTaskPreExecute() {
         Log.i(LOG_TAG, "AsyncTask CheckPermissionsTask started");
         mOutputText.setText("Checking permissions ...");
@@ -416,7 +423,6 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         }
     }
 
-
     @Override
     public void onCheckPreviousAppInstalledTaskPreExecute() {
         Log.i(LOG_TAG, "AsyncTask CheckPreviousAppInstalledTask started");
@@ -428,8 +434,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     public void onCheckPreviousAppInstalledTaskPostExecute(JSONObject json) {
         mProgress.hide();
         if (json == null) {
-            mOutputText.setText("There is no backed-up previous version on Google Drive to restore. Your account is now syncing.");
-            PreferencesUtils.setBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, true);
+            initializeSyncing();
         } else {
             mOutputText.setText("There is previous version of backup on your Google Drive account.");
             importSpecifiedVehiclesFromJson(json);
@@ -448,6 +453,9 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
                 startActivityForResult(
                         ((UserRecoverableAuthIOException) mLastError).getIntent(),
                         REQUEST_AUTHORIZATION);
+            } else if (mLastError instanceof GoogleAuthIOException) {
+                Log.e(LOG_TAG,"Authentication error occured when calling Google Drive API.", mLastError);
+                mOutputText.setText("Authentication error occured when calling Google Drive API.");
             } else {
                 mOutputText.setText("The following error occurred:\n"
                         + mLastError.getMessage());

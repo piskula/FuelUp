@@ -11,9 +11,11 @@ import android.os.Bundle;
  * Implement AbstractAccountAuthenticator and stub out all
  * of its methods
  *
- * Created by Martin Styk on 18.10.2017.
+ * @author Martin Styk
+ * @version 18.10.2017
  */
 public class Authenticator extends AbstractAccountAuthenticator {
+
     // Simple constructor
     public Authenticator(Context context) {
         super(context);

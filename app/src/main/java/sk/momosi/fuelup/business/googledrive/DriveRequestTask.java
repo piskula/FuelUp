@@ -15,6 +15,7 @@ import java.lang.ref.WeakReference;
  * @author Martin Styk
  * @author Ondrej Oravčok
  */
+// TODO remove before release
 public class DriveRequestTask extends GoogleDriveAbstractAsyncTask<Void, Void, String> {
 
     private WeakReference<Callback> callbackReference;

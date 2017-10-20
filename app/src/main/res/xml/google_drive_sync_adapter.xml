@@ -4,6 +4,6 @@
     android:contentAuthority="sk.momosi.fuelup"
     android:accountType="sk.momosi.fuelup.account"
     android:userVisible="false"
-    android:supportsUploading="false"
+    android:supportsUploading="true"
     android:allowParallelSyncs="false"
     android:isAlwaysSyncable="true"/>

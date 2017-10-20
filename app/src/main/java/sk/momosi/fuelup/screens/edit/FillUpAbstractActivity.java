@@ -2,6 +2,7 @@ package sk.momosi.fuelup.screens.edit;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,8 @@ import android.widget.ToggleButton;
 import java.util.Calendar;
 
 import sk.momosi.fuelup.R;
+import sk.momosi.fuelup.business.googledrive.syncing.SyncAdapterContentObserver;
+import sk.momosi.fuelup.data.FuelUpContract;
 import sk.momosi.fuelup.entity.Vehicle;
 import sk.momosi.fuelup.entity.util.DateUtil;
 
@@ -42,7 +45,6 @@ public abstract class FillUpAbstractActivity extends AppCompatActivity implement
     protected CheckBox mCheckBoxIsFullFill;
 
     protected Button mBtnAdd;
-
     protected ActionBar actionBar;
 
     protected SwitchPrice priceMode = SwitchPrice.perVolume;
@@ -51,6 +53,7 @@ public abstract class FillUpAbstractActivity extends AppCompatActivity implement
 
     protected Vehicle mVehicle;
 
+    private SyncAdapterContentObserver mObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +114,20 @@ public abstract class FillUpAbstractActivity extends AppCompatActivity implement
                 mTxtFuelPriceUnit.setText(getString(R.string.unit_pricePerLitre, mVehicle.getPerLitreSubcurrencySymbol()));
             }
         }
+    }
+
+    @Override
+    public void onResume () {
+        super.onResume();
+        if (mObserver == null)
+            mObserver = new SyncAdapterContentObserver(new Handler());
+        getContentResolver().registerContentObserver(FuelUpContract.FillUpEntry.CONTENT_URI, true, mObserver);
+    }
+
+    @Override
+    public void onPause () {
+        super.onPause();
+        getContentResolver().unregisterContentObserver(mObserver);
     }
 
     protected enum SwitchPrice {

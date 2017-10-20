@@ -19,9 +19,9 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Created by Martin Styk on 14.10.2017.
+ * @author Martin Styk
+ * @version 14.10.2017
  */
-
 public class DriveBackupFileUtil {
 
     public static final String BACKUP_DB_FOLDER = "appDataFolder";

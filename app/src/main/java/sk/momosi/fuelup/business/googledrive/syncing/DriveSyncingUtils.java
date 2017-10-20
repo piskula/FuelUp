@@ -5,46 +5,58 @@ import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
+
+import java.util.Arrays;
+import java.util.List;
 
 import sk.momosi.fuelup.business.googledrive.authenticator.AccountService;
 import sk.momosi.fuelup.data.FuelUpContract;
 
 /**
- * Created by Martin Styk on 18.10.2017.
+ * @author Martin Styk
+ * @version 18.10.2017
  */
-
 public class DriveSyncingUtils {
+    private static final String LOG_TAG = DriveSyncingUtils.class.getSimpleName();
 
+    public static void enableSyncGlobally(Context context) {
+        Account genericAccount = AccountService.getAccount();
 
-    public static void setUpPeriodicSync(Context context) {
-        Account account = AccountService.getAccount();
         AccountManager accountManager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
-        if (accountManager.addAccountExplicitly(account, null, null)) {
-            // Inform the system that this account supports sync
-            ContentResolver.setIsSyncable(account, FuelUpContract.CONTENT_AUTHORITY, 1);
-            // Inform the system that this account is eligible for auto sync when the network is up
-            ContentResolver.setSyncAutomatically(account, FuelUpContract.CONTENT_AUTHORITY, true);
-            // Recommend a schedule for automatic synchronization. The system may modify this based
-            // on other scheduled syncs and network utilization.
-            ContentResolver.addPeriodicSync(account, FuelUpContract.CONTENT_AUTHORITY, new Bundle(), 60);
+        List<Account> accounts = Arrays.asList(accountManager.getAccountsByType(AccountService.ACCOUNT_TYPE));
 
-            Toast.makeText(context, "Syncing is enabled", Toast.LENGTH_SHORT).show();
-
-        } else {
-            Toast.makeText(context, "Syncing disabled", Toast.LENGTH_SHORT).show();
+        if(accounts.isEmpty()) {
+            Log.e(LOG_TAG, "Generic sync account must be added but it should have been already done when first running application.");
+            accountManager.addAccountExplicitly(genericAccount, null, null);
         }
 
+        ContentResolver.setIsSyncable(genericAccount, FuelUpContract.CONTENT_AUTHORITY, 1);
+        ContentResolver.setSyncAutomatically(genericAccount, FuelUpContract.CONTENT_AUTHORITY, true);
     }
 
-    public static void requestImmediateSync(Context context) {
+    public static void disableSync() {
+        Account genericAccount = AccountService.getAccount();
+        ContentResolver.setIsSyncable(genericAccount, FuelUpContract.CONTENT_AUTHORITY, 0);
+        ContentResolver.setSyncAutomatically(genericAccount, FuelUpContract.CONTENT_AUTHORITY, false);
+        Log.i(LOG_TAG, "Syncing is now disabled.");
+    }
+
+    public static boolean isSyncable() {
+        return ContentResolver.getIsSyncable(AccountService.getAccount(), FuelUpContract.CONTENT_AUTHORITY) > 0;
+    }
+
+    public static boolean isSyncPending() {
+        return ContentResolver.isSyncPending(AccountService.getAccount(), FuelUpContract.CONTENT_AUTHORITY);
+    }
+
+    public static void requestImmediateSync() {
         Bundle b = new Bundle();
         b.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         b.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
 
         Account account = AccountService.getAccount();
         ContentResolver.requestSync(account, FuelUpContract.CONTENT_AUTHORITY, b);
-
-        Toast.makeText(context, "Syncing started", Toast.LENGTH_SHORT).show();
     }
 }

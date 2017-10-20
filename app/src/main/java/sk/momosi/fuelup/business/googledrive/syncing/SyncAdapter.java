@@ -45,7 +45,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
-        Log.e(LOG_TAG, "SYNC STARTED");
+        Log.i(LOG_TAG, "SYNC STARTED");
 
         List<Long> vehicleIds = VehicleService.getAvailableVehicleIds(getContext());
         String json = JsonUtil.getWholeDbAsJson(vehicleIds, getContext());
@@ -106,6 +106,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             Log.e(LOG_TAG, "", e);
             syncResult.stats.numIoExceptions++;
         }
+
+        // if this is first backup, set up flag, which means upload is now automatic
+        PreferencesUtils.setBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, true);
 
         Log.i(LOG_TAG, "Syncing DB ended successfully.");
     }
