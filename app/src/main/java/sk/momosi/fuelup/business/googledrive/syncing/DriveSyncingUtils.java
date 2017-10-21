@@ -13,6 +13,7 @@ import java.util.List;
 
 import sk.momosi.fuelup.business.googledrive.authenticator.AccountService;
 import sk.momosi.fuelup.data.FuelUpContract;
+import sk.momosi.fuelup.util.PreferencesUtils;
 
 /**
  * @author Martin Styk
@@ -36,7 +37,10 @@ public class DriveSyncingUtils {
         ContentResolver.setSyncAutomatically(genericAccount, FuelUpContract.CONTENT_AUTHORITY, true);
     }
 
-    public static void disableSync() {
+    public static void disableSync(Context context) {
+        PreferencesUtils.remove(context, PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED,
+                PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_NAME);
+
         Account genericAccount = AccountService.getAccount();
         ContentResolver.setIsSyncable(genericAccount, FuelUpContract.CONTENT_AUTHORITY, 0);
         ContentResolver.setSyncAutomatically(genericAccount, FuelUpContract.CONTENT_AUTHORITY, false);

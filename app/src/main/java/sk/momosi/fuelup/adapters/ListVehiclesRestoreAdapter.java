@@ -3,7 +3,6 @@ package sk.momosi.fuelup.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +57,7 @@ public class ListVehiclesRestoreAdapter extends ArrayAdapter<String> {
                     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                         if (!enabled) {
                             vehicleName.setChecked(false);
-                            Toast.makeText(getContext(), R.string.googledrive_existing_vehicle, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), R.string.googleDrive_existing_vehicle, Toast.LENGTH_SHORT).show();
                         } else {
                             if (isChecked)
                                 callback.onItemClickAdd(compoundButton.getText().toString());

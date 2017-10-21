@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String IS_FIRST_RUN = "is_this_fisrt_run";
 
-    private ContentObserver mObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -185,14 +185,30 @@
     <string name="Expense">Expense</string>
 
     <!--Google Drive API-->
-    <string name="googledrive_cannot_connect">You have connected this app with Google account, but we cannot connect to your Google Drive now.</string>
-    <string name="googledrive_existing_vehicle">Importing this vehicle may cause duplicate vehicles. First rename existing vehicle.</string>
+    <string name="googleDrive_accountListNeeded">This app needs to access your Google accounts list.</string>
+    <string name="googleDrive_cannot_connect">You have connected this app with Google account, but we cannot connect to your Google Drive now.</string>
+    <string name="googleDrive_existing_vehicle">Importing this vehicle may cause duplicate vehicles. First rename existing vehicle.</string>
+    <string name="googleDrive_err_backup_not_available">Backup is available only after importing or deleting previous version from Google Drive. If you want to remove your old backup and use only actual data, select no vehicle and press \'Start import\' on Import Dialog.</string>
+    <string name="googleDrive_forceUpload">Force upload</string>
+    <string name="googleDrive_checkPermissions_loader">Checking permissions&#8230;</string>
     <string name="googleDrive_import_dialog_warning">Not included vehicles will be removed also from your Google Drive account!</string>
-    <string name="googledrive_no_connection">No network connection available. We cannot go online to check your account settings.</string>
-    <string name="googledrive_none">none</string>
-    <string name="googledrive_not_configured">You have not configured Google account yet.</string>
-    <string name="googledrive_requires_google_play">This app requires Google Play Services. Please install Google Play Services on your device and relaunch this app.</string>
-    <string name="googledrive_startimport_btn">Start import</string>
+    <string name="googleDrive_mustBeOnline">You must be online to check permissions</string>
+    <string name="googleDrive_no_connection">No network connection available. We cannot go online to check your account settings.</string>
+    <string name="googleDrive_noneAccount">none</string>
+    <string name="googleDrive_not_configured">You have not configured Google account yet.</string>
+    <string name="googleDrive_nothingToImport">You chose nothing to import. Your previous back up have been removed.</string>
+    <string name="googleDrive_permissionsOK">Permissions OK</string>
+    <string name="googleDrive_permissionsNotGranted">Permissions not granted.</string>
+    <string name="googleDrive_removeAccount">Remove account</string>
+    <string name="googleDrive_requires_google_play">This app requires Google Play Services. Please install Google Play Services on your device and relaunch this app.</string>
+    <string name="googleDrive_retrievingLastBackup">Retrieving Google Drive last backup&#8230;</string>
+    <string name="googleDrive_setAndSyncing">Your account is set and syncing.</string>
+    <string name="googleDrive_startImport_btn">Start import</string>
+    <string name="googleDrive_sync_upToDate">Syncing is active and backup is up to date.</string>
+    <string name="googleDrive_syncing_NOT_active">Syncing is NOT active</string>
+    <string name="googleDrive_syncingActive_pendingUploads">Syncing Active, but there are some pending uploads.</string>
+    <string name="googleDrive_toast_syncInProgress">Syncing..</string>
+    <string name="googleDrive_youAccount_title">Your Google account for this app:</string>
 
     <!--without translation-->
     <string name="authors">&#169; Ondrej Oravčok, Martin Styk</string>
@@ -212,5 +228,7 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="googleDrive_test_sync">Test sync</string>
 
 </resources>

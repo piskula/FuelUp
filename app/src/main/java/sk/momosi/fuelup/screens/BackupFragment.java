@@ -11,6 +11,9 @@ import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -57,34 +60,39 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         CheckPreviousAppInstalledTask.Callback,
         ImportVehiclesTask.Callback {
 
+    private static final String LOG_TAG = BackupFragment.class.getSimpleName();
+
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
-    private static final String LOG_TAG = BackupFragment.class.getSimpleName();
-    private GoogleAccountCredential mCredential;
+
     private ProgressDialog mProgress;
     private TextView mOutputText;
     private TextView mAccountName;
     private TextView mSyncStatus;
-    private Button uploadBtn;
     private Button downloadBtn;
-    private Button removeBtn;
-    private Button testSyncBtn;
+
     private JSONObject json = null;
+    private GoogleAccountCredential mCredential;
+
+    private boolean showRemoveButton;
+    private boolean showForceUploadButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         setRetainInstance(true);
-        View rootview = inflater.inflate(R.layout.fragment_backup, container, false);
-        initializeViews(rootview);
+        View rootView = inflater.inflate(R.layout.fragment_backup, container, false);
+        initializeViews(rootView);
 
         mCredential = DriveBackupFileUtil.generateCredential(getContext());
 
         getActivity().findViewById(R.id.fab_add_vehicle).setVisibility(View.GONE);
-        return rootview;
+        setHasOptionsMenu(true);
+
+        return rootView;
     }
 
     @Override
@@ -93,7 +101,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
         mProgress = new ProgressDialog(getContext());
         mProgress.setCanceledOnTouchOutside(false);
-        mProgress.setCancelable(false);
+//        mProgress.setCancelable(false);
         mProgress.setMessage("Calling Drive API ...");
 
         String accountName = PreferencesUtils.getString(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_NAME);
@@ -103,15 +111,15 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
         } else if (accountName != null) {
             mCredential.setSelectedAccountName(accountName);
-            removeBtn.setEnabled(true);
+            showRemoveButton = true;
             mAccountName.setText(accountName);
-            mSyncStatus.setText(R.string.googledrive_cannot_connect);
+            mSyncStatus.setText(R.string.googleDrive_cannot_connect);
             checkPermissions();
 
         } else {
-            removeBtn.setEnabled(false);
-            mAccountName.setText(R.string.googledrive_none);
-            mSyncStatus.setText(R.string.googledrive_not_configured);
+            showRemoveButton = false;
+            mAccountName.setText(R.string.googleDrive_noneAccount);
+            mSyncStatus.setText(R.string.googleDrive_not_configured);
             chooseAccount();
         }
     }
@@ -119,10 +127,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     private void initializeViews(View rootview) {
         mAccountName = rootview.findViewById(R.id.txt_sync_account);
         downloadBtn = rootview.findViewById(R.id.btn_sync);
-        uploadBtn = rootview.findViewById(R.id.btn_sync_upload_file);
         mSyncStatus = rootview.findViewById(R.id.sync_status);
-        removeBtn = rootview.findViewById(R.id.btn_sync_remove_account);
-        testSyncBtn = rootview.findViewById(R.id.test_sync);
         mOutputText = rootview.findViewById(R.id.txt_sync);
 
         downloadBtn.setOnClickListener(new View.OnClickListener() {
@@ -132,61 +137,64 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
             }
         });
 
-        uploadBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                uploadFileThroughApi();
-            }
-        });
-
-        removeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                removeAccount();
-            }
-        });
-
-        testSyncBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                testSync();
-            }
-        });
-
         mOutputText.setVerticalScrollBarEnabled(true);
         mOutputText.setMovementMethod(new ScrollingMovementMethod());
     }
 
-    private void testSync() {
-        boolean active = DriveSyncingUtils.isSyncable();
-        boolean pending = DriveSyncingUtils.isSyncPending();
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.backup_action_bar, menu);
+    }
 
-        if (!active)
-            Toast.makeText(getContext(), "Syncing is NOT active", Toast.LENGTH_SHORT).show();
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.googleDrive_removeAccount_item).setEnabled(showRemoveButton);
+        menu.findItem(R.id.googleDrive_forceUpload_item).setEnabled(showForceUploadButton);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.googleDrive_forceUpload_item:
+                uploadFileThroughApi();
+                return true;
+            case R.id.googleDrive_removeAccount_item:
+                removeAccount();
+                return true;
+            case R.id.googleDrive_testSync:
+                testSync();
+                return true;
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void testSync() {
+        if (!DriveSyncingUtils.isSyncable())
+            Toast.makeText(getContext(), R.string.googleDrive_syncing_NOT_active, Toast.LENGTH_SHORT).show();
         else
-            if (pending)
-            Toast.makeText(getContext(), "Syncing Active, but there are some pending uploads.", Toast.LENGTH_SHORT).show();
+            if (DriveSyncingUtils.isSyncPending())
+            Toast.makeText(getContext(), R.string.googleDrive_syncingActive_pendingUploads, Toast.LENGTH_SHORT).show();
         else
-            Toast.makeText(getContext(), "Syncing is active and backup is up to date.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.googleDrive_sync_upToDate, Toast.LENGTH_SHORT).show();
     }
 
     private void removeAccount() {
-        PreferencesUtils.remove(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED,
-                PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_NAME);
-
         mCredential.setSelectedAccountName(null);
-        removeBtn.setEnabled(false);
-        mAccountName.setText(R.string.googledrive_none);
-        mSyncStatus.setText(R.string.googledrive_not_configured);
+        showRemoveButton = false;
+        mAccountName.setText(R.string.googleDrive_noneAccount);
+        mSyncStatus.setText(R.string.googleDrive_not_configured);
 
-        DriveSyncingUtils.disableSync();
+        DriveSyncingUtils.disableSync(getContext());
 
         chooseAccount();
     }
 
     private void checkPermissions() {
         if (!ConnectivityUtils.isDeviceOnline(getContext()))
-            Toast.makeText(getContext(), "You must be online to check permissions", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.googleDrive_mustBeOnline, Toast.LENGTH_SHORT).show();
         else
             new CheckPermissionsTask(mCredential, this).execute();
     }
@@ -197,7 +205,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
         mAccountName.setText(googleDriveAccount);
         mCredential.setSelectedAccountName(googleDriveAccount);
-        removeBtn.setEnabled(true);
+        showRemoveButton = true;
 
         checkPermissions();
     }
@@ -214,26 +222,30 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     }
 
     private void uploadFileThroughApi() {
-        if (PreferencesUtils.getBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED)) {
+        boolean isUploadAvailable = PreferencesUtils.getBoolean(
+                getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED);
 
+        if (isUploadAvailable) {
             DriveSyncingUtils.requestImmediateSync();
-            Toast.makeText(getContext(), "Syncing..", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),
+                    R.string.googleDrive_toast_syncInProgress,
+                    Toast.LENGTH_SHORT).show();
         } else {
-            mOutputText.setText("Backup is available only after importing or deleting previous version from Google Drive. If you want to remove your old backup and use only actual data, select no vehicle and press 'Start import' on Import Dialog.");
+            mOutputText.setText(R.string.googleDrive_err_backup_not_available);
         }
     }
 
-    // @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private void chooseAccount() {
-        if (EasyPermissions.hasPermissions(
-                getContext(), Manifest.permission.GET_ACCOUNTS)) {
+        if (EasyPermissions.hasPermissions(getContext(),
+                Manifest.permission.GET_ACCOUNTS)) {
+
             startActivityForResult(mCredential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
 
         } else {
             // Request the GET_ACCOUNTS permission via a user dialog
             EasyPermissions.requestPermissions(
                     this,
-                    "This app needs to access your Google accounts list.",
+                    getString(R.string.googleDrive_accountListNeeded),
                     REQUEST_PERMISSION_GET_ACCOUNTS,
                     Manifest.permission.GET_ACCOUNTS);
         }
@@ -255,9 +267,14 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
             int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
+            case REQUEST_AUTHORIZATION:
+                if (resultCode == RESULT_OK) {
+                    onStart();
+                }
+                break;
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode != RESULT_OK) {
-                    mSyncStatus.setText(R.string.googledrive_requires_google_play);
+                    mSyncStatus.setText(R.string.googleDrive_requires_google_play);
                 } else {
                     onStart();
                 }
@@ -268,11 +285,6 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
                     if (accountName != null) {
                         assignAccount(accountName);
                     }
-                }
-                break;
-            case REQUEST_AUTHORIZATION:
-                if (resultCode == RESULT_OK) {
-                    onStart();
                 }
                 break;
         }
@@ -295,29 +307,11 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
                 requestCode, permissions, grantResults, this);
     }
 
-    /**
-     * Callback for when a permission is granted using the EasyPermissions
-     * library.
-     *
-     * @param requestCode The request code associated with the requested
-     *                    permission
-     * @param list        The requested permission list. Never null.
-     */
     @Override
-    public void onPermissionsGranted(int requestCode, List<String> list) {
-    }
+    public void onPermissionsGranted(int requestCode, List<String> list) { }
 
-    /**
-     * Callback for when a permission is denied using the EasyPermissions
-     * library.
-     *
-     * @param requestCode The request code associated with the requested
-     *                    permission
-     * @param list        The requested permission list. Never null.
-     */
     @Override
-    public void onPermissionsDenied(int requestCode, List<String> list) {
-    }
+    public void onPermissionsDenied(int requestCode, List<String> list) { }
 
     /**
      * Attempt to resolve a missing, out-of-date, invalid or disabled Google
@@ -354,13 +348,13 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
         } else {
             initializeSyncing();
-            Toast.makeText(getContext(), "You chose nothing to import. Your previous back up have been removed.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.googleDrive_nothingToImport, Toast.LENGTH_LONG).show();
         }
     }
 
     private void initializeSyncing() {
         DriveSyncingUtils.enableSyncGlobally(getContext());
-        mOutputText.setText("Your account is set and syncing.");
+        mOutputText.setText(R.string.googleDrive_setAndSyncing);
         DriveSyncingUtils.requestImmediateSync();
         PreferencesUtils.setBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, true);
     }
@@ -385,8 +379,8 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     @Override
     public void onCheckPermissionsTaskPreExecute() {
         Log.i(LOG_TAG, "AsyncTask CheckPermissionsTask started");
-        mOutputText.setText("Checking permissions ...");
-        uploadBtn.setEnabled(false);
+        mOutputText.setText(R.string.googleDrive_checkPermissions_loader);
+        showForceUploadButton = false;
         downloadBtn.setEnabled(false);
         mProgress.show();
     }
@@ -395,8 +389,8 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     public void onCheckPermissionsTaskPostExecute(Boolean output) {
         mProgress.hide();
         if (output) {
-            mOutputText.setText("Permissions OK.");
-            uploadBtn.setEnabled(true);
+            mOutputText.setText(R.string.googleDrive_permissionsOK);
+            showForceUploadButton = true;
             downloadBtn.setEnabled(true);
             mSyncStatus.setText("");
 
@@ -404,14 +398,14 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
                 new CheckPreviousAppInstalledTask(mCredential, this).execute();
             }
         } else {
-            mOutputText.setText("Permissions not granted.");
+            mOutputText.setText(R.string.googleDrive_permissionsNotGranted);
         }
     }
 
     @Override
     public void onCheckPreviousAppInstalledTaskPreExecute() {
         Log.i(LOG_TAG, "AsyncTask CheckPreviousAppInstalledTask started");
-        mOutputText.setText("Retrieving Google Drive last backup ...");
+        mOutputText.setText(R.string.googleDrive_retrievingLastBackup);
         mProgress.show();
     }
 

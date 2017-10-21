@@ -9,11 +9,9 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import sk.momosi.fuelup.R;
@@ -68,7 +66,7 @@ public class RestoreVehicleDialog extends DialogFragment implements Dialog.OnSho
         final AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setView(dialogView)
                 .setTitle(R.string.select_vehicles)
-                .setPositiveButton(R.string.googledrive_startimport_btn,
+                .setPositiveButton(R.string.googleDrive_startImport_btn,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 callback.onDialogPositiveClick(vehicleNamesResult);
