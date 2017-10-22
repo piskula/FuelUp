@@ -34,7 +34,7 @@ public class JsonUtil {
 
     private static final String LOG_TAG = JsonUtil.class.getSimpleName();
     private static final String JSON_VEHICLE = "vehicle";
-    public static final String JSON_DEVICE_APP_INSTANCE = "device";
+    private static final String JSON_DEVICE_APP_INSTANCE = "device";
 
     public static String getWholeDbAsJson(final List<Long> vehicleIds, final Context context) {
 
@@ -43,7 +43,7 @@ public class JsonUtil {
 
         try {
             for (Long vehicleId : vehicleIds) {
-                JSONObject vehicle = new JSONObject();//getVehicleAsJson(vehicleId, context);
+                JSONObject vehicle = new JSONObject();
 
                 vehicle.put(JSON_VEHICLE, getVehicleAsJson(vehicleId, context));
                 vehicle.put(FillUpEntry.TABLE_NAME, getFillUps(vehicleId, context));
@@ -229,6 +229,25 @@ public class JsonUtil {
                 fillUpValues.put(FillUpEntry.COLUMN_INFO, fillUp.getString(FillUpEntry.COLUMN_INFO));
 
             context.getContentResolver().insert(FillUpEntry.CONTENT_URI, fillUpValues);
+        }
+
+        JSONArray expenses = vehicleItem.getJSONArray(ExpenseEntry.TABLE_NAME);
+        for (int i = 0; i < expenses.length(); i++) {
+            JSONObject expense = expenses.getJSONObject(i);
+            ContentValues expenseValues = new ContentValues();
+
+            expenseValues.put(ExpenseEntry.COLUMN_VEHICLE, id);
+
+            if (expense.has(ExpenseEntry.COLUMN_PRICE))
+                expenseValues.put(ExpenseEntry.COLUMN_PRICE, expense.getDouble(ExpenseEntry.COLUMN_PRICE));
+
+            if (expense.has(ExpenseEntry.COLUMN_DATE))
+                expenseValues.put(ExpenseEntry.COLUMN_DATE, expense.getLong(ExpenseEntry.COLUMN_DATE));
+
+            if (expense.has(ExpenseEntry.COLUMN_INFO))
+                expenseValues.put(ExpenseEntry.COLUMN_INFO, expense.getString(ExpenseEntry.COLUMN_INFO));
+
+            context.getContentResolver().insert(ExpenseEntry.CONTENT_URI, expenseValues);
         }
 
         return id;
