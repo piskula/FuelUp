@@ -1,7 +1,7 @@
 <resources>
 
     <!--shared-->
-    <string name="about">O aplikaci</string>
+    <string name="about">O aplikácii</string>
     <string name="add">Pridať</string>
     <string name="advanced">Pokročilé</string>
     <string name="answer_yes">Áno</string>
@@ -17,6 +17,7 @@
     <string name="password">Heslo</string>
     <string name="price">Cena</string>
     <string name="remove">Odstrániť</string>
+    <string name="select_vehicles">Zvoľte vozidlá</string>
     <string name="update">Upraviť</string>
     <string name="vehicleName">Názov vozidla</string>
     <string name="vehicle_type">Typ vozidla</string>
@@ -183,4 +184,22 @@
     <string name="Edit_vehicle">Úprava vozidla</string>
     <string name="Expense">Výdaj</string>
 
+    <!--Google Drive API-->
+    <string name="googleDrive_accountListNeeded">Táto aplikácia potrebuje prístup k zoznamu Google účtov.</string>
+    <string name="googleDrive_authErr">Authentizačná chyba pri volaní Google Drive API.</string>
+    <string name="googleDrive_broken_backup">Vaše zálohované dáta sú poškodené alebo nekonzistentné. Prosíme, skúste import znova a v prípade problémov nás kontaktujte. Kontakt nájdete v sekcii \'o Aplikácii\'</string>
+    <string name="googleDrive_cancelledRequest">Požiadavka na server zrušená.</string>
+    <string name="googleDrive_cannot_connect">Táto aplikácia už je prepojená s Vašim Google účtom, ale momentálne nie je možné sa na Google Drive pripojiť.</string>
+    <string name="googleDrive_existing_vehicle">Import tohoto vozidla by spôsobil jeho zdvojenie. Premenujte alebo zmažte vozidlo s rovnakým názvom.</string>
+    <string name="googleDrive_err_backup_not_available">Zálohu je možné vykonať len vtedy, keď predchádzajúca verzia na Google Drive už bola využitá. Ak si želáte znevalidniť predchádzajúcu zálohu a prepísať ju aktuálnymi dátami, nezaškrtnite v dialógu žiadne vozidlo a zvoľte \'Začať import\'.</string>
+    <string name="googleDrive_errOccurred">Nastala nasledujúca chyba: %s</string>
+    <string name="googleDrive_forceUpload">Zálohovať teraz</string>
+    <string name="googleDrive_checkPermissions_loader">Overujem povolenia&#8230;</string>
+    <string name="googleDrive_import_dialog_warning">Nezaškrtnuté vozidá budú trvalo odstránené z Vašej zálohy na Google Drive!</string>
+    <string name="googleDrive_imported_setAndSyncing">Úspešne ste naimportovali vozidlá zo zálohy. Váš účet odteraz zálohuje dáta automaticky.</string>
+    <string name="googleDrive_importingFromBackup">Importujem vozidlá zo zálohy&#8230;</string>
+    <string name="googleDrive_mustBeOnline">Pre kontrolu oprávnení musíte byť online.</string>
+    <string name="googleDrive_no_connection">Žiadne pripojenie k internetu. Nie je možné overiť nastavenia Vašeho účtu.</string>
+    <string name="googleDrive_noneAccount">žiadny</string>
+    
 </resources>
