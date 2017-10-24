@@ -57,7 +57,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         // initialize with data when first running
         SharedPreferences settings = getSharedPreferences(IS_FIRST_RUN, 0);
         if (settings.getBoolean("my_first_time", true)) {
-            SampleDataUtils.initializeWhenFirstRun(getApplicationContext());
+            // if you want to fill Dummy Vehicle with data
+            // SampleDataUtils.initializeWhenFirstRun(getApplicationContext());
 
             Account genericAccount = AccountService.getAccount();
 

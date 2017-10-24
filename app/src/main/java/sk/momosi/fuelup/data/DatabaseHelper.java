@@ -94,7 +94,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         // initialize Vehicle
-        db.execSQL("INSERT INTO " + VehicleEntry.TABLE_NAME + "('name','type','currency','volume_unit') VALUES ('My Loved Car',6,'EUR','LITRE');");
+        // db.execSQL("INSERT INTO " + VehicleEntry.TABLE_NAME + "('name','type','currency','volume_unit') VALUES ('My Loved Car',6,'EUR','LITRE');");
     }
 
 }

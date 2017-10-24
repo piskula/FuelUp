@@ -65,7 +65,7 @@ public class SampleDataUtils {
                 "NOS - nitro tuning", "Yearly insurance", "Tires interchange", "Air freshener",
                 "Rear window - new", "Kid Seat", "STK & ETK", "Additional insurance", "Radiator - new",
                 "Registration fee", "Spark plugs - replace", "Castrol Magnatec lubricate");
-        List<Double> prices = Arrays.asList(7d, 50d, 3.6d, 220d, 315d, 450d, 11700d, 7400d, 3200d, 14d, 15d, 18d, 45d, 52d, 110d, 95d, 130d, 8400d, 8500d, 7600d, 350d, 420d, 710d, 700d, 1200d, 115d);
+        List<Double> prices = Arrays.asList(7d, 50d, 3.6d, 220d, 315d, 450d, 1700d, 14d, 15d, 18d, 45d, 52d, 110d, 95d, 130d, 350d, 420d, 710d, 700d, 1200d, 115d);
 
         int currencyFactor = 1; //whichVehicle == 1 ? 1 : 4;
 
