@@ -1,0 +1,1 @@
+GET_ACCOUNT permission is only used to backup your data to Google Drive. 
