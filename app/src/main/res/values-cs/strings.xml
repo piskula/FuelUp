@@ -17,6 +17,7 @@
     <string name="password">Heslo</string>
     <string name="price">Cena</string>
     <string name="remove">Odstranit</string>
+    <string name="select_vehicles">Zvolte vozidla</string>
     <string name="update">Upravit</string>
     <string name="vehicleName">Jméno vozu</string>
     <string name="vehicle_type">Typ vozu</string>
@@ -182,5 +183,39 @@
     <string name="Edit_fillup">Úprava tankování</string>
     <string name="Edit_vehicle">Úprava vozidla</string>
     <string name="Expense">Výdej</string>
+
+    <!--Google Drive API-->
+    <string name="googleDrive_accountListNeeded">Tato aplikácia potřebuje přístup k seznamu Google účtů.</string>
+    <string name="googleDrive_authErr">Authentizační chyba při volání Google Drive API.</string>
+    <string name="googleDrive_broken_backup">Vaše zálohovaná data jsou poškozená nebo nekonzistentní. Prosíme, zkuste import znovu a v případě problémů nás kontaktujte. Kontakt nájdete v sekcii \'o Aplikaci\'</string>
+    <string name="googleDrive_cancelledRequest">Požadavka na servr zrušena.</string>
+    <string name="googleDrive_cannot_connect">Tato aplikace je již propojena s Vašim Google účtem, ale momentálně není možné se na Google Drive připojit.</string>
+    <string name="googleDrive_existing_vehicle">Import tohoto vozu by spůsobil jeho zdvojení. Přejmenujte nebo smažte vozidlo se stejným názvem.</string>
+    <string name="googleDrive_err_backup_not_available">Zálohu je možno vykonat jenom tehdy, když předešlá verze na Google Drive už byla zneplatněna. Pokud si přejete znevalidnit předchozí zálohu a přepsat ji aktuálními údaji, nezvolte v dialogu žádné vozidlo a zvolte \'Začít import\'.</string>
+    <string name="googleDrive_errOccurred">Stala se nasledujíci chyba: %s</string>
+    <string name="googleDrive_forceUpload">Zálohovat teď</string>
+    <string name="googleDrive_checkPermissions_loader">Ověřuji povolení&#8230;</string>
+    <string name="googleDrive_import_dialog_warning">Nezahrnuté vozy budou odstraněny také z Vaší zálohy na Google Drive!</string>
+    <string name="googleDrive_imported_setAndSyncing">Úspěšne ste naimportovali vozidla ze zálohy. Váš účet nyní zálohuje data automaticky.</string>
+    <string name="googleDrive_importingFromBackup">Importuji vozidlá ze zálohy&#8230;</string>
+    <string name="googleDrive_mustBeOnline">Pro kontrolu oprávnění musíte být online.</string>
+    <string name="googleDrive_no_connection">Žádné připojeí k internetu. Není možné ověřit nastavení Vašeho účtu.</string>
+    <string name="googleDrive_noneAccount">žádný</string>
+    <string name="googleDrive_not_configured">Dosud jste nenakonfigurovali účet Google.</string>
+    <string name="googleDrive_nothingToImport">Zvolili ste si neimportovat žádné vozidlo. Vaše předchozí záloha byla odstraněna.</string>
+    <string name="googleDrive_permissionsOK_checkingPrevious">Oprávnění jsou OK, hledám předchozí verze&#8230;</string>
+    <string name="googleDrive_permissionsNotGranted">Aplikace FuelUp nemá od Vás povolení používat Google Drive.</string>
+    <string name="googleDrive_progressBar_retrievingData">Načítám&#8230;</string>
+    <string name="googleDrive_removeAccount">Odstranit účet</string>
+    <string name="googleDrive_requires_google_play">Tato aplikace potřebuje Službu Google Play. Nainstalujte Službu Google Play a znovu spusťte aplikaci.</string>
+    <string name="googleDrive_retrievingLastBackup">Načítám poslední zálohu z Google Drive&#8230;</string>
+    <string name="googleDrive_setAndSyncing">Váš účet je aktivní a data sa zálohují automaticky.</string>
+    <string name="googleDrive_startImport_btn">Začít import</string>
+    <string name="googleDrive_sync_upToDate">Zálohování je aktivní a záloha je aktuální.</string>
+    <string name="googleDrive_syncing_NOT_active">Zálohování NENÍ aktivní</string>
+    <string name="googleDrive_syncingActive_pendingUploads">Zálohování je aktivní, ale něktorá data čekají na upload.</string>
+    <string name="googleDrive_thereIsPreviousVersion">Na Vašem účtu Google Drive již existuje nějaká záloha.</string>
+    <string name="googleDrive_toast_syncInProgress">Synchronizuji&#8230;</string>
+    <string name="googleDrive_youAccount_title">Váš Google účet pre tuto aplikaci:</string>
 
 </resources>

@@ -215,7 +215,7 @@
     <string name="googleDrive_syncing_NOT_active">Syncing is NOT active</string>
     <string name="googleDrive_syncingActive_pendingUploads">Syncing Active, but there are some pending uploads.</string>
     <string name="googleDrive_thereIsPreviousVersion">There is previous version of backup on your Google Drive account.</string>
-    <string name="googleDrive_toast_syncInProgress">Syncing..</string>
+    <string name="googleDrive_toast_syncInProgress">Syncing&#8230;</string>
     <string name="googleDrive_youAccount_title">Your Google account for this app:</string>
 
     <!--without translation-->

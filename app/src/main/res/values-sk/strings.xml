@@ -201,5 +201,21 @@
     <string name="googleDrive_mustBeOnline">Pre kontrolu oprávnení musíte byť online.</string>
     <string name="googleDrive_no_connection">Žiadne pripojenie k internetu. Nie je možné overiť nastavenia Vašeho účtu.</string>
     <string name="googleDrive_noneAccount">žiadny</string>
-    
+    <string name="googleDrive_not_configured">Ešte ste si nenastavili Google účet.</string>
+    <string name="googleDrive_nothingToImport">Zvolili ste si neimportovať žiadne vozidlo. Vaša predchádzajúca záloha bola odstránená.</string>
+    <string name="googleDrive_permissionsOK_checkingPrevious">Povolenia sú OK, hľadám predošlé zálohy&#8230;</string>
+    <string name="googleDrive_permissionsNotGranted">Aplikácia FuelUp nemá od Vás povolenie používať Google Drive.</string>
+    <string name="googleDrive_progressBar_retrievingData">Načítam&#8230;</string>
+    <string name="googleDrive_removeAccount">Odstrániť účet</string>
+    <string name="googleDrive_requires_google_play">Táto aplikácia potrebuje Službu Google Play. Nainštalujte Službu Google Play a znovu zapnite aplikáciu.</string>
+    <string name="googleDrive_retrievingLastBackup">Načítam poslednú zálohu z Google Drive&#8230;</string>
+    <string name="googleDrive_setAndSyncing">Váš účet je aktívny a dáta sa zálohujú automaticky.</string>
+    <string name="googleDrive_startImport_btn">Začať import</string>
+    <string name="googleDrive_sync_upToDate">Zálohovanie je aktívne a záloha je aktuálna.</string>
+    <string name="googleDrive_syncing_NOT_active">Zálohovanie NIE JE aktívne</string>
+    <string name="googleDrive_syncingActive_pendingUploads">Zálohovanie je aktívne, ale niektoré dáta čakajú na upload.</string>
+    <string name="googleDrive_thereIsPreviousVersion">Na Vašom účte Google Drive už existuje nejaká záloha.</string>
+    <string name="googleDrive_toast_syncInProgress">Synchronizujem&#8230;</string>
+    <string name="googleDrive_youAccount_title">Váš Google účet pre túto aplikáciu:</string>
+
 </resources>
