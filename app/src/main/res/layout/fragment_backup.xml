@@ -38,12 +38,14 @@
             android:textAlignment="center"
             android:lines="3"/>
 
+        <!--
         <Button
             android:id="@+id/btn_sync"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="false"
             android:text="Get My Data From Drive"/>
+            -->
 
         <TextView
             android:id="@+id/txt_sync"

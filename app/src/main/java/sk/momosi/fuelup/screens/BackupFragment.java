@@ -56,7 +56,7 @@ import static android.app.Activity.RESULT_OK;
  */
 public class BackupFragment extends Fragment implements EasyPermissions.PermissionCallbacks,
         RestoreVehicleDialog.Callback,
-        DriveRequestTask.Callback,
+        // DriveRequestTask.Callback,
         CheckPermissionsTask.Callback,
         CheckPreviousAppInstalledTask.Callback,
         ImportVehiclesTask.Callback {
@@ -76,7 +76,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     private TextView mOutputText;
     private TextView mAccountName;
     private TextView mSyncStatus;
-    private Button downloadBtn;
+    // private Button downloadBtn;
 
     private JSONObject json = null;
     private GoogleAccountCredential mCredential;
@@ -131,17 +131,18 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
     private void initializeViews(View rootview) {
         mAccountName = rootview.findViewById(R.id.txt_sync_account);
-        downloadBtn = rootview.findViewById(R.id.btn_sync);
+        // downloadBtn = rootview.findViewById(R.id.btn_sync);
         mSyncStatus = rootview.findViewById(R.id.sync_status);
         mOutputText = rootview.findViewById(R.id.txt_sync);
 
-        // TODO remove before release
+        /*
         downloadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getFilesFromDrive();
             }
         });
+        */
 
         mOutputText.setVerticalScrollBarEnabled(true);
         mOutputText.setTextColor(ContextCompat.getColor(getContext(), PRIMARY_COLOR));
@@ -223,10 +224,11 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         getActivity().findViewById(R.id.fab_add_vehicle).setVisibility(View.VISIBLE);
     }
 
-    // TODO remove before release
+    /*
     private void getFilesFromDrive() {
         new DriveRequestTask(mCredential, this).execute();
     }
+    */
 
     private void uploadFileThroughApi() {
         boolean isUploadAvailable = PreferencesUtils.getBoolean(
@@ -368,6 +370,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         PreferencesUtils.setBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, true);
     }
 
+    /*
     @Override
     public void onDriveRequestTaskPreExecute() {
         Log.i(LOG_TAG, "AsyncTask DriveRequestTask started");
@@ -385,6 +388,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
             mOutputText.setText("Data:\n" + output);
         }
     }
+    */
 
     @Override
     public void onCheckPermissionsTaskPreExecute() {
@@ -393,7 +397,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         mOutputText.setText(R.string.googleDrive_checkPermissions_loader);
 
         showForceUploadButton = false;
-        downloadBtn.setEnabled(false);
+        // downloadBtn.setEnabled(false);
         mProgress.show();
     }
 
@@ -403,7 +407,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         if (output) {
             mOutputText.setText("");
             showForceUploadButton = true;
-            downloadBtn.setEnabled(true);
+            // downloadBtn.setEnabled(true);
             mSyncStatus.setText("");
 
             if (!PreferencesUtils.getBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED)) {
