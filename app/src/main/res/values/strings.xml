@@ -232,7 +232,7 @@
     <string name="desc_expensePic">service icon</string>
     <string name="desc_fillupPic">pump icon</string>
 
-    <string name="app_name">Fuel Up</string>
+    <string name="app_name">FuelUp</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
