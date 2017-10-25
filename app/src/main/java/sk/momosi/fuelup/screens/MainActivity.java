@@ -4,7 +4,6 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.ContentObserver;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -16,15 +15,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
 import android.view.MenuItem;
 
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.business.googledrive.authenticator.AccountService;
-import sk.momosi.fuelup.data.SampleDataUtils;
-import sk.momosi.fuelup.screens.dialog.CreateVehicleDialog;
 
-public class MainActivity extends AppCompatActivity implements OnNavigationItemSelectedListener, CreateVehicleDialog.Callback {
+public class MainActivity extends AppCompatActivity implements OnNavigationItemSelectedListener {
 
     private static MainActivity singleton;
 
@@ -101,25 +97,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    /**
-     * Interfragment communication
-     */
-    @Override
-    public void onDialogCreateBtnClick(CreateVehicleDialog dialog, Editable vehicleName) {
-        Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(TAG);
-        if (currentFragment instanceof CreateVehicleDialog.Callback) {
-            ((CreateVehicleDialog.Callback) currentFragment).onDialogCreateBtnClick(dialog, vehicleName);
-        }
-    }
-
-    @Override
-    public void onDialogAdvancedBtnClick(CreateVehicleDialog dialog, Editable vehicleName) {
-        Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(TAG);
-        if (currentFragment instanceof CreateVehicleDialog.Callback) {
-            ((CreateVehicleDialog.Callback) currentFragment).onDialogAdvancedBtnClick(dialog, vehicleName);
-        }
     }
 
     public static MainActivity getInstance() {

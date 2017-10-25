@@ -43,15 +43,8 @@ public class AddVehicleActivity extends VehicleAbstractActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vehicle_add);
-        Intent intent = getIntent();
 
         initViews();
-
-        String nameFromDialog = intent.getStringExtra("vehicleName");
-        if (nameFromDialog != null) {
-            txtName.setText(nameFromDialog);
-            txtName.setSelection(nameFromDialog.length());
-        }
     }
 
     private void initViews() {

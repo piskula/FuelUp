@@ -27,11 +27,10 @@ import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.adapters.ListVehiclesAdapter;
 import sk.momosi.fuelup.data.FuelUpContract;
 import sk.momosi.fuelup.data.FuelUpContract.VehicleEntry;
-import sk.momosi.fuelup.screens.dialog.CreateVehicleDialog;
 import sk.momosi.fuelup.screens.edit.AddVehicleActivity;
 
 public class VehicleListFragment extends Fragment implements ListVehiclesAdapter.Callback,
-        View.OnClickListener, CreateVehicleDialog.Callback, LoaderManager.LoaderCallbacks<Cursor> {
+        View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = VehicleListFragment.class.getSimpleName();
 
@@ -86,35 +85,8 @@ public class VehicleListFragment extends Fragment implements ListVehiclesAdapter
     @Override
     public void onClick(final View view) {
         if (view.getId() == addCarBtn.getId()) {
-            new CreateVehicleDialog().show(getActivity().getSupportFragmentManager(), CreateVehicleDialog.class.getSimpleName());
+            startActivity(new Intent(getContext(), AddVehicleActivity.class));
         }
-    }
-
-    // TODO remove fast-inserting dialog before release
-    @Override
-    public void onDialogCreateBtnClick(CreateVehicleDialog dialog, Editable vehicleName) {
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(VehicleEntry.COLUMN_NAME, vehicleName.toString());
-        contentValues.put(VehicleEntry.COLUMN_VOLUME_UNIT, "LITRE");
-        contentValues.put(VehicleEntry.COLUMN_CURRENCY, "EUR");
-        contentValues.put(VehicleEntry.COLUMN_TYPE, 1);
-
-        ContentResolver resolver = getActivity().getContentResolver();
-        if (resolver.insert(VehicleEntry.CONTENT_URI, contentValues) == null) {
-            Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.addVehicle_fail, Snackbar.LENGTH_LONG).show();
-        } else {
-            dialog.dismiss();
-            Snackbar.make(getActivity().findViewById(android.R.id.content), R.string.addVehicle_success, Snackbar.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
-    public void onDialogAdvancedBtnClick(CreateVehicleDialog dialog, Editable vehicleName) {
-        dialog.dismiss();
-        Intent i = new Intent(getContext(), AddVehicleActivity.class);
-        i.putExtra("vehicleName", vehicleName.toString());
-        startActivity(i);
     }
 
     @Override
