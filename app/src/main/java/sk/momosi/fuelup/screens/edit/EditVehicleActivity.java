@@ -129,7 +129,7 @@ public class EditVehicleActivity extends VehicleAbstractActivity implements Menu
             Snackbar.make(findViewById(android.R.id.content), R.string.toast_emptyName, Snackbar.LENGTH_LONG).show();
             return;
         }
-        if (VehicleService.isVehicleNameTaken(name, this)) {
+        if (VehicleService.isVehicleNameTaken(name, this) && !name.equals(vehicle.getName())) {
             Snackbar.make(findViewById(android.R.id.content), R.string.toast_nameNotUnique, Snackbar.LENGTH_LONG).show();
             return;
         }
