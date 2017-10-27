@@ -3,6 +3,7 @@ package sk.momosi.fuelup.screens.edit;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -97,7 +98,7 @@ public class EditFillUpActivity extends FillUpAbstractActivity implements Delete
         boolean isFull = mCheckBoxIsFullFill.isChecked();
 
         if (TextUtils.isEmpty(distance) || TextUtils.isEmpty(fuelVol) || TextUtils.isEmpty(price) && mVehicle != null) {
-            Toast.makeText(this, R.string.toast_emptyFields, Toast.LENGTH_LONG).show();
+            Snackbar.make(findViewById(android.R.id.content), R.string.toast_emptyFields, Snackbar.LENGTH_LONG).show();
             return;
         }
 
