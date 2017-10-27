@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -22,6 +24,7 @@ import sk.momosi.fuelup.business.googledrive.syncing.SyncAdapterContentObserver;
 import sk.momosi.fuelup.data.FuelUpContract;
 import sk.momosi.fuelup.entity.Vehicle;
 import sk.momosi.fuelup.entity.util.DateUtil;
+import sk.momosi.fuelup.util.NonZeroTextWatcher;
 
 /**
  * @author Martin Styk
@@ -79,7 +82,11 @@ public abstract class FillUpAbstractActivity extends AppCompatActivity implement
         mBtnSwitchPrice.setOnCheckedChangeListener(this);
 
         actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null)
+            actionBar.setDisplayHomeAsUpEnabled(true);
+
+        mTxtDistance.addTextChangedListener(new NonZeroTextWatcher(mTxtDistance));
+        mTxtFuelVolume.addTextChangedListener(new NonZeroTextWatcher(mTxtFuelVolume));
     }
 
     /**
@@ -117,7 +124,7 @@ public abstract class FillUpAbstractActivity extends AppCompatActivity implement
     }
 
     @Override
-    public void onResume () {
+    public void onResume() {
         super.onResume();
         if (mObserver == null)
             mObserver = new SyncAdapterContentObserver(new Handler());
@@ -125,7 +132,7 @@ public abstract class FillUpAbstractActivity extends AppCompatActivity implement
     }
 
     @Override
-    public void onPause () {
+    public void onPause() {
         super.onPause();
         getContentResolver().unregisterContentObserver(mObserver);
     }
