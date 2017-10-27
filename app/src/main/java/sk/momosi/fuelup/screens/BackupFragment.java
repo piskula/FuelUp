@@ -180,10 +180,9 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     }
 
     private void testSync() {
-        if (!DriveSyncingUtils.isSyncable())
+        if (!DriveSyncingUtils.isSyncable() || mCredential.getSelectedAccount() == null)
             Toast.makeText(getContext(), R.string.googleDrive_syncing_NOT_active, Toast.LENGTH_SHORT).show();
-        else
-            if (DriveSyncingUtils.isSyncPending())
+        else if (DriveSyncingUtils.isSyncPending())
             Toast.makeText(getContext(), R.string.googleDrive_syncingActive_pendingUploads, Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(getContext(), R.string.googleDrive_sync_upToDate, Toast.LENGTH_SHORT).show();
