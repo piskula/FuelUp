@@ -318,7 +318,9 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     }
 
     @Override
-    public void onPermissionsGranted(int requestCode, List<String> list) { }
+    public void onPermissionsGranted(int requestCode, List<String> list) {
+        chooseAccount();
+    }
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> list) { }
