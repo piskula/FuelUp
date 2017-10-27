@@ -1,7 +1,9 @@
 package sk.momosi.fuelup.entity;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -12,6 +14,7 @@ import sk.momosi.fuelup.entity.enums.DistanceUnit;
 import sk.momosi.fuelup.entity.enums.VolumeUnit;
 import sk.momosi.fuelup.entity.util.CurrencyUtil;
 import sk.momosi.fuelup.screens.MainActivity;
+import sk.momosi.fuelup.util.ScreenSizeUtils;
 
 /**
  * @author Ondrej Oravcok
@@ -19,6 +22,17 @@ import sk.momosi.fuelup.screens.MainActivity;
  */
 public class Vehicle implements Parcelable {
 
+    public static final Creator<Vehicle> CREATOR = new Creator<Vehicle>() {
+        @Override
+        public Vehicle createFromParcel(Parcel source) {
+            return new Vehicle(source);
+        }
+
+        @Override
+        public Vehicle[] newArray(int size) {
+            return new Vehicle[size];
+        }
+    };
     private Long id;
     private String name;
     private VehicleType type;
@@ -26,9 +40,24 @@ public class Vehicle implements Parcelable {
     private String vehicleMaker;
     private Long startMileage;
     private String currency;
-    private String pathToPicture;
 
     //end of attributes
+    private String pathToPicture;
+
+    public Vehicle() {
+    }
+
+    protected Vehicle(Parcel in) {
+        this.id = (Long) in.readValue(Long.class.getClassLoader());
+        this.name = in.readString();
+        this.type = in.readParcelable(VehicleType.class.getClassLoader());
+        int tmpVolumeUnit = in.readInt();
+        this.volumeUnit = tmpVolumeUnit == -1 ? null : VolumeUnit.values()[tmpVolumeUnit];
+        this.vehicleMaker = in.readString();
+        this.startMileage = (Long) in.readValue(Long.class.getClassLoader());
+        this.currency = in.readString();
+        this.pathToPicture = in.readString();
+    }
 
     public Long getId() {
         return id;
@@ -120,11 +149,12 @@ public class Vehicle implements Parcelable {
                 + "}";
     }
 
-    public Bitmap getPicture() {
+    public Bitmap getPicture(Activity context) {
         if (this.pathToPicture == null || this.pathToPicture.isEmpty()) {
             return null;
         } else {
-            return BitmapFactory.decodeFile(this.pathToPicture);
+            int width = ScreenSizeUtils.getActualWidth(context);
+            return ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(this.pathToPicture), width, (width / 16) * 9, ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
         }
     }
 
@@ -144,9 +174,6 @@ public class Vehicle implements Parcelable {
         return CurrencyUtil.getPerLitreSubcurrencySymbol(this.getCurrency());
     }
 
-    public Vehicle() {
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -163,30 +190,6 @@ public class Vehicle implements Parcelable {
         dest.writeString(this.currency);
         dest.writeString(this.pathToPicture);
     }
-
-    protected Vehicle(Parcel in) {
-        this.id = (Long) in.readValue(Long.class.getClassLoader());
-        this.name = in.readString();
-        this.type = in.readParcelable(VehicleType.class.getClassLoader());
-        int tmpVolumeUnit = in.readInt();
-        this.volumeUnit = tmpVolumeUnit == -1 ? null : VolumeUnit.values()[tmpVolumeUnit];
-        this.vehicleMaker = in.readString();
-        this.startMileage = (Long) in.readValue(Long.class.getClassLoader());
-        this.currency = in.readString();
-        this.pathToPicture = in.readString();
-    }
-
-    public static final Creator<Vehicle> CREATOR = new Creator<Vehicle>() {
-        @Override
-        public Vehicle createFromParcel(Parcel source) {
-            return new Vehicle(source);
-        }
-
-        @Override
-        public Vehicle[] newArray(int size) {
-            return new Vehicle[size];
-        }
-    };
 
     public DistanceUnit getDistanceUnit() {
         return this.getVolumeUnit() == VolumeUnit.LITRE ? DistanceUnit.km : DistanceUnit.mi;

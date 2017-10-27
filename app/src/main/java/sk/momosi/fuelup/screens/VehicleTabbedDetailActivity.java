@@ -80,7 +80,7 @@ public class VehicleTabbedDetailActivity extends AppCompatActivity implements Bo
     protected void onStart() {
         super.onStart();
 
-        Bitmap bmp = vehicle.getPicture();
+        Bitmap bmp = vehicle.getPicture(this);
         ((ImageView) findViewById(R.id.toolbar_layout_image)).setImageBitmap(bmp);
     }
 
