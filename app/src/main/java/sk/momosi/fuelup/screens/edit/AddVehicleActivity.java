@@ -18,6 +18,7 @@ import java.util.Currency;
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.adapters.SpinnerCurrencyAdapter;
 import sk.momosi.fuelup.adapters.SpinnerVehicleTypesAdapter;
+import sk.momosi.fuelup.business.VehicleService;
 import sk.momosi.fuelup.data.FuelUpContract.VehicleEntry;
 import sk.momosi.fuelup.entity.VehicleType;
 import sk.momosi.fuelup.entity.enums.DistanceUnit;
@@ -97,6 +98,10 @@ public class AddVehicleActivity extends VehicleAbstractActivity {
 
         if (name.isEmpty()) {
             Snackbar.make(findViewById(android.R.id.content), R.string.toast_emptyName, Snackbar.LENGTH_LONG).show();
+            return;
+        }
+        if (VehicleService.isVehicleNameTaken(name, this)) {
+            Snackbar.make(findViewById(android.R.id.content), R.string.toast_nameNotUnique, Snackbar.LENGTH_LONG).show();
             return;
         }
 

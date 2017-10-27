@@ -30,6 +30,7 @@
     <string name="title_expenses">Expenses</string>
     <string name="title_fillUps">Fill Ups</string>
     <string name="title_mileage">Mileage</string>
+    <string name="toast_nameNotUnique">Name must be unique.</string>
     <string name="title_settings">Settings</string>
     <string name="title_statistics">Statistics</string>
     <string name="title_vehicleManufacturer">Vehicle manufacturer</string>

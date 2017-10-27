@@ -18,6 +18,7 @@ import java.io.File;
 
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.adapters.SpinnerVehicleTypesAdapter;
+import sk.momosi.fuelup.business.VehicleService;
 import sk.momosi.fuelup.data.FuelUpContract.VehicleEntry;
 import sk.momosi.fuelup.data.provider.VehicleProvider;
 import sk.momosi.fuelup.entity.Vehicle;
@@ -99,6 +100,7 @@ public class EditVehicleActivity extends VehicleAbstractActivity implements Menu
             imgCarPhoto.setAlpha(REMOVE_PHOTO_ALPHA_CHANNEL);
             imgCarPhotoRemove.setVisibility(View.VISIBLE);
         } else {
+            vehiclePicturePath = "";
             imgCarPhoto.setImageResource(R.drawable.ic_insert_photo);
             imgCarPhoto.setAlpha(1f);
             imgCarPhotoRemove.setVisibility(View.GONE);
@@ -127,12 +129,16 @@ public class EditVehicleActivity extends VehicleAbstractActivity implements Menu
             Snackbar.make(findViewById(android.R.id.content), R.string.toast_emptyName, Snackbar.LENGTH_LONG).show();
             return;
         }
+        if (VehicleService.isVehicleNameTaken(name, this)) {
+            Snackbar.make(findViewById(android.R.id.content), R.string.toast_nameNotUnique, Snackbar.LENGTH_LONG).show();
+            return;
+        }
 
         contentValues.put(VehicleEntry.COLUMN_NAME, name);
         contentValues.put(VehicleEntry.COLUMN_VEHICLE_MAKER, vehicleManufacturer);
         contentValues.put(VehicleEntry.COLUMN_TYPE, ((VehicleType) spinnerType.getSelectedItem()).getId());
 
-        if (vehicle.getPathToPicture() != vehiclePicturePath) {
+        if (!vehiclePicturePath.equals(vehicle.getPathToPicture())) {
             if (vehicle.getPathToPicture() != null && !vehicle.getPathToPicture().isEmpty()) {
                 File file = new File(vehicle.getPathToPicture());
                 if (!file.delete()) {

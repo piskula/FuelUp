@@ -30,6 +30,7 @@
     <string name="title_expenses">Výdaje</string>
     <string name="title_fillUps">Tankovania</string>
     <string name="title_mileage">Nájazd</string>
+    <string name="toast_nameNotUnique">Vozidlo s týmto názvom už existuje.</string>
     <string name="title_settings">Nastavenia</string>
     <string name="title_statistics">Štatistiky</string>
     <string name="title_vehicleManufacturer">Výrobca</string>
