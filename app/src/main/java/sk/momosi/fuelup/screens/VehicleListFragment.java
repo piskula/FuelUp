@@ -50,7 +50,7 @@ public class VehicleListFragment extends Fragment implements ListVehiclesAdapter
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        adapter = new ListVehiclesAdapter(this);
+        adapter = new ListVehiclesAdapter(getContext(), this);
     }
 
     @Override

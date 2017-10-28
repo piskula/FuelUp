@@ -27,8 +27,8 @@ public class StatisticsService {
     private static final BigDecimal HUNDRED = BigDecimal.valueOf(100);
 
     private DatabaseHelper dbHelper;
-    private long mVehicleId;
-    private Vehicle vehicle;
+    private final long mVehicleId;
+    private final Vehicle vehicle;
 
     public StatisticsService(Context context, long vehicleId) {
         dbHelper = new DatabaseHelper(context);
@@ -40,13 +40,13 @@ public class StatisticsService {
         StatisticsDTO dto = new StatisticsDTO();
 
         // Totals
-        BigDecimal totalCostsFuel = getTotalPriceFillUpsForVehicle(mVehicleId);
-        BigDecimal totalCostsExpenses = getTotalPriceOfExpensesForVehicle(mVehicleId);
+        BigDecimal totalCostsFuel = getTotalPriceFillUpsForVehicle();
+        BigDecimal totalCostsExpenses = getTotalPriceOfExpensesForVehicle();
         BigDecimal totalPrice = totalCostsExpenses.add(totalCostsFuel);
-        int totalNumberFillUps = getTotalNumberOfFillUpsForVehicle(mVehicleId);
-        int totalNumberExpenses = getTotalNumberOfExpensesForVehicle(mVehicleId);
-        BigDecimal totalFuelVolume = getTotalFuelVolume(mVehicleId);
-        long totalDrivenDistance = getTotalDrivenDistance(mVehicleId);
+        int totalNumberFillUps = getTotalNumberOfFillUpsForVehicle();
+        int totalNumberExpenses = getTotalNumberOfExpensesForVehicle();
+        BigDecimal totalFuelVolume = getTotalFuelVolume();
+        long totalDrivenDistance = getTotalDrivenDistance();
 
         // Costs per distance
         BigDecimal totalCostsPerDistance = totalDrivenDistance > 0 ?
@@ -66,14 +66,14 @@ public class StatisticsService {
                 BigDecimal.valueOf(totalDrivenDistance).divide(BigDecimal.valueOf(totalNumberFillUps), 2, BigDecimal.ROUND_HALF_UP).intValue() : 0;
 
         // FuelUp usage
-        long trackingDays = getTrackingDays(mVehicleId);
+        long trackingDays = getTrackingDays();
 
         // Consumption
-        dto.setAvgConsumption(getAverageConsumption(mVehicleId));
-        dto.setAvgConsumptionReversed(getAverageConsumptionReversed(mVehicleId));
+        dto.setAvgConsumption(getAverageConsumption());
+        dto.setAvgConsumptionReversed(getAverageConsumptionReversed());
         dto.setConsumptionReversedUnitMpg(vehicle.getConsumptionUnit().equals("mpg"));
-        dto.setFuelConsumptionBest(getFuelConsumptionBest(mVehicleId));
-        dto.setFuelConsumptionWorst(getFuelConsumptionWorst(mVehicleId));
+        dto.setFuelConsumptionBest(getFuelConsumptionBest());
+        dto.setFuelConsumptionWorst(getFuelConsumptionWorst());
 
         // Totals
         dto.setTotalCosts(totalCostsFuel.add(totalCostsExpenses));
@@ -106,14 +106,14 @@ public class StatisticsService {
         dto.setAverageNumberOfFillUpsPerWeek(getAveragePerTime(BigDecimal.valueOf(totalNumberFillUps), trackingDays, TimePeriod.WEEK));
         dto.setAverageNumberOfFillUpsPerMonth(getAveragePerTime(BigDecimal.valueOf(totalNumberFillUps), trackingDays, TimePeriod.MONTH));
         dto.setAverageNumberOfFillUpsPerYear(getAveragePerTime(BigDecimal.valueOf(totalNumberFillUps), trackingDays, TimePeriod.YEAR));
-        dto.setDistanceBetweenFillUpsHighest(getDistanceBetweenFillUpsHighest(mVehicleId));
-        dto.setDistanceBetweenFillUpsLowest(getDistanceBetweenFillUpsLowest(mVehicleId));
+        dto.setDistanceBetweenFillUpsHighest(getDistanceBetweenFillUpsHighest());
+        dto.setDistanceBetweenFillUpsLowest(getDistanceBetweenFillUpsLowest());
         dto.setDistanceBetweenFillUpsAverage(averageDistanceBetweenFillUps);
 
         // Fuel unit price
-        dto.setFuelUnitPriceAverage(getFuelUnitPriceAverage(mVehicleId));
-        dto.setFuelUnitPriceHighest(getFuelUnitPriceHighest(mVehicleId));
-        dto.setFuelUnitPriceLowest(getFuelUnitPriceLowest(mVehicleId));
+        dto.setFuelUnitPriceAverage(getFuelUnitPriceAverage());
+        dto.setFuelUnitPriceHighest(getFuelUnitPriceHighest());
+        dto.setFuelUnitPriceLowest(getFuelUnitPriceLowest());
 
         // Distance per time
         dto.setAverageDistancePerDay(getAveragePerTime(BigDecimal.valueOf(totalDrivenDistance), trackingDays, TimePeriod.DAY).longValue());
@@ -132,12 +132,12 @@ public class StatisticsService {
         return dto;
     }
 
-    public BigDecimal getAverageConsumption(long vehicleId) {
+    public BigDecimal getAverageConsumption() {
         Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
                 "SELECT TOTAL(" + FillUpEntry.COLUMN_DISTANCE_FROM_LAST + " * " + FillUpEntry.COLUMN_FUEL_CONSUMPTION + ") / SUM(" + FillUpEntry.COLUMN_DISTANCE_FROM_LAST
                         + ") FROM " + FillUpEntry.TABLE_NAME
                         + " WHERE " + FillUpEntry.COLUMN_VEHICLE + "=? AND " + FillUpEntry.COLUMN_FUEL_CONSUMPTION + " IS NOT NULL",
-                getAsArgument(vehicleId));
+                getAsArgument(mVehicleId));
         if (cursor.moveToFirst()) {
             BigDecimal result = BigDecimal.valueOf(cursor.getDouble(0));
             cursor.close();
@@ -147,14 +147,14 @@ public class StatisticsService {
         return BigDecimal.ZERO;
     }
 
-    private BigDecimal getAverageConsumptionReversed(long vehicleId) {
+    private BigDecimal getAverageConsumptionReversed() {
         if (vehicle.getVolumeUnit() == VolumeUnit.LITRE) {
             // if default (NOT REVERSED) consumption unit is l/100km
             Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
                     "SELECT TOTAL(" + FillUpEntry.COLUMN_DISTANCE_FROM_LAST + ") / SUM(" + FillUpEntry.COLUMN_DISTANCE_FROM_LAST + " * " + FillUpEntry.COLUMN_FUEL_CONSUMPTION + " / 100"
                             + ") FROM " + FillUpEntry.TABLE_NAME
                             + " WHERE " + FillUpEntry.COLUMN_VEHICLE + "=? AND " + FillUpEntry.COLUMN_FUEL_CONSUMPTION + " IS NOT NULL",
-                    getAsArgument(vehicleId));
+                    getAsArgument(mVehicleId));
             if (cursor.moveToFirst()) {
                 BigDecimal result = BigDecimal.valueOf(cursor.getDouble(0));
                 cursor.close();
@@ -165,7 +165,7 @@ public class StatisticsService {
 
         } else {
             // if default consumption unit is miles per gallon
-            BigDecimal milesPerOneLitre = getAverageConsumption(vehicleId).divide(
+            BigDecimal milesPerOneLitre = getAverageConsumption().divide(
                     vehicle.getVolumeUnit() == VolumeUnit.GALLON_UK ?
                             VolumeUtil.ONE_UK_GALLON_IS_LITRES :
                             VolumeUtil.ONE_US_GALLON_IS_LITRES,
@@ -179,11 +179,11 @@ public class StatisticsService {
         }
     }
 
-    private BigDecimal getTotalPriceFillUpsForVehicle(long vehicleId) {
+    private BigDecimal getTotalPriceFillUpsForVehicle() {
         Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
                 "SELECT TOTAL(" + FillUpEntry.COLUMN_FUEL_PRICE_TOTAL
                         + ") FROM " + FillUpEntry.TABLE_NAME
-                        + " WHERE " + FillUpEntry.COLUMN_VEHICLE + "=?", getAsArgument(vehicleId));
+                        + " WHERE " + FillUpEntry.COLUMN_VEHICLE + "=?", getAsArgument(mVehicleId));
         if (cursor.moveToFirst()) {
             BigDecimal result = BigDecimal.valueOf(cursor.getDouble(0));
             cursor.close();
@@ -193,11 +193,11 @@ public class StatisticsService {
         return BigDecimal.ZERO;
     }
 
-    private BigDecimal getTotalPriceOfExpensesForVehicle(long vehicleId) {
+    private BigDecimal getTotalPriceOfExpensesForVehicle() {
         Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
                 "SELECT TOTAL(" + ExpenseEntry.COLUMN_PRICE
                         + ") FROM " + ExpenseEntry.TABLE_NAME
-                        + " WHERE " + ExpenseEntry.COLUMN_VEHICLE + "=?", getAsArgument(vehicleId));
+                        + " WHERE " + ExpenseEntry.COLUMN_VEHICLE + "=?", getAsArgument(mVehicleId));
         if (cursor.moveToFirst()) {
             BigDecimal result = BigDecimal.valueOf(cursor.getDouble(0));
             cursor.close();
@@ -207,11 +207,11 @@ public class StatisticsService {
         return BigDecimal.ZERO;
     }
 
-    private int getTotalNumberOfFillUpsForVehicle(long vehicleId) {
+    private int getTotalNumberOfFillUpsForVehicle() {
         Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
                 "SELECT COUNT(*"
                         + ") FROM " + FillUpEntry.TABLE_NAME
-                        + " WHERE " + FillUpEntry.COLUMN_VEHICLE + "=?", getAsArgument(vehicleId));
+                        + " WHERE " + FillUpEntry.COLUMN_VEHICLE + "=?", getAsArgument(mVehicleId));
         if (cursor.moveToFirst()) {
             int result = cursor.getInt(0);
             cursor.close();
@@ -221,11 +221,11 @@ public class StatisticsService {
         return 0;
     }
 
-    private int getTotalNumberOfExpensesForVehicle(long vehicleId) {
+    private int getTotalNumberOfExpensesForVehicle() {
         Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
                 "SELECT COUNT(*"
                         + ") FROM " + ExpenseEntry.TABLE_NAME
-                        + " WHERE " + ExpenseEntry.COLUMN_VEHICLE + "=?", getAsArgument(vehicleId));
+                        + " WHERE " + ExpenseEntry.COLUMN_VEHICLE + "=?", getAsArgument(mVehicleId));
         if (cursor.moveToFirst()) {
             int result = cursor.getInt(0);
             cursor.close();
@@ -235,11 +235,11 @@ public class StatisticsService {
         return 0;
     }
 
-    private long getTotalDrivenDistance(long vehicleId) {
+    private long getTotalDrivenDistance() {
         Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
                 "SELECT TOTAL(" + FillUpEntry.COLUMN_DISTANCE_FROM_LAST
                         + ") FROM " + FillUpEntry.TABLE_NAME
-                        + " WHERE " + FillUpEntry.COLUMN_VEHICLE + "=?", getAsArgument(vehicleId));
+                        + " WHERE " + FillUpEntry.COLUMN_VEHICLE + "=?", getAsArgument(mVehicleId));
         if (cursor.moveToFirst()) {
             long result = cursor.getLong(0);
             cursor.close();
@@ -249,11 +249,19 @@ public class StatisticsService {
         return 0L;
     }
 
-    private BigDecimal getTotalFuelVolume(long vehicleId) {
+    public String getActualMileageIfPossible() {
+        if (vehicle.getStartMileage() == null) {
+            return "";
+        } else {
+            return (vehicle.getStartMileage() + getTotalDrivenDistance()) + vehicle.getDistanceUnit().toString();
+        }
+    }
+
+    private BigDecimal getTotalFuelVolume() {
         Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
                 "SELECT TOTAL(" + FillUpEntry.COLUMN_FUEL_VOLUME
                         + ") FROM " + FillUpEntry.TABLE_NAME
-                        + " WHERE " + FillUpEntry.COLUMN_VEHICLE + "=?", getAsArgument(vehicleId));
+                        + " WHERE " + FillUpEntry.COLUMN_VEHICLE + "=?", getAsArgument(mVehicleId));
         if (cursor.moveToFirst()) {
             BigDecimal result = BigDecimal.valueOf(cursor.getDouble(0));
             cursor.close();
@@ -263,12 +271,12 @@ public class StatisticsService {
         return BigDecimal.ZERO;
     }
 
-    private long getTrackingDays(long vehicleId) {
+    private long getTrackingDays() {
         Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
                 "SELECT MIN(" + FillUpEntry.COLUMN_DATE
                         + ") FROM " + FillUpEntry.TABLE_NAME
                         + " WHERE " + FillUpEntry.COLUMN_VEHICLE + "=?",
-                getAsArgument(vehicleId));
+                getAsArgument(mVehicleId));
         if (cursor.moveToFirst()) {
             long firstEntry = (new Date(cursor.getLong(0))).getTime();
             long today = (new Date()).getTime();
@@ -286,12 +294,12 @@ public class StatisticsService {
         return totalCostAllTime.divide(BigDecimal.valueOf(trackingIntervals), 2, RoundingMode.HALF_UP);
     }
 
-    private BigDecimal getFuelConsumptionWorst(long vehicleId) {
+    private BigDecimal getFuelConsumptionWorst() {
         Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
                 "SELECT MAX(" + FillUpEntry.COLUMN_FUEL_CONSUMPTION
                         + ") FROM " + FillUpEntry.TABLE_NAME
                         + " WHERE " + FillUpEntry.COLUMN_VEHICLE + "=? AND " + FillUpEntry.COLUMN_FUEL_CONSUMPTION + " IS NOT NULL",
-                getAsArgument(vehicleId));
+                getAsArgument(mVehicleId));
         if (cursor.moveToFirst()) {
             BigDecimal result = BigDecimal.valueOf(cursor.getDouble(0));
             cursor.close();
@@ -301,12 +309,12 @@ public class StatisticsService {
         return BigDecimal.ZERO;
     }
 
-    public BigDecimal getFuelConsumptionBest(long vehicleId) {
+    public BigDecimal getFuelConsumptionBest() {
         Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
                 "SELECT MIN(" + FillUpEntry.COLUMN_FUEL_CONSUMPTION
                         + ") FROM " + FillUpEntry.TABLE_NAME
                         + " WHERE " + FillUpEntry.COLUMN_VEHICLE + "=? AND " + FillUpEntry.COLUMN_FUEL_CONSUMPTION + " IS NOT NULL",
-                getAsArgument(vehicleId));
+                getAsArgument(mVehicleId));
         if (cursor.moveToFirst()) {
             BigDecimal result = BigDecimal.valueOf(cursor.getDouble(0));
             cursor.close();
@@ -316,12 +324,12 @@ public class StatisticsService {
         return BigDecimal.ZERO;
     }
 
-    private BigDecimal getFuelUnitPriceHighest(long vehicleId) {
+    private BigDecimal getFuelUnitPriceHighest() {
         Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
                 "SELECT MAX(" + FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE
                         + ") FROM " + FillUpEntry.TABLE_NAME
                         + " WHERE " + FillUpEntry.COLUMN_VEHICLE + "=?",
-                getAsArgument(vehicleId));
+                getAsArgument(mVehicleId));
         if (cursor.moveToFirst()) {
             BigDecimal result = BigDecimal.valueOf(cursor.getDouble(0));
             cursor.close();
@@ -331,12 +339,12 @@ public class StatisticsService {
         return BigDecimal.ZERO;
     }
 
-    public BigDecimal getFuelUnitPriceAverage(long vehicleId) {
+    public BigDecimal getFuelUnitPriceAverage() {
         Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
                 "SELECT TOTAL(" + FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE + ") / COUNT(*"
                         + ") FROM " + FillUpEntry.TABLE_NAME
                         + " WHERE " + FillUpEntry.COLUMN_VEHICLE + "=?",
-                getAsArgument(vehicleId));
+                getAsArgument(mVehicleId));
         if (cursor.moveToFirst()) {
             BigDecimal result = BigDecimal.valueOf(cursor.getDouble(0));
             cursor.close();
@@ -346,12 +354,12 @@ public class StatisticsService {
         return BigDecimal.ZERO;
     }
 
-    private BigDecimal getFuelUnitPriceLowest(long vehicleId) {
+    private BigDecimal getFuelUnitPriceLowest() {
         Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
                 "SELECT MIN(" + FillUpEntry.COLUMN_FUEL_PRICE_PER_LITRE
                         + ") FROM " + FillUpEntry.TABLE_NAME
                         + " WHERE " + FillUpEntry.COLUMN_VEHICLE + "=?",
-                getAsArgument(vehicleId));
+                getAsArgument(mVehicleId));
         if (cursor.moveToFirst()) {
             BigDecimal result = BigDecimal.valueOf(cursor.getDouble(0));
             cursor.close();
@@ -361,12 +369,12 @@ public class StatisticsService {
         return BigDecimal.ZERO;
     }
 
-    private int getDistanceBetweenFillUpsHighest(long vehicleId) {
+    private int getDistanceBetweenFillUpsHighest() {
         Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
                 "SELECT MAX(" + FillUpEntry.COLUMN_DISTANCE_FROM_LAST
                         + ") FROM " + FillUpEntry.TABLE_NAME
                         + " WHERE " + FillUpEntry.COLUMN_VEHICLE + "=?",
-                getAsArgument(vehicleId));
+                getAsArgument(mVehicleId));
         if (cursor.moveToFirst()) {
             int result = cursor.getInt(0);
             cursor.close();
@@ -376,12 +384,12 @@ public class StatisticsService {
         return 0;
     }
 
-    private int getDistanceBetweenFillUpsLowest(long vehicleId) {
+    private int getDistanceBetweenFillUpsLowest() {
         Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
                 "SELECT MIN(" + FillUpEntry.COLUMN_DISTANCE_FROM_LAST
                         + ") FROM " + FillUpEntry.TABLE_NAME
                         + " WHERE " + FillUpEntry.COLUMN_VEHICLE + "=?",
-                getAsArgument(vehicleId));
+                getAsArgument(mVehicleId));
         if (cursor.moveToFirst()) {
             int result = cursor.getInt(0);
             cursor.close();

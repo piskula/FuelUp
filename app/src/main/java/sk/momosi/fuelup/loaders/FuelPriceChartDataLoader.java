@@ -95,7 +95,7 @@ public class FuelPriceChartDataLoader extends FuelUpAbstractAsyncLoader<Map<Stri
         List<Line> lines = new ArrayList<>(2);
         lines.add(line);
 
-        BigDecimal averagePrice = new StatisticsService(getContext(), vehicleId).getFuelUnitPriceAverage(vehicleId);
+        BigDecimal averagePrice = new StatisticsService(getContext(), vehicleId).getFuelUnitPriceAverage();
 
         List<PointValue> averageLineValues = new ArrayList<>(2);
         averageLineValues.add(new PointValue(0, averagePrice.floatValue()));

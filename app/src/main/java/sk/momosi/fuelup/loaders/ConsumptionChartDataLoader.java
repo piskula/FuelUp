@@ -98,7 +98,7 @@ public class ConsumptionChartDataLoader extends FuelUpAbstractAsyncLoader<Map<St
         List<Line> lines = new ArrayList<>(2);
         lines.add(line);
 
-        BigDecimal averageConsumption = new StatisticsService(getContext(), vehicleId).getAverageConsumption(vehicleId);
+        BigDecimal averageConsumption = new StatisticsService(getContext(), vehicleId).getAverageConsumption();
         if (averageConsumption != null) {
             List<PointValue> averageLineValues = new ArrayList<>(2);
             averageLineValues.add(new PointValue(0, averageConsumption.floatValue()));

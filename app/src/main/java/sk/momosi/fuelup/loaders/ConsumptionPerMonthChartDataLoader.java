@@ -55,7 +55,7 @@ public class ConsumptionPerMonthChartDataLoader extends FuelUpAbstractAsyncLoade
 
         Map<String,Object> map = new HashMap<>(2);
         map.put(CHART_DATA, generateColumnChartData(fillUps));
-        map.put(MIN_CONSUMPTION, statisticsService.getFuelConsumptionBest(vehicleId));
+        map.put(MIN_CONSUMPTION, statisticsService.getFuelConsumptionBest());
 
         return map;
     }

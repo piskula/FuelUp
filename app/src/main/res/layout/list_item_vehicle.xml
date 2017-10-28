@@ -56,6 +56,16 @@
                 android:layout_marginRight="@dimen/ic_vehicleItem_type_margin_right"
                 android:scaleType="fitXY" />
 
+            <TextView
+                android:id="@+id/vehicle_item_vehicleDistanceDriven"
+                android:layout_width="wrap_content"
+                android:layout_height="31dp"
+                android:layout_below="@id/vehicle_item_thumbnail"
+                android:gravity="center"
+                android:layout_marginRight="@dimen/ic_vehicleItem_type_margin_right"
+                android:layout_marginTop="@dimen/ic_vehicleItem_type_margin_top"
+                android:layout_toStartOf="@id/vehicle_item_vehicleType"/>
+
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>

@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import sk.momosi.fuelup.R;
+import sk.momosi.fuelup.business.StatisticsService;
 import sk.momosi.fuelup.business.VehicleTypeService;
 import sk.momosi.fuelup.data.FuelUpContract.VehicleEntry;
 import sk.momosi.fuelup.screens.MainActivity;
@@ -23,14 +24,16 @@ public class ListVehiclesAdapter extends RecyclerViewCursorAdapter<ListVehiclesA
 
     private static final String LOG_TAG = ListVehiclesAdapter.class.getSimpleName();
 
+    private Context mContext;
     private Callback mCallback;
 
     public interface Callback {
         void onItemClick(long vehicleId);
     }
 
-    public ListVehiclesAdapter(Callback callback) {
+    public ListVehiclesAdapter(Context context, Callback callback) {
         super(null);
+        mContext = context;
         mCallback = callback;
     }
 
@@ -53,6 +56,7 @@ public class ListVehiclesAdapter extends RecyclerViewCursorAdapter<ListVehiclesA
         final long vehicleId = cursor.getInt(idColumnIndex);
         holder.txtName.setText(cursor.getString(nameColumnIndex));
         holder.txtMaker.setText(cursor.getString(makerColumnIndex));
+        holder.txtDistance.setText(new StatisticsService(mContext, vehicleId).getActualMileageIfPossible());
         holder.thumbnail.setImageBitmap(BitmapFactory.decodeFile(cursor.getString(pictureColumnIndex)));
         holder.overflow.setImageResource(getImageResourceId(cursor.getInt(typeColumnIndex)));
 
@@ -67,13 +71,14 @@ public class ListVehiclesAdapter extends RecyclerViewCursorAdapter<ListVehiclesA
 
     static class VehicleViewHolder extends RecyclerView.ViewHolder {
         ImageView thumbnail, overflow;
-        TextView txtName, txtMaker;
+        TextView txtName, txtMaker, txtDistance;
 
         VehicleViewHolder(View view) {
             super(view);
 
             txtName = view.findViewById(R.id.vehicle_item_title);
             txtMaker = view.findViewById(R.id.vehicle_item_count);
+            txtDistance = view.findViewById(R.id.vehicle_item_vehicleDistanceDriven);
             thumbnail = view.findViewById(R.id.vehicle_item_thumbnail);
             overflow = view.findViewById(R.id.vehicle_item_vehicleType);
         }
