@@ -496,7 +496,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         PreferencesUtils.setBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, true);
         mOutputText.setTextColor(ContextCompat.getColor(getContext(), GREEN_COLOR));
         mOutputText.setText(R.string.googleDrive_imported_setAndSyncing);
-        // TODO set syncing job
+        initializeSyncing();
         mProgress.hide();
     }
 
