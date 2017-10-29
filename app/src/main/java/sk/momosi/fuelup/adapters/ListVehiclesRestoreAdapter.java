@@ -49,8 +49,13 @@ public class ListVehiclesRestoreAdapter extends ArrayAdapter<String> {
 
         final CheckBox vehicleName = convertView.findViewById(R.id.checkbox_restore_vehicle);
         vehicleName.setText(name);
-        if (!enabled)
+        if (!enabled) {
             vehicleName.setTextColor(getContext().getResources().getColor(R.color.colorDisabled));
+        } else {
+            callback.onItemClickAdd(name);
+            vehicleName.setChecked(true);
+        }
+
         vehicleName.setOnCheckedChangeListener(
                 new CompoundButton.OnCheckedChangeListener() {
                     @Override
