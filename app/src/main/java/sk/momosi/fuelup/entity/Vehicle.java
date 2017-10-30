@@ -1,12 +1,9 @@
 package sk.momosi.fuelup.entity;
 
-import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.ThumbnailUtils;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.File;
 import java.util.Currency;
 
 import sk.momosi.fuelup.R;
@@ -14,7 +11,6 @@ import sk.momosi.fuelup.entity.enums.DistanceUnit;
 import sk.momosi.fuelup.entity.enums.VolumeUnit;
 import sk.momosi.fuelup.entity.util.CurrencyUtil;
 import sk.momosi.fuelup.screens.MainActivity;
-import sk.momosi.fuelup.util.ScreenSizeUtils;
 
 /**
  * @author Ondrej Oravcok
@@ -149,12 +145,11 @@ public class Vehicle implements Parcelable {
                 + "}";
     }
 
-    public Bitmap getPicture(Activity context) {
+    public File getPicture() {
         if (this.pathToPicture == null || this.pathToPicture.isEmpty()) {
-            return null;
+            return new File("");
         } else {
-            int width = ScreenSizeUtils.getActualWidth(context);
-            return ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(this.pathToPicture), width, (width / 16) * 9, ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+            return new File(this.pathToPicture);
         }
     }
 

@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +15,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
@@ -25,9 +25,9 @@ import sk.momosi.fuelup.business.googledrive.syncing.SyncAdapterContentObserver;
 import sk.momosi.fuelup.data.FuelUpContract;
 
 /**
- * Created by Martin Styk on 22.09.2017.
+ * @author Martin Styk
+ * @version 22.09.2017
  */
-
 public abstract class VehicleAbstractActivity extends AppCompatActivity {
 
     protected static final String PHOTO = "photo";
@@ -54,7 +54,7 @@ public abstract class VehicleAbstractActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState.containsKey(PHOTO)) {
             vehiclePicturePath = savedInstanceState.getString(PHOTO);
-            imgCarPhoto.setImageBitmap(BitmapFactory.decodeFile(vehiclePicturePath));
+            Picasso.with(getApplicationContext()).load(new File(vehiclePicturePath)).into(imgCarPhoto);
             imgCarPhotoRemove.setVisibility(View.VISIBLE);
         } else {
             vehiclePicturePath = null;
@@ -98,7 +98,7 @@ public abstract class VehicleAbstractActivity extends AppCompatActivity {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 vehiclePicturePath = result.getUri().getPath();
-                imgCarPhoto.setImageBitmap(BitmapFactory.decodeFile(vehiclePicturePath));
+                Picasso.with(getApplicationContext()).load(new File(vehiclePicturePath)).into(imgCarPhoto);
                 imgCarPhoto.setAlpha(REMOVE_PHOTO_ALPHA_CHANNEL);
                 imgCarPhotoRemove.setVisibility(View.VISIBLE);
                 Snackbar.make(findViewById(android.R.id.content), getString(R.string.addVehicle_picture_add_success), Snackbar.LENGTH_SHORT).show();

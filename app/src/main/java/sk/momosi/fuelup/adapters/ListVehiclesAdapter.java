@@ -2,13 +2,16 @@ package sk.momosi.fuelup.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.business.StatisticsService;
@@ -54,10 +57,12 @@ public class ListVehiclesAdapter extends RecyclerViewCursorAdapter<ListVehiclesA
         int typeColumnIndex = cursor.getColumnIndexOrThrow(VehicleEntry.COLUMN_TYPE);
 
         final long vehicleId = cursor.getInt(idColumnIndex);
+        final String picturePath = cursor.getString(pictureColumnIndex);
+
         holder.txtName.setText(cursor.getString(nameColumnIndex));
         holder.txtMaker.setText(cursor.getString(makerColumnIndex));
         holder.txtDistance.setText(new StatisticsService(mContext, vehicleId).getActualMileageIfPossible());
-        holder.thumbnail.setImageBitmap(BitmapFactory.decodeFile(cursor.getString(pictureColumnIndex)));
+        Picasso.with(mContext).load(new File(picturePath == null ? "" : picturePath)).into(holder.thumbnail);
         holder.overflow.setImageResource(getImageResourceId(cursor.getInt(typeColumnIndex)));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

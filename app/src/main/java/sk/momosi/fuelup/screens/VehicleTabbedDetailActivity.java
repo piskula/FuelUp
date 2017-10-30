@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.Currency;
 
 import sk.momosi.fuelup.R;
@@ -80,8 +82,8 @@ public class VehicleTabbedDetailActivity extends AppCompatActivity implements Bo
     protected void onStart() {
         super.onStart();
 
-        Bitmap bmp = vehicle.getPicture(this);
-        ((ImageView) findViewById(R.id.toolbar_layout_image)).setImageBitmap(bmp);
+        Picasso.with(getApplicationContext()).load(vehicle.getPicture())
+                .into((ImageView) findViewById(R.id.toolbar_layout_image));
     }
 
     @Override

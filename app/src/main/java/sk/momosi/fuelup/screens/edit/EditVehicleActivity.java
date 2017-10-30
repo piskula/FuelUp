@@ -3,7 +3,6 @@ package sk.momosi.fuelup.screens.edit;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.Menu;
@@ -13,6 +12,8 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
@@ -94,9 +95,9 @@ public class EditVehicleActivity extends VehicleAbstractActivity implements Menu
         txtName.setText(vehicle.getName());
         txtManufacturer.setText(vehicle.getVehicleMaker());
         spinnerType.setSelection(getAlreadySelectedTypePosition(vehicle.getType()));
-        vehiclePicturePath = vehicle.getPathToPicture();
-        if (vehiclePicturePath != null && new File(vehiclePicturePath).exists()) {
-            imgCarPhoto.setImageBitmap(BitmapFactory.decodeFile(vehiclePicturePath));
+        if (vehicle.getPicture().exists()) {
+            vehiclePicturePath = vehicle.getPathToPicture();
+            Picasso.with(getApplicationContext()).load(vehicle.getPicture()).into(imgCarPhoto);
             imgCarPhoto.setAlpha(REMOVE_PHOTO_ALPHA_CHANNEL);
             imgCarPhotoRemove.setVisibility(View.VISIBLE);
         } else {
