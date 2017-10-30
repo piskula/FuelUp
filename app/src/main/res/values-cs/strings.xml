@@ -219,25 +219,4 @@
     <string name="googleDrive_toast_syncInProgress">Synchronizuji&#8230;</string>
     <string name="googleDrive_youAccount_title">Váš Google účet pre tuto aplikaci:</string>
 
-    <!--without translation-->
-    <string name="authors">&#169; Ondrej Oravčok, Martin Styk</string>
-    <string name="na">N/A</string>
-    <string name="unit_litre">\u2113</string>
-    <string name="unit_pricePerLitre">%s/\u2113</string>
-    <string name="units_litreper100km">\u2113/100km</string>
-    <string name="units_mpg">mpg</string>
-    <string name="units_litreper100_distance_units">\u2113/100 %s</string>
-    <string name="units_distance_units_per_litre">%s/\u2113</string>
-    <string name="units_distance_units_per_litre_only">/\u2113</string>
-
-    <string name="desc_expensePic">service icon</string>
-    <string name="desc_fillupPic">pump icon</string>
-
-    <string name="app_name">FuelUp</string>
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="googleDrive_test_sync">Test sync</string>
-
 </resources>
