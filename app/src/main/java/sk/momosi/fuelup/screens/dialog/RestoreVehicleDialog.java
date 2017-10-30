@@ -21,7 +21,7 @@ import sk.momosi.fuelup.adapters.ListVehiclesRestoreAdapter;
  * @author Ondrej Oravcok
  * @version 13.10.2017
  */
-public class RestoreVehicleDialog extends DialogFragment implements Dialog.OnShowListener, ListVehiclesRestoreAdapter.Callback {
+public class RestoreVehicleDialog extends DialogFragment implements ListVehiclesRestoreAdapter.Callback {
 
     private static final String LOG_TAG = RestoreVehicleDialog.class.getSimpleName();
     private static final String BUNDLE_ARGS_VEHICLE_NAMES = "vehicle_names_to_restore_dialog";
@@ -81,17 +81,12 @@ public class RestoreVehicleDialog extends DialogFragment implements Dialog.OnSho
                         }
                 )
                 .create();
-        dialog.setOnShowListener(this);
 
         ListView vehicleList = dialogView.findViewById(R.id.rd_list_vehicles);
         vehicleList.setAdapter(new ListVehiclesRestoreAdapter(
                 getContext(), getArguments().getStringArrayList(BUNDLE_ARGS_VEHICLE_NAMES), this));
 
         return dialog;
-    }
-
-    @Override
-    public void onShow(DialogInterface dialog) {
     }
 
 }

@@ -43,7 +43,14 @@ public class VehicleService {
         vehicle.setVehicleMaker(cursor.getString(cursor.getColumnIndexOrThrow(VehicleEntry.COLUMN_VEHICLE_MAKER)));
         vehicle.setType(VehicleTypeService.getVehicleTypeById(typeId, context));
         vehicle.setVolumeUnit(getVolumeUnitFromString(cursor.getString(cursor.getColumnIndexOrThrow(VehicleEntry.COLUMN_VOLUME_UNIT))));
-        vehicle.setPathToPicture(cursor.getString(cursor.getColumnIndexOrThrow(VehicleEntry.COLUMN_PICTURE)));
+
+        int columnPicturePath = cursor.getColumnIndexOrThrow(VehicleEntry.COLUMN_PICTURE);
+        if (cursor.isNull(columnPicturePath)) {
+            vehicle.setPathToPicture(null);
+        } else {
+            vehicle.setPathToPicture(cursor.getString(columnPicturePath));
+        }
+
 
         int columnMileage = cursor.getColumnIndexOrThrow(VehicleEntry.COLUMN_START_MILEAGE);
         if (cursor.isNull(columnMileage)) {

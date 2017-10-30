@@ -94,7 +94,9 @@ public class JsonUtil {
         if (cursor != null) {
             cursor.moveToFirst();
             for (int i = 0; i < cursor.getColumnCount(); i++) {
-                if (cursor.getColumnName(i) != null && !cursor.getColumnName(i).equals(VehicleEntry._ID)) {
+                if (cursor.getColumnName(i) != null
+                        && !cursor.getColumnName(i).equals(VehicleEntry._ID)
+                        && !cursor.getColumnName(i).equals(VehicleEntry.COLUMN_PICTURE)) {
                     row.put(cursor.getColumnName(i), cursor.getString(i));
                 }
             }
