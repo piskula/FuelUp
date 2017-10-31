@@ -216,12 +216,6 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         checkPermissions();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        getActivity().findViewById(R.id.fab_add_vehicle).setVisibility(View.VISIBLE);
-    }
-
     /*
     private void getFilesFromDrive() {
         new DriveRequestTask(mCredential, this).execute();

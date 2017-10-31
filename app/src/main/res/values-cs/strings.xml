@@ -219,4 +219,15 @@
     <string name="googleDrive_toast_syncInProgress">Synchronizuji&#8230;</string>
     <string name="googleDrive_youAccount_title">Váš Google účet pre tuto aplikaci:</string>
 
+    <!--faq-->
+    <string name="faq_long">Často kladené otázky</string>
+    <string name="faq_01_question">Spotřeba se nepočítá</string>
+    <string name="faq_01_answer">Tato aplikace používá plnou nádrž jako referenční bod. Pokaždé, když natankujete plnou nádrž, spotřeba se přepočítá. Jinak to totiž nelze udělat.</string>
+    <string name="faq_02_question">Nenašel jsem svou měnu</string>
+    <string name="faq_02_answer">Tento problém je jednoduché vyřešit. Kontaktujte nás pomocí sekce \'O aplikaci\' a budeme rádi když budeme moci doručit update s podporou Vaší měny. Nebojte se nám napsat více informací o Vaší Zemi a také o výchozích jednotkách (míle za galon, litry za km, počet desetinných míst, cenu za litr, fotku Vaší čerpací stanice)</string>
+    <string name="faq_03_question">Mohu pomocí Google Drive synchronizovat data mezi více aplikacemi FuelUp?</string>
+    <string name="faq_03_answer">Toto není původní účel této aplikace a zatím tato funkce není podporována. Hlavním účelem Google Drive je záloha Vašich dat (např. pro případ straty zařízení). Když si nastavíte účet Google aplikace se pokusí naimportovat Vaše předchozí vozy ze zálohy (pokud nějaká existuje). Následně všechny zálohy probíhají automaticky jenom jedním směrem (z Vašeho zařízení na Google Drive). Použítím jednoho účtu na více zařízeních by ste si tak přepisovali zálohu navzájem a data by byla nekonzistentní.</string>
+    <string name="faq_04_question">Nezvolil jsem nic pri importu a teď jsem ztratil zálohu.</string>
+    <string name="faq_04_answer">Nezoufejte. Google Drive ukládá historii Vašich záloh. Vaše předešlý zálohy můžete najít po přihlášení do Google Drive na Vaším PC. Najděte \'FuelUp_backup\' složku a v ní je Vaše záloha. Klikněte na \'Manage versions\' a navraťte tu, kterou chcete.</string>
+
 </resources>

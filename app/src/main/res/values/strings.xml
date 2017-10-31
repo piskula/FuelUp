@@ -219,6 +219,17 @@
     <string name="googleDrive_toast_syncInProgress">Syncing&#8230;</string>
     <string name="googleDrive_youAccount_title">Your Google account for this app:</string>
 
+    <!--faq-->
+    <string name="faq_long">Frequently Asked Questions</string>
+    <string name="faq_01_question">Consumption is not computed</string>
+    <string name="faq_01_answer">This application use full tank as a reference point, so your consumption will recompute each time when you fully fuel up. There is simple not other way how to do it.</string>
+    <string name="faq_02_question">My currency is not listed</string>
+    <string name="faq_02_answer">Well, this is very annoying, but so easy to solve. Simple contact us through \'About\' page and in next release we will be very proud to support your currency. Feel free to write us more info about conditions and default units used in your country (miles per gallon, litre per km, currency decimal places, per litre price, photo of gas station)</string>
+    <string name="faq_03_question">May I use this app on more devices with Google Drive syncing?</string>
+    <string name="faq_03_answer">This is not supported feature (for now). Main purpose of Google Drive is to backup your data (e.g. in case of losing your phone). When you first set up your account, application will ask you, if you want to import your old backup (if exists). Then all following backups are made one-way, e.g. from your phone to Google Drive. Using this app on several devices may cause that each app rewrites data of other app.</string>
+    <string name="faq_04_question">I have chosen to import nothing and now I lost my backup.</string>
+    <string name="faq_04_answer">Do not be afraid. Google Drive keeps history of your backup. You can find your previous backups when you log into Google Drive on your computer. Go to \'FuelUp_backup\' folder and you will see your backup file. Click on \'Manage versions\' and restore the last one, which have been uploaded before import (or simply choose one you want).</string>
+
     <!--without translation-->
     <string name="authors">&#169; Ondrej Oravčok, Martin Styk</string>
     <string name="na">N/A</string>
@@ -238,6 +249,9 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="googleDrive">Drive</string>
     <string name="googleDrive_test_sync">Test sync</string>
+
+    <string name="faq">FAQ</string>
 
 </resources>

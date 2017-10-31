@@ -4,15 +4,19 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/vehicle_list"
-            android:icon="@drawable/ic_directions_car_black_48dp"
+            android:icon="@drawable/ic_directions_car_black_24dp"
             android:title="@string/vehicle_list" />
         <item
             android:id="@+id/google_drive"
             android:icon="@drawable/ic_google_drive"
-            android:title="Drive" />
+            android:title="@string/googleDrive" />
+        <item
+            android:id="@+id/faq"
+            android:icon="@drawable/ic_help_outline_black_24dp"
+            android:title="@string/faq" />
         <item
             android:id="@+id/about"
-            android:icon="@drawable/ic_info"
+            android:icon="@drawable/ic_info_black_24dp"
             android:title="@string/about" />
     </group>
 

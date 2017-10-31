@@ -16,6 +16,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.business.googledrive.authenticator.AccountService;
@@ -88,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             currentFragment = new AboutFragment();
         } else if (id == R.id.google_drive) {
             currentFragment = new BackupFragment();
+        } else if (id == R.id.faq) {
+            currentFragment = new FaqFragment();
         } else {
             throw new RuntimeException("onNavigationItemSelected unhandled case");
         }
@@ -101,5 +107,17 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
     public static MainActivity getInstance() {
         return singleton;
+    }
+
+    public void toggleAnswer(View v) {
+        TextView answer = (TextView) ((LinearLayout) v).getChildAt(1);
+        ImageView arrow = (ImageView) ((LinearLayout)((LinearLayout) v).getChildAt(0)).getChildAt(1);
+        if (answer.getVisibility() == View.VISIBLE) {
+            answer.setVisibility(View.GONE);
+            arrow.setImageResource(R.drawable.ic_keyboard_arrow_left_black_24dp);
+        } else {
+            answer.setVisibility(View.VISIBLE);
+            arrow.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
+        }
     }
 }

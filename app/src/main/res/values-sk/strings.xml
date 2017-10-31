@@ -219,4 +219,15 @@
     <string name="googleDrive_toast_syncInProgress">Synchronizujem&#8230;</string>
     <string name="googleDrive_youAccount_title">Váš Google účet pre túto aplikáciu:</string>
 
+    <!--faq-->
+    <string name="faq_long">Často kladené otázky</string>
+    <string name="faq_01_question">Spotreba se nepočíta</string>
+    <string name="faq_01_answer">Táto aplikácia používa plnú nádrž ako referenční bod. Vždy, keď natankujete plnú nádrž, spotreba sa prepočíta. Inak sa to totiž urobiť nedá.</string>
+    <string name="faq_02_question">Nenašiel som svoju menu ($)</string>
+    <string name="faq_02_answer">Tento problém je jednoduché vyriešiť. Kontaktujte nás pomocou sekcie \'O aplikácií\' a budeme radi keď budeme môcť doručiť update s podporou Vašej meny. Nebojte se nám napísať viac informácií o Vašej krajine a taktiež o predvolených jednotkách (míle za galón, litre za km, počet desatinných miest, cenu za liter, fotku Vašej čerpacej stanice)</string>
+    <string name="faq_03_question">Môžem pomocou Google Drive synchronizovať dáta medzi viacero aplikáciami FuelUp?</string>
+    <string name="faq_03_answer">Toto nie je pôvodný účel tejto aplikácie a zatiaľ túto funkciu nepodporujeme. Hlavným účelom Google Drive je záloha Vašich dát (napr. v prípade straty zariadenia). Keď si nastavíte účet Google aplikácia se pokúsi naimportovať Vaše predošlé vozidlá zo zálohy (ak existuje). Všetky následné zálohy prebiehajú automaticky, avšak iba jedným smerom (z Vášho zariadenia na Google Drive). Použítím jedného účtu na viacero zariadeniach by ste si tak prepisovali zálohu navzájom a dáta by boli nekonzistentné.</string>
+    <string name="faq_04_question">Nezvolil som nič pri importe a teraz som stratil zálohu.</string>
+    <string name="faq_04_answer">Nezúfajte. Google Drive ukladá históriu Vašich záloh. Vaše predošlé zálohy môžete nájsť po prihlásení do Google Drive na Vašom PC. Nájdite súbor \'FuelUp_backup\' a v ňom je Vaša záloha. Kliknite na \'Manage versions\' a navráťte tú, ktorú chcete.</string>
+
 </resources>
