@@ -109,15 +109,4 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         return singleton;
     }
 
-    public void toggleAnswer(View v) {
-        TextView answer = (TextView) ((LinearLayout) v).getChildAt(1);
-        ImageView arrow = (ImageView) ((LinearLayout)((LinearLayout) v).getChildAt(0)).getChildAt(1);
-        if (answer.getVisibility() == View.VISIBLE) {
-            answer.setVisibility(View.GONE);
-            arrow.setImageResource(R.drawable.ic_keyboard_arrow_left_black_24dp);
-        } else {
-            answer.setVisibility(View.VISIBLE);
-            arrow.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
-        }
-    }
 }

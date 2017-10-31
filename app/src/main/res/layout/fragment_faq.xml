@@ -1,187 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:textSize="@dimen/faq_question_size"
-            android:paddingTop="@dimen/faq_item_base_big_padding"
             android:paddingBottom="@dimen/faq_item_base_padding"
-            android:textColor="@color/colorPrimaryDark"
+            android:paddingTop="@dimen/faq_item_base_big_padding"
             android:text="@string/faq"
-            />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/faq_question_size" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:paddingBottom="@dimen/faq_item_base_big_padding"
-            android:text="@string/faq_long"
-            />
+            android:text="@string/faq_long" />
 
-        <LinearLayout
+        <sk.momosi.fuelup.view.FaqItemView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="toggleAnswer"
+            android:layout_marginBottom="@dimen/faq_item_base_big_margin"
             android:padding="@dimen/faq_item_base_padding"
-            android:layout_marginBottom="@dimen/faq_item_base_big_margin"
-            android:orientation="vertical">
+            app:answer="@string/faq_01_answer"
+            app:question="@string/faq_01_question" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/faq_question_size"
-                    android:textColor="@color/colorAppOrange"
-                    android:text="@string/faq_01_question"
-                    />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_keyboard_arrow_left_black_24dp"
-                    />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:textColor="@color/colorPrimaryDark"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/faq_item_base_padding"
-                android:visibility="gone"
-                android:text="@string/faq_01_answer"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <sk.momosi.fuelup.view.FaqItemView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/faq_item_base_big_margin"
-            android:onClick="toggleAnswer"
-            android:orientation="vertical"
-            android:padding="@dimen/faq_item_base_padding">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/faq_02_question"
-                    android:textColor="@color/colorAppOrange"
-                    android:textSize="@dimen/faq_question_size" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_keyboard_arrow_left_black_24dp" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/faq_item_base_padding"
-                android:text="@string/faq_02_answer"
-                android:textColor="@color/colorPrimaryDark"
-                android:visibility="gone" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="toggleAnswer"
             android:padding="@dimen/faq_item_base_padding"
-            android:layout_marginBottom="@dimen/faq_item_base_big_margin"
-            android:orientation="vertical">
+            app:answer="@string/faq_02_answer"
+            app:question="@string/faq_02_question" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/faq_question_size"
-                    android:textColor="@color/colorAppOrange"
-                    android:text="@string/faq_03_question"
-                    />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_keyboard_arrow_left_black_24dp"
-                    />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:textColor="@color/colorPrimaryDark"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/faq_item_base_padding"
-                android:visibility="gone"
-                android:text="@string/faq_03_answer"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <sk.momosi.fuelup.view.FaqItemView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="toggleAnswer"
-            android:padding="@dimen/faq_item_base_padding"
             android:layout_marginBottom="@dimen/faq_item_base_big_margin"
-            android:orientation="vertical">
+            android:padding="@dimen/faq_item_base_padding"
+            app:answer="@string/faq_03_answer"
+            app:question="@string/faq_03_question" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/faq_question_size"
-                    android:textColor="@color/colorAppOrange"
-                    android:text="@string/faq_04_question"
-                    />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_keyboard_arrow_left_black_24dp"
-                    />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:textColor="@color/colorPrimaryDark"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/faq_item_base_padding"
-                android:visibility="gone"
-                android:text="@string/faq_04_answer"
-                />
-
-        </LinearLayout>
+        <sk.momosi.fuelup.view.FaqItemView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/faq_item_base_big_margin"
+            android:padding="@dimen/faq_item_base_padding"
+            app:answer="@string/faq_04_answer"
+            app:question="@string/faq_04_question" />
 
     </LinearLayout>
 
