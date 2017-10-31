@@ -31,7 +31,8 @@ public class CheckPreviousAppInstalledTask extends GoogleDriveAbstractAsyncTask<
 
     private JSONObject checkIfPreviousVersionsHaveBeenUsed() throws IOException {
 
-        String backupFileId = DriveBackupFileUtil.getBackupFileId(mService);
+        String backupFolderId = DriveBackupFileUtil.getBackupFolderId(mService);
+        String backupFileId = DriveBackupFileUtil.getBackupFileId(mService, backupFolderId);
         if (backupFileId == null) {
             return null;
         }

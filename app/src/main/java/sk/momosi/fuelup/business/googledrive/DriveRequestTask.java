@@ -39,7 +39,7 @@ public class DriveRequestTask extends GoogleDriveAbstractAsyncTask<Void, Void, S
     private String getDataFromApi() throws IOException {
         // Get a list of up to 10 files.
 
-        String backupFileId = DriveBackupFileUtil.getBackupFileId(mService);
+        String backupFileId = DriveBackupFileUtil.getBackupFolderId(mService);
         if (backupFileId == null) {
             throw new IOException("Cannot find your previous Backup.");
         }

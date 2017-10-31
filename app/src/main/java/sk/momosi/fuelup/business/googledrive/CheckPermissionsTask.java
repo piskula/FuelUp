@@ -1,6 +1,10 @@
 package sk.momosi.fuelup.business.googledrive;
 
+import android.util.Log;
+
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.FileList;
 
 import java.io.IOException;
@@ -29,14 +33,9 @@ public class CheckPermissionsTask extends GoogleDriveAbstractAsyncTask<Void, Voi
     }
 
     private Boolean hasPermissions() throws IOException {
-        // try to get file to check permissions
-        List<String> fileInfo = new ArrayList<String>();
-        FileList result = mService.files().list()
-                .setSpaces(DriveBackupFileUtil.BACKUP_DB_FOLDER)
-                .setPageSize(1)
-                .setFields("nextPageToken, files(id, name)")
-                .execute();
-        return result.getFiles() != null;
+        // try to get folderId to check permissions
+        String folderId = DriveBackupFileUtil.getBackupFolderId(mService);
+        return true;
     }
 
     @Override

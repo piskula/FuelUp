@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.BaseColumns;
 import android.util.Log;
 
 import com.google.android.gms.iid.InstanceID;
@@ -134,7 +135,8 @@ public class JsonUtil {
                 for (int i = 0; i < cursor.getColumnCount(); i++) {
                     if (cursor.getColumnName(i) != null
                             && !cursor.getColumnName(i).equals(ExpenseEntry.COLUMN_VEHICLE)
-                            && !cursor.getColumnName(i).equals(FillUpEntry.COLUMN_VEHICLE)) {
+                            && !cursor.getColumnName(i).equals(FillUpEntry.COLUMN_VEHICLE)
+                            && !cursor.getColumnName(i).equals(BaseColumns._ID)) {
                         try {
                             row.put(cursor.getColumnName(i), cursor.getString(i));
                         } catch (Exception e) {
