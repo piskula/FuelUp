@@ -229,5 +229,7 @@
     <string name="faq_03_answer">Toto nie je pôvodný účel tejto aplikácie a zatiaľ túto funkciu nepodporujeme. Hlavným účelom Google Drive je záloha Vašich dát (napr. v prípade straty zariadenia). Keď si nastavíte účet Google aplikácia se pokúsi naimportovať Vaše predošlé vozidlá zo zálohy (ak existuje). Všetky následné zálohy prebiehajú automaticky, avšak iba jedným smerom (z Vášho zariadenia na Google Drive). Použítím jedného účtu na viacero zariadeniach by ste si tak prepisovali zálohu navzájom a dáta by boli nekonzistentné.</string>
     <string name="faq_04_question">Nezvolil som nič pri importe a teraz som stratil zálohu.</string>
     <string name="faq_04_answer">Nezúfajte. Google Drive ukladá históriu Vašich záloh. Vaše predošlé zálohy môžete nájsť po prihlásení do Google Drive na Vašom PC. Nájdite súbor \'FuelUp_backup\' a v ňom je Vaša záloha. Kliknite na \'Manage versions\' a navráťte tú, ktorú chcete.</string>
+    <string name="faq_05_question">Prečo potrebuje FuelUp všetky práva k môjmu Google Drive?</string>
+    <string name="faq_05_answer">Je to jediná možnosť ako podporovať verzovanie Vašich záloh. Môžete vidieť všetky dáta a ak omylom niečo zmažete alebo zmeníte, môžete zmeny vrátiť späť jednoducho pomocou webovej aplikácie Google Drive. Pri prísnejších pravidlách to nie je možné. Aplikácia FuelUp pracuje výhradne so súborom \'FuelUp_backup\', k Vašim ostatným súborom nepristupuje. Nepoužívajte tento súbor pre iné účely a nevytvárajte súbory s rovnakým názvom, môže to spôsobiť neočakávané správanie aplikácie.</string>
 
 </resources>

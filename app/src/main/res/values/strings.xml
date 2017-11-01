@@ -229,6 +229,8 @@
     <string name="faq_03_answer">This is not supported feature (for now). Main purpose of Google Drive is to backup your data (e.g. in case of losing your phone). When you first set up your account, application will ask you, if you want to import your old backup (if exists). Then all following backups are made one-way, e.g. from your phone to Google Drive. Using this app on several devices may cause that each app rewrites data of other app.</string>
     <string name="faq_04_question">I have chosen to import nothing and now I lost my backup.</string>
     <string name="faq_04_answer">Do not be afraid. Google Drive keeps history of your backup. You can find your previous backups when you log into Google Drive on your computer. Go to \'FuelUp_backup\' folder and you will see your backup file. Click on \'Manage versions\' and restore the last one, which have been uploaded before import (or simply choose one you want).</string>
+    <string name="faq_05_question">Why FuelUp needs full permissions to Google Drive?</string>
+    <string name="faq_05_answer">This is only way how to achieve versioning of your backups. With this approach you can see all data and if you delete or change something by mistake, you can bring it back directly through Google Drive web application. With less permissions this is not possible. FuelUp works purely with \'FuelUp_backup\' folder, it does not access your other data. Do not use that folder for other purposes and do not create folders with the same name, it may cause unexpected behaviour of your application.</string>
 
     <!--without translation-->
     <string name="authors">&#169; Ondrej Oravčok, Martin Styk</string>
