@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import sk.momosi.fuelup.data.FuelUpContract;
@@ -36,6 +37,7 @@ public class JsonUtil {
     private static final String LOG_TAG = JsonUtil.class.getSimpleName();
     private static final String JSON_VEHICLE = "vehicle";
     private static final String JSON_DEVICE_APP_INSTANCE = "device";
+    private static final String JSON_DATE = "date";
 
     public static String getWholeDbAsJson(final List<Long> vehicleIds, final Context context) {
 
@@ -52,6 +54,7 @@ public class JsonUtil {
 
                 vehicles.put(vehicle);
             }
+            result.put(JSON_DATE, new Date());
             result.put(JSON_DEVICE_APP_INSTANCE, InstanceID.getInstance(context).getId());
             result.put(VehicleEntry.TABLE_NAME, vehicles);
             result.put(VehicleTypeEntry.TABLE_NAME, getVehicleTypes(context));
