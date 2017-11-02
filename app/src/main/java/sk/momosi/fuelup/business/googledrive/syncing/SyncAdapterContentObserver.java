@@ -29,10 +29,12 @@ public class SyncAdapterContentObserver extends ContentObserver {
 
     @Override
     public void onChange(boolean selfChange, Uri uri) {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         ContentResolver.requestSync(
                 AccountService.getAccount(),
                 FuelUpContract.CONTENT_AUTHORITY,
-                new Bundle());
+                bundle);
         Log.i(LOG_TAG, "sync adapter has been notified");
     }
 }
