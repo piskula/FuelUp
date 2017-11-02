@@ -227,10 +227,14 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
                 getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED);
 
         if (isUploadAvailable) {
-            DriveSyncingUtils.requestImmediateSync();
-            Toast.makeText(getContext(),
-                    R.string.googleDrive_toast_syncInProgress,
-                    Toast.LENGTH_SHORT).show();
+            if (!ConnectivityUtils.isDeviceOnline(getContext())) {
+                Toast.makeText(getContext(), R.string.googleDrive_mustBeOnline, Toast.LENGTH_SHORT).show();
+            } else {
+                DriveSyncingUtils.requestImmediateSync();
+                Toast.makeText(getContext(),
+                        R.string.googleDrive_toast_syncInProgress,
+                        Toast.LENGTH_SHORT).show();
+            }
         } else {
             mOutputText.setTextColor(ContextCompat.getColor(getContext(), RED_WARN_COLOR));
             mOutputText.setText(R.string.googleDrive_err_backup_not_available);

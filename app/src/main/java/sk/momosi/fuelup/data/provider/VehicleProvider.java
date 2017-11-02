@@ -183,9 +183,11 @@ public class VehicleProvider extends ContentProvider {
                 return deleteVehicleWithAllData(db, uri);
             case EXPENSE_ID:
                 String[] expenseId = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-                return db.delete(ExpenseEntry.TABLE_NAME, ExpenseEntry._ID + "=?", expenseId);
+                int result = db.delete(ExpenseEntry.TABLE_NAME, ExpenseEntry._ID + "=?", expenseId);
+                getContext().getContentResolver().notifyChange(uri, null);
+                return result;
             case FILLUP_ID:
-                return deleteFillUpInTransaction(ContentUris.parseId(uri), null);
+                return deleteFillUpInTransaction(uri, null);
             default:
                 throw new IllegalArgumentException("Delete is not supported for " + uri);
         }
@@ -274,7 +276,7 @@ public class VehicleProvider extends ContentProvider {
             if (!recreatedValues.containsKey(FillUpEntry.COLUMN_INFO))
                 recreatedValues.put(FillUpEntry.COLUMN_INFO, fillUp.getInfo());
 
-            deleteFillUpInTransaction(id, db);
+            deleteFillUpInTransaction(uri, db);
             validateFillUpAndInsertInTransaction(uri, recreatedValues, db);
 
             db.setTransactionSuccessful();
@@ -893,7 +895,8 @@ public class VehicleProvider extends ContentProvider {
         return ContentUris.withAppendedId(uri, id);
     }
 
-    private int deleteFillUpInTransaction(final Long fillUpId, final SQLiteDatabase transaction) {
+    private int deleteFillUpInTransaction(final Uri uri, final SQLiteDatabase transaction) {
+        long fillUpId = ContentUris.parseId(uri);
         FillUp fillUp = FillUpService.getFillUpById(fillUpId, getContext());
         if (fillUp == null) {
             Log.e(LOG_TAG, "Cannot remove not existing fillUp (id=" + fillUpId + ")");
@@ -983,6 +986,7 @@ public class VehicleProvider extends ContentProvider {
                 FillUpEntry._ID + "=?",
                 new String[] { String.valueOf(fillUpId) }
         );
+        getContext().getContentResolver().notifyChange(uri, null);
 
         // and update all not full until it including it
         for (Long id : ids) {
@@ -991,6 +995,7 @@ public class VehicleProvider extends ContentProvider {
                     contentValuesUpdate,
                     FillUpEntry._ID + "=?",
                     new String[] { String.valueOf(id) });
+            getContext().getContentResolver().notifyChange(ContentUris.withAppendedId(FillUpEntry.CONTENT_URI, id), null);
         }
 
         if (!isOutsideTransaction) {

@@ -6,9 +6,7 @@ import android.content.ContentProviderClient;
 import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
-import android.support.v4.content.MimeTypeFilter;
 import android.util.Log;
-import android.webkit.MimeTypeMap;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.FileContent;

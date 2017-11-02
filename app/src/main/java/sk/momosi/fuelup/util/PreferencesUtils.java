@@ -19,7 +19,6 @@ public class PreferencesUtils {
         return getSharedPreferences(context).getString(key, null);
     }
 
-    @Nullable
     public static boolean getBoolean(@NonNull Context context, @NonNull String key) {
         return getSharedPreferences(context).getBoolean(key, false);
     }
