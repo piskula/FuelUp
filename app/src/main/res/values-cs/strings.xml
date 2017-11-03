@@ -214,6 +214,7 @@
     <string name="googleDrive_startImport_btn">Začít import</string>
     <string name="googleDrive_sync_upToDate">Zálohování je aktivní a záloha je aktuální.</string>
     <string name="googleDrive_syncing_NOT_active">Zálohování NENÍ aktivní</string>
+    <string name="googleDrive_syncingActive_backupDiscarded">Automatická záloha zlyhala. Prosím, zálohujte teď (přes menu).</string>
     <string name="googleDrive_syncingActive_pendingUploads">Zálohování je aktivní, ale něktorá data čekají na upload.</string>
     <string name="googleDrive_thereIsPreviousVersion">Na Vašem účtu Google Drive již existuje nějaká záloha.</string>
     <string name="googleDrive_toast_syncInProgress">Synchronizuji&#8230;</string>
@@ -231,5 +232,7 @@
     <string name="faq_04_answer">Nezoufejte. Google Drive ukládá historii Vašich záloh. Vaše předešlý zálohy můžete najít po přihlášení do Google Drive na Vaším PC. Najděte \'FuelUp_backup\' složku a v ní je Vaše záloha. Klikněte na \'Manage versions\' a navraťte tu, kterou chcete.</string>
     <string name="faq_05_question">Proč potřebuje FuelUp všechna práva k mému Google Drive?</string>
     <string name="faq_05_answer">Je to jediná možnost jak docílit verzování Vašich záloh. Můžete videť všechna data a pokud omylem něco smažete nebo změníte, můžete změny vrátit zpět jednoduše pomocí webové aplikace Google Drive. Při přísnějších pravidlech to není možné. Aplikace FuelUp pracuje výhradně se složkou \'FuelUp_backup\', k Vašim ostatním souborům nepřistupuje. Nepoužívejte tuhle složku pro jiné účely a nevytvářejte složky s rovnakým názvem, může to spôsobit neočekávané chování aplikace.</string>
+    <string name="faq_06_question">Moje data se automaticky nezálohují</string>
+    <string name="faq_06_answer">Pokud po nějaké změně údajů delší dobu nejste na internetu, některá zařízení nezavolají Sync Adapter ačkoli ho aplikace naplánuje. Testujte si průběžně, zda je vaše záloha aktuální stlačením \'Test sync\' když budete na internetu. Pokud Vaše data čekají na upload, znamená to že by co chvíli měly být zálohovány (několik minut). Můžete vynutit zálohování pomocí \'Zálohovat teď\' abyste si byli jisti že záloha proběhne (pokud jste na internetu). Například na některých Xiaomi je známo že musíte povolit Auto Start permissions (pro FuelUp v Security aplikaci) aby zálohování začalo správně pracovat.</string>
 
 </resources>
