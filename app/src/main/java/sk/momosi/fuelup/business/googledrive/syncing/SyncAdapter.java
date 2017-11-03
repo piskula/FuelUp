@@ -158,8 +158,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             }
         }
 
+        PreferencesUtils.setLastSync(getContext());
         // if this is first backup, set up flag, which means upload is now automatic
-        PreferencesUtils.setBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, true);
+        if (!PreferencesUtils.getBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED)) {
+            PreferencesUtils.setBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, true);
+        }
 
         Log.i(LOG_TAG, "Syncing DB ended successfully.");
     }

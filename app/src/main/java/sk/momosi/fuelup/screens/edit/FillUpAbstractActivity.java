@@ -127,7 +127,7 @@ public abstract class FillUpAbstractActivity extends AppCompatActivity implement
     public void onResume() {
         super.onResume();
         if (mObserver == null)
-            mObserver = new SyncAdapterContentObserver(new Handler());
+            mObserver = new SyncAdapterContentObserver(new Handler(), getApplicationContext());
         getContentResolver().registerContentObserver(FuelUpContract.FillUpEntry.CONTENT_URI, true, mObserver);
     }
 

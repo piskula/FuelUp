@@ -38,7 +38,6 @@ import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.business.googledrive.CheckPermissionsTask;
 import sk.momosi.fuelup.business.googledrive.CheckPreviousAppInstalledTask;
 import sk.momosi.fuelup.business.googledrive.DriveBackupFileUtil;
-import sk.momosi.fuelup.business.googledrive.DriveRequestTask;
 import sk.momosi.fuelup.business.googledrive.ImportVehicleJsonException;
 import sk.momosi.fuelup.business.googledrive.ImportVehiclesTask;
 import sk.momosi.fuelup.business.googledrive.JsonUtil;
@@ -181,8 +180,13 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     private void testSync() {
         if (!DriveSyncingUtils.isSyncable() || mCredential.getSelectedAccount() == null)
             Toast.makeText(getContext(), R.string.googleDrive_syncing_NOT_active, Toast.LENGTH_SHORT).show();
-        else if (DriveSyncingUtils.isSyncPending())
-            Toast.makeText(getContext(), R.string.googleDrive_syncingActive_pendingUploads, Toast.LENGTH_SHORT).show();
+        else if (PreferencesUtils.getLastSync(getContext()) < PreferencesUtils.getLastChange(getContext()))
+            if (DriveSyncingUtils.isSyncPending())
+                Toast.makeText(getContext(), R.string.googleDrive_syncingActive_pendingUploads, Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(getContext(), R.string.googleDrive_syncingActive_backupDiscarded, Toast.LENGTH_SHORT).show();
+        else if (DriveSyncingUtils.isSyncPending()) // TODO remove these 2 lines before release
+            Toast.makeText(getContext(), "Syncing is active, backup is up to date, but SyncAdapter is pending.", Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(getContext(), R.string.googleDrive_sync_upToDate, Toast.LENGTH_SHORT).show();
     }

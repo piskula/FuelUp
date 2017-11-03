@@ -6,7 +6,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,7 +33,6 @@ public class DriveSyncingUtils {
         }
 
         ContentResolver.setIsSyncable(genericAccount, FuelUpContract.CONTENT_AUTHORITY, 1);
-        ContentResolver.setSyncAutomatically(genericAccount, FuelUpContract.CONTENT_AUTHORITY, true);
     }
 
     public static void disableSync(Context context) {
@@ -43,7 +41,6 @@ public class DriveSyncingUtils {
 
         Account genericAccount = AccountService.getAccount();
         ContentResolver.setIsSyncable(genericAccount, FuelUpContract.CONTENT_AUTHORITY, 0);
-        ContentResolver.setSyncAutomatically(genericAccount, FuelUpContract.CONTENT_AUTHORITY, false);
         Log.i(LOG_TAG, "Syncing is now disabled.");
     }
 
