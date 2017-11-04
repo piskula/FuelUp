@@ -66,6 +66,14 @@
             app:answer="@string/faq_05_answer"
             app:question="@string/faq_05_question" />
 
+        <sk.momosi.fuelup.view.FaqItemView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/faq_item_base_big_margin"
+            android:padding="@dimen/faq_item_base_padding"
+            app:answer="@string/faq_06_answer"
+            app:question="@string/faq_06_question" />
+
     </LinearLayout>
 
 </ScrollView>
