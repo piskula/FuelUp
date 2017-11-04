@@ -185,8 +185,8 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
                 Toast.makeText(getContext(), R.string.googleDrive_syncingActive_pendingUploads, Toast.LENGTH_SHORT).show();
             else
                 Toast.makeText(getContext(), R.string.googleDrive_syncingActive_backupDiscarded, Toast.LENGTH_SHORT).show();
-        else if (DriveSyncingUtils.isSyncPending()) // TODO remove these 2 lines before release
-            Toast.makeText(getContext(), "Syncing is active, backup is up to date, but SyncAdapter is pending.", Toast.LENGTH_SHORT).show();
+//        else if (DriveSyncingUtils.isSyncPending()) // TODO remove these 2 lines before release
+//            Toast.makeText(getContext(), "Syncing is active, backup is up to date, but SyncAdapter is pending.", Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(getContext(), R.string.googleDrive_sync_upToDate, Toast.LENGTH_SHORT).show();
     }
