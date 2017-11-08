@@ -17,8 +17,8 @@ import java.util.List;
  */
 public class GenericFileProvider extends FileProvider {
 
-    public static final String AUTHORITY = "sk.momosi.fuelup.file.provider";
-    public static final String EXTERNAL_PATH = "external_files";
+    private static final String AUTHORITY = "sk.momosi.fuelup.file.provider";
+    private static final String EXTERNAL_PATH = "external_files";
 
     /**
      * Grants URI permissions to all applications which can respond to given intent

@@ -29,7 +29,7 @@ import sk.momosi.fuelup.util.BigDecimalFormatter;
  */
 public class CostsPerMonthChartDataLoader extends FuelUpAbstractAsyncLoader<ColumnChartData> {
 
-    private static final String TAG = CostsPerMonthChartDataLoader.class.getSimpleName();
+    private static final String LOG_TAG = CostsPerMonthChartDataLoader.class.getSimpleName();
     public static final int ID = 9;
 
     private final long vehicleId;

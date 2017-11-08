@@ -32,7 +32,7 @@ public class ConsumptionChartDataLoader extends FuelUpAbstractAsyncLoader<Map<St
     public static final String CHART_DATA = "chartData";
     public static final String PREVIEW_DATA = "previewData";
 
-    private static final String TAG = ConsumptionChartDataLoader.class.getSimpleName();
+    private static final String LOG_TAG = ConsumptionChartDataLoader.class.getSimpleName();
     public static final int ID = 6;
 
     private final FillUpService fillUpService;

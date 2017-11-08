@@ -65,10 +65,10 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     private static final int RED_WARN_COLOR = R.color.colorWarningRed;
     private static final int GREEN_COLOR = R.color.colorGreenDark;
 
-    static final int REQUEST_ACCOUNT_PICKER = 1000;
-    static final int REQUEST_AUTHORIZATION = 1001;
-    static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
-    static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
+    private static final int REQUEST_ACCOUNT_PICKER = 1000;
+    private static final int REQUEST_AUTHORIZATION = 1001;
+    private static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
+    private static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
     private ProgressDialog mProgress;
     private TextView mOutputText;
@@ -107,7 +107,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 //        mProgress.setCancelable(false);
         mProgress.setMessage("Calling Drive API ...");
 
-        String accountName = PreferencesUtils.getString(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_NAME);
+        String accountName = PreferencesUtils.getAccountName(getContext());
 
         if (!ConnectivityUtils.isGooglePlayServicesAvailable(getContext())) {
             acquireGooglePlayServices();
@@ -210,7 +210,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     }
 
     private void assignAccount(String googleDriveAccount) {
-        PreferencesUtils.setString(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_NAME, googleDriveAccount);
+        PreferencesUtils.setAccountName(getContext(), googleDriveAccount);
         PreferencesUtils.remove(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED);
 
         mAccountName.setText(googleDriveAccount);
@@ -227,8 +227,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     */
 
     private void uploadFileThroughApi() {
-        boolean isUploadAvailable = PreferencesUtils.getBoolean(
-                getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED);
+        boolean isUploadAvailable = PreferencesUtils.hasBeenImportDone(getContext());
 
         if (isUploadAvailable) {
             if (ConnectivityUtils.isNotDeviceOnline(getContext())) {
@@ -344,7 +343,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
      * @param connectionStatusCode code describing the presence (or lack of)
      *                             Google Play Services on this device.
      */
-    void showGooglePlayServicesAvailabilityErrorDialog(final int connectionStatusCode) {
+    private void showGooglePlayServicesAvailabilityErrorDialog(final int connectionStatusCode) {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         Dialog dialog = apiAvailability.getErrorDialog(
                 getActivity(),
@@ -369,7 +368,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         mOutputText.setTextColor(ContextCompat.getColor(getContext(), GREEN_COLOR));
         mOutputText.setText(R.string.googleDrive_setAndSyncing);
         DriveSyncingUtils.requestImmediateSync();
-        PreferencesUtils.setBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, true);
+        PreferencesUtils.setHasBeenImportDone(getContext(), true);
     }
 
     /*
@@ -412,7 +411,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
             // downloadBtn.setEnabled(true);
             mSyncStatus.setText("");
 
-            if (!PreferencesUtils.getBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED)) {
+            if (!PreferencesUtils.hasBeenImportDone(getContext())) {
                 mOutputText.setText(R.string.googleDrive_permissionsOK_checkingPrevious);
                 new CheckPreviousAppInstalledTask(mCredential, this).execute();
             }
@@ -494,7 +493,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
     @Override
     public void onImportVehiclesTaskPostExecute(Integer output) {
-        PreferencesUtils.setBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, true);
+        PreferencesUtils.setHasBeenImportDone(getContext(), true);
         mOutputText.setTextColor(ContextCompat.getColor(getContext(), GREEN_COLOR));
         mOutputText.setText(R.string.googleDrive_imported_setAndSyncing);
         initializeSyncing();

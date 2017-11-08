@@ -20,8 +20,8 @@ import sk.momosi.fuelup.entity.util.CurrencyUtil;
  */
 public class SpinnerCurrencyAdapter extends BaseAdapter implements SpinnerAdapter {
 
-    private Activity activity;
-    private List<Currency> currencies;
+    private final Activity activity;
+    private final List<Currency> currencies;
 
     public SpinnerCurrencyAdapter(Activity activity) {
         this.activity = activity;

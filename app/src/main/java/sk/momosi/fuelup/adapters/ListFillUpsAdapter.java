@@ -9,15 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.data.FuelUpContract.FillUpEntry;
-import sk.momosi.fuelup.entity.FillUp;
 import sk.momosi.fuelup.entity.Vehicle;
 import sk.momosi.fuelup.entity.enums.DistanceUnit;
 import sk.momosi.fuelup.entity.util.CurrencyUtil;
@@ -31,13 +27,13 @@ import sk.momosi.fuelup.screens.MainActivity;
  */
 public class ListFillUpsAdapter extends RecyclerViewCursorAdapter<ListFillUpsAdapter.FillUpViewHolder> {
 
-    private Callback mCallback;
-    private Vehicle mVehicle;
+    private final Callback mCallback;
+    private final Vehicle mVehicle;
 
-    private DecimalFormat consumptionFormat;
+    private final DecimalFormat consumptionFormat;
 
     public ListFillUpsAdapter(Callback callback, Vehicle vehicle) {
-        super(null);
+        super();
 
         this.mVehicle = vehicle;
         this.mCallback = callback;
@@ -108,17 +104,17 @@ public class ListFillUpsAdapter extends RecyclerViewCursorAdapter<ListFillUpsAda
 
 
     class FillUpViewHolder extends RecyclerView.ViewHolder {
-        TextView txtDistanceFromLastFillUp;
-        TextView txtDate;
-        TextView txtFuelVolume;
-        TextView txtFuelVolumeSymbol;
-        TextView txtPriceTotal;
-        TextView txtPricePerLitre;
-        TextView txtConsumption;
-        TextView txtConsumptionUnit;
-        TextView txtDistanceUnit;
-        TextView txtPricePerLitreSymbol;
-        ImageView imgFullnessFillUpSymbol;
+        final TextView txtDistanceFromLastFillUp;
+        final TextView txtDate;
+        final TextView txtFuelVolume;
+        final TextView txtFuelVolumeSymbol;
+        final TextView txtPriceTotal;
+        final TextView txtPricePerLitre;
+        final TextView txtConsumption;
+        final TextView txtConsumptionUnit;
+        final TextView txtDistanceUnit;
+        final TextView txtPricePerLitreSymbol;
+        final ImageView imgFullnessFillUpSymbol;
 
         FillUpViewHolder(View v) {
             super(v);

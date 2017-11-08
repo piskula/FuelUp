@@ -1,16 +1,9 @@
 package sk.momosi.fuelup.business.googledrive;
 
-import android.util.Log;
-
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.DriveScopes;
-import com.google.api.services.drive.model.FileList;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CheckPermissionsTask extends GoogleDriveAbstractAsyncTask<Void, Void, Boolean> {
 

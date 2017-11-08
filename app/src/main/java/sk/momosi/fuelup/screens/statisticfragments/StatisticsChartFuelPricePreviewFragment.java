@@ -21,7 +21,6 @@ import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.LineChartView;
 import lecho.lib.hellocharts.view.PreviewLineChartView;
-import sk.momosi.fuelup.business.FillUpService;
 import sk.momosi.fuelup.databinding.FragmentStatisticsChartConsumptionPreviewBinding;
 import sk.momosi.fuelup.entity.FillUp;
 import sk.momosi.fuelup.entity.Vehicle;

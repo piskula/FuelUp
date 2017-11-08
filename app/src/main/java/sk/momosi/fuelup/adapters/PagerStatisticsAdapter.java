@@ -17,7 +17,7 @@ import sk.momosi.fuelup.screens.statisticfragments.StatisticsChartFuelPricePrevi
  */
 public class PagerStatisticsAdapter extends FragmentStatePagerAdapter {
 
-    private Vehicle vehicle;
+    private final Vehicle vehicle;
 
     public PagerStatisticsAdapter(FragmentManager fm, Vehicle vehicle) {
         super(fm);

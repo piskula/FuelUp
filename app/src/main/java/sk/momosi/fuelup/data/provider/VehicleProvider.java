@@ -36,9 +36,9 @@ import sk.momosi.fuelup.entity.util.VolumeUtil;
  */
 public class VehicleProvider extends ContentProvider {
 
-    public static final String LOG_TAG = VehicleProvider.class.getSimpleName();
+    private static final String LOG_TAG = VehicleProvider.class.getSimpleName();
 
-    public static final double ERROR = 0.005d;
+    private static final double ERROR = 0.005d;
 
     private static final int VEHICLES = 100;
     private static final int VEHICLE_ID = 101;

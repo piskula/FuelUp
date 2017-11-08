@@ -12,8 +12,8 @@ public class ImportVehicleJsonException extends JSONException {
     private final JSONException e;
     private final JSONObject json;
 
-    public ImportVehicleJsonException(final String s, final JSONException e, final JSONObject json) {
-        super(s);
+    public ImportVehicleJsonException(final JSONException e, final JSONObject json) {
+        super("JSONException occurred when importing vehicle");
         this.e = e;
         this.json = json;
     }

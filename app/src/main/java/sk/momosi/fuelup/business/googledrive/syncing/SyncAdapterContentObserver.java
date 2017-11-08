@@ -19,7 +19,7 @@ import sk.momosi.fuelup.util.PreferencesUtils;
 public class SyncAdapterContentObserver extends ContentObserver {
 
     private static final String LOG_TAG = SyncAdapterContentObserver.class.getSimpleName();
-    private Context context;
+    private final Context context;
 
     public SyncAdapterContentObserver(Handler handler, Context context) {
         super(handler);

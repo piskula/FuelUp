@@ -6,8 +6,6 @@ import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -52,7 +50,7 @@ public abstract class FillUpAbstractActivity extends AppCompatActivity implement
 
     protected SwitchPrice priceMode = SwitchPrice.perVolume;
 
-    protected Calendar fillUpDate;
+    private Calendar fillUpDate;
 
     protected Vehicle mVehicle;
 

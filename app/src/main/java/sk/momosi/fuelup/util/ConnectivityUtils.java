@@ -8,9 +8,9 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 /**
- * Created by Martin Styk on 14.10.2017.
+ * @author Martin Styk
+ * @version 14.10.2017
  */
-
 public class ConnectivityUtils {
 
     /**

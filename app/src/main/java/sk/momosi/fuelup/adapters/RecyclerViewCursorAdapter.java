@@ -23,10 +23,10 @@ public abstract class RecyclerViewCursorAdapter<VH extends RecyclerView.ViewHold
     private int mRowIDColumn;
 
 
-    public RecyclerViewCursorAdapter(Cursor cursor)
+    public RecyclerViewCursorAdapter()
     {
         setHasStableIds(true);
-        swapCursor(cursor);
+        swapCursor(null);
     }
 
     public abstract VH onCreateViewHolder(ViewGroup parent, int viewType);
@@ -70,10 +70,10 @@ public abstract class RecyclerViewCursorAdapter<VH extends RecyclerView.ViewHold
         return mCursor;
     }
 
-    public Cursor swapCursor(Cursor newCursor)
+    public void swapCursor(Cursor newCursor)
     {
         if(newCursor == mCursor){
-            return null;
+            return;
         }
         Cursor oldCursor = mCursor;
         if(oldCursor != null){
@@ -95,11 +95,10 @@ public abstract class RecyclerViewCursorAdapter<VH extends RecyclerView.ViewHold
             mDataValid = false;
             notifyDataSetChanged();
         }
-        return oldCursor;
     }
 
 
-    private DataSetObserver mDataSetObserver = new DataSetObserver()
+    private final DataSetObserver mDataSetObserver = new DataSetObserver()
     {
         @Override
         public void onChanged()

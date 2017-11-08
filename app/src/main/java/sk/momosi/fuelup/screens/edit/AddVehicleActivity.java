@@ -1,7 +1,6 @@
 package sk.momosi.fuelup.screens.edit;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.design.widget.Snackbar;

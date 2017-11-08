@@ -4,9 +4,9 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 /**
- * Created by Martin Styk on 10.07.2017.
+ * @author Martin Styk
+ * @version 10.7.2017
  */
-
 public class BigDecimalFormatter {
     private static DecimalFormat format;
 
@@ -20,11 +20,4 @@ public class BigDecimalFormatter {
         return format;
     }
 
-    public static DecimalFormat getFormat(int minFractions, int maxFractions) {
-        DecimalFormat customFormat = new DecimalFormat();
-        customFormat.setMaximumFractionDigits(maxFractions);
-        customFormat.setMinimumFractionDigits(minFractions);
-
-        return customFormat;
-    }
 }

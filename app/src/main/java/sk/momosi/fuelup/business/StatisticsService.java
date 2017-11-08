@@ -26,7 +26,7 @@ public class StatisticsService {
     private static final String LOG_TAG = StatisticsService.class.getSimpleName();
     private static final BigDecimal HUNDRED = BigDecimal.valueOf(100);
 
-    private DatabaseHelper dbHelper;
+    private final DatabaseHelper dbHelper;
     private final long mVehicleId;
     private final Vehicle vehicle;
 
@@ -409,7 +409,7 @@ public class StatisticsService {
         MONTH(30),
         YEAR(365);
 
-        private int days;
+        private final int days;
 
         TimePeriod(int days) {
             this.days = days;

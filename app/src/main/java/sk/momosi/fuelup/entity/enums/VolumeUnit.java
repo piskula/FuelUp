@@ -7,7 +7,7 @@ package sk.momosi.fuelup.entity.enums;
 public enum VolumeUnit {
     LITRE("\u2113"), GALLON_US("Gal"), GALLON_UK("Gal");
 
-    private String value;
+    private final String value;
 
     VolumeUnit(String value) {
         this.value = value;

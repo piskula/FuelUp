@@ -24,7 +24,7 @@ public class GoogleDriveSyncService extends Service {
         Log.i(TAG, "Service created");
         synchronized (sSyncAdapterLock) {
             if (sSyncAdapter == null) {
-                sSyncAdapter = new SyncAdapter(getApplicationContext(), true);
+                sSyncAdapter = new SyncAdapter(getApplicationContext());
             }
         }
     }

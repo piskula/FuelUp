@@ -27,7 +27,7 @@ import sk.momosi.fuelup.screens.detailfragments.FillUpsListFragment;
 
 public class AddFillUpActivity extends FillUpAbstractActivity implements CompoundButton.OnCheckedChangeListener {
 
-    public static final String TAG = AddFillUpActivity.class.getSimpleName();
+    private static final String TAG = AddFillUpActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

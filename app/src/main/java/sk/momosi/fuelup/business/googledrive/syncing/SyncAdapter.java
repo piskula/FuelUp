@@ -31,10 +31,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     private static final String LOG_TAG = SyncAdapter.class.getSimpleName();
 
-    private GoogleAccountCredential mCredential;
+    private final GoogleAccountCredential mCredential;
 
-    public SyncAdapter(Context context, boolean autoInitialize) {
-        super(context, autoInitialize);
+    public SyncAdapter(Context context) {
+        super(context, true);
         mCredential = DriveBackupFileUtil.generateCredential(context);
     }
 
@@ -76,7 +76,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             return;
         }
 
-        String accountName = PreferencesUtils.getString(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_NAME);
+        String accountName = PreferencesUtils.getAccountName(getContext());
         if (accountName == null) {
             Log.e(LOG_TAG, "No account set for Google Drive.");
             syncResult.stats.numAuthExceptions++;
@@ -160,8 +160,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         PreferencesUtils.setLastSync(getContext());
         // if this is first backup, set up flag, which means upload is now automatic
-        if (!PreferencesUtils.getBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED)) {
-            PreferencesUtils.setBoolean(getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, true);
+        if (!PreferencesUtils.hasBeenImportDone(getContext())) {
+            PreferencesUtils.setHasBeenImportDone(getContext(), true);
         }
 
         Log.i(LOG_TAG, "Syncing DB ended successfully.");

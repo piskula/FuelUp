@@ -17,8 +17,8 @@ import sk.momosi.fuelup.entity.FillUp;
  */
 public class FillUpInfoDialog extends DialogFragment {
 
-    private static final String TAG = FillUpInfoDialog.class.getSimpleName();
-    public static final String FILL_UP = "fillUp";
+    private static final String LOG_TAG = FillUpInfoDialog.class.getSimpleName();
+    private static final String FILL_UP = "fillUp";
 
     public static FillUpInfoDialog newInstance(FillUp fillUp) {
         FillUpInfoDialog frag = new FillUpInfoDialog();

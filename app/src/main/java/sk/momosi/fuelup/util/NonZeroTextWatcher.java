@@ -5,12 +5,12 @@ import android.text.TextWatcher;
 import android.widget.EditText;
 
 /**
- * Created by Martin Styk on 27.10.2017.
+ * @author Martin Styk
+ * @version 27.10.2017
  */
-
 public class NonZeroTextWatcher implements TextWatcher {
 
-    private EditText editText;
+    private final EditText editText;
 
     public NonZeroTextWatcher(EditText editText) {
         this.editText = editText;

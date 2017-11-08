@@ -1,8 +1,6 @@
 package sk.momosi.fuelup.screens;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -11,23 +9,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.Currency;
-
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.business.VehicleService;
-import sk.momosi.fuelup.data.FuelUpContract;
-import sk.momosi.fuelup.data.FuelUpContract.VehicleEntry;
-import sk.momosi.fuelup.data.FuelUpContract.VehicleTypeEntry;
 import sk.momosi.fuelup.entity.Vehicle;
-import sk.momosi.fuelup.entity.VehicleType;
-import sk.momosi.fuelup.entity.enums.VolumeUnit;
 import sk.momosi.fuelup.screens.detailfragments.ExpensesListFragment;
 import sk.momosi.fuelup.screens.detailfragments.FillUpsListFragment;
 import sk.momosi.fuelup.screens.detailfragments.StatisticsFragment;

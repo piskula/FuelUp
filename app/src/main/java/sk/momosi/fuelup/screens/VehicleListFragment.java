@@ -1,12 +1,9 @@
 package sk.momosi.fuelup.screens;
 
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -16,7 +13,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,8 +31,8 @@ public class VehicleListFragment extends Fragment implements ListVehiclesAdapter
     private static final String TAG = VehicleListFragment.class.getSimpleName();
 
 
-    public static final int VEHICLE_ACTION_REQUEST_CODE = 33;
     public static final String EXTRA_ADDED_VEHICLE_ID = "extra_key_added_car";
+    private static final int VEHICLE_ACTION_REQUEST_CODE = 33;
     private static final int VEHICLE_LOADER_ID = 712;
 
     private FloatingActionButton addCarBtn;

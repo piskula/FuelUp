@@ -142,7 +142,8 @@ public class ConsumptionPerMonthChartDataLoader extends FuelUpAbstractAsyncLoade
 
             ConsumptionPair that = (ConsumptionPair) o;
 
-            if (numerator != that.numerator) return false;
+            if (numerator != that.numerator)
+                return false;
             return Float.compare(that.denumerator, denumerator) == 0;
 
         }

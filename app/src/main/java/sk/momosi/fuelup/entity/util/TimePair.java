@@ -4,12 +4,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Created by Martin Styk on 24.07.2017.
+ * @author Martin Styk
+ * @version 24.07.2017
  */
-
 public class TimePair {
-    public int year;
-    public int month;
+    public final int year;
+    public final int month;
 
     public static TimePair from(Date date) {
         Calendar calendar = Calendar.getInstance();
@@ -32,7 +32,8 @@ public class TimePair {
 
         TimePair pair = (TimePair) o;
 
-        if (year != pair.year) return false;
+        if (year != pair.year)
+            return false;
         return month == pair.month;
 
     }

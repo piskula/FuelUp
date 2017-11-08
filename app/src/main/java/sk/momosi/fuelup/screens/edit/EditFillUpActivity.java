@@ -35,7 +35,7 @@ import sk.momosi.fuelup.util.BigDecimalFormatter;
 
 public class EditFillUpActivity extends FillUpAbstractActivity implements DeleteDialog.Callback {
 
-    public static final String TAG = EditFillUpActivity.class.getSimpleName();
+    private static final String TAG = EditFillUpActivity.class.getSimpleName();
 
     private FillUp mSelectedFillUp;
 

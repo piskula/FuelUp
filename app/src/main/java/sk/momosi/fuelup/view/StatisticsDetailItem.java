@@ -11,13 +11,14 @@ import android.widget.TextView;
 import sk.momosi.fuelup.R;
 
 /**
- * Created by Martin Styk on 10.07.2017.
+ * @author Martin Styk
+ * @version 10.07.2017
  */
 public class StatisticsDetailItem extends LinearLayout {
 
-    private TextView nameView;
-    private TextView valueView;
-    private TextView unitView;
+    private final TextView nameView;
+    private final TextView valueView;
+    private final TextView unitView;
 
     private String name;
     private String value;

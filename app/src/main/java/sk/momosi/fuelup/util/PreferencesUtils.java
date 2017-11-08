@@ -19,23 +19,23 @@ public class PreferencesUtils {
     public static final String BACKUP_LAST_CHANGE = "sync_configured_when";
 
     @Nullable
-    public static String getString(@NonNull Context context, @NonNull String key) {
-        return getSharedPreferences(context).getString(key, null);
+    public static String getAccountName(@NonNull Context context) {
+        return getSharedPreferences(context).getString(BACKUP_FRAGMENT_ACCOUNT_NAME, null);
     }
 
-    public static boolean getBoolean(@NonNull Context context, @NonNull String key) {
-        return getSharedPreferences(context).getBoolean(key, false);
+    public static boolean hasBeenImportDone(@NonNull Context context) {
+        return getSharedPreferences(context).getBoolean(BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, false);
     }
 
-    public static void setString(@NonNull Context context, @NonNull String key, @Nullable String value) {
+    public static void setAccountName(@NonNull Context context, @Nullable String value) {
         getSharedPreferences(context).edit()
-                .putString(key, value)
+                .putString(BACKUP_FRAGMENT_ACCOUNT_NAME, value)
                 .apply();
     }
 
-    public static void setBoolean(@NonNull Context context, @NonNull String key, boolean value) {
+    public static void setHasBeenImportDone(@NonNull Context context, boolean value) {
         getSharedPreferences(context).edit()
-                .putBoolean(key, value)
+                .putBoolean(BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED, value)
                 .apply();
     }
 

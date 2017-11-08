@@ -34,7 +34,7 @@ import sk.momosi.fuelup.screens.dialog.DeleteDialog;
  */
 public class EditVehicleActivity extends VehicleAbstractActivity implements MenuItem.OnMenuItemClickListener, DeleteDialog.Callback {
 
-    public static final String TAG = EditVehicleActivity.class.getSimpleName();
+    private static final String LOG_TAG = EditVehicleActivity.class.getSimpleName();
 
     private EditText txtName;
     private EditText txtManufacturer;

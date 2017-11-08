@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -30,7 +31,7 @@ import sk.momosi.fuelup.data.FuelUpContract;
  */
 public abstract class VehicleAbstractActivity extends AppCompatActivity {
 
-    protected static final String PHOTO = "photo";
+    private static final String PHOTO = "photo";
 
     public static final float REMOVE_PHOTO_ALPHA_CHANNEL = 0.5f;
 
@@ -38,7 +39,7 @@ public abstract class VehicleAbstractActivity extends AppCompatActivity {
     protected ImageView imgCarPhotoRemove;
 
     protected String vehiclePicturePath;
-    protected Uri cropImageUri;
+    private Uri cropImageUri;
 
     private SyncAdapterContentObserver mObserver;
 
@@ -138,7 +139,7 @@ public abstract class VehicleAbstractActivity extends AppCompatActivity {
                 .start(this);
     }
 
-    public void deletePhoto() {
+    private void deletePhoto() {
         vehiclePicturePath = null;
         imgCarPhoto.setImageResource(R.drawable.ic_insert_photo);
         imgCarPhoto.setAlpha(1f);

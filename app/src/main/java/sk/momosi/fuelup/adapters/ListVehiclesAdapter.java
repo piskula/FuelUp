@@ -27,15 +27,15 @@ public class ListVehiclesAdapter extends RecyclerViewCursorAdapter<ListVehiclesA
 
     private static final String LOG_TAG = ListVehiclesAdapter.class.getSimpleName();
 
-    private Context mContext;
-    private Callback mCallback;
+    private final Context mContext;
+    private final Callback mCallback;
 
     public interface Callback {
         void onItemClick(long vehicleId);
     }
 
     public ListVehiclesAdapter(Context context, Callback callback) {
-        super(null);
+        super();
         mContext = context;
         mCallback = callback;
     }
@@ -75,8 +75,8 @@ public class ListVehiclesAdapter extends RecyclerViewCursorAdapter<ListVehiclesA
 
 
     static class VehicleViewHolder extends RecyclerView.ViewHolder {
-        ImageView thumbnail, overflow;
-        TextView txtName, txtMaker, txtDistance;
+        final ImageView thumbnail, overflow;
+        final TextView txtName, txtMaker, txtDistance;
 
         VehicleViewHolder(View view) {
             super(view);

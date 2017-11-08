@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
@@ -11,11 +12,12 @@ import android.support.v7.app.AlertDialog;
 import sk.momosi.fuelup.R;
 
 /**
- * Created by Martin Styk on 23.06.2017.
+ * @author Martin Styk
+ * @version 23.06.2017
  */
 public class DeleteDialog extends DialogFragment {
 
-    private static final String TAG = DeleteDialog.class.getSimpleName();
+    private static final String LOG_TAG = DeleteDialog.class.getSimpleName();
 
     private static final String ARG_TITLE = "title";
     private static final String ARG_MESSAGE = "message";
@@ -40,6 +42,7 @@ public class DeleteDialog extends DialogFragment {
         return frag;
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         String title = getArguments().getString(ARG_TITLE);

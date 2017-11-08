@@ -3,7 +3,8 @@ package sk.momosi.fuelup.entity.dto;
 import java.math.BigDecimal;
 
 /**
- * Created by Martin Styk on 10.07.2017.
+ * @author Martin Styk
+ * @version 10.07.2017
  */
 public class StatisticsDTO {
 

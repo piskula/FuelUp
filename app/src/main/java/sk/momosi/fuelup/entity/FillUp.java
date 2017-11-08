@@ -153,7 +153,7 @@ public class FillUp implements Parcelable, Comparable<FillUp> {
     public FillUp() {
     }
 
-    protected FillUp(Parcel in) {
+    private FillUp(Parcel in) {
         this.id = (Long) in.readValue(Long.class.getClassLoader());
         this.vehicle = in.readParcelable(Vehicle.class.getClassLoader());
         this.distanceFromLastFillUp = (Long) in.readValue(Long.class.getClassLoader());

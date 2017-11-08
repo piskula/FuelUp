@@ -90,7 +90,7 @@ public class Expense implements Parcelable, Comparable<Expense> {
     public Expense() {
     }
 
-    protected Expense(Parcel in) {
+    private Expense(Parcel in) {
         this.id = (Long) in.readValue(Long.class.getClassLoader());
         this.vehicle = in.readParcelable(Vehicle.class.getClassLoader());
         this.price = (BigDecimal) in.readSerializable();
@@ -113,7 +113,7 @@ public class Expense implements Parcelable, Comparable<Expense> {
 
     @Override
     public int compareTo(@NonNull Expense other) {
-        if (date != null && other != null && other.getDate() != null)
+        if (date != null && other.getDate() != null)
             return date.compareTo(other.getDate());
         return 0;
     }

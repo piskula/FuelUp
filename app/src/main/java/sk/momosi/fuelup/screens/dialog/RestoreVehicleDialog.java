@@ -27,7 +27,7 @@ public class RestoreVehicleDialog extends DialogFragment implements ListVehicles
     private static final String BUNDLE_ARGS_VEHICLE_NAMES = "vehicle_names_to_restore_dialog";
 
     private Callback callback;
-    private Set<String> vehicleNamesResult = new HashSet<>();
+    private final Set<String> vehicleNamesResult = new HashSet<>();
 
     @Override
     public void onItemClickAdd(String vehicleName) {

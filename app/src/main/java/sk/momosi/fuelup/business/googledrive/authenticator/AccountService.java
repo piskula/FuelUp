@@ -11,7 +11,7 @@ import android.os.IBinder;
  */
 public class AccountService extends Service {
 
-    public static final String ACCOUNT_NAME = "fuelup_generic_syncing_account";
+    private static final String ACCOUNT_NAME = "fuelup_generic_syncing_account";
     public static final String ACCOUNT_TYPE = "sk.momosi.fuelup.account";
 
     // Instance field that stores the authenticator object

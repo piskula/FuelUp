@@ -1,12 +1,7 @@
 package sk.momosi.fuelup.loaders;
 
-/**
- * Created by Martin Styk on 20.06.2017.
- */
-
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
-
 
 /**
  * Abstract parent class for loaders.
@@ -116,7 +111,7 @@ public abstract class FuelUpAbstractAsyncLoader<T> extends AsyncTaskLoader<T> {
      * Helper function to take care of releasing resources associated
      * with an actively loaded data set.
      */
-    protected void onReleaseResources(T param) {
+    private void onReleaseResources(T param) {
         // For a simple List<> there is nothing to do.  For something
         // like a Cursor, we would close it here.
     }

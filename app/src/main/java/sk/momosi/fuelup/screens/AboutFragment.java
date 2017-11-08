@@ -18,12 +18,12 @@ public class AboutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View rootview = inflater.inflate(R.layout.fragment_about, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_about, container, false);
 
         getActivity().findViewById(R.id.fab_add_vehicle).setVisibility(View.GONE);
-        ((TextView) rootview.findViewById(R.id.about_app_version)).setText(BuildConfig.VERSION_NAME);
+        ((TextView) rootView.findViewById(R.id.about_app_version)).setText(BuildConfig.VERSION_NAME);
 
-        return rootview;
+        return rootView;
     }
 
 }

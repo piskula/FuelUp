@@ -12,7 +12,6 @@ import java.util.Date;
 
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.data.FuelUpContract.ExpenseEntry;
-import sk.momosi.fuelup.entity.Expense;
 import sk.momosi.fuelup.entity.Vehicle;
 import sk.momosi.fuelup.entity.util.CurrencyUtil;
 import sk.momosi.fuelup.entity.util.DateUtil;
@@ -24,11 +23,11 @@ import sk.momosi.fuelup.entity.util.DateUtil;
 public class ListExpensesAdapter extends RecyclerViewCursorAdapter<ListExpensesAdapter.ExpenseViewHolder> {
 
     private static final String LOG_TAG = ListExpensesAdapter.class.getSimpleName();
-    private Callback mCallback;
-    private Vehicle mVehicle;
+    private final Callback mCallback;
+    private final Vehicle mVehicle;
 
     public ListExpensesAdapter(Callback callback, Vehicle vehicle) {
-        super(null);
+        super();
         this.mVehicle = vehicle;
         this.mCallback = callback;
     }
@@ -69,9 +68,9 @@ public class ListExpensesAdapter extends RecyclerViewCursorAdapter<ListExpensesA
 
     class ExpenseViewHolder extends RecyclerView.ViewHolder
     {
-        TextView txtInfo;
-        TextView txtPrice;
-        TextView txtDate;
+        final TextView txtInfo;
+        final TextView txtPrice;
+        final TextView txtDate;
 
         ExpenseViewHolder(View view) {
             super(view);

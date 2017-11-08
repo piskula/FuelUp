@@ -5,10 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import sk.momosi.fuelup.BuildConfig;
 import sk.momosi.fuelup.R;
 
 /**

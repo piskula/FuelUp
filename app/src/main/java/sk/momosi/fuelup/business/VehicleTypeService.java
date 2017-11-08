@@ -1,6 +1,5 @@
 package sk.momosi.fuelup.business;
 
-import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;

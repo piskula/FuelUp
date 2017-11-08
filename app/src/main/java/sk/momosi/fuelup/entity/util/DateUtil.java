@@ -14,7 +14,7 @@ import java.util.Date;
 
 public class DateUtil {
 
-    private static final String TAG = "DateUtil";
+    private static final String LOG_TAG = "DateUtil";
 
     public static Calendar transformToCal(Date date) {
         Calendar cal = Calendar.getInstance();

@@ -17,8 +17,6 @@ import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import sk.momosi.fuelup.R;
-import sk.momosi.fuelup.business.ExpenseService;
-import sk.momosi.fuelup.business.FillUpService;
 import sk.momosi.fuelup.databinding.FragmentStatisticsChartCostsPerTimeBinding;
 import sk.momosi.fuelup.entity.Vehicle;
 import sk.momosi.fuelup.loaders.CostsPerMonthChartDataLoader;

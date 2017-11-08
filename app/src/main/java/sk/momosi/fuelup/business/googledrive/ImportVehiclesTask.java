@@ -2,7 +2,6 @@ package sk.momosi.fuelup.business.googledrive;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -18,14 +17,14 @@ import java.util.Set;
  */
 public class ImportVehiclesTask extends AsyncTask<Void, Void, Integer> {
 
-    private static String LOG_TAG = ImportVehiclesTask.class.getSimpleName();
+    private static final String LOG_TAG = ImportVehiclesTask.class.getSimpleName();
 
-    private Set<String> vehicleNames;
-    private JSONObject json;
+    private final Set<String> vehicleNames;
+    private final JSONObject json;
     private Exception mLastError = null;
 
-    private Context context;
-    private WeakReference<Callback> callbackReference;
+    private final Context context;
+    private final WeakReference<Callback> callbackReference;
 
     public ImportVehiclesTask(@NonNull Set<String> vehicleNames, @NonNull JSONObject json, @NonNull Callback callback, @NonNull Context context) {
         super();
@@ -48,7 +47,7 @@ public class ImportVehiclesTask extends AsyncTask<Void, Void, Integer> {
                     Log.e(LOG_TAG, "vehicle was not imported due to some SQLite error.");
             }
         } catch (JSONException e) {
-            mLastError = new ImportVehicleJsonException("JSONException occurred when importing vehicle", e, vehicle);
+            mLastError = new ImportVehicleJsonException(e, vehicle);
             cancel(true);
             return null;
         }

@@ -15,7 +15,7 @@ public class StatisticsLoader extends FuelUpAbstractAsyncLoader<StatisticsDTO> {
     private static final String TAG = StatisticsLoader.class.getSimpleName();
     public static final int ID = 3;
 
-    private StatisticsService statisticsService;
+    private final StatisticsService statisticsService;
 
     public StatisticsLoader(Context context, StatisticsService statisticsService) {
         super(context);

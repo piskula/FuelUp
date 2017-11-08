@@ -24,8 +24,8 @@ public class ListVehiclesRestoreAdapter extends ArrayAdapter<String> {
 
     private static final String LOG_TAG = ListVehiclesRestoreAdapter.class.getSimpleName();
 
-    private ListVehiclesRestoreAdapter.Callback callback;
-    private List<String> vehicleNames;
+    private final Callback callback;
+    private final List<String> vehicleNames;
 
     public interface Callback {
         void onItemClickAdd(String vehicleName);

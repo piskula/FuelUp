@@ -41,9 +41,10 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
     private static final String LOG_TAG = ExpensesListFragment.class.getSimpleName();
 
     public static final String EXPENSE_ID_TO_EDIT = "expense_to_edit";
-    public static final int EXPENSE_ACTION_REQUEST_CODE = 31;
     public static final String VEHICLE_FROM_FRAGMENT_TO_EDIT_EXPENSE = "fromFragmentToExpense";
-    public static final int EXPENSE_LOADER_ID = 714;
+
+    private static final int EXPENSE_ACTION_REQUEST_CODE = 31;
+    private static final int EXPENSE_LOADER_ID = 714;
 
     private Vehicle vehicle;
     private ListExpensesAdapter adapter;

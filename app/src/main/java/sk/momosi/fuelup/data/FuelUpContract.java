@@ -4,9 +4,6 @@ import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import sk.momosi.fuelup.entity.Vehicle;
-import sk.momosi.fuelup.entity.VehicleType;
-
 /**
  * @author Ondrej Oravcok
  * @version 7.8.2017

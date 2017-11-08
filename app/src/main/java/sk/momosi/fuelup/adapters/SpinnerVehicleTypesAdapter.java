@@ -9,13 +9,11 @@ import android.widget.ImageView;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import sk.momosi.fuelup.R;
-import sk.momosi.fuelup.data.DatabaseHelper;
 import sk.momosi.fuelup.data.FuelUpContract;
 import sk.momosi.fuelup.data.FuelUpContract.VehicleTypeEntry;
 import sk.momosi.fuelup.entity.VehicleType;
@@ -26,8 +24,8 @@ import sk.momosi.fuelup.entity.VehicleType;
  */
 public class SpinnerVehicleTypesAdapter extends BaseAdapter implements SpinnerAdapter {
 
-    private Activity activity;
-    private List<VehicleType> vehicleTypes;
+    private final Activity activity;
+    private final List<VehicleType> vehicleTypes;
 
     public SpinnerVehicleTypesAdapter(Activity activity) {
         this.activity = activity;

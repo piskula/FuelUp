@@ -1,13 +1,10 @@
 package sk.momosi.fuelup.entity.util;
 
-import android.content.Context;
 import android.util.Log;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.text.Format;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

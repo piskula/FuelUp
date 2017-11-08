@@ -45,12 +45,12 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
     private static final String LOG_TAG = "FillUpsListFragment";
 
     public static final String FILLUP_ID_TO_EDIT = "fillup_to_edit";
-    public static final int FILLUP_ACTION_REQUEST_CODE = 32;
     public static final String VEHICLE_FROM_FRAGMENT_TO_EDIT_FILLUP = "fromFragmentToFillUp";
-    public static final int FILLUP_LOADER_ID = 713;
+
+    private static final int FILLUP_ACTION_REQUEST_CODE = 32;
+    private static final int FILLUP_LOADER_ID = 713;
 
     private Vehicle vehicle;
-    private List<FillUp> data;
     private ListFillUpsAdapter adapter;
 
     private RecyclerView recyclerView;
