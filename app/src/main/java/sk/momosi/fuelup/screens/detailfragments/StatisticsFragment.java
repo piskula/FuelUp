@@ -35,7 +35,6 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
 
     private FragmentStatisticsBinding binding;
 
-    private CollapsingToolbarLayout appBarLayout;
     private FloatingActionButton floatingActionButton;
 
     @Override
@@ -48,7 +47,7 @@ public class StatisticsFragment extends Fragment implements View.OnClickListener
             vehicle = args.getParcelable(VehicleTabbedDetailActivity.VEHICLE_TO_FRAGMENT);
         }
 
-        appBarLayout = getActivity().findViewById(R.id.toolbar_layout);
+        CollapsingToolbarLayout appBarLayout = getActivity().findViewById(R.id.toolbar_layout);
         appBarLayout.setTitle(getResources().getString(R.string.title_statistics));
 
         getActivity().findViewById(R.id.fab_add).setVisibility(View.GONE);

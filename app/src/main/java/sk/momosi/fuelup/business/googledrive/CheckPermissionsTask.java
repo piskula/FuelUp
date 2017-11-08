@@ -14,7 +14,7 @@ import java.util.List;
 
 public class CheckPermissionsTask extends GoogleDriveAbstractAsyncTask<Void, Void, Boolean> {
 
-    private WeakReference<Callback> callbackReference;
+    private final WeakReference<Callback> callbackReference;
 
     public CheckPermissionsTask(GoogleAccountCredential credential, Callback callback) {
         super(credential);

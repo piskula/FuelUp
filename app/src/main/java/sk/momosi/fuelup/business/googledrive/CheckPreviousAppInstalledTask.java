@@ -11,7 +11,7 @@ import java.lang.ref.WeakReference;
 
 public class CheckPreviousAppInstalledTask extends GoogleDriveAbstractAsyncTask<Void, Void, JSONObject> {
 
-    private WeakReference<Callback> callbackReference;
+    private final WeakReference<Callback> callbackReference;
 
     public CheckPreviousAppInstalledTask(GoogleAccountCredential credential, Callback callback) {
         super(credential);

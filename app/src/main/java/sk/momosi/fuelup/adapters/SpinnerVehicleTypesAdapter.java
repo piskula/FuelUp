@@ -49,6 +49,7 @@ public class SpinnerVehicleTypesAdapter extends BaseAdapter implements SpinnerAd
 
                 vehicleTypes.add(type);
             }
+            cursor.close();
         }
     }
 

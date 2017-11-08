@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/item_left_part_font_size"
         android:paddingLeft="@dimen/item_left_part_left_padding"
+        android:paddingStart="@dimen/item_left_part_left_padding"
         />
 
     <TextView

@@ -35,10 +35,9 @@ public class ConsumptionPerMonthChartDataLoader extends FuelUpAbstractAsyncLoade
     public static final String CHART_DATA = "chartData";
     public static final String MIN_CONSUMPTION = "minConsumption";
 
-    private FillUpService fillUpService;
-    private StatisticsService statisticsService;
-
-    private long vehicleId;
+    private final FillUpService fillUpService;
+    private final StatisticsService statisticsService;
+    private final long vehicleId;
 
     public ConsumptionPerMonthChartDataLoader(Context context, long vehicleId, FillUpService fillUpService, StatisticsService statisticsService) {
         super(context);

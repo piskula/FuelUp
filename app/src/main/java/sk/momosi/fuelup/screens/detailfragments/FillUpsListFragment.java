@@ -57,7 +57,6 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
     private ProgressBar loadingBar;
     private TextView emptyList;
 
-    private CollapsingToolbarLayout appBarLayout;
     private FloatingActionButton addButton;
 
     @Override
@@ -73,7 +72,7 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
 
         View view = inflater.inflate(R.layout.fragment_fillups_list, container, false);
 
-        appBarLayout = getActivity().findViewById(R.id.toolbar_layout);
+        CollapsingToolbarLayout appBarLayout = getActivity().findViewById(R.id.toolbar_layout);
         appBarLayout.setTitle(getResources().getString(R.string.title_fillUps));
 
         loadingBar = view.findViewById(R.id.fill_ups_list_loading);

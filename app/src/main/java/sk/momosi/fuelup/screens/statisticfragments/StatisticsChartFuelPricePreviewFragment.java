@@ -79,7 +79,7 @@ public class StatisticsChartFuelPricePreviewFragment extends Fragment implements
     public Loader<Map<String, Object>> onCreateLoader(int id, Bundle args) {
         Vehicle vehicle = args.getParcelable(ARG_VEHICLE);
         long vehicleId = vehicle.getId();
-        return new FuelPriceChartDataLoader(getActivity(), vehicleId, new FillUpService());
+        return new FuelPriceChartDataLoader(getActivity(), vehicleId);
     }
 
     @Override

@@ -18,10 +18,10 @@ public class ConnectivityUtils {
      *
      * @return true if the device has a network connection, false otherwise.
      */
-    public static boolean isDeviceOnline(Context context) {
+    public static boolean isNotDeviceOnline(Context context) {
         ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
+        return !(networkInfo != null && networkInfo.isConnected());
     }
 
     /**

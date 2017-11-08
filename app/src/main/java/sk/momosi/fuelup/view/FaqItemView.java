@@ -13,13 +13,14 @@ import android.widget.TextView;
 import sk.momosi.fuelup.R;
 
 /**
- * Created by Martin Styk on 10.07.2017.
+ * @author Martin Styk
+ * @version 10.07.2017
  */
 public class FaqItemView extends LinearLayout implements View.OnClickListener{
 
-    private TextView questionView;
-    private TextView answerView;
-    private ImageView iconView;
+    private final TextView questionView;
+    private final TextView answerView;
+    private final ImageView iconView;
 
     private String question;
     private String answer;
@@ -28,9 +29,9 @@ public class FaqItemView extends LinearLayout implements View.OnClickListener{
     public FaqItemView(Context context, AttributeSet attrs) {
         super(context, attrs, R.attr.faqItem);
 
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FaqItem, 0, 0);
-        question = a.getString(R.styleable.FaqItem_question);
-        answer = a.getString(R.styleable.FaqItem_answer);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FaqItemView, 0, 0);
+        question = a.getString(R.styleable.FaqItemView_question);
+        answer = a.getString(R.styleable.FaqItemView_answer);
         a.recycle();
 
         iconSource = getResources().getDrawable(R.drawable.ic_keyboard_arrow_left_black_24dp);

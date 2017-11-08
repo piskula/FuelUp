@@ -57,6 +57,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:background="@color/colorAccent"
+                    android:layout_marginEnd="@dimen/small_padding"
                     android:layout_marginRight="@dimen/small_padding"/>
 
                 <TextView
@@ -69,6 +70,8 @@
                     android:layout_height="20dp"
                     android:background="@color/colorAppGreen"
                     android:layout_marginRight="@dimen/small_padding"
+                    android:layout_marginEnd="@dimen/small_padding"
+                    android:layout_marginStart="@dimen/default_padding"
                     android:layout_marginLeft="@dimen/default_padding"/>
 
                 <TextView

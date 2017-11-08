@@ -3,18 +3,14 @@
     <!--shared-->
     <string name="about">O aplikaci</string>
     <string name="add">Přidat</string>
-    <string name="advanced">Pokročilý</string>
     <string name="answer_yes">Ano</string>
     <string name="answer_no">Ne</string>
     <string name="cancel">Zrušit</string>
-    <string name="create">Vytvořit</string>
     <string name="currency">Měna</string>
     <string name="Date">Datum</string>
     <string name="dismiss">Zavřít</string>
     <string name="volume_units">Jednotka objemu</string>
     <string name="fuel">Palivo</string>
-    <string name="ok">OK</string>
-    <string name="password">Heslo</string>
     <string name="price">Cena</string>
     <string name="remove">Odstranit</string>
     <string name="select_vehicles">Zvolte vozidla</string>
@@ -31,31 +27,21 @@
     <string name="title_fillUps">Tankování</string>
     <string name="title_mileage">Nájezd</string>
     <string name="toast_nameNotUnique">Vůz s tímto jménem již existuje.</string>
-    <string name="title_settings">Nastavení</string>
     <string name="title_statistics">Statistiky</string>
     <string name="title_vehicleManufacturer">Výrobce</string>
 
-    <string name="noExpenseInTheDatabase">Pro tento vůz ste zatím nepřidali žádné výdaje. Výdaj zadáte kliknutím na tlačítko \'plus\' vpravo dolů.</string>
-    <string name="noFillupInTheDatabase">Pro tento vůz ste zatím nepřidali žádný záznam o tankování. Nový zadáte kliknutím na tlačítko \'plus\' vpravo dolů.</string>
     <string name="no_expense_created_yet">Žádné výdavky</string>
     <string name="no_fillup_created_yet">Žádné tankování</string>
     <string name="no_vehicle_created_yet">Žádné vozy</string>
     <string name="no_data_to_show">Žádne data pro zobrazení.</string>
 
-    <string name="addVehicle">Nový vůz</string>
     <string name="addVehicle_nameNotUnique">Vůz s tímto jménem již existuje.</string>
-    <string name="addVehicle_vehicle_picture">Zvolit obrázek</string>
-    <string name="addVehicle_takePhoto">Fotoaparát</string>
-    <string name="addVehicle_selectPhotoFromGallery">Zvolit foto ze zařízení</string>
     <string name="addVehicle_Toast_successfullyCreated">Vůz byl úspěšne vytvořen</string>
-    <string name="addVehicle_success">Vůz byl vytvořen</string>
     <string name="addVehicle_fail">Nepodařilo se vytvořit vozidlo</string>
     <string name="addVehicle_picture_add_success">Obrázek byl přiřazen</string>
     <string name="addVehicle_picture_add_fail">Není možné přiřazit obrázek %s</string>
-    <string name="permission_image_not_granted">Táto aplikace nemá dostatočná oprávnení pro práci s galerií. Obrázek nebude použitý.</string>
 
     <string name="editVehicle_toast_oldPhotoWasNotRemovedDueToError">Chyba: Původný obrázek sa nepodařilo odstranit !!!</string>
-    <string name="editVehicle_toast_photoWillBeRemoved">Fotografie bude odstránena po stlačení tlačidla \'Upravit\'.</string>
 
     <string name="delete_vehicle_dialog_message">Skutečně chcete odstranit \'%1$s\' a taky všechny záznamy?</string>
     <string name="delete_vehicle_dialog_title">Odstranit \'%1$s\'</string>
@@ -76,26 +62,17 @@
     <string name="remove_expense_success">Výdej byl zmazán</string>
     <string name="remove_expense_fail">Nepodařilo se zmazat výdej</string>
 
-    <string name="carUpdate_delete_btn">Zmazat vůz</string>
-    <string name="carUpdate_manufacturer">Výrobce vozu</string>
     <string name="carUpdate_Toast_successfullyUpdated">Vozidlo bylo upraveno</string>
     <string name="carUpdate_Toast_updateFail">Nepodařilo sa upravit informace o vozu</string>
 
     <string name="updateCarActivity_wrong_number_format">Nesprávný formát čísla</string>
-    <string name="updateCarActivity_Toast_carNoUpdate">Beze změny</string>
-    <string name="updateCarActivity_emptyFields">Některé položky jsou nevyplnené</string>
 
-    <string name="add_fillup_distance_mode_update_rejected">Změna módu vzdálenosti není možná</string>
-    <string name="add_fillup_distance_overall">Celková vzdálenost</string>
     <string name="add_fillup_distanceFromLast">Vzdálenost od posledního tankování</string>
-    <string name="add_fillup_distanceFromLast_short">Od posledního tankování</string>
-    <string name="add_fillup_distanceTotal_short">Celkem</string>
     <string name="add_fillup_fail">Vytvoření tankování zlyhalo</string>
     <string name="add_fillup_fail_update">Aktualizace tankování se nezdařila</string>
     <string name="add_fillup_fuel_volume">Objem paliva</string>
     <string name="add_fillup_full_fillup">Plná nádrž</string>
     <string name="add_fillup_info">Poznámka</string>
-    <string name="add_fillup_price">Cena</string>
     <string name="add_fillup_pricePerGallon">Cena za galon</string>
     <string name="add_fillup_pricePerGallon_short">Za galon</string>
     <string name="add_fillup_pricePerLitre">Cena za litr</string>
@@ -200,13 +177,11 @@
     <string name="googleDrive_imported_setAndSyncing">Úspěšne ste naimportovali vozidla ze zálohy. Váš účet nyní zálohuje data automaticky.</string>
     <string name="googleDrive_importingFromBackup">Importuji vozidlá ze zálohy&#8230;</string>
     <string name="googleDrive_mustBeOnline">Pro kontrolu oprávnění musíte být online.</string>
-    <string name="googleDrive_no_connection">Žádné připojeí k internetu. Není možné ověřit nastavení Vašeho účtu.</string>
     <string name="googleDrive_noneAccount">žádný</string>
     <string name="googleDrive_not_configured">Dosud jste nenakonfigurovali účet Google.</string>
     <string name="googleDrive_nothingToImport">Zvolili ste si neimportovat žádné vozidlo. Vaše předchozí záloha byla odstraněna.</string>
     <string name="googleDrive_permissionsOK_checkingPrevious">Oprávnění jsou OK, hledám předchozí verze&#8230;</string>
     <string name="googleDrive_permissionsNotGranted">Aplikace FuelUp nemá od Vás povolení používat Google Drive.</string>
-    <string name="googleDrive_progressBar_retrievingData">Načítám&#8230;</string>
     <string name="googleDrive_removeAccount">Odstranit účet</string>
     <string name="googleDrive_requires_google_play">Tato aplikace potřebuje Službu Google Play. Nainstalujte Službu Google Play a znovu spusťte aplikaci.</string>
     <string name="googleDrive_retrievingLastBackup">Načítám poslední zálohu z Google Drive&#8230;</string>

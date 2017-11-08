@@ -37,6 +37,7 @@
         android:textColor="@color/colorWhite"
         android:layout_alignBottom="@id/nav_top_icon"
         android:layout_toEndOf="@id/nav_top_icon"
+        android:layout_toRightOf="@id/nav_top_icon"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
 </RelativeLayout>

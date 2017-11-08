@@ -18,6 +18,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:baselineAligned="false"
             android:orientation="horizontal">
 
             <android.support.design.widget.TextInputLayout
@@ -30,6 +31,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     android:hint="@string/vehicleName"
                     android:inputType="textCapWords"
                     android:maxLines="1" />
@@ -86,7 +88,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginBottom="@dimen/whole_spinner_margin_bottom"
-            android:layout_marginLeft="@dimen/whole_spinner_margin_left">
+            android:layout_marginLeft="@dimen/whole_spinner_margin_left"
+            android:layout_marginStart="@dimen/whole_spinner_margin_left">
 
             <TextView
                 android:layout_width="wrap_content"

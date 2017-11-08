@@ -32,22 +32,17 @@ public class CostsPerMonthChartDataLoader extends FuelUpAbstractAsyncLoader<Colu
     private static final String TAG = CostsPerMonthChartDataLoader.class.getSimpleName();
     public static final int ID = 9;
 
-    private FillUpService fillUpService;
-    private ExpenseService expenseService;
+    private final long vehicleId;
 
-    private long vehicleId;
-
-    public CostsPerMonthChartDataLoader(Context context, long vehicleId, FillUpService fillUpService, ExpenseService expenseService) {
+    public CostsPerMonthChartDataLoader(Context context, long vehicleId) {
         super(context);
         this.vehicleId = vehicleId;
-        this.fillUpService = fillUpService;
-        this.expenseService = expenseService;
     }
 
     @Override
     public ColumnChartData loadInBackground() {
-        List<FillUp> fillUps = fillUpService.findFillUpsOfVehicle(vehicleId, getContext());
-        List<Expense> expenses = expenseService.getExpensesOfVehicle(vehicleId, getContext());
+        List<FillUp> fillUps = FillUpService.findFillUpsOfVehicle(vehicleId, getContext());
+        List<Expense> expenses = ExpenseService.getExpensesOfVehicle(vehicleId, getContext());
 
         return fillUps.isEmpty() && expenses.isEmpty() ? null : generateColumnChartData(fillUps, expenses);
     }
@@ -148,9 +143,8 @@ public class CostsPerMonthChartDataLoader extends FuelUpAbstractAsyncLoader<Colu
 
             ExpensePair that = (ExpensePair) o;
 
-            if (Float.compare(that.fuel, fuel) != 0) return false;
-            return Float.compare(that.expense, expense) == 0;
-
+            return Float.compare(that.fuel, fuel) == 0
+                    && Float.compare(that.expense, expense) == 0;
         }
 
         @Override

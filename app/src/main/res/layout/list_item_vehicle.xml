@@ -51,9 +51,11 @@
                 android:layout_width="@dimen/ic_vehicleItem_type_width"
                 android:layout_height="@dimen/ic_vehicleItem_type_height"
                 android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_below="@id/vehicle_item_thumbnail"
                 android:layout_marginTop="@dimen/ic_vehicleItem_type_margin_top"
                 android:layout_marginRight="@dimen/ic_vehicleItem_type_margin_right"
+                android:layout_marginEnd="@dimen/ic_vehicleItem_type_margin_right"
                 android:scaleType="fitXY" />
 
             <TextView
@@ -63,8 +65,10 @@
                 android:layout_below="@id/vehicle_item_thumbnail"
                 android:gravity="center"
                 android:layout_marginRight="@dimen/ic_vehicleItem_type_margin_right"
+                android:layout_marginEnd="@dimen/ic_vehicleItem_type_margin_right"
                 android:layout_marginTop="@dimen/ic_vehicleItem_type_margin_top"
-                android:layout_toStartOf="@id/vehicle_item_vehicleType"/>
+                android:layout_toStartOf="@id/vehicle_item_vehicleType"
+                android:layout_toLeftOf="@id/vehicle_item_vehicleType"/>
 
         </RelativeLayout>
 

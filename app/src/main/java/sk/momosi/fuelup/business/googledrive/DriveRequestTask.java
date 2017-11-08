@@ -18,7 +18,7 @@ import java.lang.ref.WeakReference;
 // TODO remove before release
 public class DriveRequestTask extends GoogleDriveAbstractAsyncTask<Void, Void, String> {
 
-    private WeakReference<Callback> callbackReference;
+    private final WeakReference<Callback> callbackReference;
 
     public DriveRequestTask(@NonNull GoogleAccountCredential credential, @NonNull Callback callback) {
         super(credential);

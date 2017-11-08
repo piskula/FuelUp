@@ -35,8 +35,8 @@ public class ConsumptionChartDataLoader extends FuelUpAbstractAsyncLoader<Map<St
     private static final String TAG = ConsumptionChartDataLoader.class.getSimpleName();
     public static final int ID = 6;
 
-    private FillUpService fillUpService;
-    private long vehicleId;
+    private final FillUpService fillUpService;
+    private final long vehicleId;
 
     public ConsumptionChartDataLoader(Context context, long vehicleId, FillUpService fillUpService) {
         super(context);

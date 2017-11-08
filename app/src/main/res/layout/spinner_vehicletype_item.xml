@@ -12,7 +12,9 @@
         android:layout_width="@dimen/item_left_part_width"
         android:layout_height="wrap_content"
         android:paddingEnd="10dp"
+        android:paddingRight="10dp"
         android:paddingStart="@dimen/item_left_part_left_padding"
+        android:paddingLeft="@dimen/item_left_part_left_padding"
         android:adjustViewBounds="true"/>
 
     <TextView

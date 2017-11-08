@@ -8,7 +8,7 @@
     <declare-styleable name="statisticsItemDetail">
         <attr name="statisticsItemDetail" format="reference"/>
     </declare-styleable>
-    <declare-styleable name="FaqItem">
+    <declare-styleable name="FaqItemView">
         <attr name="question" format="string" localization="suggested" />
         <attr name="answer" format="string" localization="suggested" />
     </declare-styleable>

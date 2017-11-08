@@ -3,18 +3,14 @@
     <!--shared-->
     <string name="about">About</string>
     <string name="add">Add</string>
-    <string name="advanced">Advanced</string>
     <string name="answer_yes">Yes</string>
     <string name="answer_no">No</string>
     <string name="cancel">Cancel</string>
-    <string name="create">Create</string>
     <string name="currency">Currency</string>
     <string name="Date">Date</string>
     <string name="dismiss">Dismiss</string>
     <string name="volume_units">Volume units</string>
     <string name="fuel">Fuel</string>
-    <string name="ok">OK</string>
-    <string name="password">Password</string>
     <string name="price">Price</string>
     <string name="remove">Remove</string>
     <string name="select_vehicles">Select vehicles</string>
@@ -31,31 +27,21 @@
     <string name="title_fillUps">Fill Ups</string>
     <string name="title_mileage">Mileage</string>
     <string name="toast_nameNotUnique">Name must be unique.</string>
-    <string name="title_settings">Settings</string>
     <string name="title_statistics">Statistics</string>
     <string name="title_vehicleManufacturer">Vehicle manufacturer</string>
 
-    <string name="noExpenseInTheDatabase">No expense available for this car. Add a new one by clicking the add button on the bottom right</string>
-    <string name="noFillupInTheDatabase">No fill-up available for this car. Add a new one by clicking the add button on the bottom right</string>
     <string name="no_expense_created_yet">No expense created yet.</string>
     <string name="no_fillup_created_yet">No fill up created yet.</string>
     <string name="no_vehicle_created_yet">No vehicle created yet.</string>
     <string name="no_data_to_show">No data to show.</string>
 
-    <string name="addVehicle">Create vehicle</string>
     <string name="addVehicle_nameNotUnique">Vehicle with this name already exists.</string>
-    <string name="addVehicle_vehicle_picture">Select picture</string>
-    <string name="addVehicle_takePhoto">Take photo</string>
-    <string name="addVehicle_selectPhotoFromGallery">Select photo from gallery</string>
     <string name="addVehicle_Toast_successfullyCreated">Vehicle have been successfully created</string>
-    <string name="addVehicle_success">Vehicle created</string>
     <string name="addVehicle_fail">Vehicle create failed</string>
     <string name="addVehicle_picture_add_success">Picture added</string>
     <string name="addVehicle_picture_add_fail">Cannot add picture %s</string>
-    <string name="permission_image_not_granted">Permissions required for work with images not granted. Image will not be used.</string>
 
     <string name="editVehicle_toast_oldPhotoWasNotRemovedDueToError">Error: Old picture was not removed !!!</string>
-    <string name="editVehicle_toast_photoWillBeRemoved">Photo of your Vehicle will be removed after submitting update.</string>
 
     <string name="delete_vehicle_dialog_title">Delete %1$s</string>
     <string name="delete_vehicle_dialog_message">Do you want to completely remove vehicle %1$s and all its data?</string>
@@ -76,26 +62,18 @@
     <string name="remove_expense_success">Expense removed</string>
     <string name="remove_expense_fail">Expense remove failed</string>
 
-    <string name="carUpdate_delete_btn">Delete vehicle</string>
-    <string name="carUpdate_manufacturer">Vehicle manufacturer</string>
     <string name="carUpdate_Toast_successfullyUpdated">Vehicle have been successfully updated</string>
     <string name="carUpdate_Toast_updateFail">Vehicle update failed</string>
 
     <string name="updateCarActivity_wrong_number_format">Wrong number format</string>
-    <string name="updateCarActivity_Toast_carNoUpdate">No change</string>
-    <string name="updateCarActivity_emptyFields">One or more fields are empty!</string>
 
-    <string name="add_fillup_distance_mode_update_rejected">It is not possible to switch distance modes on edit</string>
     <string name="add_fillup_distance_overall">Overall distance</string>
     <string name="add_fillup_distanceFromLast">Distance from last fill up</string>
-    <string name="add_fillup_distanceFromLast_short">From last</string>
-    <string name="add_fillup_distanceTotal_short">Total</string>
     <string name="add_fillup_fail">Fill up create failed</string>
     <string name="add_fillup_fail_update">Fill up update failed</string>
     <string name="add_fillup_fuel_volume">Fuel volume</string>
     <string name="add_fillup_full_fillup">Full fill up</string>
     <string name="add_fillup_info">Note</string>
-    <string name="add_fillup_price">Price</string>
     <string name="add_fillup_pricePerGallon">Price per gallon</string>
     <string name="add_fillup_pricePerGallon_short">Per gallon</string>
     <string name="add_fillup_pricePerLitre">Price per litre</string>
@@ -200,13 +178,11 @@
     <string name="googleDrive_imported_setAndSyncing">Your vehicles have been imported successfully. Your account is now set and syncing.</string>
     <string name="googleDrive_importingFromBackup">Importing vehicles from backup&#8230;</string>
     <string name="googleDrive_mustBeOnline">You must be online to check permissions</string>
-    <string name="googleDrive_no_connection">No network connection available. We cannot go online to check your account settings.</string>
     <string name="googleDrive_noneAccount">none</string>
     <string name="googleDrive_not_configured">You have not configured Google account yet.</string>
     <string name="googleDrive_nothingToImport">You chose nothing to import. Your previous back up have been removed.</string>
     <string name="googleDrive_permissionsOK_checkingPrevious">Permissions OK, checking previous versions&#8230;</string>
     <string name="googleDrive_permissionsNotGranted">Permissions not granted.</string>
-    <string name="googleDrive_progressBar_retrievingData">Retrieving data&#8230;</string>
     <string name="googleDrive_removeAccount">Remove account</string>
     <string name="googleDrive_requires_google_play">This app requires Google Play Services. Please install Google Play Services on your device and relaunch this app.</string>
     <string name="googleDrive_retrievingLastBackup">Retrieving Google Drive last backup&#8230;</string>

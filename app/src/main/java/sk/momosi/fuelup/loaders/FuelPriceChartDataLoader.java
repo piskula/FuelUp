@@ -28,20 +28,18 @@ import sk.momosi.fuelup.entity.util.DateUtil;
  * Created by Martin Styk on 15.06.2017.
  */
 public class FuelPriceChartDataLoader extends FuelUpAbstractAsyncLoader<Map<String, Object>> {
-    public static final String FILL_UPS = "fillUps";
-    public static final String CHART_DATA = "chartData";
-    public static final String PREVIEW_DATA = "previewData";
+    private static final String FILL_UPS = "fillUps";
+    private static final String CHART_DATA = "chartData";
+    private static final String PREVIEW_DATA = "previewData";
 
     private static final String TAG = FuelPriceChartDataLoader.class.getSimpleName();
     public static final int ID = 7;
 
-    private FillUpService fillUpService;
-    private long vehicleId;
+    private final long vehicleId;
 
-    public FuelPriceChartDataLoader(Context context, long vehicleId, FillUpService fillUpService) {
+    public FuelPriceChartDataLoader(Context context, long vehicleId) {
         super(context);
         this.vehicleId = vehicleId;
-        this.fillUpService = fillUpService;
     }
 
     /**
@@ -51,7 +49,7 @@ public class FuelPriceChartDataLoader extends FuelUpAbstractAsyncLoader<Map<Stri
      */
     @Override
     public Map<String, Object> loadInBackground() {
-        List<FillUp> fillUps = fillUpService.findFillUpsOfVehicle(vehicleId, getContext());
+        List<FillUp> fillUps = FillUpService.findFillUpsOfVehicle(vehicleId, getContext());
         if (fillUps.isEmpty()) {
             return null;
         }

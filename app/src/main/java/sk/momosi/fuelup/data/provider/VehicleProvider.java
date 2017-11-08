@@ -307,10 +307,13 @@ public class VehicleProvider extends ContentProvider {
             Long vehicleId = contentValues.getAsLong(ExpenseEntry.COLUMN_VEHICLE);
             String selectionVehicle = VehicleEntry._ID + "=?";
             String[] selectionVehicleArgs = new String[] { String.valueOf(vehicleId) };
-            Cursor cursor = mDbHelper.getReadableDatabase().query(VehicleEntry.TABLE_NAME, FuelUpContract.ALL_COLUMNS_VEHICLE_TYPES, selectionVehicle, selectionVehicleArgs, null, null, null);
+            Cursor cursor = mDbHelper.getReadableDatabase().query(VehicleEntry.TABLE_NAME, FuelUpContract.ALL_COLUMNS_VEHICLES, selectionVehicle, selectionVehicleArgs, null, null, null);
             if (cursor == null || cursor.getCount() != 1) {
+                if (cursor != null)
+                    cursor.close();
                 throw new IllegalArgumentException("Vehicle with id=" + vehicleId + " does not exist.");
             }
+            cursor.close();
         }
 
         final String selection = ExpenseEntry._ID + "=?";
@@ -327,7 +330,7 @@ public class VehicleProvider extends ContentProvider {
 
         if (contentValues.containsKey(VehicleEntry.COLUMN_NAME)) {
             String name = contentValues.getAsString(VehicleEntry.COLUMN_NAME).trim();
-            if (!isVehicleNameUnique(name, id)) {
+            if (isNotVehicleNameUnique(name, id)) {
                 return VEHICLE_UPDATE_NAME_NOT_UNIQUE;
             }
         }
@@ -337,7 +340,7 @@ public class VehicleProvider extends ContentProvider {
             if (typeId == null) {
                 throw new IllegalArgumentException("Vehicle Type must be set.");
             }
-            if (!typeExists(typeId)) {
+            if (typeNotExists(typeId)) {
                 throw new IllegalArgumentException("Vehicle Type must exists.");
             }
         }
@@ -375,7 +378,7 @@ public class VehicleProvider extends ContentProvider {
     private Uri validateVehicleAndInsert(Uri uri, ContentValues contentValues) {
 
         String name = contentValues.getAsString(VehicleEntry.COLUMN_NAME).trim();
-        if (!isVehicleNameUnique(name, null)) {
+        if (isNotVehicleNameUnique(name, null)) {
             throw new IllegalArgumentException("Vehicle name must be set and unique.");
         }
 
@@ -383,7 +386,7 @@ public class VehicleProvider extends ContentProvider {
         if (typeId == null) {
             throw new IllegalArgumentException("Vehicle Type must be set.");
         }
-        if (!typeExists(typeId)) {
+        if (typeNotExists(typeId)) {
             throw new IllegalArgumentException("Vehicle Type must exists.");
         }
 
@@ -417,25 +420,25 @@ public class VehicleProvider extends ContentProvider {
         return ContentUris.withAppendedId(uri, id);
     }
 
-    private boolean isVehicleNameUnique(String name, Long ignoreId) {
+    private boolean isNotVehicleNameUnique(String name, Long ignoreId) {
         String selection = VehicleEntry.COLUMN_NAME + "=?";
         String[] selectionArgs = new String[] { name };
 
         Cursor cursor = mDbHelper.getReadableDatabase().query(VehicleEntry.TABLE_NAME, FuelUpContract.ALL_COLUMNS_VEHICLES, selection, selectionArgs, null, null, null);
         if (cursor == null) {
-            return true;
+            return false;
         }
 
         if (cursor.getCount() == 0) {
             cursor.close();
-            return true;
+            return false;
         } else if (cursor.getCount() == 1 && ignoreId != null) {
             cursor.moveToFirst();
             Long id = cursor.getLong(cursor.getColumnIndexOrThrow(VehicleEntry._ID));
-            return ignoreId.equals(id);
+            return !ignoreId.equals(id);
         }
 
-        return false;
+        return true;
     }
 
     private boolean isVehicleTypeNameUnique(String name) {
@@ -443,15 +446,25 @@ public class VehicleProvider extends ContentProvider {
         String[] selectionArgs = new String[] { name };
 
         Cursor cursor = mDbHelper.getReadableDatabase().query(FuelUpContract.VehicleTypeEntry.TABLE_NAME, FuelUpContract.ALL_COLUMNS_VEHICLES, selection, selectionArgs, null, null, null);
-        return (cursor == null || cursor.getCount() == 0);
+        boolean isUnique = (cursor == null || cursor.getCount() == 0);
+
+        if (cursor != null)
+            cursor.close();
+
+        return isUnique;
     }
 
-    private boolean typeExists(Integer typeId) {
+    private boolean typeNotExists(Integer typeId) {
         String selection = FuelUpContract.VehicleTypeEntry._ID + "=?";
         String[] selectionArgs = new String[] { String.valueOf(typeId) };
 
         Cursor cursor = mDbHelper.getReadableDatabase().query(FuelUpContract.VehicleTypeEntry.TABLE_NAME, FuelUpContract.ALL_COLUMNS_VEHICLE_TYPES, selection, selectionArgs, null, null, null);
-        return (cursor != null && cursor.getCount() == 1);
+        boolean typeExists = (cursor != null && cursor.getCount() == 1);
+
+        if (cursor != null)
+            cursor.close();
+
+        return !typeExists;
     }
 
     private Uri validateExpenseAndInsert(Uri uri, ContentValues contentValues) {
@@ -471,8 +484,11 @@ public class VehicleProvider extends ContentProvider {
         String[] selectionArgs = new String[] { String.valueOf(vehicleId) };
         Cursor cursor = mDbHelper.getReadableDatabase().query(VehicleEntry.TABLE_NAME, FuelUpContract.ALL_COLUMNS_VEHICLES, selection, selectionArgs, null, null, null);
         if (cursor == null || cursor.getCount() != 1) {
+            if (cursor != null)
+                cursor.close();
             throw new IllegalArgumentException("Vehicle with id=" + vehicleId + " does not exist.");
         }
+        cursor.close();
 
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
         long id = database.insert(ExpenseEntry.TABLE_NAME, null, contentValues);

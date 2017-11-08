@@ -20,19 +20,6 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="WhiteBlockStyle">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@android:color/white</item>
-        <item name="android:paddingLeft">8dp</item>
-        <item name="android:paddingRight">8dp</item>
-        <item name="android:paddingTop">0dp</item>
-        <item name="android:paddingBottom">0dp</item>
-        <item name="android:layout_marginTop">3dp</item>
-        <item name="android:layout_marginBottom">6dp</item>
-        <item name="android:minHeight">45dp</item>
-    </style>
-
     <style name="ConfirmButton" parent="Widget.AppCompat.Button.Colored">
         <item name="android:colorButtonNormal">@android:color/holo_orange_dark</item>
         <item name="android:textColor">@android:color/white</item>

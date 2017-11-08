@@ -52,7 +52,6 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
     private ProgressBar loadingBar;
     private TextView emptyList;
 
-    private CollapsingToolbarLayout appBarLayout;
     private FloatingActionButton addButton;
 
     @Override
@@ -68,7 +67,7 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
 
         View view = inflater.inflate(R.layout.fragment_expenses_list, container, false);
 
-        appBarLayout = getActivity().findViewById(R.id.toolbar_layout);
+        CollapsingToolbarLayout appBarLayout = getActivity().findViewById(R.id.toolbar_layout);
         appBarLayout.setTitle(getResources().getString(R.string.title_expenses));
 
         loadingBar = view.findViewById(R.id.expense_list_loading);

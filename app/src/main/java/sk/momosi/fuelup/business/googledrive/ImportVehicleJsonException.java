@@ -9,8 +9,8 @@ import org.json.JSONObject;
  */
 public class ImportVehicleJsonException extends JSONException {
 
-    private JSONException e;
-    private JSONObject json;
+    private final JSONException e;
+    private final JSONObject json;
 
     public ImportVehicleJsonException(final String s, final JSONException e, final JSONObject json) {
         super(s);

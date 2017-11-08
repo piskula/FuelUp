@@ -203,7 +203,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     }
 
     private void checkPermissions() {
-        if (!ConnectivityUtils.isDeviceOnline(getContext()))
+        if (ConnectivityUtils.isNotDeviceOnline(getContext()))
             Toast.makeText(getContext(), R.string.googleDrive_mustBeOnline, Toast.LENGTH_SHORT).show();
         else
             new CheckPermissionsTask(mCredential, this).execute();
@@ -231,7 +231,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
                 getContext(), PreferencesUtils.BACKUP_FRAGMENT_ACCOUNT_IMPORT_ASKED);
 
         if (isUploadAvailable) {
-            if (!ConnectivityUtils.isDeviceOnline(getContext())) {
+            if (ConnectivityUtils.isNotDeviceOnline(getContext())) {
                 Toast.makeText(getContext(), R.string.googleDrive_mustBeOnline, Toast.LENGTH_SHORT).show();
             } else {
                 DriveSyncingUtils.requestImmediateSync();

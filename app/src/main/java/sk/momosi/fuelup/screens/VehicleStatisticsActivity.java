@@ -18,9 +18,6 @@ public class VehicleStatisticsActivity extends AppCompatActivity {
 
     public static final String VEHICLE_TO_ADVANCED_STATISTICS = "VEHICLE_TO_ADVANCED_STATISTICS";
 
-    private PagerStatisticsAdapter adapter;
-    private ViewPager viewPager;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,12 +33,10 @@ public class VehicleStatisticsActivity extends AppCompatActivity {
         Intent incomingIntent = getIntent();
         Vehicle vehicle = incomingIntent.getParcelableExtra(VEHICLE_TO_ADVANCED_STATISTICS);
 
-        adapter = new PagerStatisticsAdapter(getSupportFragmentManager(), vehicle);
+        ViewPager viewPager = findViewById(R.id.pager);
+        viewPager.setAdapter(new PagerStatisticsAdapter(getSupportFragmentManager(), vehicle));
 
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter(adapter);
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
     }
 

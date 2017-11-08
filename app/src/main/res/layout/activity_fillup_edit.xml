@@ -38,6 +38,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/edit_fillup_expense_unit_paddingTop"
                 android:textAlignment="textStart"
+                android:layout_gravity="start"
                 android:textSize="@dimen/edit_fillup_expense_unit_fontSize" />
 
         </LinearLayout>
@@ -70,6 +71,7 @@
                 android:layout_weight="@integer/edit_fillup_weight_unit"
                 android:paddingTop="@dimen/edit_fillup_expense_unit_paddingTop"
                 android:textAlignment="textStart"
+                android:layout_gravity="start"
                 android:textSize="@dimen/edit_fillup_expense_unit_fontSize" />
 
             <ToggleButton
@@ -109,6 +111,7 @@
                 android:layout_weight="@integer/edit_fillup_weight_unit"
                 android:paddingTop="@dimen/edit_fillup_expense_unit_paddingTop"
                 android:textAlignment="textStart"
+                android:layout_gravity="start"
                 android:textSize="@dimen/edit_fillup_expense_unit_fontSize" />
 
             <CheckBox

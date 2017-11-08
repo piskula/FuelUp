@@ -37,7 +37,7 @@ public class CurrencyUtil {
     private static final String DELIMETER = ",";
     private static final List<String> currencyBefore = Arrays.asList("GBP", "USD");    //TODO property file?
 
-    private static Properties properties = new Properties();
+    private static final Properties properties = new Properties();
 
     public static String getCurrencySymbol(Currency currency) {
         checkPropertiesAreLoaded();
