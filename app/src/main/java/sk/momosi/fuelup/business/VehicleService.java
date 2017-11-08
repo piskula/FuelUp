@@ -6,7 +6,9 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Currency;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import sk.momosi.fuelup.data.FuelUpContract;
 import sk.momosi.fuelup.data.FuelUpContract.VehicleEntry;
@@ -74,6 +76,23 @@ public class VehicleService {
             return true;
         }
         return false;
+    }
+
+    public static Set<String> getAvailableVehicleNames(Context context) {
+        String[] projection = { VehicleEntry.COLUMN_NAME };
+        Cursor cursor = context.getContentResolver().query(
+                VehicleEntry.CONTENT_URI,
+                projection, null, null, null);
+
+        Set<String> names = new HashSet<>();
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                names.add(cursor.getString(cursor.getColumnIndex(VehicleEntry.COLUMN_NAME)));
+            }
+            cursor.close();
+        }
+
+        return names;
     }
 
     public static List<Long> getAvailableVehicleIds(Context context) {

@@ -12,6 +12,7 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Set;
 
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.business.VehicleService;
@@ -26,6 +27,7 @@ public class ListVehiclesRestoreAdapter extends ArrayAdapter<String> {
 
     private final Callback callback;
     private final List<String> vehicleNames;
+    private final Set<String> alreadyUsedVehicleNames;
 
     public interface Callback {
         void onItemClickAdd(String vehicleName);
@@ -36,6 +38,7 @@ public class ListVehiclesRestoreAdapter extends ArrayAdapter<String> {
         super(context, R.layout.list_item_vehicle_restore, vehicleNames);
         this.vehicleNames = vehicleNames;
         this.callback = callback;
+        this.alreadyUsedVehicleNames = VehicleService.getAvailableVehicleNames(context);
     }
 
     @Override
@@ -45,7 +48,7 @@ public class ListVehiclesRestoreAdapter extends ArrayAdapter<String> {
         convertView = inflater.inflate(R.layout.list_item_vehicle_restore, parent, false);
 
         String name = vehicleNames.get(position);
-        final boolean enabled = !VehicleService.isVehicleNameTaken(name, getContext());
+        final boolean enabled = !alreadyUsedVehicleNames.contains(name);
 
         final CheckBox vehicleName = convertView.findViewById(R.id.checkbox_restore_vehicle);
         vehicleName.setText(name);
