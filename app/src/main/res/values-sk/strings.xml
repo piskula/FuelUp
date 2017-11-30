@@ -172,6 +172,7 @@
     <string name="googleDrive_err_backup_not_available">Zálohu je možné vykonať len vtedy, keď predchádzajúca verzia na Google Drive už bola využitá. Ak si želáte znevalidniť predchádzajúcu zálohu a prepísať ju aktuálnymi dátami, nezaškrtnite v dialógu žiadne vozidlo a zvoľte \'Začať import\'.</string>
     <string name="googleDrive_errOccurred">Nastala nasledujúca chyba: %s</string>
     <string name="googleDrive_forceUpload">Zálohovať teraz</string>
+    <string name="googleDrive_haveToGrantPrivileges">Ak chcete zálohovať Vaše dáta, musíte dať aplikácii FuelUp príslušné práva.</string>
     <string name="googleDrive_checkPermissions_loader">Overujem povolenia&#8230;</string>
     <string name="googleDrive_import_dialog_warning">Nezaškrtnuté vozidá budú trvalo odstránené z Vašej zálohy na Google Drive!</string>
     <string name="googleDrive_imported_setAndSyncing">Úspešne ste naimportovali vozidlá zo zálohy. Váš účet odteraz zálohuje dáta automaticky.</string>

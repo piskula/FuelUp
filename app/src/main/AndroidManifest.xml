@@ -78,6 +78,32 @@
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
+        <activity
+            android:name=".screens.backup.ChooseAccountActivity"
+            android:label="Choose Account"
+            android:parentActivityName=".screens.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Backup"/>
+        <activity
+            android:name=".screens.backup.CheckPermissionsActivity"
+            android:label="Check permissions"
+            android:noHistory="true"
+            android:parentActivityName=".screens.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Backup"/>
+        <activity
+            android:name=".screens.backup.CheckPreviousVersionsActivity"
+            android:label="Check previous versions"
+            android:parentActivityName=".screens.backup.ChooseAccountActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Backup"/>
+        <activity
+            android:name=".screens.backup.ImportVehiclesActivity"
+            android:label="Import vehicles"
+            android:noHistory="true"
+            android:parentActivityName=".screens.backup.CheckPreviousVersionsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Backup"/>
 
         <provider
             android:name=".data.provider.VehicleProvider"

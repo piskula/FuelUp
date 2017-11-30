@@ -23,6 +23,7 @@ import sk.momosi.fuelup.data.FuelUpContract;
 import sk.momosi.fuelup.entity.Vehicle;
 import sk.momosi.fuelup.entity.util.DateUtil;
 import sk.momosi.fuelup.util.NonZeroTextWatcher;
+import sk.momosi.fuelup.util.PreferencesUtils;
 
 /**
  * @author Martin Styk
@@ -124,15 +125,20 @@ public abstract class FillUpAbstractActivity extends AppCompatActivity implement
     @Override
     public void onResume() {
         super.onResume();
-        if (mObserver == null)
+        boolean isSyncEnabled = PreferencesUtils.getAccountName(this) != null;
+        if (mObserver == null && isSyncEnabled)
             mObserver = new SyncAdapterContentObserver(new Handler(), getApplicationContext());
-        getContentResolver().registerContentObserver(FuelUpContract.FillUpEntry.CONTENT_URI, true, mObserver);
+        if (isSyncEnabled)
+            getContentResolver().registerContentObserver(
+                    FuelUpContract.FillUpEntry.CONTENT_URI, true, mObserver);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        getContentResolver().unregisterContentObserver(mObserver);
+        if (mObserver != null) {
+            getContentResolver().unregisterContentObserver(mObserver);
+        }
     }
 
     protected enum SwitchPrice {

@@ -24,6 +24,7 @@ import java.io.File;
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.business.googledrive.syncing.SyncAdapterContentObserver;
 import sk.momosi.fuelup.data.FuelUpContract;
+import sk.momosi.fuelup.util.PreferencesUtils;
 
 /**
  * @author Martin Styk
@@ -150,14 +151,19 @@ public abstract class VehicleAbstractActivity extends AppCompatActivity {
     @Override
     public void onResume () {
         super.onResume();
-        if (mObserver == null)
+        boolean isSyncEnabled = PreferencesUtils.getAccountName(this) != null;
+        if (mObserver == null && isSyncEnabled)
             mObserver = new SyncAdapterContentObserver(new Handler(), getApplicationContext());
-        getContentResolver().registerContentObserver(FuelUpContract.VehicleEntry.CONTENT_URI, true, mObserver);
+        if (isSyncEnabled)
+            getContentResolver().registerContentObserver(
+                    FuelUpContract.VehicleEntry.CONTENT_URI, true, mObserver);
     }
 
     @Override
     public void onPause () {
         super.onPause();
-        getContentResolver().unregisterContentObserver(mObserver);
+        if (mObserver != null) {
+            getContentResolver().unregisterContentObserver(mObserver);
+        }
     }
 }

@@ -1,6 +1,5 @@
 package sk.momosi.fuelup.screens;
 
-import android.Manifest;
 import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -26,57 +25,41 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIO
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import pub.devrel.easypermissions.EasyPermissions;
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.business.googledrive.CheckPermissionsTask;
-import sk.momosi.fuelup.business.googledrive.CheckPreviousAppInstalledTask;
 import sk.momosi.fuelup.business.googledrive.DriveBackupFileUtil;
-import sk.momosi.fuelup.business.googledrive.ImportVehicleJsonException;
-import sk.momosi.fuelup.business.googledrive.ImportVehiclesTask;
-import sk.momosi.fuelup.business.googledrive.JsonUtil;
 import sk.momosi.fuelup.business.googledrive.syncing.DriveSyncingUtils;
-import sk.momosi.fuelup.screens.dialog.RestoreVehicleDialog;
+import sk.momosi.fuelup.screens.backup.ChooseAccountActivity;
 import sk.momosi.fuelup.util.ConnectivityUtils;
 import sk.momosi.fuelup.util.PreferencesUtils;
 
 import static android.app.Activity.RESULT_OK;
 
 /**
- * @author Ondro
+ * @author Ondrej Oravcok
  * @version 10.10.2017
  */
-public class BackupFragment extends Fragment implements EasyPermissions.PermissionCallbacks,
-        RestoreVehicleDialog.Callback,
-        // DriveRequestTask.Callback,
-        CheckPermissionsTask.Callback,
-        CheckPreviousAppInstalledTask.Callback,
-        ImportVehiclesTask.Callback {
+public class BackupFragment extends Fragment implements
+        EasyPermissions.PermissionCallbacks,
+        CheckPermissionsTask.Callback {
 
     private static final String LOG_TAG = BackupFragment.class.getSimpleName();
 
     private static final int PRIMARY_COLOR = R.color.colorPrimary;
     private static final int RED_WARN_COLOR = R.color.colorWarningRed;
-    private static final int GREEN_COLOR = R.color.colorGreenDark;
 
     private static final int REQUEST_ACCOUNT_PICKER = 1000;
     private static final int REQUEST_AUTHORIZATION = 1001;
     private static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
-    private static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
     private ProgressDialog mProgress;
     private TextView mOutputText;
     private TextView mAccountName;
     private TextView mSyncStatus;
-    // private Button downloadBtn;
 
-    private JSONObject json = null;
     private GoogleAccountCredential mCredential;
 
     private boolean showRemoveButton;
@@ -104,7 +87,6 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
         mProgress = new ProgressDialog(getContext());
         mProgress.setCanceledOnTouchOutside(false);
-//        mProgress.setCancelable(false);
         mProgress.setMessage("Calling Drive API ...");
 
         String accountName = PreferencesUtils.getAccountName(getContext());
@@ -112,35 +94,19 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         if (!ConnectivityUtils.isGooglePlayServicesAvailable(getContext())) {
             acquireGooglePlayServices();
 
-        } else if (accountName != null) {
+        } else {
             mCredential.setSelectedAccountName(accountName);
             showRemoveButton = true;
             mAccountName.setText(accountName);
             mSyncStatus.setText(R.string.googleDrive_cannot_connect);
             checkPermissions();
-
-        } else {
-            showRemoveButton = false;
-            mAccountName.setText(R.string.googleDrive_noneAccount);
-            mSyncStatus.setText(R.string.googleDrive_not_configured);
-            chooseAccount();
         }
     }
 
     private void initializeViews(View rootview) {
         mAccountName = rootview.findViewById(R.id.txt_sync_account);
-        // downloadBtn = rootview.findViewById(R.id.btn_sync);
         mSyncStatus = rootview.findViewById(R.id.sync_status);
         mOutputText = rootview.findViewById(R.id.txt_sync);
-
-        /*
-        downloadBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getFilesFromDrive();
-            }
-        });
-        */
 
         mOutputText.setVerticalScrollBarEnabled(true);
         mOutputText.setTextColor(ContextCompat.getColor(getContext(), PRIMARY_COLOR));
@@ -185,8 +151,6 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
                 Toast.makeText(getContext(), R.string.googleDrive_syncingActive_pendingUploads, Toast.LENGTH_SHORT).show();
             else
                 Toast.makeText(getContext(), R.string.googleDrive_syncingActive_backupDiscarded, Toast.LENGTH_SHORT).show();
-//        else if (DriveSyncingUtils.isSyncPending()) // TODO remove these 2 lines before release
-//            Toast.makeText(getContext(), "Syncing is active, backup is up to date, but SyncAdapter is pending.", Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(getContext(), R.string.googleDrive_sync_upToDate, Toast.LENGTH_SHORT).show();
     }
@@ -199,7 +163,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
 
         DriveSyncingUtils.disableSync(getContext());
 
-        chooseAccount();
+        startActivity(new Intent(getActivity(), ChooseAccountActivity.class));
     }
 
     private void checkPermissions() {
@@ -220,12 +184,6 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         checkPermissions();
     }
 
-    /*
-    private void getFilesFromDrive() {
-        new DriveRequestTask(mCredential, this).execute();
-    }
-    */
-
     private void uploadFileThroughApi() {
         boolean isUploadAvailable = PreferencesUtils.hasBeenImportDone(getContext());
 
@@ -241,22 +199,6 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         } else {
             mOutputText.setTextColor(ContextCompat.getColor(getContext(), RED_WARN_COLOR));
             mOutputText.setText(R.string.googleDrive_err_backup_not_available);
-        }
-    }
-
-    private void chooseAccount() {
-        if (EasyPermissions.hasPermissions(getContext(),
-                Manifest.permission.GET_ACCOUNTS)) {
-
-            startActivityForResult(mCredential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
-
-        } else {
-            // Request the GET_ACCOUNTS permission via a user dialog
-            EasyPermissions.requestPermissions(
-                    this,
-                    getString(R.string.googleDrive_accountListNeeded),
-                    REQUEST_PERMISSION_GET_ACCOUNTS,
-                    Manifest.permission.GET_ACCOUNTS);
         }
     }
 
@@ -317,9 +259,7 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     }
 
     @Override
-    public void onPermissionsGranted(int requestCode, List<String> list) {
-        chooseAccount();
-    }
+    public void onPermissionsGranted(int requestCode, List<String> list) { }
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> list) { }
@@ -353,52 +293,12 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
     }
 
     @Override
-    public void onDialogPositiveClick(Set<String> vehicleNames) {
-        if (vehicleNames != null && !vehicleNames.isEmpty()) {
-            new ImportVehiclesTask(vehicleNames, json, this, getContext()).execute();
-
-        } else {
-            initializeSyncing();
-            Toast.makeText(getContext(), R.string.googleDrive_nothingToImport, Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private void initializeSyncing() {
-        DriveSyncingUtils.enableSyncGlobally(getContext());
-        mOutputText.setTextColor(ContextCompat.getColor(getContext(), GREEN_COLOR));
-        mOutputText.setText(R.string.googleDrive_setAndSyncing);
-        DriveSyncingUtils.requestImmediateSync();
-        PreferencesUtils.setHasBeenImportDone(getContext(), true);
-    }
-
-    /*
-    @Override
-    public void onDriveRequestTaskPreExecute() {
-        Log.i(LOG_TAG, "AsyncTask DriveRequestTask started");
-        mOutputText.setText(R.string.googleDrive_progressBar_retrievingData);
-        mProgress.show();
-    }
-
-    // TODO remove before release
-    @Override
-    public void onDriveRequestTaskPostExecute(String output) {
-        mProgress.hide();
-        if (output == null) {
-            mOutputText.setText("Error occurred.");
-        } else {
-            mOutputText.setText("Data:\n" + output);
-        }
-    }
-    */
-
-    @Override
     public void onCheckPermissionsTaskPreExecute() {
         Log.i(LOG_TAG, "AsyncTask CheckPermissionsTask started");
         mOutputText.setTextColor(ContextCompat.getColor(getContext(), PRIMARY_COLOR));
         mOutputText.setText(R.string.googleDrive_checkPermissions_loader);
 
         showForceUploadButton = false;
-        // downloadBtn.setEnabled(false);
         mProgress.show();
     }
 
@@ -408,51 +308,11 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         if (output) {
             mOutputText.setText("");
             showForceUploadButton = true;
-            // downloadBtn.setEnabled(true);
             mSyncStatus.setText("");
 
-            if (!PreferencesUtils.hasBeenImportDone(getContext())) {
-                mOutputText.setText(R.string.googleDrive_permissionsOK_checkingPrevious);
-                new CheckPreviousAppInstalledTask(mCredential, this).execute();
-            }
         } else {
             mOutputText.setTextColor(ContextCompat.getColor(getContext(), RED_WARN_COLOR));
             mOutputText.setText(R.string.googleDrive_permissionsNotGranted);
-        }
-    }
-
-    @Override
-    public void onCheckPreviousAppInstalledTaskPreExecute() {
-        Log.i(LOG_TAG, "AsyncTask CheckPreviousAppInstalledTask started");
-        mOutputText.setTextColor(ContextCompat.getColor(getContext(), PRIMARY_COLOR));
-        mOutputText.setText(R.string.googleDrive_retrievingLastBackup);
-        mProgress.show();
-    }
-
-    @Override
-    public void onCheckPreviousAppInstalledTaskPostExecute(JSONObject json) {
-        mProgress.hide();
-        if (json == null) {
-            initializeSyncing();
-        } else {
-            mOutputText.setTextColor(ContextCompat.getColor(getContext(), PRIMARY_COLOR));
-            mOutputText.setText(R.string.googleDrive_thereIsPreviousVersion);
-
-            ArrayList<String> vehicles;
-            try {
-                vehicles = JsonUtil.getVehicleNamesFromJson(json);
-            } catch (JSONException e) {
-                Log.e(LOG_TAG, "Json format exception occurred.", e);
-                vehicles = new ArrayList<>();
-            }
-
-            if (vehicles.isEmpty()) {   // previous version exists but is empty
-                initializeSyncing();
-
-            } else {
-                this.json = json;
-                RestoreVehicleDialog.newInstance(vehicles, this).show(getFragmentManager(), RestoreVehicleDialog.class.getSimpleName());
-            }
         }
     }
 
@@ -483,34 +343,4 @@ public class BackupFragment extends Fragment implements EasyPermissions.Permissi
         }
     }
 
-    @Override
-    public void onImportVehiclesTaskPreExecute() {
-        Log.i(LOG_TAG, "AsyncTask ImportVehiclesTask started");
-        mOutputText.setTextColor(ContextCompat.getColor(getContext(), PRIMARY_COLOR));
-        mOutputText.setText(R.string.googleDrive_importingFromBackup);
-        mProgress.show();
-    }
-
-    @Override
-    public void onImportVehiclesTaskPostExecute(Integer output) {
-        PreferencesUtils.setHasBeenImportDone(getContext(), true);
-        mOutputText.setTextColor(ContextCompat.getColor(getContext(), GREEN_COLOR));
-        mOutputText.setText(R.string.googleDrive_imported_setAndSyncing);
-        initializeSyncing();
-        mProgress.hide();
-    }
-
-    @Override
-    public void onImportVehiclesTaskCancel(Exception mLastError) {
-        mOutputText.setTextColor(ContextCompat.getColor(getContext(), RED_WARN_COLOR));
-        mProgress.hide();
-        if (mLastError != null) {
-            if (mLastError instanceof ImportVehicleJsonException) {
-                mOutputText.setText(R.string.googleDrive_broken_backup);
-                Log.e(LOG_TAG, "ImportingVehicleError: " + mLastError.toString());
-            }
-        } else {
-            mOutputText.setText(R.string.googleDrive_cancelledRequest);
-        }
-    }
 }

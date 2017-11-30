@@ -3,6 +3,7 @@ package sk.momosi.fuelup.screens;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,6 +20,8 @@ import android.view.MenuItem;
 
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.business.googledrive.authenticator.AccountService;
+import sk.momosi.fuelup.screens.backup.ChooseAccountActivity;
+import sk.momosi.fuelup.util.PreferencesUtils;
 
 public class MainActivity extends AppCompatActivity implements OnNavigationItemSelectedListener {
 
@@ -81,13 +84,21 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         Fragment currentFragment;
         if (id == R.id.vehicle_list) {
             currentFragment = new VehicleListFragment();
         } else if (id == R.id.about) {
             currentFragment = new AboutFragment();
         } else if (id == R.id.google_drive) {
-            currentFragment = new BackupFragment();
+            if (PreferencesUtils.getAccountName(this) == null) {
+                Intent a = new Intent(this, ChooseAccountActivity.class);
+                startActivity(a);
+                drawer.closeDrawer(GravityCompat.START);
+                return false;
+            } else {
+                currentFragment = new BackupFragment();
+            }
         } else if (id == R.id.faq) {
             currentFragment = new FaqFragment();
         } else {
@@ -96,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.activty_main_frame, currentFragment, TAG).commit();
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

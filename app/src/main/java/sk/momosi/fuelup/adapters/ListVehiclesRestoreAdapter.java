@@ -1,80 +1,146 @@
 package sk.momosi.fuelup.adapters;
 
-import android.app.Activity;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import sk.momosi.fuelup.R;
-import sk.momosi.fuelup.business.VehicleService;
+import sk.momosi.fuelup.screens.MainActivity;
 
 /**
- * @author Ondrej Oravcok
- * @version 13.10.2017
+ * @author Ondro
+ * @version 13.11.2017
  */
-public class ListVehiclesRestoreAdapter extends ArrayAdapter<String> {
-
-    private static final String LOG_TAG = ListVehiclesRestoreAdapter.class.getSimpleName();
+public class ListVehiclesRestoreAdapter extends RecyclerView.Adapter<ListVehiclesRestoreAdapter.VehicleRestoreViewHolder> {
 
     private final Callback callback;
-    private final List<String> vehicleNames;
-    private final Set<String> alreadyUsedVehicleNames;
+    private final List<String> vehiclesFromBackup;
+    private final Set<String> vehiclesInDb;
+    private final Set<String> vehiclesChosen;
 
-    public interface Callback {
-        void onItemClickAdd(String vehicleName);
-        void onItemClickRemove(String vehicleName);
+    public ListVehiclesRestoreAdapter(final Callback callback, final Context context, final List<String> vehiclesFromBackup, final Set<String> vehiclesInDb) {
+        super();
+        this.callback = callback;
+        
+        this.vehiclesFromBackup = Collections.unmodifiableList(vehiclesFromBackup);
+        this.vehiclesInDb = Collections.unmodifiableSet(vehiclesInDb);
+        
+        this.vehiclesChosen = new HashSet<>(vehiclesFromBackup);
+        this.vehiclesChosen.removeAll(vehiclesInDb);
+
+        callback.onVehiclesChosenChange(Collections.unmodifiableSet(vehiclesChosen));
     }
 
-    public ListVehiclesRestoreAdapter(Context context, List<String> vehicleNames, Callback callback) {
-        super(context, R.layout.list_item_vehicle_restore, vehicleNames);
-        this.vehicleNames = vehicleNames;
-        this.callback = callback;
-        this.alreadyUsedVehicleNames = VehicleService.getAvailableVehicleNames(context);
+    public interface Callback {
+        void onVehiclesChosenChange(Set<String> vehiclesChosen);
+        void makeWarningToastForVehicle(String name);
     }
 
     @Override
-    @NonNull
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        LayoutInflater inflater = ((Activity)getContext()).getLayoutInflater();
-        convertView = inflater.inflate(R.layout.list_item_vehicle_restore, parent, false);
-
-        String name = vehicleNames.get(position);
-        final boolean enabled = !alreadyUsedVehicleNames.contains(name);
-
-        final CheckBox vehicleName = convertView.findViewById(R.id.checkbox_restore_vehicle);
-        vehicleName.setText(name);
-        if (!enabled) {
-            vehicleName.setTextColor(getContext().getResources().getColor(R.color.colorDisabled));
-        } else {
-            callback.onItemClickAdd(name);
-            vehicleName.setChecked(true);
-        }
-
-        vehicleName.setOnCheckedChangeListener(
-                new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                        if (!enabled) {
-                            vehicleName.setChecked(false);
-                            Toast.makeText(getContext(), R.string.googleDrive_existing_vehicle, Toast.LENGTH_SHORT).show();
-                        } else {
-                            if (isChecked)
-                                callback.onItemClickAdd(compoundButton.getText().toString());
-                            else
-                                callback.onItemClickRemove(compoundButton.getText().toString());
-                        }
-                    }
-                }
-        );
-        return convertView;
+    public VehicleRestoreViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item_vehicle_restore, parent, false);
+        return new VehicleRestoreViewHolder(view);
     }
+
+    @Override
+    public void onBindViewHolder(final VehicleRestoreViewHolder holder, final int position) {
+        final String name = vehiclesFromBackup.get(position);
+
+        boolean disabled = vehiclesInDb.contains(name);
+        boolean chosen = vehiclesChosen.contains(name);
+        int color;
+        int colorText;
+        if (disabled) {
+            color = R.drawable.vehicle_item_disabled;
+            colorText = R.color.colorPrimary;
+        } else {
+            colorText = R.color.colorPrimaryDark;
+            if (chosen)
+                color = R.drawable.vehicle_item_chosen;
+            else
+                color = R.drawable.vehicle_item_unchosen;
+        }
+//        int color = disabled ? R.drawable.vehicle_item_disabled : R.drawable.account_list_shape;
+        holder.itemView.setBackground(MainActivity.getInstance().getResources().getDrawable(color));
+
+        holder.restoreVehicleBox.setText(name);
+        holder.restoreVehicleBox.setChecked(chosen);
+        holder.trashIcon.setVisibility(chosen ? View.GONE : View.VISIBLE);
+//        holder.restoreVehicleBox.tint
+        holder.restoreVehicleBox.setTextColor(MainActivity.getInstance().getResources().getColor(colorText));
+        holder.restoreVehicleBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (vehiclesInDb.contains(name)) {
+                    holder.restoreVehicleBox.setChecked(false);
+                    callback.makeWarningToastForVehicle(name);
+                } else if (isChecked) {
+                    chooseVehicle(name);
+                } else {
+                    unchooseVehicle(name);
+                }
+            }
+        });
+    }
+
+//    public void setChosenVehicles(Set<String> chosenVehicles) {
+//        if (chosenVehicles != null) {
+//            vehiclesChosen.addAll(chosenVehicles);
+//            notifyDataSetChanged();
+//            callback.onVehiclesChosenChange(Collections.unmodifiableSet(vehiclesChosen));
+//        }
+//    }
+
+    private void unchooseVehicle(final @NonNull String name) {
+        if (vehiclesChosen.remove(name)) {
+            notifyDataSetChanged();
+            callback.onVehiclesChosenChange(Collections.unmodifiableSet(vehiclesChosen));
+        }
+    }
+
+    private void chooseVehicle(final @NonNull String name) {
+        if (!vehiclesInDb.contains(name)) {
+            vehiclesChosen.add(name);
+            notifyDataSetChanged();
+            callback.onVehiclesChosenChange(Collections.unmodifiableSet(vehiclesChosen));
+
+        } else {
+                // TODO toast?
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return vehiclesFromBackup.size();
+    }
+
+    class VehicleRestoreViewHolder extends RecyclerView.ViewHolder
+    {
+        final CheckBox restoreVehicleBox;
+        final ImageView trashIcon;
+
+        VehicleRestoreViewHolder(View view) {
+            super(view);
+            restoreVehicleBox = view.findViewById(R.id.checkbox_restore_vehicle);
+            trashIcon = view.findViewById(R.id.restore_item_trash);
+        }
+    }
+
 }

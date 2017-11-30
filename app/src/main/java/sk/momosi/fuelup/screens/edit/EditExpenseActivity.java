@@ -34,6 +34,7 @@ import sk.momosi.fuelup.entity.Vehicle;
 import sk.momosi.fuelup.entity.util.DateUtil;
 import sk.momosi.fuelup.screens.detailfragments.ExpensesListFragment;
 import sk.momosi.fuelup.screens.dialog.DeleteDialog;
+import sk.momosi.fuelup.util.PreferencesUtils;
 
 /**
  * @author Ondrej Oravcok
@@ -234,15 +235,20 @@ public class EditExpenseActivity extends AppCompatActivity implements DeleteDial
     @Override
     public void onResume () {
         super.onResume();
-        if (mObserver == null)
+        boolean isSyncEnabled = PreferencesUtils.getAccountName(this) != null;
+        if (mObserver == null && isSyncEnabled)
             mObserver = new SyncAdapterContentObserver(new Handler(), getApplicationContext());
-        getContentResolver().registerContentObserver(FuelUpContract.ExpenseEntry.CONTENT_URI, true, mObserver);
+        if (isSyncEnabled)
+            getContentResolver().registerContentObserver(
+                    FuelUpContract.ExpenseEntry.CONTENT_URI, true, mObserver);
     }
 
     @Override
     public void onPause () {
         super.onPause();
-        getContentResolver().unregisterContentObserver(mObserver);
+        if (mObserver != null) {
+            getContentResolver().unregisterContentObserver(mObserver);
+        }
     }
 
     private enum Mode {

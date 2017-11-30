@@ -173,6 +173,7 @@
     <string name="googleDrive_err_backup_not_available">Backup is available only after importing or deleting previous version from Google Drive. If you want to remove your old backup and use only actual data, select no vehicle and press \'Start import\' on Import Dialog.</string>
     <string name="googleDrive_errOccurred">The following error occurred: %s</string>
     <string name="googleDrive_forceUpload">Force upload</string>
+    <string name="googleDrive_haveToGrantPrivileges">If you want backup your data, you have to grant privileges to FuelUp.</string>
     <string name="googleDrive_checkPermissions_loader">Checking permissions&#8230;</string>
     <string name="googleDrive_import_dialog_warning">Not included vehicles will be removed also from your Google Drive account!</string>
     <string name="googleDrive_imported_setAndSyncing">Your vehicles have been imported successfully. Your account is now set and syncing.</string>

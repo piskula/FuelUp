@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -19,18 +20,18 @@ public class ImportVehiclesTask extends AsyncTask<Void, Void, Integer> {
 
     private static final String LOG_TAG = ImportVehiclesTask.class.getSimpleName();
 
-    private final Set<String> vehicleNames;
+    private final Collection<String> vehicleNames;
     private final JSONObject json;
     private Exception mLastError = null;
 
-    private final Context context;
+    private final WeakReference<Context> context;
     private final WeakReference<Callback> callbackReference;
 
-    public ImportVehiclesTask(@NonNull Set<String> vehicleNames, @NonNull JSONObject json, @NonNull Callback callback, @NonNull Context context) {
+    public ImportVehiclesTask(@NonNull Collection<String> vehicleNames, @NonNull JSONObject json, @NonNull Callback callback, @NonNull Context context) {
         super();
         this.vehicleNames = vehicleNames;
         this.json = json;
-        this.context = context;
+        this.context = new WeakReference<Context>(context);
         this.callbackReference = new WeakReference<>(callback);
     }
 
@@ -40,7 +41,7 @@ public class ImportVehiclesTask extends AsyncTask<Void, Void, Integer> {
         try {
             for (String vehicleName : vehicleNames) {
                 vehicle = JsonUtil.getVehicle(json, vehicleName);
-                long vehicleId = JsonUtil.importVehicle(vehicle, context);
+                long vehicleId = JsonUtil.importVehicle(vehicle, context.get());
                 if (vehicleId != 0)
                     Log.i(LOG_TAG, "vehicle " + vehicleName + " imported with id=" + vehicleId);
                 else
