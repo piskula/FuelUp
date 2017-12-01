@@ -115,7 +115,7 @@ public class CheckPreviousVersionsActivity extends AppCompatActivity
                 numberOfClicks++;
                 if (vehiclesChosen.size() < adapter.getItemCount()) {
                     if (numberOfClicks <= 1) {
-                        Toast.makeText(this, "You are about to delete some of your backed up vehicles. Press \'START IMPORT\' again to confirm.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, R.string.googleDrive_import_delete_warning, Toast.LENGTH_LONG).show();
                     } else if (vehiclesChosen.isEmpty()) {
                         setAccountAndFinish();
                     } else {

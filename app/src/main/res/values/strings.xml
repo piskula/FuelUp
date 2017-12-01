@@ -179,6 +179,7 @@
     <string name="googleDrive_checkPermissions_loader">Checking permissions&#8230;</string>
     <string name="googleDrive_checkPrevious_loader">Checking previous versions&#8230;</string>
     <string name="googleDrive_chooseAccount">Choose account:</string>
+    <string name="googleDrive_import_delete_warning">You are about to delete some of your backed up vehicles. Press \'START IMPORT\' again to confirm.</string>
     <string name="googleDrive_import_dialog_warning">Not included vehicles will be removed also from your Google Drive account!</string>
     <string name="googleDrive_imported_setAndSyncing">Your vehicles have been imported successfully. Your account is now set and syncing.</string>
     <string name="googleDrive_importingFromBackup">Importing vehicles from backup&#8230;</string>

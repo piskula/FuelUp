@@ -15,8 +15,8 @@ android {
         applicationId "sk.momosi.fuelup"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 12
-        versionName "2.4"
+        versionCode 13
+        versionName "2.4.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

@@ -179,6 +179,7 @@
     <string name="googleDrive_checkPermissions_loader">Overujem povolenia&#8230;</string>
     <string name="googleDrive_checkPrevious_loader">Hľadám predošlé zálohy&#8230;</string>
     <string name="googleDrive_chooseAccount">Choose account:</string>
+    <string name="googleDrive_import_delete_warning">Chystáte sa odstrániť vozidlo zo zálohy. Stlačte \'ZAČAŤ IMPORT\' ešte raz pre potvrdenie.</string>
     <string name="googleDrive_import_dialog_warning">Nezaškrtnuté vozidá budú trvalo odstránené z Vašej zálohy na Google Drive!</string>
     <string name="googleDrive_imported_setAndSyncing">Úspešne ste naimportovali vozidlá zo zálohy. Váš účet odteraz zálohuje dáta automaticky.</string>
     <string name="googleDrive_importingFromBackup">Importujem vozidlá zo zálohy&#8230;</string>
