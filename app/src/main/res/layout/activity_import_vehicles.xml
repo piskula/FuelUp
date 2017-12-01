@@ -18,7 +18,7 @@
         android:layout_centerHorizontal="true"
         android:textSize="20sp"
         android:textColor="@color/colorWhite"
-        android:text="Checking permissions to OneDrive" />
+        android:text="@string/googleDrive_importingFromBackup" />
 
     <TextView
         android:id="@+id/importVehicles_txtStatus"

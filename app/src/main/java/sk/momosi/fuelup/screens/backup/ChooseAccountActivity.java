@@ -25,13 +25,14 @@ import static sk.momosi.fuelup.screens.backup.CheckPermissionsActivity.KEY_ACCOU
 public class ChooseAccountActivity extends AppCompatActivity implements View.OnClickListener, ListAccountsAdapter.Callback {
 
     private static final String LOG_TAG = ChooseAccountActivity.class.getSimpleName();
-    private static final int REQUEST_ACCOUNT_PICKER = 1000;
     private static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1001;
+    public static final String KEY_IS_THIS_FIRST_RUN = "is_this_first_run";
 
     private ListAccountsAdapter adapter;
 
     private ProgressBar progressBar;
     private Button buttonNext;
+    private Button buttonSkip;
     private RecyclerView accounts;
 
     private final Bundle bundle = new Bundle();
@@ -43,16 +44,25 @@ public class ChooseAccountActivity extends AppCompatActivity implements View.OnC
 
         progressBar = findViewById(R.id.chooseAccount_progress);
         buttonNext = findViewById(R.id.chooseAccount_btnNext);
+        buttonSkip = findViewById(R.id.chooseAccount_btnSkip);
         accounts = findViewById(R.id.listAccounts);
 
         progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
         progressBar.setVisibility(View.VISIBLE);
 
         buttonNext.setOnClickListener(this);
+        buttonSkip.setOnClickListener(this);
         accounts.setLayoutManager(new LinearLayoutManager(this));
 
         if (adapter == null)
             adapter = new ListAccountsAdapter(this, this);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            if (extras.getBoolean(KEY_IS_THIS_FIRST_RUN, false)) {
+                buttonSkip.setVisibility(View.VISIBLE);
+            }
+        }
 
         init();
     }
@@ -81,6 +91,9 @@ public class ChooseAccountActivity extends AppCompatActivity implements View.OnC
                 intent.putExtras(bundle);
                 startActivity(intent);
                 // finish(); //TODO if we do not want to get back to this page
+                break;
+            case R.id.chooseAccount_btnSkip:
+                onBackPressed();
                 break;
         }
     }

@@ -1,8 +1,5 @@
 package sk.momosi.fuelup.screens;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import sk.momosi.fuelup.R;
-import sk.momosi.fuelup.business.googledrive.authenticator.AccountService;
 import sk.momosi.fuelup.screens.backup.ChooseAccountActivity;
 import sk.momosi.fuelup.util.PreferencesUtils;
 
@@ -59,10 +55,14 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             // if you want to fill Dummy Vehicle with data
             // SampleDataUtils.initializeWhenFirstRun(getApplicationContext());
 
-            Account genericAccount = AccountService.getAccount();
+            Intent intent = new Intent(this, ChooseAccountActivity.class);
+            intent.putExtra(ChooseAccountActivity.KEY_IS_THIS_FIRST_RUN, true);
+            startActivity(intent);
 
-            AccountManager accountManager = (AccountManager) this.getSystemService(Context.ACCOUNT_SERVICE);
-            accountManager.addAccountExplicitly(genericAccount, null, null);
+//            Account genericAccount = AccountService.getAccount();
+
+//            AccountManager accountManager = (AccountManager) this.getSystemService(Context.ACCOUNT_SERVICE);
+//            accountManager.addAccountExplicitly(genericAccount, null, null);
 
             settings.edit().putBoolean("my_first_time", false).apply();
         }

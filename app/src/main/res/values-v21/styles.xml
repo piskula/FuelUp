@@ -31,4 +31,13 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <style name="NextButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="SkipButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
 </resources>

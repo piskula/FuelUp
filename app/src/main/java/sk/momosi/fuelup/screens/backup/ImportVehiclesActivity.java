@@ -101,8 +101,7 @@ public class ImportVehiclesActivity extends AppCompatActivity implements ImportV
     public void onImportVehiclesTaskPostExecute(Integer output) {
         PreferencesUtils.setAccountName(this, account);
         initializeSyncing();
-        Toast.makeText(this, "Your account " + account + " is set and syncing", Toast.LENGTH_LONG).show();
-//        Toast.makeText(this, R.string.googleDrive_setAndSyncing, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.googleDrive_setAndSyncing, account), Toast.LENGTH_LONG).show();
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

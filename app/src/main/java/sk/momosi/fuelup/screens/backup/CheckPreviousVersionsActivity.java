@@ -33,8 +33,10 @@ import sk.momosi.fuelup.adapters.ListVehiclesRestoreAdapter;
 import sk.momosi.fuelup.business.googledrive.CheckPreviousAppInstalledTask;
 import sk.momosi.fuelup.business.googledrive.DriveBackupFileUtil;
 import sk.momosi.fuelup.business.googledrive.JsonUtil;
+import sk.momosi.fuelup.business.googledrive.syncing.DriveSyncingUtils;
 import sk.momosi.fuelup.screens.MainActivity;
 import sk.momosi.fuelup.util.ConnectivityUtils;
+import sk.momosi.fuelup.util.PreferencesUtils;
 
 import static sk.momosi.fuelup.screens.backup.CheckPermissionsActivity.KEY_ACCOUNT_FROM_CHECK_PERMISSIONS;
 import static sk.momosi.fuelup.screens.backup.ImportVehiclesActivity.KEY_ACCOUNT;
@@ -105,23 +107,33 @@ public class CheckPreviousVersionsActivity extends AppCompatActivity
         }
     }
 
+    private int numberOfClicks = 0;
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.checkPrevious_btnNext:
-                if (vehiclesChosen != null) {
-                    if (vehiclesChosen.isEmpty()) {
+                numberOfClicks++;
+                if (vehiclesChosen.size() < adapter.getItemCount()) {
+                    if (numberOfClicks <= 1) {
+                        Toast.makeText(this, "You are about to delete some of your backed up vehicles. Press \'START IMPORT\' again to confirm.", Toast.LENGTH_LONG).show();
+                    } else if (vehiclesChosen.isEmpty()) {
                         setAccountAndFinish();
                     } else {
-                        Intent intent = new Intent(this, ImportVehiclesActivity.class);
-                        intent.putExtra(KEY_ACCOUNT, mCredential.getSelectedAccountName());
-                        intent.putExtra(KEY_VEHCLES, new ArrayList<>(vehiclesChosen));
-                        intent.putExtra(KEY_JSON, json.toString());
-                        startActivity(intent);
+                        startImportActivity();
                     }
+                } else {
+                    startImportActivity();
                 }
                 break;
         }
+    }
+
+    private void startImportActivity() {
+        Intent intent = new Intent(this, ImportVehiclesActivity.class);
+        intent.putExtra(KEY_ACCOUNT, mCredential.getSelectedAccountName());
+        intent.putExtra(KEY_VEHCLES, new ArrayList<>(vehiclesChosen));
+        intent.putExtra(KEY_JSON, json.toString());
+        startActivity(intent);
     }
 
 
@@ -156,10 +168,15 @@ public class CheckPreviousVersionsActivity extends AppCompatActivity
     }
 
     private void setAccountAndFinish() {
-        // TODO set account
-        Toast.makeText(this, "Your account is now set and syncing.", Toast.LENGTH_LONG).show();
-        startActivity(new Intent(this,
-                MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        String account = mCredential.getSelectedAccountName();
+
+        PreferencesUtils.setAccountName(this, account);
+        initializeSyncing();
+        Toast.makeText(this, getString(R.string.googleDrive_setAndSyncing, account), Toast.LENGTH_LONG).show();
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
         finish();
     }
 
@@ -186,11 +203,16 @@ public class CheckPreviousVersionsActivity extends AppCompatActivity
     public void onVehiclesChosenChange(Set<String> vehiclesChosen) {
         this.vehiclesChosen = Collections.unmodifiableSet(vehiclesChosen);
         this.count.setText(String.valueOf(vehiclesChosen.size()));
+        numberOfClicks = 0;
     }
 
     @Override
     public void makeWarningToastForVehicle(String name) {
         Snackbar.make(chooseVehiclesLayout, R.string.googleDrive_existing_vehicle, Snackbar.LENGTH_SHORT).show();
-//        Toast.makeText(this, R.string.googleDrive_existing_vehicle, Toast.LENGTH_SHORT).show();
+    }
+
+    private void initializeSyncing() {
+        DriveSyncingUtils.enableSyncGlobally(this);
+        DriveSyncingUtils.requestImmediateSync();
     }
 }

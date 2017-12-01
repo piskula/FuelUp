@@ -9,14 +9,16 @@
     <string name="currency">Currency</string>
     <string name="Date">Date</string>
     <string name="dismiss">Dismiss</string>
-    <string name="volume_units">Volume units</string>
     <string name="fuel">Fuel</string>
+    <string name="next">Next</string>
     <string name="price">Price</string>
     <string name="remove">Remove</string>
     <string name="select_vehicles">Select vehicles</string>
+    <string name="skip">Skip</string>
     <string name="update">Update</string>
     <string name="vehicleName">Vehicle name</string>
     <string name="vehicle_type">Vehicle type</string>
+    <string name="volume_units">Volume units</string>
     <string name="volumeUnit_gallons_us">US Gallons</string>
     <string name="volumeUnit_gallons_uk">UK Gallons</string>
     <string name="volumeUnit_litres">Litres</string>
@@ -175,6 +177,8 @@
     <string name="googleDrive_forceUpload">Force upload</string>
     <string name="googleDrive_haveToGrantPrivileges">If you want backup your data, you have to grant privileges to FuelUp.</string>
     <string name="googleDrive_checkPermissions_loader">Checking permissions&#8230;</string>
+    <string name="googleDrive_checkPrevious_loader">Checking previous versions&#8230;</string>
+    <string name="googleDrive_chooseAccount">Choose account:</string>
     <string name="googleDrive_import_dialog_warning">Not included vehicles will be removed also from your Google Drive account!</string>
     <string name="googleDrive_imported_setAndSyncing">Your vehicles have been imported successfully. Your account is now set and syncing.</string>
     <string name="googleDrive_importingFromBackup">Importing vehicles from backup&#8230;</string>
@@ -182,12 +186,11 @@
     <string name="googleDrive_noneAccount">none</string>
     <string name="googleDrive_not_configured">You have not configured Google account yet.</string>
     <string name="googleDrive_nothingToImport">You chose nothing to import. Your previous back up have been removed.</string>
-    <string name="googleDrive_permissionsOK_checkingPrevious">Permissions OK, checking previous versions&#8230;</string>
     <string name="googleDrive_permissionsNotGranted">Permissions not granted.</string>
     <string name="googleDrive_removeAccount">Remove account</string>
     <string name="googleDrive_requires_google_play">This app requires Google Play Services. Please install Google Play Services on your device and relaunch this app.</string>
     <string name="googleDrive_retrievingLastBackup">Retrieving Google Drive last backup&#8230;</string>
-    <string name="googleDrive_setAndSyncing">Your account is set and syncing.</string>
+    <string name="googleDrive_setAndSyncing">Your account %1$s is set and syncing.</string>
     <string name="googleDrive_startImport_btn">Start import</string>
     <string name="googleDrive_sync_upToDate">Syncing is active and backup is up to date.</string>
     <string name="googleDrive_syncing_NOT_active">Syncing is NOT active</string>
@@ -195,6 +198,7 @@
     <string name="googleDrive_syncingActive_pendingUploads">Syncing Active, but there are some pending uploads.</string>
     <string name="googleDrive_thereIsPreviousVersion">There is previous version of backup on your Google Drive account.</string>
     <string name="googleDrive_toast_syncInProgress">Syncing&#8230;</string>
+    <string name="googleDrive_vehiclesToImport">Vehicles to import:</string>
     <string name="googleDrive_youAccount_title">Your Google account for this app:</string>
 
     <!--faq-->

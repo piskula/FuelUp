@@ -9,14 +9,16 @@
     <string name="currency">Měna</string>
     <string name="Date">Datum</string>
     <string name="dismiss">Zavřít</string>
-    <string name="volume_units">Jednotka objemu</string>
     <string name="fuel">Palivo</string>
+    <string name="next">Dále</string>
     <string name="price">Cena</string>
     <string name="remove">Odstranit</string>
     <string name="select_vehicles">Zvolte vozidla</string>
+    <string name="skip">Přeskočit</string>
     <string name="update">Upravit</string>
     <string name="vehicleName">Jméno vozu</string>
     <string name="vehicle_type">Typ vozu</string>
+    <string name="volume_units">Jednotka objemu</string>
     <string name="volumeUnit_gallons_us">US Galony</string>
     <string name="volumeUnit_gallons_uk">UK Galony</string>
     <string name="volumeUnit_litres">Litry</string>
@@ -67,6 +69,7 @@
 
     <string name="updateCarActivity_wrong_number_format">Nesprávný formát čísla</string>
 
+    <string name="add_fillup_distance_overall">Celková vzdálenost</string>
     <string name="add_fillup_distanceFromLast">Vzdálenost od posledního tankování</string>
     <string name="add_fillup_fail">Vytvoření tankování zlyhalo</string>
     <string name="add_fillup_fail_update">Aktualizace tankování se nezdařila</string>
@@ -174,6 +177,8 @@
     <string name="googleDrive_forceUpload">Zálohovat teď</string>
     <string name="googleDrive_haveToGrantPrivileges">Když chcete zálohovat Vaše data, musíte dát aplikaci FuelUp příslušná oprávnění.</string>
     <string name="googleDrive_checkPermissions_loader">Ověřuji povolení&#8230;</string>
+    <string name="googleDrive_checkPrevious_loader">Hledám předchozí verze&#8230;</string>
+    <string name="googleDrive_chooseAccount">Choose account:</string>
     <string name="googleDrive_import_dialog_warning">Nezahrnuté vozy budou odstraněny také z Vaší zálohy na Google Drive!</string>
     <string name="googleDrive_imported_setAndSyncing">Úspěšne ste naimportovali vozidla ze zálohy. Váš účet nyní zálohuje data automaticky.</string>
     <string name="googleDrive_importingFromBackup">Importuji vozidlá ze zálohy&#8230;</string>
@@ -181,12 +186,11 @@
     <string name="googleDrive_noneAccount">žádný</string>
     <string name="googleDrive_not_configured">Dosud jste nenakonfigurovali účet Google.</string>
     <string name="googleDrive_nothingToImport">Zvolili ste si neimportovat žádné vozidlo. Vaše předchozí záloha byla odstraněna.</string>
-    <string name="googleDrive_permissionsOK_checkingPrevious">Oprávnění jsou OK, hledám předchozí verze&#8230;</string>
     <string name="googleDrive_permissionsNotGranted">Aplikace FuelUp nemá od Vás povolení používat Google Drive.</string>
     <string name="googleDrive_removeAccount">Odstranit účet</string>
     <string name="googleDrive_requires_google_play">Tato aplikace potřebuje Službu Google Play. Nainstalujte Službu Google Play a znovu spusťte aplikaci.</string>
     <string name="googleDrive_retrievingLastBackup">Načítám poslední zálohu z Google Drive&#8230;</string>
-    <string name="googleDrive_setAndSyncing">Váš účet je aktivní a data sa zálohují automaticky.</string>
+    <string name="googleDrive_setAndSyncing">Váš účet %1$s je aktivní a data sa zálohují automaticky.</string>
     <string name="googleDrive_startImport_btn">Začít import</string>
     <string name="googleDrive_sync_upToDate">Zálohování je aktivní a záloha je aktuální.</string>
     <string name="googleDrive_syncing_NOT_active">Zálohování NENÍ aktivní</string>
@@ -194,6 +198,7 @@
     <string name="googleDrive_syncingActive_pendingUploads">Zálohování je aktivní, ale něktorá data čekají na upload.</string>
     <string name="googleDrive_thereIsPreviousVersion">Na Vašem účtu Google Drive již existuje nějaká záloha.</string>
     <string name="googleDrive_toast_syncInProgress">Synchronizuji&#8230;</string>
+    <string name="googleDrive_vehiclesToImport">Vozidla pro importování:</string>
     <string name="googleDrive_youAccount_title">Váš Google účet pre tuto aplikaci:</string>
 
     <!--faq-->

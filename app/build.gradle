@@ -55,9 +55,9 @@ dependencies {
     compile 'com.theartofdev.edmodo:android-image-cropper:2.5.1'
     compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
     compile 'pub.devrel:easypermissions:0.3.0'
-    compile 'com.google.android.gms:play-services-drive:11.6.0'
-    compile 'com.google.android.gms:play-services-auth:11.6.0'
-    compile 'com.google.android.gms:play-services-gcm:11.6.0'
+    compile 'com.google.android.gms:play-services-drive:11.6.2'
+    compile 'com.google.android.gms:play-services-auth:11.6.2'
+    compile 'com.google.android.gms:play-services-gcm:11.6.2'
     compile('com.google.api-client:google-api-client-android:1.23.0') {
         exclude group: 'org.apache.httpcomponents'
     }

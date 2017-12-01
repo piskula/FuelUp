@@ -77,10 +77,12 @@ public class CheckPermissionsActivity extends AppCompatActivity implements Check
     /* Async Task */
     @Override
     public void onCheckPermissionsTaskPreExecute() {
+        Log.e(LOG_TAG, "pre execute");
     }
 
     @Override
     public void onCheckPermissionsTaskPostExecute(Boolean output) {
+        Log.e(LOG_TAG, "post execute");
         Intent intent = new Intent(this, CheckPreviousVersionsActivity.class);
         intent.putExtra(KEY_ACCOUNT_FROM_CHECK_PERMISSIONS, mCredential.getSelectedAccountName());
         startActivity(intent);
@@ -88,6 +90,7 @@ public class CheckPermissionsActivity extends AppCompatActivity implements Check
 
     @Override
     public void onAsyncTaskCancel(Exception mLastError) {
+        Log.e(LOG_TAG, "async error");
         if (mLastError != null) {
             if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
                 showGooglePlayServicesAvailabilityErrorDialog(

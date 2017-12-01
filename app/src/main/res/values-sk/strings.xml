@@ -9,14 +9,16 @@
     <string name="currency">Mena</string>
     <string name="Date">Dátum</string>
     <string name="dismiss">Zavrieť</string>
-    <string name="volume_units">Jednotky objemu</string>
     <string name="fuel">Palivo</string>
+    <string name="next">Ďalej</string>
     <string name="price">Cena</string>
     <string name="remove">Odstrániť</string>
     <string name="select_vehicles">Zvoľte vozidlá</string>
+    <string name="skip">Preskočiť</string>
     <string name="update">Upraviť</string>
     <string name="vehicleName">Názov vozidla</string>
     <string name="vehicle_type">Typ vozidla</string>
+    <string name="volume_units">Jednotky objemu</string>
     <string name="volumeUnit_gallons_us">US Galóny</string>
     <string name="volumeUnit_gallons_uk">UK Galóny</string>
     <string name="volumeUnit_litres">Litre</string>
@@ -67,6 +69,7 @@
 
     <string name="updateCarActivity_wrong_number_format">Nesprávny formát čísla</string>
 
+    <string name="add_fillup_distance_overall">Celková vzdialenosť</string>
     <string name="add_fillup_distanceFromLast">Vzdialenosť od posledného tankovania</string>
     <string name="add_fillup_fail">Vytvorenie tankovania zlyhalo</string>
     <string name="add_fillup_fail_update">Aktualizácia tankovania zlyhala</string>
@@ -174,6 +177,8 @@
     <string name="googleDrive_forceUpload">Zálohovať teraz</string>
     <string name="googleDrive_haveToGrantPrivileges">Ak chcete zálohovať Vaše dáta, musíte dať aplikácii FuelUp príslušné práva.</string>
     <string name="googleDrive_checkPermissions_loader">Overujem povolenia&#8230;</string>
+    <string name="googleDrive_checkPrevious_loader">Hľadám predošlé zálohy&#8230;</string>
+    <string name="googleDrive_chooseAccount">Choose account:</string>
     <string name="googleDrive_import_dialog_warning">Nezaškrtnuté vozidá budú trvalo odstránené z Vašej zálohy na Google Drive!</string>
     <string name="googleDrive_imported_setAndSyncing">Úspešne ste naimportovali vozidlá zo zálohy. Váš účet odteraz zálohuje dáta automaticky.</string>
     <string name="googleDrive_importingFromBackup">Importujem vozidlá zo zálohy&#8230;</string>
@@ -181,12 +186,11 @@
     <string name="googleDrive_noneAccount">žiadny</string>
     <string name="googleDrive_not_configured">Ešte ste si nenastavili Google účet.</string>
     <string name="googleDrive_nothingToImport">Zvolili ste si neimportovať žiadne vozidlo. Vaša predchádzajúca záloha bola odstránená.</string>
-    <string name="googleDrive_permissionsOK_checkingPrevious">Povolenia sú OK, hľadám predošlé zálohy&#8230;</string>
     <string name="googleDrive_permissionsNotGranted">Aplikácia FuelUp nemá od Vás povolenie používať Google Drive.</string>
     <string name="googleDrive_removeAccount">Odstrániť účet</string>
     <string name="googleDrive_requires_google_play">Táto aplikácia potrebuje Službu Google Play. Nainštalujte Službu Google Play a znovu zapnite aplikáciu.</string>
     <string name="googleDrive_retrievingLastBackup">Načítam poslednú zálohu z Google Drive&#8230;</string>
-    <string name="googleDrive_setAndSyncing">Váš účet je aktívny a dáta sa zálohujú automaticky.</string>
+    <string name="googleDrive_setAndSyncing">Váš účet %1$s je aktívny a dáta sa zálohujú automaticky.</string>
     <string name="googleDrive_startImport_btn">Začať import</string>
     <string name="googleDrive_sync_upToDate">Zálohovanie je aktívne a záloha je aktuálna.</string>
     <string name="googleDrive_syncing_NOT_active">Zálohovanie NIE JE aktívne</string>
@@ -194,6 +198,7 @@
     <string name="googleDrive_syncingActive_pendingUploads">Zálohovanie je aktívne, ale niektoré dáta čakajú na upload.</string>
     <string name="googleDrive_thereIsPreviousVersion">Na Vašom účte Google Drive už existuje nejaká záloha.</string>
     <string name="googleDrive_toast_syncInProgress">Synchronizujem&#8230;</string>
+    <string name="googleDrive_vehiclesToImport">Vozidlá pre importovanie:</string>
     <string name="googleDrive_youAccount_title">Váš Google účet pre túto aplikáciu:</string>
 
     <!--faq-->
