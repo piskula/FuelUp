@@ -27,6 +27,7 @@
     <string name="toast_emptyFields">There are some empty fields above.</string>
     <string name="title_expenses">Expenses</string>
     <string name="title_fillUps">Fill Ups</string>
+    <string name="toast_invalidDistance">Given distance is invalid.</string>
     <string name="title_mileage">Mileage</string>
     <string name="toast_nameNotUnique">Name must be unique.</string>
     <string name="title_statistics">Statistics</string>
@@ -69,13 +70,15 @@
 
     <string name="updateCarActivity_wrong_number_format">Wrong number format</string>
 
-    <string name="add_fillup_distance_overall">Overall distance</string>
+    <string name="add_fillup_actual_mileage">Actual mileage</string>
+    <string name="add_fillup_actualStatus">actual</string>
     <string name="add_fillup_distanceFromLast">Distance from last fill up</string>
     <string name="add_fillup_fail">Fill up create failed</string>
     <string name="add_fillup_fail_update">Fill up update failed</string>
     <string name="add_fillup_fuel_volume">Fuel volume</string>
     <string name="add_fillup_full_fillup">Full fill up</string>
     <string name="add_fillup_info">Note</string>
+    <string name="add_fillup_madeStatus">made</string>
     <string name="add_fillup_pricePerGallon">Price per gallon</string>
     <string name="add_fillup_pricePerGallon_short">Per gallon</string>
     <string name="add_fillup_pricePerLitre">Price per litre</string>

@@ -257,6 +257,14 @@ public class StatisticsService {
         }
     }
 
+    public Long getActualMileageAsLongIfPossible() {
+        if (vehicle.getStartMileage() == null) {
+            return null;
+        } else {
+            return vehicle.getStartMileage() + getTotalDrivenDistance();
+        }
+    }
+
     private BigDecimal getTotalFuelVolume() {
         Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
                 "SELECT TOTAL(" + FillUpEntry.COLUMN_FUEL_VOLUME

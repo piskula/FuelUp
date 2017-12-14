@@ -17,6 +17,11 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+            <Switch
+                android:id="@+id/switch_overal_fromLast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/txt_input_addfillup_distance_from_last_fillup_adding"
                 android:layout_width="0dp"

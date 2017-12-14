@@ -18,6 +18,7 @@ import java.util.Calendar;
 
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.business.FillUpService;
+import sk.momosi.fuelup.business.StatisticsService;
 import sk.momosi.fuelup.data.FuelUpContract.FillUpEntry;
 import sk.momosi.fuelup.entity.util.CurrencyUtil;
 import sk.momosi.fuelup.entity.util.DateUtil;
@@ -27,7 +28,7 @@ import sk.momosi.fuelup.screens.detailfragments.FillUpsListFragment;
 
 public class AddFillUpActivity extends FillUpAbstractActivity implements CompoundButton.OnCheckedChangeListener {
 
-    private static final String TAG = AddFillUpActivity.class.getSimpleName();
+    private static final String LOG_TAG = AddFillUpActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,8 @@ public class AddFillUpActivity extends FillUpAbstractActivity implements Compoun
 
         mVehicle = getIntent()
                 .getParcelableExtra(FillUpsListFragment.VEHICLE_FROM_FRAGMENT_TO_EDIT_FILLUP);
+        overalDistance = new StatisticsService(getApplicationContext(), mVehicle.getId())
+                .getActualMileageAsLongIfPossible();
 
         initViews();
     }
@@ -48,12 +51,14 @@ public class AddFillUpActivity extends FillUpAbstractActivity implements Compoun
         mTxtDistanceUnit.setText(mVehicle.getDistanceUnit().toString());
         mTxtFuelVolumeUnit.setText(mVehicle.getVolumeUnit().toString());
         this.onCheckedChanged(mBtnSwitchPrice, false);
-    }
 
-    protected void initViews() {
-        super.initViews();
-
-        actionBar.setTitle(R.string.add_fillup_title_create);
+        if (overalDistance != null) {
+            distanceMode = SwitchDistance.overall;
+            mTxtInputDistance.setHint(getString(R.string.add_fillup_actual_mileage));
+        } else {
+            distanceMode = SwitchDistance.fromLast;
+            isWholeDistanceTyped.setVisibility(View.GONE);
+        }
     }
 
     public void onClickAdd(View view) {
@@ -73,6 +78,13 @@ public class AddFillUpActivity extends FillUpAbstractActivity implements Compoun
         decimalFormat.setParseBigDecimal(true);
 
         Long createdDistance = Long.parseLong(distance.toString());
+        if (distanceMode == SwitchDistance.overall) {
+            createdDistance = createdDistance - overalDistance;
+            if (createdDistance <= 0) {
+                Snackbar.make(findViewById(android.R.id.content), R.string.toast_invalidDistance, Snackbar.LENGTH_LONG).show();
+                return;
+            }
+        }
 
         Calendar createdDate;
         BigDecimal createdFuelVol;
@@ -82,7 +94,7 @@ public class AddFillUpActivity extends FillUpAbstractActivity implements Compoun
             createdPrice = (BigDecimal) decimalFormat.parse(price.toString());
             createdDate = DateUtil.parseDateTimeFromString(date, getApplicationContext());
         } catch (ParseException ex) {
-            Log.d(TAG, "tried bad format", ex);
+            Log.d(LOG_TAG, "tried bad format", ex);
             throw new RuntimeException(ex);
         }
 

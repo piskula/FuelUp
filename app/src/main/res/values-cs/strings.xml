@@ -69,7 +69,7 @@
 
     <string name="updateCarActivity_wrong_number_format">Nesprávný formát čísla</string>
 
-    <string name="add_fillup_distance_overall">Celková vzdálenost</string>
+    <string name="add_fillup_actual_mileage">Celková vzdálenost</string>
     <string name="add_fillup_distanceFromLast">Vzdálenost od posledního tankování</string>
     <string name="add_fillup_fail">Vytvoření tankování zlyhalo</string>
     <string name="add_fillup_fail_update">Aktualizace tankování se nezdařila</string>

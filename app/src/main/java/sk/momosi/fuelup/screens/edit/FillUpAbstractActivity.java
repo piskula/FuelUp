@@ -6,12 +6,17 @@ import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -31,6 +36,8 @@ import sk.momosi.fuelup.util.PreferencesUtils;
  */
 public abstract class FillUpAbstractActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
+    private static final String LOG_TAG = FillUpAbstractActivity.class.getSimpleName();
+
     protected EditText mTxtDistance;
     protected EditText mTxtFuelVolume;
     protected TextView mTxtFuelVolumeUnit;
@@ -39,21 +46,25 @@ public abstract class FillUpAbstractActivity extends AppCompatActivity implement
     protected TextView mTxtDate;
 
     protected TextInputLayout mTxtInputPrice;
+    protected TextInputLayout mTxtInputDistance;
 
     protected TextView mTxtDistanceUnit;
     protected TextView mTxtFuelPriceUnit;
 
     protected ToggleButton mBtnSwitchPrice;
     protected CheckBox mCheckBoxIsFullFill;
+    protected Switch isWholeDistanceTyped;
 
     protected Button mBtnAdd;
     protected ActionBar actionBar;
 
     protected SwitchPrice priceMode = SwitchPrice.perVolume;
+    protected SwitchDistance distanceMode = SwitchDistance.overall;
 
     private Calendar fillUpDate;
 
     protected Vehicle mVehicle;
+    protected Long overalDistance;
 
     private SyncAdapterContentObserver mObserver;
 
@@ -72,20 +83,67 @@ public abstract class FillUpAbstractActivity extends AppCompatActivity implement
         mTxtPrice = findViewById(R.id.txt_addfillup_price);
         mTxtFuelPriceUnit = findViewById(R.id.txt_addfillup_fuel_price_unit);
         mTxtInputPrice = findViewById(R.id.txt_input_addfillup_price);
+        mTxtInputDistance = findViewById(R.id.txt_input_addfillup_distance_from_last_fillup_adding);
         mTxtDate = findViewById(R.id.txt_addfillup_date);
         mTxtInfo = findViewById(R.id.txt_addfillup_information);
         mCheckBoxIsFullFill = findViewById(R.id.checkBox_fullFillUp);
         mBtnAdd = findViewById(R.id.btn_add_fillup);
         mBtnSwitchPrice = findViewById(R.id.btn_switch_price);
+        isWholeDistanceTyped = findViewById(R.id.switch_overal_fromLast);
 
         mBtnSwitchPrice.setOnCheckedChangeListener(this);
+        isWholeDistanceTyped.setChecked(overalDistance != null);
+        isWholeDistanceTyped.setOnCheckedChangeListener(this);
 
         actionBar = getSupportActionBar();
         if (actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
 
-        mTxtDistance.addTextChangedListener(new NonZeroTextWatcher(mTxtDistance));
         mTxtFuelVolume.addTextChangedListener(new NonZeroTextWatcher(mTxtFuelVolume));
+        mTxtDistance.addTextChangedListener(new NonZeroTextWatcher(mTxtDistance));
+        mTxtDistance.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                invalidateOptionsMenu();
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.edit_fillup, menu);
+
+        MenuItem overalDistanceMenuItem = menu.findItem(R.id.txt_vehicle_mileage);
+
+        if (this.overalDistance != null) {
+            String distanceTypedString = mTxtDistance.getText().toString();
+            Long distanceTyped = distanceTypedString.isEmpty() ? 0 : Long.valueOf(distanceTypedString);
+
+            if (distanceMode == SwitchDistance.fromLast) {
+                Long distance = distanceTyped + this.overalDistance;
+                overalDistanceMenuItem.setTitle(getString(R.string.add_fillup_actualStatus)
+                        + " " + distance.toString() + mVehicle.getDistanceUnit().toString());
+                overalDistanceMenuItem.setVisible(true);
+
+            } else {
+                Long distance = distanceTyped - this.overalDistance;
+                if (distance > 0) {
+                    overalDistanceMenuItem.setTitle(getString(R.string.add_fillup_madeStatus)
+                            + " " + distance.toString() + mVehicle.getDistanceUnit().toString());
+                    overalDistanceMenuItem.setVisible(true);
+                } else {
+                    overalDistanceMenuItem.setVisible(false);
+                }
+            }
+        } else {
+            overalDistanceMenuItem.setVisible(false);
+        }
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     /**
@@ -111,14 +169,23 @@ public abstract class FillUpAbstractActivity extends AppCompatActivity implement
     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
         if (compoundButton.getId() == mBtnSwitchPrice.getId()) {
             if (isChecked) {
-                priceMode = AddFillUpActivity.SwitchPrice.total;
+                priceMode = SwitchPrice.total;
                 mTxtInputPrice.setHint(getString(R.string.add_fillup_priceTotal));
                 mTxtFuelPriceUnit.setText(mVehicle.getCurrencySymbol());
             } else {
-                priceMode = AddFillUpActivity.SwitchPrice.perVolume;
+                priceMode = SwitchPrice.perVolume;
                 mTxtInputPrice.setHint(getString(R.string.add_fillup_pricePerLitre));
                 mTxtFuelPriceUnit.setText(getString(R.string.unit_pricePerLitre, mVehicle.getPerLitreSubcurrencySymbol()));
             }
+        } else if (compoundButton.getId() == isWholeDistanceTyped.getId()) {
+            if (isChecked) {
+                distanceMode = SwitchDistance.overall;
+                mTxtInputDistance.setHint(getString(R.string.add_fillup_actual_mileage));
+            } else {
+                distanceMode = SwitchDistance.fromLast;
+                mTxtInputDistance.setHint(getString(R.string.add_fillup_distanceFromLast));
+            }
+            invalidateOptionsMenu();
         }
     }
 
@@ -144,5 +211,10 @@ public abstract class FillUpAbstractActivity extends AppCompatActivity implement
     protected enum SwitchPrice {
         total,
         perVolume
+    }
+
+    protected enum SwitchDistance {
+        fromLast,
+        overall
     }
 }

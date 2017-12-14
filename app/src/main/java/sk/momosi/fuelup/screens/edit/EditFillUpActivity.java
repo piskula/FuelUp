@@ -22,6 +22,7 @@ import java.util.Currency;
 
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.business.FillUpService;
+import sk.momosi.fuelup.business.StatisticsService;
 import sk.momosi.fuelup.data.FuelUpContract.FillUpEntry;
 import sk.momosi.fuelup.data.provider.VehicleProvider;
 import sk.momosi.fuelup.entity.FillUp;
@@ -46,6 +47,7 @@ public class EditFillUpActivity extends FillUpAbstractActivity implements Delete
         long fillUpId = getIntent().getLongExtra(FillUpsListFragment.FILLUP_ID_TO_EDIT, 0);
         mSelectedFillUp = FillUpService.getFillUpById(fillUpId, getApplicationContext());
         mVehicle = mSelectedFillUp.getVehicle();
+        overalDistance = null;
 
         initViews();
     }
@@ -78,6 +80,9 @@ public class EditFillUpActivity extends FillUpAbstractActivity implements Delete
         mBtnAdd.setText(R.string.update);
 
         mTxtDistanceUnit.setText(mVehicle.getDistanceUnit().toString());
+
+        distanceMode = SwitchDistance.fromLast;
+        isWholeDistanceTyped.setVisibility(View.GONE);
     }
 
     protected void initViews() {
