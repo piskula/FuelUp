@@ -129,7 +129,7 @@ public class ExpensesListFragment extends Fragment implements ListExpensesAdapte
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         loadingBar.setVisibility(View.VISIBLE);
-        String[] selectionArgs = { String.valueOf(vehicle.getId()) };
+        String[] selectionArgs = {String.valueOf(vehicle.getId())};
         return new CursorLoader(getContext(),
                 ExpenseEntry.CONTENT_URI,
                 FuelUpContract.ALL_COLUMNS_EXPENSES,

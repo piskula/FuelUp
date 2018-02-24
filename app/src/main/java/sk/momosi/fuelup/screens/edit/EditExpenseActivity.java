@@ -6,7 +6,6 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -26,15 +25,12 @@ import java.util.Calendar;
 
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.business.ExpenseService;
-import sk.momosi.fuelup.business.googledrive.syncing.SyncAdapterContentObserver;
-import sk.momosi.fuelup.data.FuelUpContract;
 import sk.momosi.fuelup.data.FuelUpContract.ExpenseEntry;
 import sk.momosi.fuelup.entity.Expense;
 import sk.momosi.fuelup.entity.Vehicle;
 import sk.momosi.fuelup.entity.util.DateUtil;
 import sk.momosi.fuelup.screens.detailfragments.ExpensesListFragment;
 import sk.momosi.fuelup.screens.dialog.DeleteDialog;
-import sk.momosi.fuelup.util.PreferencesUtils;
 
 /**
  * @author Ondrej Oravcok
@@ -55,8 +51,6 @@ public class EditExpenseActivity extends AppCompatActivity implements DeleteDial
     private Expense expense;
     private Calendar expenseDate;
     private Mode mode;
-
-    private SyncAdapterContentObserver mObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -230,25 +224,6 @@ public class EditExpenseActivity extends AppCompatActivity implements DeleteDial
     @Override
     public void onDeleteDialogNegativeClick(DeleteDialog dialog) {
         dialog.dismiss();
-    }
-
-    @Override
-    public void onResume () {
-        super.onResume();
-        boolean isSyncEnabled = PreferencesUtils.getAccountName(this) != null;
-        if (mObserver == null && isSyncEnabled)
-            mObserver = new SyncAdapterContentObserver(new Handler(), getApplicationContext());
-        if (isSyncEnabled)
-            getContentResolver().registerContentObserver(
-                    FuelUpContract.ExpenseEntry.CONTENT_URI, true, mObserver);
-    }
-
-    @Override
-    public void onPause () {
-        super.onPause();
-        if (mObserver != null) {
-            getContentResolver().unregisterContentObserver(mObserver);
-        }
     }
 
     private enum Mode {

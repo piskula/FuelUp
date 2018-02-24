@@ -6,13 +6,13 @@
         <attr name="unit" format="string" localization="suggested" />
     </declare-styleable>
     <declare-styleable name="statisticsItemDetail">
-        <attr name="statisticsItemDetail" format="reference"/>
+        <attr name="statisticsItemDetail" format="reference" />
     </declare-styleable>
     <declare-styleable name="FaqItemView">
         <attr name="question" format="string" localization="suggested" />
         <attr name="answer" format="string" localization="suggested" />
     </declare-styleable>
     <declare-styleable name="faqItem">
-        <attr name="faqItem" format="reference"/>
+        <attr name="faqItem" format="reference" />
     </declare-styleable>
 </resources>

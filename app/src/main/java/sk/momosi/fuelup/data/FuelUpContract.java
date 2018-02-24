@@ -22,7 +22,6 @@ public class FuelUpContract {
     public static final String PATH_VEHICLE_TYPES = "vehicle_types";
 
 
-
     public static final String[] ALL_COLUMNS_EXPENSES = {
             ExpenseEntry._ID,
             ExpenseEntry.COLUMN_VEHICLE,
@@ -51,7 +50,6 @@ public class FuelUpContract {
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
                 + "/" + CONTENT_AUTHORITY + "/" + PATH_EXPENSES;
     }
-
 
 
     public static final String[] ALL_COLUMNS_VEHICLES = {
@@ -90,7 +88,6 @@ public class FuelUpContract {
     }
 
 
-
     public static final String[] ALL_COLUMNS_VEHICLE_TYPES = {
             VehicleTypeEntry._ID,
             VehicleTypeEntry.COLUMN_NAME
@@ -113,7 +110,6 @@ public class FuelUpContract {
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
                 + "/" + CONTENT_AUTHORITY + "/" + PATH_VEHICLE_TYPES;
     }
-
 
 
     public static final String[] ALL_COLUMNS_FILLUPS = {

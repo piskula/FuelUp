@@ -2,7 +2,6 @@ package sk.momosi.fuelup.screens.edit;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -23,12 +22,9 @@ import android.widget.ToggleButton;
 import java.util.Calendar;
 
 import sk.momosi.fuelup.R;
-import sk.momosi.fuelup.business.googledrive.syncing.SyncAdapterContentObserver;
-import sk.momosi.fuelup.data.FuelUpContract;
 import sk.momosi.fuelup.entity.Vehicle;
 import sk.momosi.fuelup.entity.util.DateUtil;
 import sk.momosi.fuelup.util.NonZeroTextWatcher;
-import sk.momosi.fuelup.util.PreferencesUtils;
 
 /**
  * @author Martin Styk
@@ -66,8 +62,6 @@ public abstract class FillUpAbstractActivity extends AppCompatActivity implement
     protected Vehicle mVehicle;
     protected Long overalDistance;
 
-    private SyncAdapterContentObserver mObserver;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,9 +97,13 @@ public abstract class FillUpAbstractActivity extends AppCompatActivity implement
         mTxtDistance.addTextChangedListener(new NonZeroTextWatcher(mTxtDistance));
         mTxtDistance.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
             @Override
             public void afterTextChanged(Editable editable) {
                 invalidateOptionsMenu();
@@ -186,25 +184,6 @@ public abstract class FillUpAbstractActivity extends AppCompatActivity implement
                 mTxtInputDistance.setHint(getString(R.string.add_fillup_distanceFromLast));
             }
             invalidateOptionsMenu();
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        boolean isSyncEnabled = PreferencesUtils.getAccountName(this) != null;
-        if (mObserver == null && isSyncEnabled)
-            mObserver = new SyncAdapterContentObserver(new Handler(), getApplicationContext());
-        if (isSyncEnabled)
-            getContentResolver().registerContentObserver(
-                    FuelUpContract.FillUpEntry.CONTENT_URI, true, mObserver);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mObserver != null) {
-            getContentResolver().unregisterContentObserver(mObserver);
         }
     }
 

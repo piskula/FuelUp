@@ -23,7 +23,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:visibility="gone"
-        android:text="@string/no_fillup_created_yet"/>
+        android:text="@string/no_fillup_created_yet" />
 
     <ProgressBar
         android:id="@+id/fill_ups_list_loading"

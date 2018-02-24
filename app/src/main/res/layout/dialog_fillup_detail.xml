@@ -8,6 +8,7 @@
         <import type="sk.momosi.fuelup.entity.Vehicle" />
 
         <import type="sk.momosi.fuelup.entity.util.DateUtil" />
+
         <import type="sk.momosi.fuelup.entity.util.CurrencyUtil" />
 
         <variable

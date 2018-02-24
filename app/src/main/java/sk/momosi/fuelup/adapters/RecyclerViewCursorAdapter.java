@@ -6,15 +6,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 /**
- * @version 8.8.2017 by Ondrej Oravcok
- *
- * RecyclerView CursorAdapter
- * Created by Simon on 28/02/2016.
- *
- * This code comes from
- * https://codereview.stackexchange.com/questions/121353/recycler-view-with-cursor-adapter
- *
  * @author slightfoot - GitHub https://github.com/slightfoot
+ * @version 8.8.2017 by Ondrej Oravcok
+ *          <p>
+ *          RecyclerView CursorAdapter
+ *          Created by Simon on 28/02/2016.
+ *          <p>
+ *          This code comes from
+ *          https://codereview.stackexchange.com/questions/121353/recycler-view-with-cursor-adapter
  */
 public abstract class RecyclerViewCursorAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
@@ -23,8 +22,7 @@ public abstract class RecyclerViewCursorAdapter<VH extends RecyclerView.ViewHold
     private int mRowIDColumn;
 
 
-    public RecyclerViewCursorAdapter()
-    {
+    public RecyclerViewCursorAdapter() {
         setHasStableIds(true);
         swapCursor(null);
     }
@@ -34,63 +32,56 @@ public abstract class RecyclerViewCursorAdapter<VH extends RecyclerView.ViewHold
     protected abstract void onBindViewHolder(VH holder, Cursor cursor);
 
     @Override
-    public void onBindViewHolder(VH holder, int position)
-    {
-        if(!mDataValid){
+    public void onBindViewHolder(VH holder, int position) {
+        if (!mDataValid) {
             throw new IllegalStateException("this should only be called when the cursor is valid");
         }
-        if(!mCursor.moveToPosition(position)){
+        if (!mCursor.moveToPosition(position)) {
             throw new IllegalStateException("couldn't move cursor to position " + position);
         }
         onBindViewHolder(holder, mCursor);
     }
 
     @Override
-    public long getItemId(int position)
-    {
-        if(mDataValid && mCursor != null && mCursor.moveToPosition(position)){
+    public long getItemId(int position) {
+        if (mDataValid && mCursor != null && mCursor.moveToPosition(position)) {
             return mCursor.getLong(mRowIDColumn);
         }
         return RecyclerView.NO_ID;
     }
 
     @Override
-    public int getItemCount()
-    {
-        if(mDataValid && mCursor != null){
+    public int getItemCount() {
+        if (mDataValid && mCursor != null) {
             return mCursor.getCount();
-        }
-        else{
+        } else {
             return 0;
         }
     }
 
-    protected Cursor getCursor()
-    {
+    protected Cursor getCursor() {
         return mCursor;
     }
 
-    public void swapCursor(Cursor newCursor)
-    {
-        if(newCursor == mCursor){
+    public void swapCursor(Cursor newCursor) {
+        if (newCursor == mCursor) {
             return;
         }
         Cursor oldCursor = mCursor;
-        if(oldCursor != null){
-            if(mDataSetObserver != null){
+        if (oldCursor != null) {
+            if (mDataSetObserver != null) {
                 oldCursor.unregisterDataSetObserver(mDataSetObserver);
             }
         }
         mCursor = newCursor;
-        if(newCursor != null){
-            if(mDataSetObserver != null){
+        if (newCursor != null) {
+            if (mDataSetObserver != null) {
                 newCursor.registerDataSetObserver(mDataSetObserver);
             }
             mRowIDColumn = newCursor.getColumnIndexOrThrow("_id");
             mDataValid = true;
             notifyDataSetChanged();
-        }
-        else{
+        } else {
             mRowIDColumn = -1;
             mDataValid = false;
             notifyDataSetChanged();
@@ -98,18 +89,15 @@ public abstract class RecyclerViewCursorAdapter<VH extends RecyclerView.ViewHold
     }
 
 
-    private final DataSetObserver mDataSetObserver = new DataSetObserver()
-    {
+    private final DataSetObserver mDataSetObserver = new DataSetObserver() {
         @Override
-        public void onChanged()
-        {
+        public void onChanged() {
             mDataValid = true;
             notifyDataSetChanged();
         }
 
         @Override
-        public void onInvalidated()
-        {
+        public void onInvalidated() {
             mDataValid = false;
             notifyDataSetChanged();
         }

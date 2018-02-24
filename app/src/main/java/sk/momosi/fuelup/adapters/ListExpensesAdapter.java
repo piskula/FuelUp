@@ -65,9 +65,7 @@ public class ListExpensesAdapter extends RecyclerViewCursorAdapter<ListExpensesA
     }
 
 
-
-    class ExpenseViewHolder extends RecyclerView.ViewHolder
-    {
+    class ExpenseViewHolder extends RecyclerView.ViewHolder {
         final TextView txtInfo;
         final TextView txtPrice;
         final TextView txtDate;

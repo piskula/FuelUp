@@ -12,8 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
-        android:textSize="18sp"
-        />
+        android:textSize="18sp" />
 
     <ImageView
         android:id="@+id/restore_item_trash"
@@ -21,6 +20,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_delete_red"/>
+        android:src="@drawable/ic_delete_red" />
 
 </LinearLayout>

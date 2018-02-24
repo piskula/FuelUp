@@ -15,13 +15,12 @@
         android:paddingRight="10dp"
         android:paddingStart="@dimen/item_left_part_left_padding"
         android:paddingLeft="@dimen/item_left_part_left_padding"
-        android:adjustViewBounds="true"/>
+        android:adjustViewBounds="true" />
 
     <TextView
         android:id="@+id/spinner_item_vehicletype_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/item_right_part_font_size"
-        />
+        android:textSize="@dimen/item_right_part_font_size" />
 
 </LinearLayout>

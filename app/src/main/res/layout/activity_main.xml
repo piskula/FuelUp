@@ -22,7 +22,6 @@
         app:headerLayout="@layout/nav_header_vehicle_list"
         app:menu="@menu/vehicle_list_drawer"
         app:itemTextAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:itemIconTint="@color/colorPrimaryDark"
-        />
+        app:itemIconTint="@color/colorPrimaryDark" />
 
 </android.support.v4.widget.DrawerLayout>

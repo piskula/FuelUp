@@ -1,9 +1,6 @@
 package sk.momosi.fuelup.adapters;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,9 +9,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -37,10 +32,10 @@ public class ListVehiclesRestoreAdapter extends RecyclerView.Adapter<ListVehicle
     public ListVehiclesRestoreAdapter(final Callback callback, final Context context, final List<String> vehiclesFromBackup, final Set<String> vehiclesInDb) {
         super();
         this.callback = callback;
-        
+
         this.vehiclesFromBackup = Collections.unmodifiableList(vehiclesFromBackup);
         this.vehiclesInDb = Collections.unmodifiableSet(vehiclesInDb);
-        
+
         this.vehiclesChosen = new HashSet<>(vehiclesFromBackup);
         this.vehiclesChosen.removeAll(vehiclesInDb);
 
@@ -49,6 +44,7 @@ public class ListVehiclesRestoreAdapter extends RecyclerView.Adapter<ListVehicle
 
     public interface Callback {
         void onVehiclesChosenChange(Set<String> vehiclesChosen);
+
         void makeWarningToastForVehicle(String name);
     }
 
@@ -122,7 +118,7 @@ public class ListVehiclesRestoreAdapter extends RecyclerView.Adapter<ListVehicle
             callback.onVehiclesChosenChange(Collections.unmodifiableSet(vehiclesChosen));
 
         } else {
-                // TODO toast?
+            // TODO toast?
         }
     }
 
@@ -131,8 +127,7 @@ public class ListVehiclesRestoreAdapter extends RecyclerView.Adapter<ListVehicle
         return vehiclesFromBackup.size();
     }
 
-    class VehicleRestoreViewHolder extends RecyclerView.ViewHolder
-    {
+    class VehicleRestoreViewHolder extends RecyclerView.ViewHolder {
         final CheckBox restoreVehicleBox;
         final ImageView trashIcon;
 

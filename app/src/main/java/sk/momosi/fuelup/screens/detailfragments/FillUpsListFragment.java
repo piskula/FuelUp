@@ -20,17 +20,14 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.List;
-
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.adapters.ListFillUpsAdapter;
 import sk.momosi.fuelup.data.FuelUpContract;
 import sk.momosi.fuelup.data.FuelUpContract.FillUpEntry;
-import sk.momosi.fuelup.entity.FillUp;
 import sk.momosi.fuelup.entity.Vehicle;
+import sk.momosi.fuelup.screens.VehicleTabbedDetailActivity;
 import sk.momosi.fuelup.screens.edit.AddFillUpActivity;
 import sk.momosi.fuelup.screens.edit.EditFillUpActivity;
-import sk.momosi.fuelup.screens.VehicleTabbedDetailActivity;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -102,7 +99,6 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
     }
 
 
-
     @Override
     public void onItemClick(long fillUpId) {
         Intent i = new Intent(getActivity(), EditFillUpActivity.class);
@@ -136,7 +132,7 @@ public class FillUpsListFragment extends Fragment implements ListFillUpsAdapter.
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         loadingBar.setVisibility(View.VISIBLE);
-        String[] selectionArgs = { String.valueOf(vehicle.getId()) };
+        String[] selectionArgs = {String.valueOf(vehicle.getId())};
         return new CursorLoader(getContext(),
                 FillUpEntry.CONTENT_URI,
                 FuelUpContract.ALL_COLUMNS_FILLUPS,

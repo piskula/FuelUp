@@ -25,7 +25,7 @@ public class VehicleService {
     private static final String LOG_TAG = VehicleService.class.getSimpleName();
 
     public static Vehicle getVehicleById(long id, Context context) {
-        String[] selectionArgs = { String.valueOf(id) };
+        String[] selectionArgs = {String.valueOf(id)};
         Cursor cursor = context.getContentResolver().query(VehicleEntry.CONTENT_URI,
                 FuelUpContract.ALL_COLUMNS_VEHICLES, VehicleEntry._ID + "=?",
                 selectionArgs, null);
@@ -67,7 +67,7 @@ public class VehicleService {
     }
 
     public static boolean isVehicleNameTaken(String name, Context context) {
-        String[] selectionArgs = { name };
+        String[] selectionArgs = {name};
         Cursor cursor = context.getContentResolver().query(VehicleEntry.CONTENT_URI,
                 FuelUpContract.ALL_COLUMNS_VEHICLES, VehicleEntry.COLUMN_NAME + "=?",
                 selectionArgs, null);
@@ -79,7 +79,7 @@ public class VehicleService {
     }
 
     public static Set<String> getAvailableVehicleNames(Context context) {
-        String[] projection = { VehicleEntry.COLUMN_NAME };
+        String[] projection = {VehicleEntry.COLUMN_NAME};
         Cursor cursor = context.getContentResolver().query(
                 VehicleEntry.CONTENT_URI,
                 projection, null, null, null);
@@ -96,7 +96,7 @@ public class VehicleService {
     }
 
     public static List<Long> getAvailableVehicleIds(Context context) {
-        String[] projection = { VehicleEntry._ID };
+        String[] projection = {VehicleEntry._ID};
         Cursor cursor = context.getContentResolver().query(
                 VehicleEntry.CONTENT_URI,
                 projection, null, null, null);

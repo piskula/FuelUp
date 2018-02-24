@@ -7,8 +7,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -22,9 +20,6 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import java.io.File;
 
 import sk.momosi.fuelup.R;
-import sk.momosi.fuelup.business.googledrive.syncing.SyncAdapterContentObserver;
-import sk.momosi.fuelup.data.FuelUpContract;
-import sk.momosi.fuelup.util.PreferencesUtils;
 
 /**
  * @author Martin Styk
@@ -32,17 +27,13 @@ import sk.momosi.fuelup.util.PreferencesUtils;
  */
 public abstract class VehicleAbstractActivity extends AppCompatActivity {
 
-    private static final String PHOTO = "photo";
-
     public static final float REMOVE_PHOTO_ALPHA_CHANNEL = 0.5f;
-
+    private static final String PHOTO = "photo";
     protected ImageView imgCarPhoto;
     protected ImageView imgCarPhotoRemove;
 
     protected String vehiclePicturePath;
     private Uri cropImageUri;
-
-    private SyncAdapterContentObserver mObserver;
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -146,24 +137,5 @@ public abstract class VehicleAbstractActivity extends AppCompatActivity {
         imgCarPhoto.setAlpha(1f);
         imgCarPhotoRemove.setVisibility(View.GONE);
         Snackbar.make(findViewById(android.R.id.content), R.string.delete_vehicle_photo, Snackbar.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onResume () {
-        super.onResume();
-        boolean isSyncEnabled = PreferencesUtils.getAccountName(this) != null;
-        if (mObserver == null && isSyncEnabled)
-            mObserver = new SyncAdapterContentObserver(new Handler(), getApplicationContext());
-        if (isSyncEnabled)
-            getContentResolver().registerContentObserver(
-                    FuelUpContract.VehicleEntry.CONTENT_URI, true, mObserver);
-    }
-
-    @Override
-    public void onPause () {
-        super.onPause();
-        if (mObserver != null) {
-            getContentResolver().unregisterContentObserver(mObserver);
-        }
     }
 }

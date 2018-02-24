@@ -102,7 +102,6 @@ public class ListFillUpsAdapter extends RecyclerViewCursorAdapter<ListFillUpsAda
     }
 
 
-
     class FillUpViewHolder extends RecyclerView.ViewHolder {
         final TextView txtDistanceFromLastFillUp;
         final TextView txtDate;

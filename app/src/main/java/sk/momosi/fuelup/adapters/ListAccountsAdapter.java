@@ -93,8 +93,7 @@ public class ListAccountsAdapter extends RecyclerView.Adapter<ListAccountsAdapte
     }
 
 
-    class AccountViewHolder extends RecyclerView.ViewHolder
-    {
+    class AccountViewHolder extends RecyclerView.ViewHolder {
         final TextView txtAccount;
 
         AccountViewHolder(View view) {

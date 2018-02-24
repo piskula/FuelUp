@@ -17,7 +17,7 @@ public class VehicleTypeService {
     private static final String LOG_TAG = VehicleTypeService.class.getSimpleName();
 
     public static String getVehicleTypeNameById(long typeId, Context context) {
-        String[] selectionArgs = { String.valueOf(typeId) };
+        String[] selectionArgs = {String.valueOf(typeId)};
         Cursor cursor = context.getContentResolver().query(VehicleTypeEntry.CONTENT_URI,
                 FuelUpContract.ALL_COLUMNS_VEHICLE_TYPES, VehicleTypeEntry._ID + "=?",
                 selectionArgs, null);

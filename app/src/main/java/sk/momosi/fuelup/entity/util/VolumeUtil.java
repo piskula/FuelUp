@@ -38,7 +38,7 @@ public class VolumeUtil {
             return MainActivity.getInstance().getString(R.string.add_fillup_pricePerGallon);
     }
 
-    public static BigDecimal getTotalPriceFromPerLitre(BigDecimal volume, BigDecimal price, VolumeUnit volumeUnit){
+    public static BigDecimal getTotalPriceFromPerLitre(BigDecimal volume, BigDecimal price, VolumeUnit volumeUnit) {
         BigDecimal total = null;
         switch (volumeUnit) {
             case LITRE:
@@ -54,7 +54,7 @@ public class VolumeUtil {
         return total;
     }
 
-    public static BigDecimal getPerLitrePriceFromTotal(BigDecimal volume, BigDecimal price, VolumeUnit volumeUnit){
+    public static BigDecimal getPerLitrePriceFromTotal(BigDecimal volume, BigDecimal price, VolumeUnit volumeUnit) {
         BigDecimal total = null;
         switch (volumeUnit) {
             case LITRE:

@@ -8,8 +8,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
-import sk.momosi.fuelup.data.FuelUpContract.FillUpEntry;
 import sk.momosi.fuelup.data.FuelUpContract.ExpenseEntry;
+import sk.momosi.fuelup.data.FuelUpContract.FillUpEntry;
 
 /**
  * @author Ondrej Oravcok
@@ -44,7 +44,7 @@ public class SampleDataUtils {
             double gallonFactor = 1d; //whichVehicle == 1 ? 1d : LITRE_TO_GALLON;
             int dist = random.nextInt(8) + 4;
             double pricePerLitre = (random.nextDouble() + 2) * 3.1 * currencyFactor;
-            double fuelVolume = (dist + 3 * random.nextDouble())* 4 * 0.7 * gallonFactor;
+            double fuelVolume = (dist + 3 * random.nextDouble()) * 4 * 0.7 * gallonFactor;
 
             values.put(FillUpEntry.COLUMN_VEHICLE, 1);
             values.put(FillUpEntry.COLUMN_DATE, start + ((long) (Math.random() * diff)));

@@ -5,7 +5,9 @@
     <data>
 
         <import type="sk.momosi.fuelup.util.BigDecimalFormatter" />
+
         <import type="sk.momosi.fuelup.entity.util.CurrencyUtil" />
+
         <import type="sk.momosi.fuelup.entity.util.VolumeUtil" />
 
         <variable

@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <!--for checking if sync is pending-->
     <uses-permission android:name="android.permission.READ_SYNC_STATS" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -78,32 +78,6 @@
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity
-            android:name=".screens.backup.ChooseAccountActivity"
-            android:label="Choose Account"
-            android:parentActivityName=".screens.MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Backup"/>
-        <activity
-            android:name=".screens.backup.CheckPermissionsActivity"
-            android:label="Check permissions"
-            android:noHistory="true"
-            android:parentActivityName=".screens.MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Backup"/>
-        <activity
-            android:name=".screens.backup.CheckPreviousVersionsActivity"
-            android:label="Check previous versions"
-            android:parentActivityName=".screens.backup.ChooseAccountActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Backup"/>
-        <activity
-            android:name=".screens.backup.ImportVehiclesActivity"
-            android:label="Import vehicles"
-            android:noHistory="true"
-            android:parentActivityName=".screens.backup.CheckPreviousVersionsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Backup"/>
 
         <provider
             android:name=".data.provider.VehicleProvider"
@@ -119,26 +93,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
-        <service
-            android:name=".business.googledrive.syncing.GoogleDriveSyncService"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
-            </intent-filter>
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/google_drive_sync_adapter" />
-        </service>
-
-        <service android:name=".business.googledrive.authenticator.AccountService">
-            <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator" />
-            </intent-filter>
-            <meta-data
-                android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator" />
-        </service>
 
     </application>
 

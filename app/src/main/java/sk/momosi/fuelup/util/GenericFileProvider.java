@@ -45,7 +45,7 @@ public class GenericFileProvider extends FileProvider {
         }
 
         String path = uri.getEncodedPath();
-        path = path.replace("/"+ EXTERNAL_PATH, Environment.getExternalStorageDirectory().getAbsolutePath());
+        path = path.replace("/" + EXTERNAL_PATH, Environment.getExternalStorageDirectory().getAbsolutePath());
         return path;
     }
 }

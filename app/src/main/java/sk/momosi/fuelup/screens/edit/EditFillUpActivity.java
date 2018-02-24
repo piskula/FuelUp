@@ -22,7 +22,6 @@ import java.util.Currency;
 
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.business.FillUpService;
-import sk.momosi.fuelup.business.StatisticsService;
 import sk.momosi.fuelup.data.FuelUpContract.FillUpEntry;
 import sk.momosi.fuelup.data.provider.VehicleProvider;
 import sk.momosi.fuelup.entity.FillUp;

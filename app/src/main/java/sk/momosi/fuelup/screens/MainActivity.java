@@ -1,7 +1,5 @@
 package sk.momosi.fuelup.screens;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -16,16 +14,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import sk.momosi.fuelup.R;
-import sk.momosi.fuelup.screens.backup.ChooseAccountActivity;
-import sk.momosi.fuelup.util.PreferencesUtils;
 
 public class MainActivity extends AppCompatActivity implements OnNavigationItemSelectedListener {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
     private static MainActivity singleton;
 
-    private static final String TAG = MainActivity.class.getSimpleName();
-    private static final String IS_FIRST_RUN = "is_this_fisrt_run";
-
+    public static MainActivity getInstance() {
+        return singleton;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,24 +44,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
         if (savedInstanceState == null) {
             navigationView.setCheckedItem(R.id.vehicle_list);
             getSupportFragmentManager().beginTransaction().replace(R.id.activty_main_frame, new VehicleListFragment(), TAG).commit();
-        }
-
-        // initialize with data when first running
-        SharedPreferences settings = getSharedPreferences(IS_FIRST_RUN, 0);
-        if (settings.getBoolean("my_first_time", true)) {
-            // if you want to fill Dummy Vehicle with data
-            // SampleDataUtils.initializeWhenFirstRun(getApplicationContext());
-
-            Intent intent = new Intent(this, ChooseAccountActivity.class);
-            intent.putExtra(ChooseAccountActivity.KEY_IS_THIS_FIRST_RUN, true);
-            startActivity(intent);
-
-//            Account genericAccount = AccountService.getAccount();
-
-//            AccountManager accountManager = (AccountManager) this.getSystemService(Context.ACCOUNT_SERVICE);
-//            accountManager.addAccountExplicitly(genericAccount, null, null);
-
-            settings.edit().putBoolean("my_first_time", false).apply();
         }
 
         singleton = this;
@@ -90,17 +69,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             currentFragment = new VehicleListFragment();
         } else if (id == R.id.about) {
             currentFragment = new AboutFragment();
-        } else if (id == R.id.google_drive) {
-            if (PreferencesUtils.getAccountName(this) == null) {
-                Intent a = new Intent(this, ChooseAccountActivity.class);
-                startActivity(a);
-                drawer.closeDrawer(GravityCompat.START);
-                return false;
-            } else {
-                currentFragment = new BackupFragment();
-            }
-        } else if (id == R.id.faq) {
-            currentFragment = new FaqFragment();
         } else {
             throw new RuntimeException("onNavigationItemSelected unhandled case");
         }
@@ -109,10 +77,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public static MainActivity getInstance() {
-        return singleton;
     }
 
 }

@@ -30,11 +30,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        String SQL_CREATE_VEHICLE_TYPES_TABLE =  "CREATE TABLE " + VehicleTypeEntry.TABLE_NAME + " ("
+        String SQL_CREATE_VEHICLE_TYPES_TABLE = "CREATE TABLE " + VehicleTypeEntry.TABLE_NAME + " ("
                 + VehicleTypeEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + VehicleTypeEntry.COLUMN_NAME + " TEXT NOT NULL);";
 
-        String SQL_CREATE_VEHICLES_TABLE =  "CREATE TABLE " + VehicleEntry.TABLE_NAME + " ("
+        String SQL_CREATE_VEHICLES_TABLE = "CREATE TABLE " + VehicleEntry.TABLE_NAME + " ("
                 + VehicleEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + VehicleEntry.COLUMN_NAME + " TEXT NOT NULL UNIQUE, "
                 + VehicleEntry.COLUMN_TYPE + " INTEGER NOT NULL, "
@@ -47,7 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + "FOREIGN KEY(" + VehicleEntry.COLUMN_TYPE + ") REFERENCES "
                 + VehicleTypeEntry.TABLE_NAME + "(" + VehicleTypeEntry._ID + ") );";
 
-        String SQL_CREATE_EXPENSES_TABLE =  "CREATE TABLE " + ExpenseEntry.TABLE_NAME + " ("
+        String SQL_CREATE_EXPENSES_TABLE = "CREATE TABLE " + ExpenseEntry.TABLE_NAME + " ("
                 + ExpenseEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + ExpenseEntry.COLUMN_VEHICLE + " INTEGER NOT NULL, "
                 + ExpenseEntry.COLUMN_INFO + " TEXT NOT NULL, "
@@ -57,7 +57,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + "FOREIGN KEY(" + ExpenseEntry.COLUMN_VEHICLE + ") REFERENCES "
                 + VehicleEntry.TABLE_NAME + "(" + VehicleEntry._ID + ") );";
 
-        String SQL_CREATE_FILLUPS_TABLE =  "CREATE TABLE " + FillUpEntry.TABLE_NAME + " ("
+        String SQL_CREATE_FILLUPS_TABLE = "CREATE TABLE " + FillUpEntry.TABLE_NAME + " ("
                 + FillUpEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + FillUpEntry.COLUMN_VEHICLE + " INTEGER NOT NULL, "
                 + FillUpEntry.COLUMN_DISTANCE_FROM_LAST + " INTEGER, "
@@ -89,7 +89,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // initialize types
         for (String typeName : types) {
-            db.execSQL("INSERT INTO "+ VehicleTypeEntry.TABLE_NAME +" ('name') VALUES ('" + typeName + "');");
+            db.execSQL("INSERT INTO " + VehicleTypeEntry.TABLE_NAME + " ('name') VALUES ('" + typeName + "');");
         }
 
         // initialize Vehicle

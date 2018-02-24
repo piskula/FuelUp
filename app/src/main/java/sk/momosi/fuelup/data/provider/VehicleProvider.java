@@ -88,7 +88,7 @@ public class VehicleProvider extends ContentProvider {
                 break;
             case VEHICLE_ID:
                 selection = VehicleEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 cursor = database.query(VehicleEntry.TABLE_NAME,
                         projection, selection, selectionArgs, null, null, sortOrder);
                 break;
@@ -98,7 +98,7 @@ public class VehicleProvider extends ContentProvider {
                 break;
             case EXPENSE_ID:
                 selection = ExpenseEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 cursor = database.query(ExpenseEntry.TABLE_NAME,
                         projection, selection, selectionArgs, null, null, sortOrder);
                 break;
@@ -108,7 +108,7 @@ public class VehicleProvider extends ContentProvider {
                 break;
             case FILLUP_ID:
                 selection = FillUpEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 cursor = database.query(FillUpEntry.TABLE_NAME,
                         projection, selection, selectionArgs, null, null, sortOrder);
                 break;
@@ -118,7 +118,7 @@ public class VehicleProvider extends ContentProvider {
                 break;
             case VEHICLE_TYPE_ID:
                 selection = FuelUpContract.VehicleTypeEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 cursor = database.query(FuelUpContract.VehicleTypeEntry.TABLE_NAME,
                         projection, selection, selectionArgs, null, null, sortOrder);
                 break;
@@ -182,7 +182,7 @@ public class VehicleProvider extends ContentProvider {
             case VEHICLE_ID:
                 return deleteVehicleWithAllData(db, uri);
             case EXPENSE_ID:
-                String[] expenseId = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                String[] expenseId = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 int result = db.delete(ExpenseEntry.TABLE_NAME, ExpenseEntry._ID + "=?", expenseId);
                 getContext().getContentResolver().notifyChange(uri, null);
                 return result;
@@ -194,7 +194,7 @@ public class VehicleProvider extends ContentProvider {
     }
 
     private int deleteVehicleWithAllData(final SQLiteDatabase db, Uri uri) {
-        String[] vehicleId = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+        String[] vehicleId = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
         db.beginTransactionNonExclusive();
 
@@ -230,9 +230,9 @@ public class VehicleProvider extends ContentProvider {
         if (contentValues.size() == 0) {
             return UPDATE_NO_CHANGE;
         }
-        
+
         validateFillUpBasics(contentValues, true, id);
-        
+
         if (contentValues.containsKey(FillUpEntry.COLUMN_VEHICLE)) {
             throw new IllegalArgumentException("Cannot change vehicle of FillUp. Please, create a fresh new FillUp in this case.");
         }
@@ -245,7 +245,7 @@ public class VehicleProvider extends ContentProvider {
         if (!isDeleteAndInsertNeeded) {
             // if only Not-Neighbour-Affecting values have been changed
             final String selection = FillUpEntry._ID + "=?";
-            final String[] idArgument = new String[] { String.valueOf(id) };
+            final String[] idArgument = new String[]{String.valueOf(id)};
 
             getContext().getContentResolver().notifyChange(uri, null);
             return mDbHelper.getWritableDatabase().update(
@@ -306,7 +306,7 @@ public class VehicleProvider extends ContentProvider {
         if (contentValues.containsKey(ExpenseEntry.COLUMN_VEHICLE)) {
             Long vehicleId = contentValues.getAsLong(ExpenseEntry.COLUMN_VEHICLE);
             String selectionVehicle = VehicleEntry._ID + "=?";
-            String[] selectionVehicleArgs = new String[] { String.valueOf(vehicleId) };
+            String[] selectionVehicleArgs = new String[]{String.valueOf(vehicleId)};
             Cursor cursor = mDbHelper.getReadableDatabase().query(VehicleEntry.TABLE_NAME, FuelUpContract.ALL_COLUMNS_VEHICLES, selectionVehicle, selectionVehicleArgs, null, null, null);
             if (cursor == null || cursor.getCount() != 1) {
                 if (cursor != null)
@@ -317,7 +317,7 @@ public class VehicleProvider extends ContentProvider {
         }
 
         final String selection = ExpenseEntry._ID + "=?";
-        final String[] idArgument = new String[] { String.valueOf(id) };
+        final String[] idArgument = new String[]{String.valueOf(id)};
 
         getContext().getContentResolver().notifyChange(uri, null);
         return mDbHelper.getWritableDatabase().update(
@@ -368,7 +368,7 @@ public class VehicleProvider extends ContentProvider {
         }
 
         final String selection = VehicleEntry._ID + "=?";
-        final String[] idArgument = new String[] { String.valueOf(id) };
+        final String[] idArgument = new String[]{String.valueOf(id)};
 
         getContext().getContentResolver().notifyChange(uri, null);
         return mDbHelper.getWritableDatabase().update(
@@ -422,7 +422,7 @@ public class VehicleProvider extends ContentProvider {
 
     private boolean isNotVehicleNameUnique(String name, Long ignoreId) {
         String selection = VehicleEntry.COLUMN_NAME + "=?";
-        String[] selectionArgs = new String[] { name };
+        String[] selectionArgs = new String[]{name};
 
         Cursor cursor = mDbHelper.getReadableDatabase().query(VehicleEntry.TABLE_NAME, FuelUpContract.ALL_COLUMNS_VEHICLES, selection, selectionArgs, null, null, null);
         if (cursor == null) {
@@ -443,7 +443,7 @@ public class VehicleProvider extends ContentProvider {
 
     private boolean isVehicleTypeNameUnique(String name) {
         String selection = FuelUpContract.VehicleTypeEntry.COLUMN_NAME + "=?";
-        String[] selectionArgs = new String[] { name };
+        String[] selectionArgs = new String[]{name};
 
         Cursor cursor = mDbHelper.getReadableDatabase().query(FuelUpContract.VehicleTypeEntry.TABLE_NAME, FuelUpContract.ALL_COLUMNS_VEHICLES, selection, selectionArgs, null, null, null);
         boolean isUnique = (cursor == null || cursor.getCount() == 0);
@@ -456,7 +456,7 @@ public class VehicleProvider extends ContentProvider {
 
     private boolean typeNotExists(Integer typeId) {
         String selection = FuelUpContract.VehicleTypeEntry._ID + "=?";
-        String[] selectionArgs = new String[] { String.valueOf(typeId) };
+        String[] selectionArgs = new String[]{String.valueOf(typeId)};
 
         Cursor cursor = mDbHelper.getReadableDatabase().query(FuelUpContract.VehicleTypeEntry.TABLE_NAME, FuelUpContract.ALL_COLUMNS_VEHICLE_TYPES, selection, selectionArgs, null, null, null);
         boolean typeExists = (cursor != null && cursor.getCount() == 1);
@@ -481,7 +481,7 @@ public class VehicleProvider extends ContentProvider {
 
         Long vehicleId = contentValues.getAsLong(ExpenseEntry.COLUMN_VEHICLE);
         String selection = VehicleEntry._ID + "=?";
-        String[] selectionArgs = new String[] { String.valueOf(vehicleId) };
+        String[] selectionArgs = new String[]{String.valueOf(vehicleId)};
         Cursor cursor = mDbHelper.getReadableDatabase().query(VehicleEntry.TABLE_NAME, FuelUpContract.ALL_COLUMNS_VEHICLES, selection, selectionArgs, null, null, null);
         if (cursor == null || cursor.getCount() != 1) {
             if (cursor != null)
@@ -501,7 +501,7 @@ public class VehicleProvider extends ContentProvider {
         getContext().getContentResolver().notifyChange(uri, null);
         return ContentUris.withAppendedId(uri, id);
     }
-    
+
     private void validateFillUpBasics(ContentValues contentValues, boolean isUpdate, Long existingFillUpId) {
 
         if (contentValues.containsKey(FillUpEntry.COLUMN_DISTANCE_FROM_LAST) || !isUpdate) {
@@ -570,9 +570,7 @@ public class VehicleProvider extends ContentProvider {
                             throw new IllegalArgumentException("Fuel priceTotal must equals (pricePerLitre * fuelVolume)");
                         }
                     }
-                }
-
-                else if (fuelPriceTotal == null) {
+                } else if (fuelPriceTotal == null) {
                     // fuelVolume changed and fuelPriceTotal NOT
                     fuelPriceTotal = updatingFillUp.getFuelPriceTotal().doubleValue();
                     final Double fuelVolume = getLitresFromLocalizedVolume(fuelVolumeLocalized, updatingFillUp.getVehicle().getVolumeUnit());
@@ -584,9 +582,7 @@ public class VehicleProvider extends ContentProvider {
                             throw new IllegalArgumentException("Fuel priceTotal must equals (pricePerLitre * fuelVolume)");
                         }
                     }
-                }
-
-                else {
+                } else {
                     // fuelVol changed and priceTotal changed also
                     final Double fuelVolume = getLitresFromLocalizedVolume(fuelVolumeLocalized, updatingFillUp.getVehicle().getVolumeUnit());
 
@@ -645,7 +641,7 @@ public class VehicleProvider extends ContentProvider {
         long timestamp = contentValues.getAsLong(FillUpEntry.COLUMN_DATE);
 
         String selectionOlder = FillUpEntry.COLUMN_VEHICLE + "=? AND " + FillUpEntry.COLUMN_DATE + "<?";
-        String[] selectionOlderArgs = new String[] { String.valueOf(vehicleId), String.valueOf(timestamp) };
+        String[] selectionOlderArgs = new String[]{String.valueOf(vehicleId), String.valueOf(timestamp)};
 
         Cursor cursorOlderFillUps = mDbHelper.getReadableDatabase().query(
                 FillUpEntry.TABLE_NAME,
@@ -708,7 +704,7 @@ public class VehicleProvider extends ContentProvider {
 
             // and update all not full until it
             for (Long fillUpId : olderIds) {
-                selectionUpdateArgs = new String[] { String.valueOf(fillUpId) };
+                selectionUpdateArgs = new String[]{String.valueOf(fillUpId)};
                 db.update(
                         FillUpEntry.TABLE_NAME,
                         contentValuesUpdate,
@@ -719,7 +715,7 @@ public class VehicleProvider extends ContentProvider {
 
         // find first full newer fillUp in case not inserting the newest fillUp
         String selectionNewer = FillUpEntry.COLUMN_VEHICLE + "=? AND " + FillUpEntry.COLUMN_DATE + ">?";
-        String[] selectionNewerArgs = new String[] { String.valueOf(vehicleId), String.valueOf(timestamp) };
+        String[] selectionNewerArgs = new String[]{String.valueOf(vehicleId), String.valueOf(timestamp)};
 
         Cursor cursorNewerFillUps = mDbHelper.getReadableDatabase().query(
                 FillUpEntry.TABLE_NAME,
@@ -758,7 +754,7 @@ public class VehicleProvider extends ContentProvider {
 
             // and update all not full until it including it
             for (Long fillUpId : newerIds) {
-                selectionUpdateArgs = new String[] { String.valueOf(fillUpId) };
+                selectionUpdateArgs = new String[]{String.valueOf(fillUpId)};
                 db.update(
                         FillUpEntry.TABLE_NAME,
                         contentValuesUpdate,
@@ -799,7 +795,7 @@ public class VehicleProvider extends ContentProvider {
         // then recalculate consumption
         // firstly count newer fillUps
         String selectionNewer = FillUpEntry.COLUMN_VEHICLE + "=? AND " + FillUpEntry.COLUMN_DATE + ">=?";
-        String[] selectionNewerArgs = new String[] { String.valueOf(vehicleId), String.valueOf(timestamp) };
+        String[] selectionNewerArgs = new String[]{String.valueOf(vehicleId), String.valueOf(timestamp)};
 
         Cursor cursorNewerFillUps = mDbHelper.getReadableDatabase().query(
                 FillUpEntry.TABLE_NAME,
@@ -841,7 +837,7 @@ public class VehicleProvider extends ContentProvider {
 
         // secondly count older fillUps until full (respecting this)
         String selectionOlder = FillUpEntry.COLUMN_VEHICLE + "=? AND " + FillUpEntry.COLUMN_DATE + "<?";
-        String[] selectionOlderArgs = new String[] { String.valueOf(vehicleId), String.valueOf(timestamp) };
+        String[] selectionOlderArgs = new String[]{String.valueOf(vehicleId), String.valueOf(timestamp)};
 
         Cursor cursorOlderFillUps = mDbHelper.getReadableDatabase().query(
                 FillUpEntry.TABLE_NAME,
@@ -898,7 +894,7 @@ public class VehicleProvider extends ContentProvider {
                     FillUpEntry.TABLE_NAME,
                     contentValuesUpdate,
                     FillUpEntry._ID + "=?",
-                    new String[] { String.valueOf(fillUpId) });
+                    new String[]{String.valueOf(fillUpId)});
         }
 
         if (!isOutsideTransaction) {
@@ -927,7 +923,7 @@ public class VehicleProvider extends ContentProvider {
         Long fuelUpsDistance = 0L;
 
         String selectionOlder = FillUpEntry.COLUMN_VEHICLE + "=? AND " + FillUpEntry.COLUMN_DATE + "<?";
-        String[] selectionOlderArgs = new String[] { String.valueOf(vehicleId), String.valueOf(timestamp) };
+        String[] selectionOlderArgs = new String[]{String.valueOf(vehicleId), String.valueOf(timestamp)};
 
         Cursor cursorOlderFillUps = mDbHelper.getReadableDatabase().query(
                 FillUpEntry.TABLE_NAME,
@@ -952,7 +948,7 @@ public class VehicleProvider extends ContentProvider {
         cursorOlderFillUps.close();
 
         String selectionNewer = FillUpEntry.COLUMN_VEHICLE + "=? AND " + FillUpEntry.COLUMN_DATE + ">?";
-        String[] selectionNewerArgs = new String[] { String.valueOf(vehicleId), String.valueOf(timestamp) };
+        String[] selectionNewerArgs = new String[]{String.valueOf(vehicleId), String.valueOf(timestamp)};
 
         Cursor cursorNewerFillUps = mDbHelper.getReadableDatabase().query(
                 FillUpEntry.TABLE_NAME,
@@ -1000,7 +996,7 @@ public class VehicleProvider extends ContentProvider {
         int result = db.delete(
                 FillUpEntry.TABLE_NAME,
                 FillUpEntry._ID + "=?",
-                new String[] { String.valueOf(fillUpId) }
+                new String[]{String.valueOf(fillUpId)}
         );
         getContext().getContentResolver().notifyChange(uri, null);
 
@@ -1010,7 +1006,7 @@ public class VehicleProvider extends ContentProvider {
                     FillUpEntry.TABLE_NAME,
                     contentValuesUpdate,
                     FillUpEntry._ID + "=?",
-                    new String[] { String.valueOf(id) });
+                    new String[]{String.valueOf(id)});
             getContext().getContentResolver().notifyChange(ContentUris.withAppendedId(FillUpEntry.CONTENT_URI, id), null);
         }
 
@@ -1024,7 +1020,7 @@ public class VehicleProvider extends ContentProvider {
     }
 
     private Uri validateFillUpAndInsertInTransaction(Uri uri, ContentValues contentValues, SQLiteDatabase transaction) {
-        
+
         validateFillUpBasics(contentValues, false, null);
 
         boolean isFullFillUp = 1 == contentValues.getAsInteger(FillUpEntry.COLUMN_IS_FULL_FILLUP);

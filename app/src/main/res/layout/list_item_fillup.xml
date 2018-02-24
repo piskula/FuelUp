@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp"
-    android:background="@drawable/selector_list_item" >
+    android:background="@drawable/selector_list_item">
 
     <TextView
         android:id="@+id/txt_itemfillup_date"
@@ -116,8 +116,7 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:contentDescription="@string/desc_fillupPic"
-        android:clickable="false"
-        />
+        android:clickable="false" />
 
     <TextView
         android:id="@+id/txt_itemfillup_fuel_volume_symbol"

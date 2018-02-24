@@ -68,7 +68,7 @@
                 android:layout_marginEnd="@dimen/ic_vehicleItem_type_margin_right"
                 android:layout_marginTop="@dimen/ic_vehicleItem_type_margin_top"
                 android:layout_toStartOf="@id/vehicle_item_vehicleType"
-                android:layout_toLeftOf="@id/vehicle_item_vehicleType"/>
+                android:layout_toLeftOf="@id/vehicle_item_vehicleType" />
 
         </RelativeLayout>
 

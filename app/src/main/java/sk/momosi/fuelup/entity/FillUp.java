@@ -106,7 +106,7 @@ public class FillUp implements Parcelable, Comparable<FillUp> {
 
     @Override
     public String toString() {
-        String vehicleId = vehicle != null ? ""+vehicle.getId() : "NULL";
+        String vehicleId = vehicle != null ? "" + vehicle.getId() : "NULL";
         return "FillUp{" +
                 "id=" + id +
                 ", vehicleId=" + vehicleId +

@@ -43,8 +43,7 @@
                 android:layout_weight="1"
                 android:paddingEnd="4dp"
                 android:paddingStart="4dp"
-                android:onClick="onClickPhoto"
-                >
+                android:onClick="onClickPhoto">
 
                 <ImageView
                     android:id="@+id/img_editVehicle_photo"
@@ -52,8 +51,7 @@
                     android:layout_height="match_parent"
                     android:adjustViewBounds="false"
                     android:cropToPadding="false"
-                    android:src="@drawable/ic_insert_photo"
-                    />
+                    android:src="@drawable/ic_insert_photo" />
 
                 <ImageView
                     android:id="@+id/img_editVehicle_removePhoto"

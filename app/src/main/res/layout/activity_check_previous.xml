@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/checkPrevious_chooseVehicles"
@@ -21,7 +21,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:textColor="@color/colorPrimaryDark"
-                android:text="@string/googleDrive_vehiclesToImport"/>
+                android:text="@string/googleDrive_vehiclesToImport" />
+
             <TextView
                 android:id="@+id/choose_vehicle_title_count"
                 android:layout_width="wrap_content"
@@ -29,7 +30,7 @@
                 android:textColor="@color/colorWhite"
                 android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"
-                android:textSize="28sp"/>
+                android:textSize="28sp" />
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
@@ -42,7 +43,7 @@
             android:layout_below="@+id/choose_vehicle_title_layout"
             android:layout_marginBottom="150dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"/>
+            android:layout_marginStart="10dp" />
     </RelativeLayout>
 
     <Button
@@ -71,7 +72,7 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:textColor="@color/colorWhite"
-            android:text="@string/googleDrive_checkPrevious_loader"/>
+            android:text="@string/googleDrive_checkPrevious_loader" />
 
         <ProgressBar
             android:id="@+id/checkPrevious_progress"
@@ -91,19 +92,22 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_gasolinedrop_disable"/>
+            android:src="@drawable/ic_gasolinedrop_disable" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_gasolinedrop_disable"/>
+            android:src="@drawable/ic_gasolinedrop_disable" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_gasolinedrop_disable"/>
+            android:src="@drawable/ic_gasolinedrop_disable" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_gasolinedrop_enable"/>
+            android:src="@drawable/ic_gasolinedrop_enable" />
     </LinearLayout>
 
 </RelativeLayout>
