@@ -4,9 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import sk.momosi.fuelup.FuelUp;
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.entity.Vehicle;
-import sk.momosi.fuelup.screens.MainActivity;
 import sk.momosi.fuelup.screens.statisticfragments.StatisticsChartConsumptionPerTimeFragment;
 import sk.momosi.fuelup.screens.statisticfragments.StatisticsChartConsumptionPreviewFragment;
 import sk.momosi.fuelup.screens.statisticfragments.StatisticsChartCostsPerTimeFragment;
@@ -49,13 +49,13 @@ public class PagerStatisticsAdapter extends FragmentStatePagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return MainActivity.getInstance().getString(R.string.statistics_fuel_consumption);
+                return FuelUp.getInstance().getString(R.string.statistics_fuel_consumption);
             case 1:
-                return MainActivity.getInstance().getString(R.string.statistics_fuel_price);
+                return FuelUp.getInstance().getString(R.string.statistics_fuel_price);
             case 2:
-                return MainActivity.getInstance().getString(R.string.statistics_fuel_consumption_per_month);
+                return FuelUp.getInstance().getString(R.string.statistics_fuel_consumption_per_month);
             case 3:
-                return MainActivity.getInstance().getString(R.string.statistics_costs_per_month);
+                return FuelUp.getInstance().getString(R.string.statistics_costs_per_month);
             default:
                 throw new RuntimeException("Wrong position");
         }

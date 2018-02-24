@@ -6,11 +6,11 @@ import android.os.Parcelable;
 import java.io.File;
 import java.util.Currency;
 
+import sk.momosi.fuelup.FuelUp;
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.entity.enums.DistanceUnit;
 import sk.momosi.fuelup.entity.enums.VolumeUnit;
 import sk.momosi.fuelup.entity.util.CurrencyUtil;
-import sk.momosi.fuelup.screens.MainActivity;
 
 /**
  * @author Ondrej Oravcok
@@ -192,9 +192,9 @@ public class Vehicle implements Parcelable {
 
     public String getConsumptionUnit() {
         if (this.getDistanceUnit() == DistanceUnit.mi) {
-            return MainActivity.getInstance().getString(R.string.units_mpg);
+            return FuelUp.getInstance().getString(R.string.units_mpg);
         } else {
-            return MainActivity.getInstance().getString(R.string.units_litreper100km);
+            return FuelUp.getInstance().getString(R.string.units_litreper100km);
         }
     }
 }

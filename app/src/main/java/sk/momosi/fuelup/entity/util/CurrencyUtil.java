@@ -13,7 +13,7 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Properties;
 
-import sk.momosi.fuelup.screens.MainActivity;
+import sk.momosi.fuelup.FuelUp;
 
 /**
  * @author Ondrej Oravcok
@@ -58,7 +58,7 @@ public class CurrencyUtil {
     private static void checkPropertiesAreLoaded() {
         if (properties.isEmpty()) {
             try {
-                properties.load(MainActivity.getInstance().getAssets().open(PROPERTY_FILE));
+                properties.load(FuelUp.getInstance().getAssets().open(PROPERTY_FILE));
             } catch (IOException e) {
                 Log.e(TAG, "Cannot load currencies from " + PROPERTY_FILE, e);
             }

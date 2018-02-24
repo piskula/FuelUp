@@ -12,16 +12,14 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import sk.momosi.fuelup.FuelUp;
 import sk.momosi.fuelup.R;
-import sk.momosi.fuelup.screens.MainActivity;
 
 /**
  * @author Ondro
@@ -78,13 +76,13 @@ public class ListVehiclesRestoreAdapter extends RecyclerView.Adapter<ListVehicle
                 color = R.drawable.vehicle_item_unchosen;
         }
 //        int color = disabled ? R.drawable.vehicle_item_disabled : R.drawable.account_list_shape;
-        holder.itemView.setBackground(MainActivity.getInstance().getResources().getDrawable(color));
+        holder.itemView.setBackground(FuelUp.getInstance().getResources().getDrawable(color));
 
         holder.restoreVehicleBox.setText(name);
         holder.restoreVehicleBox.setChecked(chosen);
         holder.trashIcon.setVisibility(chosen ? View.GONE : View.VISIBLE);
 //        holder.restoreVehicleBox.tint
-        holder.restoreVehicleBox.setTextColor(MainActivity.getInstance().getResources().getColor(colorText));
+        holder.restoreVehicleBox.setTextColor(FuelUp.getInstance().getResources().getColor(colorText));
         holder.restoreVehicleBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {

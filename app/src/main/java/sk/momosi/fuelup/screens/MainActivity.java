@@ -21,8 +21,6 @@ import sk.momosi.fuelup.util.PreferencesUtils;
 
 public class MainActivity extends AppCompatActivity implements OnNavigationItemSelectedListener {
 
-    private static MainActivity singleton;
-
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String IS_FIRST_RUN = "is_this_fisrt_run";
 
@@ -66,8 +64,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
             settings.edit().putBoolean("my_first_time", false).apply();
         }
-
-        singleton = this;
     }
 
     @Override
@@ -109,10 +105,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public static MainActivity getInstance() {
-        return singleton;
     }
 
 }

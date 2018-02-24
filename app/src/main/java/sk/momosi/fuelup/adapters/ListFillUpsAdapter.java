@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.util.Date;
 
+import sk.momosi.fuelup.FuelUp;
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.data.FuelUpContract.FillUpEntry;
 import sk.momosi.fuelup.entity.Vehicle;
@@ -19,7 +20,6 @@ import sk.momosi.fuelup.entity.enums.DistanceUnit;
 import sk.momosi.fuelup.entity.util.CurrencyUtil;
 import sk.momosi.fuelup.entity.util.DateUtil;
 import sk.momosi.fuelup.entity.util.VolumeUtil;
-import sk.momosi.fuelup.screens.MainActivity;
 
 /**
  * @author Martin Styk
@@ -83,7 +83,7 @@ public class ListFillUpsAdapter extends RecyclerViewCursorAdapter<ListFillUpsAda
         holder.txtDistanceUnit.setText(mVehicle.getDistanceUnit().toString());
         holder.txtPriceTotal.setText(CurrencyUtil.getPrice(mVehicle.getCurrency(), cursor.getDouble(priceTotalColumnIndex)));
         holder.txtPricePerLitre.setText(CurrencyUtil.getPricePerLitre(mVehicle.getCurrency(), cursor.getDouble(pricePerLitreColumnIndex)));
-        holder.txtPricePerLitreSymbol.setText("/" + MainActivity.getInstance().getString(R.string.unit_litre));
+        holder.txtPricePerLitreSymbol.setText("/" + FuelUp.getInstance().getString(R.string.unit_litre));
         holder.txtFuelVolume.setText(VolumeUtil.getFuelVolume(cursor.getDouble(fuelVolumeColumnIndex)));
         holder.txtFuelVolumeSymbol.setText(mVehicle.getVolumeUnit().toString());
 
@@ -97,8 +97,8 @@ public class ListFillUpsAdapter extends RecyclerViewCursorAdapter<ListFillUpsAda
 
     private int getImageResourceId(boolean isFullFillup) {
         String fileName = isFullFillup ? "ic_gasolinedrop_full" : "ic_gasolinedrop_empty";
-        return MainActivity.getInstance().getResources()
-                .getIdentifier(fileName, "drawable", MainActivity.getInstance().getPackageName());
+        return FuelUp.getInstance().getResources()
+                .getIdentifier(fileName, "drawable", FuelUp.getInstance().getPackageName());
     }
 
 

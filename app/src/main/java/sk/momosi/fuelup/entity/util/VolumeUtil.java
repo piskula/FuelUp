@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
+import sk.momosi.fuelup.FuelUp;
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.entity.enums.VolumeUnit;
-import sk.momosi.fuelup.screens.MainActivity;
 
 /**
  * @author Ondrej Oravcok
@@ -25,17 +25,17 @@ public class VolumeUtil {
     public static String getPricePerVolumeShortString(VolumeUnit volumeUnit) {
         String textOff;
         if (volumeUnit == VolumeUnit.LITRE)
-            textOff = MainActivity.getInstance().getString(R.string.add_fillup_pricePerLitre_short);
+            textOff = FuelUp.getInstance().getString(R.string.add_fillup_pricePerLitre_short);
         else
-            textOff = MainActivity.getInstance().getString(R.string.add_fillup_pricePerGallon_short);
+            textOff = FuelUp.getInstance().getString(R.string.add_fillup_pricePerGallon_short);
         return textOff;
     }
 
     public static String getPricePerVolumeLongString(VolumeUnit volumeUnit) {
         if (volumeUnit == VolumeUnit.LITRE)
-            return MainActivity.getInstance().getString(R.string.add_fillup_pricePerLitre);
+            return FuelUp.getInstance().getString(R.string.add_fillup_pricePerLitre);
         else
-            return MainActivity.getInstance().getString(R.string.add_fillup_pricePerGallon);
+            return FuelUp.getInstance().getString(R.string.add_fillup_pricePerGallon);
     }
 
     public static BigDecimal getTotalPriceFromPerLitre(BigDecimal volume, BigDecimal price, VolumeUnit volumeUnit){
@@ -98,7 +98,7 @@ public class VolumeUtil {
     public static DecimalFormat getFormatterForConsumption(String consumptionUnit) {
         DecimalFormat format = new DecimalFormat();
 
-        if (MainActivity.getInstance().getString(R.string.units_mpg).equals(consumptionUnit)) {
+        if (FuelUp.getInstance().getString(R.string.units_mpg).equals(consumptionUnit)) {
             format.setMaximumFractionDigits(1);
             format.setMinimumFractionDigits(1);
         } else {
