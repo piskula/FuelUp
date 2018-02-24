@@ -21,6 +21,7 @@ import sk.momosi.fuelup.entity.util.VolumeUtil;
  * @author Martin Styk, Ondrej Oravcok
  * @version 17.8.2017
  */
+@SuppressWarnings("SyntaxError")
 public class StatisticsService {
 
     private static final String LOG_TAG = StatisticsService.class.getSimpleName();
