@@ -106,12 +106,12 @@ public class StatisticsChartCostsPerTimeFragment extends Fragment implements Loa
         public void onValueSelected(int columnIndex, int subcolumnIndex, SubcolumnValue value) {
             switch (subcolumnIndex) {
                 case 0:
-                    Toast.makeText(getActivity(), getString(R.string.statistics_expense_price_alert,
+                    Toast.makeText(getActivity(), getString(R.string.statistics_fuel_price_alert,
                             BigDecimalFormatter.getCommonFormat().format(value.getValue()) + " " +
                                     vehicle.getCurrencySymbol()), Toast.LENGTH_SHORT).show();
                     return;
                 case 1:
-                    Toast.makeText(getActivity(), getString(R.string.statistics_fuel_price_alert,
+                    Toast.makeText(getActivity(), getString(R.string.statistics_expense_price_alert,
                             BigDecimalFormatter.getCommonFormat().format(value.getValue()) + " " +
                                     vehicle.getCurrencySymbol()), Toast.LENGTH_SHORT).show();
                     return;
