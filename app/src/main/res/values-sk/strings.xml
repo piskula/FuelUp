@@ -76,6 +76,8 @@
     <string name="add_fillup_fuel_volume">Objem paliva</string>
     <string name="add_fillup_full_fillup">Plná nádrž</string>
     <string name="add_fillup_info">Poznámka</string>
+    <string name="add_fillup_madeStatus">prejdené</string>
+    <string name="add_fillup_actualStatus">aktuálne</string>
     <string name="add_fillup_pricePerGallon">Cena za galón</string>
     <string name="add_fillup_pricePerGallon_short">Za galón</string>
     <string name="add_fillup_pricePerLitre">Cena za liter</string>
@@ -216,5 +218,12 @@
     <string name="faq_05_answer">Je to jediná možnosť ako podporovať verzovanie Vašich záloh. Môžete vidieť všetky dáta a ak omylom niečo zmažete alebo zmeníte, môžete zmeny vrátiť späť jednoducho pomocou webovej aplikácie Google Drive. Pri prísnejších pravidlách to nie je možné. Aplikácia FuelUp pracuje výhradne so súborom \'FuelUp_backup\', k Vašim ostatným súborom nepristupuje. Nepoužívajte tento súbor pre iné účely a nevytvárajte súbory s rovnakým názvom, môže to spôsobiť neočakávané správanie aplikácie.</string>
     <string name="faq_06_question">Moje dáta sa automaticky nezálohujú</string>
     <string name="faq_06_answer">Ak po nejakej zmene údajov dlhší čas nie ste na internete, niektoré zariadenia nezavolajú Sync Adapter hoci ho aplikácia naplánuje. Testujte si priebežne, či je Vaša záloha aktuálna stlačením \'Test sync\' keď budete na internete. Ak Vaše dáta čakajú na upload, znamená to že by čo chvíľu mali byť zálohované (niekoľko minút). Môžete vynútiť zálohovanie pomocou \'Zálohovať teraz\' aby ste si boli istý že záloha prebehne (ak ste na internete). Napríklad na niektorých Xiaomi je známe že musíte povoliť Auto Start permissions (pre FuelUp v Security aplikácii) aby zálohovanie začalo správne pracovať.</string>
+
+    <string name="toast_invalidDistance">Zadaná vzialenosť je nesprávna</string>
+    <string name="googleDrive_test_sync">Test synchronizácie</string>
+    <string name="navigation_drawer_close">Zatvoriť navigáciu</string>
+    <string name="navigation_drawer_open">Otvoriť navigáciu</string>
+    <string name="desc_fillupPic">Pumpa</string>
+    <string name="desc_expensePic">Servis</string>
 
 </resources>

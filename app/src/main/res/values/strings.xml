@@ -221,27 +221,27 @@
     <string name="faq_06_answer">On some devices after being offline a long time, Sync Adapter is not called by system even it has been scheduled. Check sometimes, if your backup is actual by clicking \'Test sync\' when you are online. Status \'pending\' means that your data will be backed up in near future (a few minutes). You may also \'Force upload\' to be sure your data is backed up. For example: on some Xiaomi devices it is known you must enable Auto Start permissions (for FuelUp in Security app) to make backup working.</string>
 
     <!--without translation-->
-    <string name="authors">&#169; Ondrej Oravčok, Martin Styk</string>
-    <string name="na">N/A</string>
-    <string name="unit_litre">\u2113</string>
-    <string name="unit_pricePerLitre">%s/\u2113</string>
-    <string name="units_litreper100km">\u2113/100km</string>
-    <string name="units_mpg">mpg</string>
-    <string name="units_litreper100_distance_units">\u2113/100 %s</string>
-    <string name="units_distance_units_per_litre">%s/\u2113</string>
-    <string name="units_distance_units_per_litre_only">/\u2113</string>
+    <string name="authors" translatable="false">&#169; Ondrej Oravčok, Martin Styk</string>
+    <string name="na" translatable="false">N/A</string>
+    <string name="unit_litre" translatable="false">\u2113</string>
+    <string name="unit_pricePerLitre" translatable="false">%s/\u2113</string>
+    <string name="units_litreper100km" translatable="false">\u2113/100km</string>
+    <string name="units_mpg" translatable="false">mpg</string>
+    <string name="units_litreper100_distance_units" translatable="false">\u2113/100 %s</string>
+    <string name="units_distance_units_per_litre" translatable="false">%s/\u2113</string>
+    <string name="units_distance_units_per_litre_only" translatable="false">/\u2113</string>
 
     <string name="desc_expensePic">service icon</string>
     <string name="desc_fillupPic">pump icon</string>
 
-    <string name="app_name">FuelUp</string>
+    <string name="app_name" translatable="false">FuelUp</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="googleDrive">Drive</string>
+    <string name="googleDrive" translatable="false">Drive</string>
     <string name="googleDrive_test_sync">Test sync</string>
 
-    <string name="faq">FAQ</string>
+    <string name="faq" translatable="false">FAQ</string>
 
 </resources>
