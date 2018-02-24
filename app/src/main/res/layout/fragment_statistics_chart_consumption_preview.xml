@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_weight="3"
-            android:visibility="@{hasData != null &amp;&amp; hasData ? View.VISIBLE : View.GONE}" />
+            android:visibility="@{hasData != null &amp;&amp; safeUnbox(hasData) ? View.VISIBLE : View.GONE}" />
 
         <View
             android:layout_width="match_parent"
@@ -29,7 +29,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:background="@color/colorPrimary"
-            android:visibility="@{hasData != null &amp;&amp; hasData ? View.VISIBLE : View.GONE}" />
+            android:visibility="@{hasData != null &amp;&amp; safeUnbox(hasData) ? View.VISIBLE : View.GONE}" />
 
 
         <lecho.lib.hellocharts.view.PreviewLineChartView
@@ -37,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:visibility="@{hasData != null &amp;&amp; hasData ? View.VISIBLE : View.GONE}"
+            android:visibility="@{hasData != null &amp;&amp; safeUnbox(hasData) ? View.VISIBLE : View.GONE}"
             android:layout_marginRight="@dimen/small_padding"
             android:layout_marginEnd="@dimen/small_padding"/>
 
@@ -55,7 +55,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="@string/no_data_to_show"
-            android:visibility="@{hasData != null &amp;&amp; !hasData ? View.VISIBLE : View.GONE}" />
+            android:visibility="@{hasData != null &amp;&amp; !safeUnbox(hasData) ? View.VISIBLE : View.GONE}" />
 
     </LinearLayout>
 </layout>

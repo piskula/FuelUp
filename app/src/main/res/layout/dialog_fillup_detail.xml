@@ -47,7 +47,7 @@
                 android:padding="@dimen/default_padding"
                 app:name="@string/add_fillup_distanceFromLast"
                 app:unit="@{fillUp.vehicle.distanceUnit.toString()}"
-                app:value="@{String.valueOf(fillUp.distanceFromLastFillUp)}" />
+                app:value="@{String.valueOf(safeUnbox(fillUp.distanceFromLastFillUp))}" />
 
             <sk.momosi.fuelup.view.StatisticsDetailItem
                 android:layout_width="match_parent"
