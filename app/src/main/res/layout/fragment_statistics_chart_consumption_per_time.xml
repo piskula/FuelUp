@@ -28,13 +28,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/no_data_to_show"
-            android:visibility="@{hasData != null &amp;&amp; !hasData ? View.VISIBLE : View.GONE}" />
+            android:visibility="@{hasData != null &amp;&amp; !safeUnbox(hasData) ? View.VISIBLE : View.GONE}" />
 
         <lecho.lib.hellocharts.view.ColumnChartView
             android:id="@+id/chart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{hasData != null &amp;&amp; hasData ? View.VISIBLE : View.GONE}" />
+            android:visibility="@{hasData != null &amp;&amp; safeUnbox(hasData) ? View.VISIBLE : View.GONE}" />
 
     </FrameLayout>
 </layout>
