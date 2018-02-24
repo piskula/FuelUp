@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import sk.momosi.fuelup.FuelUp;
 import sk.momosi.fuelup.R;
-import sk.momosi.fuelup.screens.MainActivity;
 
 /**
  * @author Ondro
@@ -34,10 +34,6 @@ public class ListAccountsAdapter extends RecyclerView.Adapter<ListAccountsAdapte
         this.mCallback = callback;
     }
 
-    public interface Callback {
-        void onItemClick(String account);
-    }
-
     @Override
     public AccountViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
@@ -51,7 +47,7 @@ public class ListAccountsAdapter extends RecyclerView.Adapter<ListAccountsAdapte
         holder.txtAccount.setText(name);
 
         int color = name.equals(chosenAccount) ? R.drawable.account_item_shape : R.drawable.account_list_shape;
-        holder.itemView.setBackground(MainActivity.getInstance().getResources().getDrawable(color));
+        holder.itemView.setBackground(FuelUp.getInstance().getResources().getDrawable(color));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +88,9 @@ public class ListAccountsAdapter extends RecyclerView.Adapter<ListAccountsAdapte
         return Collections.unmodifiableList(result);
     }
 
+    public interface Callback {
+        void onItemClick(String account);
+    }
 
     class AccountViewHolder extends RecyclerView.ViewHolder {
         final TextView txtAccount;

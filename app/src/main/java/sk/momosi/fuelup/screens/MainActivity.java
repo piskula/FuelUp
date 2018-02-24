@@ -18,11 +18,6 @@ import sk.momosi.fuelup.R;
 public class MainActivity extends AppCompatActivity implements OnNavigationItemSelectedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static MainActivity singleton;
-
-    public static MainActivity getInstance() {
-        return singleton;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +40,6 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             navigationView.setCheckedItem(R.id.vehicle_list);
             getSupportFragmentManager().beginTransaction().replace(R.id.activty_main_frame, new VehicleListFragment(), TAG).commit();
         }
-
-        singleton = this;
     }
 
     @Override

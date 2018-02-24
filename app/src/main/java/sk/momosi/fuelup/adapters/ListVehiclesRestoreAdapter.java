@@ -15,8 +15,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import sk.momosi.fuelup.FuelUp;
 import sk.momosi.fuelup.R;
-import sk.momosi.fuelup.screens.MainActivity;
 
 /**
  * @author Ondro
@@ -40,12 +40,6 @@ public class ListVehiclesRestoreAdapter extends RecyclerView.Adapter<ListVehicle
         this.vehiclesChosen.removeAll(vehiclesInDb);
 
         callback.onVehiclesChosenChange(Collections.unmodifiableSet(vehiclesChosen));
-    }
-
-    public interface Callback {
-        void onVehiclesChosenChange(Set<String> vehiclesChosen);
-
-        void makeWarningToastForVehicle(String name);
     }
 
     @Override
@@ -74,13 +68,13 @@ public class ListVehiclesRestoreAdapter extends RecyclerView.Adapter<ListVehicle
                 color = R.drawable.vehicle_item_unchosen;
         }
 //        int color = disabled ? R.drawable.vehicle_item_disabled : R.drawable.account_list_shape;
-        holder.itemView.setBackground(MainActivity.getInstance().getResources().getDrawable(color));
+        holder.itemView.setBackground(FuelUp.getInstance().getResources().getDrawable(color));
 
         holder.restoreVehicleBox.setText(name);
         holder.restoreVehicleBox.setChecked(chosen);
         holder.trashIcon.setVisibility(chosen ? View.GONE : View.VISIBLE);
 //        holder.restoreVehicleBox.tint
-        holder.restoreVehicleBox.setTextColor(MainActivity.getInstance().getResources().getColor(colorText));
+        holder.restoreVehicleBox.setTextColor(FuelUp.getInstance().getResources().getColor(colorText));
         holder.restoreVehicleBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -96,6 +90,13 @@ public class ListVehiclesRestoreAdapter extends RecyclerView.Adapter<ListVehicle
         });
     }
 
+    private void unchooseVehicle(final @NonNull String name) {
+        if (vehiclesChosen.remove(name)) {
+            notifyDataSetChanged();
+            callback.onVehiclesChosenChange(Collections.unmodifiableSet(vehiclesChosen));
+        }
+    }
+
 //    public void setChosenVehicles(Set<String> chosenVehicles) {
 //        if (chosenVehicles != null) {
 //            vehiclesChosen.addAll(chosenVehicles);
@@ -103,13 +104,6 @@ public class ListVehiclesRestoreAdapter extends RecyclerView.Adapter<ListVehicle
 //            callback.onVehiclesChosenChange(Collections.unmodifiableSet(vehiclesChosen));
 //        }
 //    }
-
-    private void unchooseVehicle(final @NonNull String name) {
-        if (vehiclesChosen.remove(name)) {
-            notifyDataSetChanged();
-            callback.onVehiclesChosenChange(Collections.unmodifiableSet(vehiclesChosen));
-        }
-    }
 
     private void chooseVehicle(final @NonNull String name) {
         if (!vehiclesInDb.contains(name)) {
@@ -125,6 +119,12 @@ public class ListVehiclesRestoreAdapter extends RecyclerView.Adapter<ListVehicle
     @Override
     public int getItemCount() {
         return vehiclesFromBackup.size();
+    }
+
+    public interface Callback {
+        void onVehiclesChosenChange(Set<String> vehiclesChosen);
+
+        void makeWarningToastForVehicle(String name);
     }
 
     class VehicleRestoreViewHolder extends RecyclerView.ViewHolder {

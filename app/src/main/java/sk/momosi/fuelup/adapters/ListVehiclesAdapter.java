@@ -13,11 +13,11 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
+import sk.momosi.fuelup.FuelUp;
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.business.StatisticsService;
 import sk.momosi.fuelup.business.VehicleTypeService;
 import sk.momosi.fuelup.data.FuelUpContract.VehicleEntry;
-import sk.momosi.fuelup.screens.MainActivity;
 
 /**
  * @author Ondrej Oravcok
@@ -90,7 +90,7 @@ public class ListVehiclesAdapter extends RecyclerViewCursorAdapter<ListVehiclesA
     }
 
     private int getImageResourceId(int vehicleTypeId) {
-        Context cxt = MainActivity.getInstance();
+        Context cxt = FuelUp.getInstance();
         return cxt.getResources().getIdentifier("ic_type_"
                         + VehicleTypeService.getVehicleTypeNameById(vehicleTypeId, cxt).toLowerCase(),
                 "drawable", cxt.getPackageName());
