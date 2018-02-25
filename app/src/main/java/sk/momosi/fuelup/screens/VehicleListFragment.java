@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import sk.momosi.fuelup.R;
 import sk.momosi.fuelup.adapters.ListVehiclesAdapter;
+import sk.momosi.fuelup.business.VehicleService;
 import sk.momosi.fuelup.data.FuelUpContract;
 import sk.momosi.fuelup.data.FuelUpContract.VehicleEntry;
 import sk.momosi.fuelup.screens.edit.AddVehicleActivity;
@@ -28,10 +29,8 @@ import sk.momosi.fuelup.screens.edit.AddVehicleActivity;
 public class VehicleListFragment extends Fragment implements ListVehiclesAdapter.Callback,
         View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final String TAG = VehicleListFragment.class.getSimpleName();
-
-
     public static final String EXTRA_ADDED_VEHICLE_ID = "extra_key_added_car";
+    private static final String TAG = VehicleListFragment.class.getSimpleName();
     private static final int VEHICLE_ACTION_REQUEST_CODE = 33;
     private static final int VEHICLE_LOADER_ID = 712;
 
@@ -41,6 +40,11 @@ public class VehicleListFragment extends Fragment implements ListVehiclesAdapter
 
     private RecyclerView recyclerView;
     private TextView txtNoVehicle;
+
+    // In case of only one vehicle, go directly to vehicle details. We want to do this only on initial
+    // data load. This allows us to use back button on vehicle details, and show vehicles list without
+    // immediate redirect bac to vehicle details.
+    private boolean redirectToSingleVehicle = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,6 +104,10 @@ public class VehicleListFragment extends Fragment implements ListVehiclesAdapter
         if (data == null || data.getCount() == 0) {
             recyclerView.setVisibility(View.GONE);
             txtNoVehicle.setVisibility(View.VISIBLE);
+        }
+        else if (data.getCount() == 1 && redirectToSingleVehicle) {
+            redirectToSingleVehicle = false;
+            openVehicleDetail(VehicleService.getAvailableVehicleIds(getContext()).get(0));
         } else {
             recyclerView.setVisibility(View.VISIBLE);
             txtNoVehicle.setVisibility(View.GONE);
@@ -114,9 +122,13 @@ public class VehicleListFragment extends Fragment implements ListVehiclesAdapter
 
     @Override
     public void onItemClick(long vehicleId) {
+        Log.i(TAG, "Clicked vehicle id=" + vehicleId);
+        openVehicleDetail(vehicleId);
+    }
+
+    private void openVehicleDetail(long vehicleId){
         Intent i = new Intent(getActivity(), VehicleTabbedDetailActivity.class);
         i.putExtra(EXTRA_ADDED_VEHICLE_ID, vehicleId);
-        Log.i(TAG, "Clicked vehicle id=" + vehicleId);
         startActivityForResult(i, VEHICLE_ACTION_REQUEST_CODE);
     }
 }
