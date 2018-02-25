@@ -38,6 +38,8 @@ dependencies {
     compile 'android.arch.persistence.room:runtime:1.0.0'
     compile 'com.theartofdev.edmodo:android-image-cropper:2.5.1'
     compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 
     testCompile 'junit:junit:4.12'
 }
