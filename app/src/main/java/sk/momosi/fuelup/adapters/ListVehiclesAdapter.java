@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 
 import sk.momosi.fuelup.FuelUp;
 import sk.momosi.fuelup.R;
@@ -27,17 +28,11 @@ public class ListVehiclesAdapter extends RecyclerViewCursorAdapter<ListVehiclesA
 
     private static final String LOG_TAG = ListVehiclesAdapter.class.getSimpleName();
 
-    private final Context mContext;
-    private final Callback mCallback;
+    private final WeakReference<Callback> mCallback;
 
-    public interface Callback {
-        void onItemClick(long vehicleId);
-    }
-
-    public ListVehiclesAdapter(Context context, Callback callback) {
+    public ListVehiclesAdapter(Callback callback) {
         super();
-        mContext = context;
-        mCallback = callback;
+        mCallback = new WeakReference<>(callback);
     }
 
     @Override
@@ -61,18 +56,30 @@ public class ListVehiclesAdapter extends RecyclerViewCursorAdapter<ListVehiclesA
 
         holder.txtName.setText(cursor.getString(nameColumnIndex));
         holder.txtMaker.setText(cursor.getString(makerColumnIndex));
-        holder.txtDistance.setText(new StatisticsService(mContext, vehicleId).getActualMileageIfPossible());
-        Picasso.with(mContext).load(new File(picturePath == null ? "" : picturePath)).into(holder.thumbnail);
+        holder.txtDistance.setText(new StatisticsService(FuelUp.getInstance(), vehicleId).getActualMileageIfPossible());
+        Picasso.with(FuelUp.getInstance()).load(new File(picturePath == null ? "" : picturePath)).into(holder.thumbnail);
         holder.overflow.setImageResource(getImageResourceId(cursor.getInt(typeColumnIndex)));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCallback.onItemClick(vehicleId);
+                if (mCallback.get() != null)
+                    mCallback.get().onItemClick(vehicleId);
             }
         });
     }
 
+    private int getImageResourceId(int vehicleTypeId) {
+        Context cxt = FuelUp.getInstance();
+        return cxt.getResources().getIdentifier("ic_type_"
+                        + VehicleTypeService.getVehicleTypeNameById(vehicleTypeId, cxt).toLowerCase(),
+                "drawable", cxt.getPackageName());
+    }
+
+
+    public interface Callback {
+        void onItemClick(long vehicleId);
+    }
 
     static class VehicleViewHolder extends RecyclerView.ViewHolder {
         final ImageView thumbnail, overflow;
@@ -87,13 +94,6 @@ public class ListVehiclesAdapter extends RecyclerViewCursorAdapter<ListVehiclesA
             thumbnail = view.findViewById(R.id.vehicle_item_thumbnail);
             overflow = view.findViewById(R.id.vehicle_item_vehicleType);
         }
-    }
-
-    private int getImageResourceId(int vehicleTypeId) {
-        Context cxt = FuelUp.getInstance();
-        return cxt.getResources().getIdentifier("ic_type_"
-                        + VehicleTypeService.getVehicleTypeNameById(vehicleTypeId, cxt).toLowerCase(),
-                "drawable", cxt.getPackageName());
     }
 
 }
