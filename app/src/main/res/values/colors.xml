@@ -5,7 +5,6 @@
     <color name="colorAccent">#FF9800</color>
     <color name="colorGreenDark">@android:color/holo_green_dark</color>
     <color name="colorAppGreen">@android:color/holo_green_light</color>
-    <color name="colorAppOrange">@android:color/holo_orange_dark</color>
     <color name="colorWarningRed">#FF0000</color>
     <color name="colorLightGrey">#D3D3D3</color>
     <color name="colorDisabled">#666666</color>
