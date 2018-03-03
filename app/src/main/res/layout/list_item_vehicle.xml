@@ -33,7 +33,7 @@
                 android:paddingLeft="@dimen/vehicleItem_title_padding"
                 android:paddingRight="@dimen/vehicleItem_title_padding"
                 android:paddingTop="@dimen/vehicleItem_title_padding"
-                android:textColor="@color/colorAppOrange"
+                android:textColor="@color/colorAccent"
                 android:textSize="@dimen/vehicleItem_title_size" />
 
             <TextView
