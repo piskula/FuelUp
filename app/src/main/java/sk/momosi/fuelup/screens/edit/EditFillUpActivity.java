@@ -169,10 +169,8 @@ public class EditFillUpActivity extends FillUpAbstractActivity implements Delete
 
         int result = getContentResolver().update(ContentUris.withAppendedId(FillUpEntry.CONTENT_URI, mSelectedFillUp.getId()), contentValues, null, null);
         if (result == 1) {
-            Toast.makeText(getApplicationContext(), R.string.add_fillup_success_update, Toast.LENGTH_LONG).show();
             setResult(RESULT_OK);
         } else if (result == VehicleProvider.UPDATE_NO_CHANGE) {
-            Toast.makeText(getApplicationContext(), R.string.add_fillup_success_update_noChange, Toast.LENGTH_LONG).show();
             setResult(RESULT_CANCELED);
         } else {
             Toast.makeText(getApplicationContext(), R.string.add_fillup_fail_update, Toast.LENGTH_LONG).show();

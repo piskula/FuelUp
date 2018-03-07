@@ -155,7 +155,6 @@ public class EditVehicleActivity extends VehicleAbstractActivity implements Menu
 
         if (result == 1) {  //update OK
             setResult(RESULT_OK);
-            Toast.makeText(this, R.string.carUpdate_Toast_successfullyUpdated, Toast.LENGTH_LONG).show();
             finish();
 
         } else if (result == VehicleProvider.VEHICLE_UPDATE_NAME_NOT_UNIQUE) {
@@ -186,9 +185,7 @@ public class EditVehicleActivity extends VehicleAbstractActivity implements Menu
         final int result = getContentResolver().delete(
                 ContentUris.withAppendedId(VehicleEntry.CONTENT_URI, vehicle.getId()), null, null);
 
-        if (result != -1) {
-            Toast.makeText(getApplicationContext(), getString(R.string.delete_vehicle_success, vehicle.getName()), Toast.LENGTH_LONG).show();
-        } else {
+        if (result == -1) {
             Toast.makeText(getApplicationContext(), R.string.delete_vehicle_fail, Toast.LENGTH_LONG).show();
         }
 
