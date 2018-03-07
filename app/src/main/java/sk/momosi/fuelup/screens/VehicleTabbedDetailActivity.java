@@ -72,7 +72,7 @@ public class VehicleTabbedDetailActivity extends AppCompatActivity implements Bo
     protected void onStart() {
         super.onStart();
 
-        Picasso.with(getApplicationContext()).load(vehicle.getPicture())
+        Picasso.with(this).load(vehicle.getPicture())
                 .into((ImageView) findViewById(R.id.toolbar_layout_image));
     }
 
