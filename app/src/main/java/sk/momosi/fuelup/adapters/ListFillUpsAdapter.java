@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.lang.ref.WeakReference;
 import java.text.DecimalFormat;
 import java.util.Date;
 
@@ -27,7 +28,7 @@ import sk.momosi.fuelup.entity.util.VolumeUtil;
  */
 public class ListFillUpsAdapter extends RecyclerViewCursorAdapter<ListFillUpsAdapter.FillUpViewHolder> {
 
-    private final Callback mCallback;
+    private final WeakReference<Callback> callbackWeakReference;
     private final Vehicle mVehicle;
 
     private final DecimalFormat consumptionFormat;
@@ -36,7 +37,7 @@ public class ListFillUpsAdapter extends RecyclerViewCursorAdapter<ListFillUpsAda
         super();
 
         this.mVehicle = vehicle;
-        this.mCallback = callback;
+        this.callbackWeakReference = new WeakReference<>(callback);
 
         int consumptionFractionDigits = mVehicle.getDistanceUnit() == DistanceUnit.mi ? 1 : 2;
         consumptionFormat = new DecimalFormat();
@@ -90,7 +91,10 @@ public class ListFillUpsAdapter extends RecyclerViewCursorAdapter<ListFillUpsAda
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCallback.onItemClick(fillUpId);
+                Callback callback = callbackWeakReference.get();
+                if (callback != null) {
+                    callback.onItemClick(fillUpId);
+                }
             }
         });
     }
