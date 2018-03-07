@@ -155,7 +155,6 @@ public class EditExpenseActivity extends AppCompatActivity implements DeleteDial
 
         if (mode == Mode.UPDATING) {
             if (getContentResolver().update(ContentUris.withAppendedId(ExpenseEntry.CONTENT_URI, expense.getId()), contentValues, null, null) == 1) {
-                Toast.makeText(getApplicationContext(), R.string.editExpense_toast_updatedSuccessfully, Toast.LENGTH_LONG).show();
                 setResult(RESULT_OK);
             } else {
                 Toast.makeText(getApplicationContext(), R.string.editExpense_toast_updateFailed, Toast.LENGTH_LONG).show();
@@ -166,7 +165,6 @@ public class EditExpenseActivity extends AppCompatActivity implements DeleteDial
                 Toast.makeText(EditExpenseActivity.this, R.string.editExpense_toast_createFailed, Toast.LENGTH_LONG).show();
                 setResult(RESULT_CANCELED);
             } else {
-                Toast.makeText(EditExpenseActivity.this, R.string.editExpense_toast_createdSuccessfully, Toast.LENGTH_LONG).show();
                 setResult(RESULT_OK);
             }
         }

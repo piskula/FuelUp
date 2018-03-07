@@ -133,7 +133,6 @@ public class AddFillUpActivity extends FillUpAbstractActivity implements Compoun
             Toast.makeText(this, R.string.add_fillup_fail, Toast.LENGTH_LONG).show();
             setResult(RESULT_CANCELED);
         } else {
-            Toast.makeText(this, R.string.add_fillup_success, Toast.LENGTH_LONG).show();
             setResult(RESULT_OK);
         }
 

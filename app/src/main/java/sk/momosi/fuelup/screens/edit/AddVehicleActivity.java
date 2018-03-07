@@ -118,7 +118,6 @@ public class AddVehicleActivity extends VehicleAbstractActivity {
             Log.e(LOG_TAG, "Cannot create vehicle " + contentValues);
             Snackbar.make(findViewById(android.R.id.content), R.string.addVehicle_fail, Snackbar.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this, R.string.addVehicle_Toast_successfullyCreated, Toast.LENGTH_LONG).show();
             finish();
         }
     }
