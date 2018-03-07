@@ -17,10 +17,6 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <Switch
-                android:id="@+id/switch_overal_fromLast"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/txt_input_addfillup_distance_from_last_fillup_adding"
@@ -45,6 +41,11 @@
                 android:textAlignment="textStart"
                 android:layout_gravity="start"
                 android:textSize="@dimen/edit_fillup_expense_unit_fontSize" />
+
+            <Switch
+                android:id="@+id/switch_overal_fromLast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
@@ -79,14 +80,11 @@
                 android:layout_gravity="start"
                 android:textSize="@dimen/edit_fillup_expense_unit_fontSize" />
 
-            <ToggleButton
+            <Switch
                 android:id="@+id/btn_switch_price"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="@integer/edit_fillup_weight_switchButtons"
-                android:minWidth="@dimen/edit_fillup_switchButton_min_width"
-                android:textOff="@string/add_fillup_pricePerLitre_short"
-                android:textOn="@string/add_fillup_priceTotal_short" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
 
         <LinearLayout
