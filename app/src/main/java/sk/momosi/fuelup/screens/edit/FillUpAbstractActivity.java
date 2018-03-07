@@ -47,7 +47,7 @@ public abstract class FillUpAbstractActivity extends AppCompatActivity implement
     protected TextView mTxtDistanceUnit;
     protected TextView mTxtFuelPriceUnit;
 
-    protected ToggleButton mBtnSwitchPrice;
+    protected Switch mBtnSwitchPrice;
     protected CheckBox mCheckBoxIsFullFill;
     protected Switch isWholeDistanceTyped;
 
