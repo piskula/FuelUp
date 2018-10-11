@@ -1,5 +1,6 @@
 package sk.momosi.fuelup.screens.backup;
 
+import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIOException;
@@ -34,6 +36,7 @@ public class CheckPermissionsActivity extends AppCompatActivity implements Check
 
     private static final int REQUEST_AUTHORIZATION = 1001;
     private static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
+    private static final int REQUEST_CODE_PICK_ACCOUNT = 1003;
 
     private GoogleAccountCredential mCredential;
     private CheckPermissionsTask task;
@@ -43,21 +46,17 @@ public class CheckPermissionsActivity extends AppCompatActivity implements Check
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         setContentView(R.layout.activity_check_permissions);
 
         ProgressBar progressBar = findViewById(R.id.checkPermissions_progress);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.SRC_IN);
         txtStatus = findViewById(R.id.checkPermissions_txtStatus);
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            mCredential = DriveBackupFileUtil.generateCredential(this);
-            mCredential.setSelectedAccountName(extras.getString(KEY_ACCOUNT_FROM_CHECK_PERMISSIONS));
-            checkPermissions();
-        } else {
-            Log.e(LOG_TAG, "No account passed to activity in Intent.");
-        }
+        Intent intent = AccountPicker.newChooseAccountIntent(null, null,
+                new String[] {"com.google"},
+                false, null, null, null, null);
+        startActivityForResult(intent, REQUEST_CODE_PICK_ACCOUNT);
     }
 
     private void checkPermissions() {
@@ -112,7 +111,7 @@ public class CheckPermissionsActivity extends AppCompatActivity implements Check
             txtStatus.setText(R.string.googleDrive_cancelledRequest);
         }
     }
-    
+
     private void showGooglePlayServicesAvailabilityErrorDialog(final int connectionStatusCode) {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         Dialog dialog = apiAvailability.getErrorDialog(
@@ -123,10 +122,17 @@ public class CheckPermissionsActivity extends AppCompatActivity implements Check
     }
 
     @Override
-    public void onActivityResult(
-            int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
+            case REQUEST_CODE_PICK_ACCOUNT:
+                Bundle extras = data.getExtras();
+                if (extras != null) {
+                    mCredential = DriveBackupFileUtil.generateCredential(this);
+                    mCredential.setSelectedAccountName(extras.getString(AccountManager.KEY_ACCOUNT_NAME));
+                    checkPermissions();
+                }
+                break;
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode != RESULT_OK) {
                     Toast.makeText(this, R.string.googleDrive_requires_google_play, Toast.LENGTH_SHORT).show();

@@ -27,7 +27,7 @@
             android:textAlignment="center"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@color/colorAppOrange"
+            android:textColor="@color/colorAccent"
             android:layout_marginBottom="30dp"/>
 
         <TextView

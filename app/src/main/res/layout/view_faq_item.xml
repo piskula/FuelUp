@@ -10,7 +10,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="@color/colorAppOrange"
+            android:textColor="@color/colorAccent"
             android:textSize="@dimen/faq_question_size" />
 
         <ImageView

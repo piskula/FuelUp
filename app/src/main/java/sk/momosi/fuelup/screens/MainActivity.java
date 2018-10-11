@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import sk.momosi.fuelup.R;
+import sk.momosi.fuelup.screens.backup.CheckPermissionsActivity;
 import sk.momosi.fuelup.screens.backup.ChooseAccountActivity;
 import sk.momosi.fuelup.util.PreferencesUtils;
 
@@ -53,8 +54,8 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             // if you want to fill Dummy Vehicle with data
             // SampleDataUtils.initializeWhenFirstRun(getApplicationContext());
 
-            Intent intent = new Intent(this, ChooseAccountActivity.class);
-            intent.putExtra(ChooseAccountActivity.KEY_IS_THIS_FIRST_RUN, true);
+            Intent intent = new Intent(this, CheckPermissionsActivity.class);
+//            intent.putExtra(ChooseAccountActivity.KEY_IS_THIS_FIRST_RUN, true);
             startActivity(intent);
 
 //            Account genericAccount = AccountService.getAccount();
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements OnNavigationItemS
             currentFragment = new AboutFragment();
         } else if (id == R.id.google_drive) {
             if (PreferencesUtils.getAccountName(this) == null) {
-                Intent a = new Intent(this, ChooseAccountActivity.class);
+                Intent a = new Intent(this, CheckPermissionsActivity.class);
                 startActivity(a);
                 drawer.closeDrawer(GravityCompat.START);
                 return false;
